@@ -3,6 +3,8 @@ import mustache from 'assets/svg/mustache.svg';
 import Image from 'next/image';
 import styled from 'styled-components';
 
+import NavBar from './NavBar';
+
 const inter = Inter({
 	weight: ['300', '700'],
 });
@@ -26,19 +28,6 @@ const HeaderStyle = styled.header`
 		font-style: italic;
 		color: #737373;
 	}
-	nav {
-		margin-top: 2rem;
-		text-align: left;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		align-items: flex-end;
-		li {
-			list-style: none;
-			font-size: 20px;
-			display: flex;
-		}
-	}
 `;
 
 export default function Header() {
@@ -49,14 +38,7 @@ export default function Header() {
 				<p className={inter.className}>a book by Gentleman programming</p>
 				<Image width={42} height={42} src={mustache} alt='logo' />
 			</section>
-			<nav className={inter.className}>
-				<li>Chapter 1</li>
-				<li>Chapter 2</li>
-				<li>Chapter 3</li>
-				<li>Chapter 4</li>
-				<li>Chapter 5</li>
-				<li>Chapter 6</li>
-			</nav>
+			<NavBar />
 		</HeaderStyle>
 	);
 }

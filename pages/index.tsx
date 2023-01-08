@@ -29,8 +29,8 @@ export default function Home() {
 					className={lora.className}
 					style={{ fontSize: '22px', letterSpacing: '1px', lineHeight: '3rem' }}
 				>
+					<h2>Lorem ipsum dolor.</h2>
 					<p>
-						<h2>Lorem ipsum dolor.</h2>
 						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
 						nam laborum repudiandae nemo quos. Nesciunt deleniti beatae ipsum
 						impedit et suscipit quos voluptas vel iste possimus earum, explicabo
