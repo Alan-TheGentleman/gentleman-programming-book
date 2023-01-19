@@ -1,6 +1,6 @@
 import { Lora } from '@next/font/google';
-import Header from 'components/header/Header';
 import Head from 'next/head';
+import Header from 'src/components/header/Header';
 import styled from 'styled-components';
 
 const lora = Lora({
@@ -47,4 +47,3 @@ export default function Home() {
 		</>
 	);
 }
-

@@ -18,8 +18,10 @@ specifiers:
   jest: 29.3.1
   jest-environment-jsdom: 29.3.1
   next: 13.1.0
+  normalize.css: 8.0.1
   react: 18.2.0
   react-dom: 18.2.0
+  react-icons: 4.7.1
   styled-components: 5.3.6
   ts-jest: 29.0.3
   typescript: 4.9.4
@@ -32,8 +34,10 @@ dependencies:
   eslint: 8.30.0
   eslint-config-next: 13.1.0_lzzuuodtsqwxnvqeq4g4likcqa
   next: 13.1.0_7xlrwlvvs7cv2obrs6a5y6oxxq
+  normalize.css: 8.0.1
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-icons: 4.7.1_react@18.2.0
   styled-components: 5.3.6_7i5myeigehqah43i5u7wbekgba
   typescript: 4.9.4
 
@@ -3718,6 +3722,10 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /normalize.css/8.0.1:
+    resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
+    dev: false
+
   /npm-run-path/4.0.1:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
     engines: {node: '>=8'}
@@ -4005,6 +4013,14 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+
+  /react-icons/4.7.1_react@18.2.0:
+    resolution: {integrity: sha512-yHd3oKGMgm7zxo3EA7H2n7vxSoiGmHk5t6Ou4bXsfcgWyhfDKMpyKfhHR6Bjnn63c+YXBLBPUql9H4wPJM6sXw==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
