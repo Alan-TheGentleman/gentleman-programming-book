@@ -1,1 +1,0 @@
-export { TranslateIcon } from './TranslateIcon';

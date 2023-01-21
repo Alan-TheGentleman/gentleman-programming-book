@@ -6,10 +6,6 @@ type Keys = typeof LocalStorageKeys[keyof typeof LocalStorageKeys];
 
 export const LocalStorage = {
 	save: <Value>(key: Keys, value: Value): void => {
-		if (typeof value === 'string') {
-			return window.localStorage.setItem(key, value);
-		}
-
 		window.localStorage.setItem(key, JSON.stringify(value));
 	},
 

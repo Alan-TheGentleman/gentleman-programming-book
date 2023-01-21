@@ -53,7 +53,7 @@ const IconButtonStyled = styled(_IconButton)(
 			color: textColor,
 			backgroundColor,
 
-			'&:hover': { filter: 'brightness(0.9)' },
+			'&:hover,&:focus': { filter: 'brightness(0.9)' },
 		};
 	},
 );

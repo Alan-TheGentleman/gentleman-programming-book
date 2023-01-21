@@ -8,9 +8,13 @@ import { ChapterContent } from 'src/components/philip/BookContentNavigation/Chap
 import { Button } from 'src/components/philip/Button';
 import { Icon } from 'src/components/philip/Icon';
 import { IconButton } from 'src/components/philip/IconButton';
-import { MenuIcon } from 'src/components/philip/MenuIcon';
-import { ThemeIcon } from 'src/components/philip/ThemeIcon';
-import { TranslateIcon } from 'src/components/philip/TranslateIcon';
+import {
+	MenuIcon,
+	ThemeIcon,
+	TranslateIcon,
+	ZoomInText,
+	ZoomOutText,
+} from 'src/components/philip/IconSource';
 
 import {
 	AsideStyled,
@@ -63,12 +67,12 @@ export const BookLayout: React.FC<BookLayoutProps> = ({ children }) => {
 				<IconButton
 					variant='text'
 					colorScheme='secondary'
-					asIcon={<TranslateIcon />}
+					asIcon={<ZoomOutText />}
 				/>
 				<IconButton
 					variant='text'
 					colorScheme='secondary'
-					asIcon={<TranslateIcon />}
+					asIcon={<ZoomInText />}
 				/>
 				<IconButton variant='text' asIcon={<ThemeIcon />} />
 			</ReaderConfigButtonsStyled>

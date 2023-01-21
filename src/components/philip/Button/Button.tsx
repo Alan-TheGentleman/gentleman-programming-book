@@ -23,7 +23,7 @@ export const Button = styled.button<ButtonProps>(
 			color: color.textButtonSolid,
 			backgroundColor,
 			borderRadius: '0.2rem',
-			'&:hover': { filter: 'brightness(0.9)' },
+			'&:hover, &:focus': { filter: 'brightness(0.9)' },
 			[media.up('md')]: { fontSize: fontSize.lg },
 		};
 	},
