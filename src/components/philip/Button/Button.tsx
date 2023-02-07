@@ -1,32 +1,35 @@
-import { color, font, fontSize, media } from 'src/theme';
+import { Color, color, font, fontSize, media } from 'src/theme';
 import styled from 'styled-components';
 
 interface ButtonProps {
-	colorScheme?: 'primary';
+	colorScheme?: Extract<Color, 'primary' | 'secondary'>;
 }
 
-export const Button = styled.button<ButtonProps>(
-	({ colorScheme = 'primary' }) => {
-		const backgroundColor =
-			colorScheme === 'primary'
-				? color.buttonPrimary
-				: colorScheme === 'primary'
-				? color.buttonSecondary
-				: color.buttonPrimary;
+export const Button = styled.button.attrs(({ type, ...props }) => ({
+	...props,
+	type: type || 'button',
+}))<ButtonProps>(({ colorScheme = 'secondary' }) => {
+	return {
+		color: color[colorScheme].contrast,
+		backgroundColor: color[colorScheme].main,
 
-		return {
-			border: 'none',
-			fontSize: fontSize.md,
-			fontFamily: font.merriweather,
-			paddingInline: '1.2rem',
-			paddingBlock: '0.5rem',
-			color: color.textButtonSolid,
-			backgroundColor,
-			borderRadius: '0.2rem',
-			'&:hover, &:focus': { filter: 'brightness(0.9)' },
-			[media.up('md')]: { fontSize: fontSize.lg },
-		};
-	},
-);
-
-Button.defaultProps = { type: 'button' };
+		alignItems: 'center',
+		justifyContent: 'center',
+		border: 'none',
+		borderRadius: '0.2rem',
+		columnGap: '0.5rem',
+		display: 'inline-flex',
+		fontFamily: font.merriweather,
+		fontSize: fontSize.md,
+		paddingBlock: '0.5rem',
+		paddingInline: '0.8rem',
+		transition: 'all 0.2s ease-in-out',
+		'&:hover, &:focus': {
+			backgroundColor: color[colorScheme].dark,
+		},
+		'&[disabled]': {
+			pointerEvents: 'none',
+		},
+		[media.up('md')]: { fontSize: fontSize.lg },
+	};
+});

@@ -23,22 +23,22 @@ export const AsideStyled = styled.aside({
 });
 
 export const ContentDialogWrapper = styled.div({
-	background: color.background2,
+	background: color.background.default,
 	mixBlendMode: 'color-burn',
 	position: 'relative',
 	overflow: 'auto',
-	paddingInlineStart: '1rem',
+	paddingInlineStart: '3rem',
 
 	[`& > ${IconButton}`]: { position: 'sticky', left: '90%', top: '.5rem' },
 
 	[media.down('lg')]: {
 		width: 'min(80vw,35rem)',
 		maxHeight: '80vh',
-		borderColor: color.buttonPrimary,
+		borderColor: color.primary.main,
 		borderWidth: '1px',
 		borderRadius: '.5rem',
 		padding: '1rem',
-		border: `1px solid ${color.textAccent}`,
+		border: `1px solid ${color.accent.main}`,
 	},
 	[media.up('lg')]: {
 		width: 'min(80vw,35%)',
@@ -57,7 +57,8 @@ export const DialogStyled = styled.dialog({
 	'&[open]': { animation: showDialogAnimation },
 
 	'&::backdrop': {
-		background: color.background1 + '90',
+		backdropFilter: 'blur(0.5px) brightness(0.9)',
+		background: color.accent.main,
 		animation: showDialogAnimation,
 	},
 	[media.down('lg')]: { borderRadius: '.5rem', overflow: 'hidden' },
@@ -76,7 +77,7 @@ export const PaginationStyled = styled.div({
 
 	[media.down('lg')]: {
 		gridTemplateColumns: 'repeat(3,1fr)',
-		backgroundColor: color.buttonPrimary,
+		backgroundColor: color.primary.main,
 
 		[`& > ${Button}, &  ${IconButton}`]: {
 			minHeight: '3rem',
@@ -100,14 +101,19 @@ export const ContentWrapperStyled = styled.div({
 });
 
 export const ReaderConfigButtonsStyled = styled.div({
-	display: 'flex',
-	justifyContent: 'center',
-	columnGap: '1rem',
+	display: 'grid',
+	placeContent: 'center',
+	columnGap: '2rem',
+	rowGap: '1rem',
 	marginBlock: '1rem',
 
 	[`& > ${IconButton}`]: { aspectRatio: '1 / 1' },
 
+	[media.down('lg')]: {
+		gridTemplateColumns: 'repeat(4,2.8rem)',
+	},
 	[media.up('lg')]: {
+		gridTemplateRows: 'repeat(4,2.8rem)',
 		flexDirection: 'column',
 		marginBlock: '0 auto',
 		position: 'sticky',
@@ -132,19 +138,31 @@ export const BookLayoutStyled = styled.div({
 
 		[`& > ${AsideStyled}`]: {
 			gridRow: '1 / 3',
-			gridColumn: '1 / 7',
+			gridColumn: '1 / 8',
 		},
 		[`& > ${ContentWrapperStyled}`]: {
 			gridRow: '1 / 2',
-			gridColumn: '7 / 24',
+			gridColumn: '8 / 24',
 		},
 		[`& > ${PaginationStyled}`]: {
 			gridRow: '2 / 3',
-			gridColumn: '7 / 24',
+			gridColumn: '8 / 24',
 		},
 		[`& > ${ReaderConfigButtonsStyled}`]: {
 			gridRow: '1 / 3',
 			gridColumn: '24 / 25',
+		},
+	},
+
+	[media.up('xl')]: {
+		[`& > ${AsideStyled}`]: {
+			gridColumn: '1 / 7',
+		},
+		[`& > ${ContentWrapperStyled}`]: {
+			gridColumn: '7 / 24',
+		},
+		[`& > ${PaginationStyled}`]: {
+			gridColumn: '7 / 24',
 		},
 	},
 });

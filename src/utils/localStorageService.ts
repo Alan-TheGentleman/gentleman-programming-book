@@ -1,10 +1,11 @@
 export const LocalStorageKeys = {
 	bookmark: 'BOOKMARK_URL',
+	theme: 'THEME',
 } as const;
 
 type Keys = typeof LocalStorageKeys[keyof typeof LocalStorageKeys];
 
-export const LocalStorage = {
+export const LocalStorageService = {
 	save: <Value>(key: Keys, value: Value): void => {
 		window.localStorage.setItem(key, JSON.stringify(value));
 	},

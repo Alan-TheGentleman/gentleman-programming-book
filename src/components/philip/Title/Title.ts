@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 const TitleBaseStyles = css({
 	fontFamily: font.merriweather,
-	color: color.text,
+	color: color.text.primary,
 	marginBlock: '0',
 	fontWeight: 'bold',
 });
@@ -12,7 +12,7 @@ export const Title1 = styled.h1(() => [
 	TitleBaseStyles,
 	{
 		fontSize: fontSize.xl8,
-		lineHeight: '90%',
+		lineHeight: '120%',
 		[media.up('md')]: { fontSize: fontSize.xl9 },
 	},
 ]);
@@ -21,7 +21,7 @@ export const Title2 = styled.h2(() => [
 	TitleBaseStyles,
 	{
 		fontSize: fontSize.xl5,
-		lineHeight: '90%',
+		lineHeight: '120%',
 		[media.up('md')]: { fontSize: fontSize.xl6 },
 	},
 ]);

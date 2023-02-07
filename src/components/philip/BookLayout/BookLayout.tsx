@@ -15,6 +15,7 @@ import {
 	ZoomInText,
 	ZoomOutText,
 } from 'src/components/philip/IconSource';
+import { ThemePicker } from 'src/components/philip/ThemePicker';
 
 import {
 	AsideStyled,
@@ -47,6 +48,7 @@ export const BookLayout: React.FC<BookLayoutProps> = ({ children }) => {
 
 				<IconButton
 					asIcon={<GoBook />}
+					colorScheme='secondary'
 					onClick={() => ref.current?.showModal()}
 				/>
 
@@ -59,22 +61,19 @@ export const BookLayout: React.FC<BookLayoutProps> = ({ children }) => {
 			</PaginationStyled>
 
 			<ReaderConfigButtonsStyled>
-				<IconButton
-					variant='text'
-					colorScheme='secondary'
-					asIcon={<TranslateIcon />}
+				<IconButton variant='text' asIcon={<TranslateIcon />} />
+				<IconButton variant='text' asIcon={<ZoomOutText />} />
+				<IconButton variant='text' asIcon={<ZoomInText />} />
+				<ThemePicker
+					justIcons
+					trigger={
+						<IconButton
+							variant='solid'
+							colorScheme='secondary'
+							asIcon={<ThemeIcon />}
+						/>
+					}
 				/>
-				<IconButton
-					variant='text'
-					colorScheme='secondary'
-					asIcon={<ZoomOutText />}
-				/>
-				<IconButton
-					variant='text'
-					colorScheme='secondary'
-					asIcon={<ZoomInText />}
-				/>
-				<IconButton variant='text' asIcon={<ThemeIcon />} />
 			</ReaderConfigButtonsStyled>
 
 			<AsideStyled>
@@ -84,6 +83,7 @@ export const BookLayout: React.FC<BookLayoutProps> = ({ children }) => {
 					</Icon>{' '}
 					Menu
 				</Button>
+
 				<ChapterContent chapter={bookContentPlaceholder[0]} />
 			</AsideStyled>
 

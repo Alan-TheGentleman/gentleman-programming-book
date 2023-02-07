@@ -1,61 +1,49 @@
 import React from 'react';
-import { Icon } from 'src/components/philip/Icon/Icon';
-import { color } from 'src/theme';
+import { Color, color, fontSize, media } from 'src/theme';
 import styled from 'styled-components';
 
 type IconButtonProps = {
 	asIcon?: React.ReactNode;
-	colorScheme?: 'primary' | 'secondary';
+	colorScheme?: Extract<Color, 'primary' | 'secondary'>;
 	variant?: 'solid' | 'text';
 } & React.ComponentProps<'button'>;
 
-const _IconButton: React.FC<IconButtonProps> = ({
-	asIcon,
-	colorScheme,
-	...props
-}) => {
-	return (
-		<button {...props}>
-			<Icon>{asIcon}</Icon>
-		</button>
-	);
-};
+const IconButtonStyled = styled.button.attrs<IconButtonProps>(({ asIcon }) => ({
+	children: asIcon,
+}))<IconButtonProps>(({ colorScheme = 'primary', variant = 'solid' }) => {
+	return {
+		color:
+			variant === 'text'
+				? color[colorScheme].main
+				: color[colorScheme].contrast,
+		backgroundColor:
+			variant === 'text' ? 'transparent' : color[colorScheme].main,
 
-// type IconButtonStyledProps = {
-// 	colorScheme?: 'primary' | 'secondary';
-// 	variant?: 'solid' | 'text';
-// };
+		display: 'inline-flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		transition: 'all 0.2s ease-in-out',
+		border: 'none',
+		borderRadius: '100vmax',
+		padding: '0.5rem',
 
-const IconButtonStyled = styled(_IconButton)(
-	({ colorScheme = 'primary', variant = 'solid' }) => {
-		const backgroundColor =
-			variant === 'solid' && colorScheme === 'primary'
-				? color.buttonPrimary
-				: variant === 'solid' && colorScheme === 'secondary'
-				? color.buttonSecondary
-				: variant === 'text'
-				? 'transparent'
-				: 'transparent';
+		'&:hover, &:focus': {
+			color:
+				variant === 'text'
+					? color[colorScheme].dark
+					: color[colorScheme].contrast,
+			backgroundColor:
+				variant === 'text'
+					? color[colorScheme].transparent
+					: color[colorScheme].dark,
+		},
+		'&[disabled]': {
+			filter: 'grayscale(100%) contrast(10%)',
+			pointerEvents: 'none',
+		},
 
-		const textColor =
-			variant === 'solid'
-				? color.textButtonSolid
-				: variant === 'text' && colorScheme === 'primary'
-				? color.buttonPrimary
-				: variant === 'text' && colorScheme === 'secondary'
-				? color.buttonSecondary
-				: color.buttonPrimary;
-
-		return {
-			border: 'none',
-			borderRadius: '100vmax',
-			padding: '0.5rem',
-			color: textColor,
-			backgroundColor,
-
-			'&:hover,&:focus': { filter: 'brightness(0.9)' },
-		};
-	},
-);
+		[media.up('md')]: { fontSize: fontSize.lg },
+	};
+});
 
 export { IconButtonStyled as IconButton };
