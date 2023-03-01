@@ -4,22 +4,41 @@ import React from 'react';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { Chapter } from 'src/components/philip/BookContentNavigation/bookContent';
 import { IconButton } from 'src/components/philip/IconButton';
-import { Title3, Title4 } from 'src/components/philip/Title';
+import { MustachiIcon } from 'src/components/philip/IconSource';
+import { Title3, Title4, Title5, Title6 } from 'src/components/philip/Title';
 import { color, media } from 'src/theme';
 import { LocalStorageKeys, LocalStorageService } from 'src/utils';
 import styled from 'styled-components';
 
 const TitleItemStyled = styled.li({
-	[`& > ${Title4}[data-active=true]`]: { color: color.accent.main },
+	fontStyle: 'italic',
+
+	[`& svg`]: {
+		maxWidth: '1.5rem',
+		maxHeight: '1.5rem',
+		verticalAlign: 'middle',
+	},
+	[`& > ${Title5}`]: { textDecoration: 'none' },
+	[`& > ${Title5}[data-active=true]`]: {
+		color: color.accent.main,
+	},
 });
 
 const TitleListStyled = styled.ol({
-	listStyle: 'none',
+	border: '0',
 	paddingInline: '0',
-	marginBlock: '0',
+	paddingInlineStart: '1rem',
+	borderInlineStart: '1px',
+	borderColor: color.accent.main,
+	borderStyle: 'solid',
+	listStyle: 'none',
+	marginBlock: '1rem 0',
 	transition: 'all 0.4s ease-in-out',
 
-	[`& > ${Title4}`]: { display: 'block', fontStyle: 'italic' },
+	[`& > ${Title5}`]: { display: 'block', fontStyle: 'italic' },
+	[`& > ${TitleItemStyled} + ${TitleItemStyled}`]: {
+		marginBlockStart: '1.2rem',
+	},
 
 	'&[data-open=false]': { maxHeight: '0', opacity: 0, visibility: 'hidden' },
 	'&[data-open=true]': { maxHeight: '100vmax', opacity: 1 },
@@ -29,13 +48,8 @@ const SummaryStyled = styled.summary({
 	listStyle: 'none',
 	backgroundColor: color.background.default,
 
-	[`& > ${IconButton}`]: {
-		transition: 'all 0.4s ease-in-out',
-		'&[data-open=true]': { transform: 'rotate(-180deg)' },
-		'&[current=true]': { transform: 'rotate(-180deg)' },
-	},
-	[`& > ${Title4}`]: { color: color.accent.main },
-	[`& > ${Title4},& > ${Title3}`]: {
+	[`& > ${Title6}`]: { color: color.accent.main },
+	[`& > ${Title6},& > ${Title4}`]: {
 		marginBlockEnd: '0.5rem',
 
 		[media.up('md')]: { marginBlockEnd: '1rem' },
@@ -46,11 +60,10 @@ const DetailsStyled = styled.details({
 	overflow: 'hidden',
 });
 
-const DASdasDetailsStyled = styled.div({
-	whiteSpace: 'nowrap',
-	[`& > ${IconButton}`]: {
-		marginInlineStart: '0.5rem',
-	},
+const ChapterNumberWrapperStyled = styled.div({
+	display: 'flex',
+	columnGap: '0.5rem',
+	[`button[data-open=true]`]: { transform: 'rotate(-180deg)' },
 });
 
 type Fn<Args extends Array<any> = [], Return extends any = void> = (
@@ -77,7 +90,10 @@ export const ChapterContent: React.FC<ChapterContentProps> = ({
 	const handleOpen = () => setIsOpen(s => !s);
 
 	const isCurrentChapter = () => {
-		return chapter.titleList.some(title => title.link.endsWith(asPath));
+		return (
+			chapter.titleList.some(title => title.link.endsWith(asPath)) ||
+			asPath.includes(chapter.chapterId)
+		);
 	};
 
 	const _open = isOpen || isCurrentChapter();
@@ -89,35 +105,38 @@ export const ChapterContent: React.FC<ChapterContentProps> = ({
 			onClick={e => e.preventDefault()}
 		>
 			<SummaryStyled>
-				<Title4 as='h3'>Chapter Nº {chapter.order}</Title4>
-				<DASdasDetailsStyled>
-					<Link passHref legacyBehavior href={chapter.link}>
-						<Title3 as='a' onClick={() => handleNavigate(chapter.link)}>
-							{chapter.name}
-						</Title3>
-					</Link>
-
+				<ChapterNumberWrapperStyled>
+					<Title6 as='h3' colorScheme='secondary'>
+						Chapter Nº {chapter.order}
+					</Title6>
 					<IconButton
 						asIcon={<MdOutlineKeyboardArrowDown />}
+						size='xs'
 						variant='text'
 						data-open={_open}
 						disabled={isCurrentChapter()}
 						onClick={handleOpen}
 					/>
-				</DASdasDetailsStyled>
+				</ChapterNumberWrapperStyled>
+
+				<Link passHref legacyBehavior href={chapter.link}>
+					<Title3 as='a' onClick={() => handleNavigate(chapter.link)}>
+						{chapter.name}
+					</Title3>
+				</Link>
 			</SummaryStyled>
 
 			<TitleListStyled data-open={_open}>
 				{chapter.titleList.map(title => (
 					<TitleItemStyled key={title.link}>
 						<Link passHref legacyBehavior href={title.link}>
-							<Title4
+							<Title5
 								as='a'
 								data-active={title.link.endsWith(asPath)}
 								onClick={() => handleNavigate(title.link)}
 							>
-								{title.name}
-							</Title4>
+								<MustachiIcon /> {title.name}
+							</Title5>
 						</Link>
 					</TitleItemStyled>
 				))}

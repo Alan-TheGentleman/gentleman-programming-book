@@ -27,7 +27,7 @@ export const ContentDialogWrapper = styled.div({
 	mixBlendMode: 'color-burn',
 	position: 'relative',
 	overflow: 'auto',
-	paddingInlineStart: '3rem',
+	paddingInline: '3rem',
 
 	[`& > ${IconButton}`]: { position: 'sticky', left: '90%', top: '.5rem' },
 
@@ -76,6 +76,8 @@ export const PaginationStyled = styled.div({
 	display: 'grid',
 
 	[media.down('lg')]: {
+		position: 'sticky',
+		bottom: '0',
 		gridTemplateColumns: 'repeat(3,1fr)',
 		backgroundColor: color.primary.main,
 
@@ -131,10 +133,10 @@ export const BookLayoutStyled = styled.div({
 	[`& > ${ReaderConfigButtonsStyled}`]: { gridRow: '1' },
 
 	[media.up('lg')]: {
-		padding: '3rem',
+		padding: '3rem 1.5rem',
 		gridTemplateColumns: 'repeat(24, 1fr)',
 		gridTemplateRows: '1fr auto',
-		columnGap: '1rem',
+		columnGap: '2rem',
 
 		[`& > ${AsideStyled}`]: {
 			gridRow: '1 / 3',

@@ -1,0 +1,4 @@
+{
+	"exportall.config.relExclusion": ["/src/utils/read.ts"],
+	"editor.formatOnSave": true
+}

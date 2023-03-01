@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const fontVariant = {
 	body1: {
 		fontSize: fontSize.md,
-		fontWeight: 700,
+		fontWeight: 400,
 		lineHeight: '200%',
 		[media.up('md')]: { fontSize: fontSize.lg },
 	},
@@ -16,7 +16,7 @@ const fontVariant = {
 	},
 	subtitle: {
 		fontSize: fontSize.xl,
-		fontWeight: 500,
+		fontWeight: 700,
 		lineHeight: '150%',
 		[media.up('md')]: { fontSize: fontSize.xl2 },
 	},

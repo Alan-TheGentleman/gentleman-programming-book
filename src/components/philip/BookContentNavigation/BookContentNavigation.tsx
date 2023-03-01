@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { BookContent, bookContentPlaceholder } from './bookContent';
+import { BookContent } from './bookContent';
 import { ChapterContent } from './ChapterContent';
 
 export const BookContentNavigationStyled = styled.nav({
@@ -22,12 +22,12 @@ type BookContentNavigationProps = {
 };
 
 export const BookContentNavigation: React.FC<BookContentNavigationProps> = ({
-	bookContent = bookContentPlaceholder,
+	bookContent,
 	onNavigate,
 }) => {
 	return (
 		<BookContentNavigationStyled>
-			{bookContent.map(chapter => (
+			{bookContent?.map(chapter => (
 				<ChapterContent
 					key={chapter.link}
 					chapter={chapter}

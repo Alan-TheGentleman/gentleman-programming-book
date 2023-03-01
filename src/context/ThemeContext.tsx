@@ -7,7 +7,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 export const themeList = ['Light', 'Dark', 'Sepia'] as const;
 
 const Global = createGlobalStyle({
-	'::-webkit-scrollbar': { width: '4px' },
+	'::-webkit-scrollbar': { width: '4px', maxHeight: '4px' },
 	'::-webkit-scrollbar-thumb': {
 		background: color.accent.main,
 		borderRadius: '100vh',

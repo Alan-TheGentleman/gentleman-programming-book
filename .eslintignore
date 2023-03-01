@@ -2,3 +2,5 @@
 /.next
 /.swc
 .gitignore
+
+*.config.js

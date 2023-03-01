@@ -1,9 +1,13 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from 'react-icons/fa';
 import { GoBook } from 'react-icons/go';
 import { MdClose } from 'react-icons/md';
 import { BookContentNavigation } from 'src/components/philip/BookContentNavigation';
-import { bookContentPlaceholder } from 'src/components/philip/BookContentNavigation/bookContent';
+import {
+	BookContent,
+	Chapter,
+} from 'src/components/philip/BookContentNavigation/bookContent';
 import { ChapterContent } from 'src/components/philip/BookContentNavigation/ChapterContent';
 import { Button } from 'src/components/philip/Button';
 import { Icon } from 'src/components/philip/Icon';
@@ -16,6 +20,7 @@ import {
 	ZoomOutText,
 } from 'src/components/philip/IconSource';
 import { ThemePicker } from 'src/components/philip/ThemePicker';
+import { Pagination } from 'src/utils/Pagination';
 
 import {
 	AsideStyled,
@@ -29,9 +34,18 @@ import {
 
 type BookLayoutProps = {
 	children: React.ReactNode;
+	bookContent?: BookContent;
+	currentChapter: Chapter;
+	pagination: Pagination;
 };
 
-export const BookLayout: React.FC<BookLayoutProps> = ({ children }) => {
+export const BookLayout: React.FC<BookLayoutProps> = ({
+	children,
+	bookContent,
+	currentChapter,
+	pagination,
+}) => {
+	const router = useRouter();
 	const ref = React.useRef<HTMLDialogElement | null>(null);
 
 	return (
@@ -39,7 +53,10 @@ export const BookLayout: React.FC<BookLayoutProps> = ({ children }) => {
 			<ContentWrapperStyled>{children}</ContentWrapperStyled>
 
 			<PaginationStyled>
-				<Button>
+				<Button
+					disabled={!pagination.previousChapter?.link}
+					onClick={() => router.push(pagination.previousChapter?.link)}
+				>
 					<Icon>
 						<FaLongArrowAltLeft />
 					</Icon>{' '}
@@ -52,7 +69,10 @@ export const BookLayout: React.FC<BookLayoutProps> = ({ children }) => {
 					onClick={() => ref.current?.showModal()}
 				/>
 
-				<Button>
+				<Button
+					disabled={!pagination.nextChapter?.link}
+					onClick={() => router.push(pagination.nextChapter?.link)}
+				>
 					<span>Next</span>{' '}
 					<Icon>
 						<FaLongArrowAltRight />
@@ -84,7 +104,7 @@ export const BookLayout: React.FC<BookLayoutProps> = ({ children }) => {
 					Menu
 				</Button>
 
-				<ChapterContent chapter={bookContentPlaceholder[0]} />
+				<ChapterContent chapter={currentChapter} />
 			</AsideStyled>
 
 			<DialogStyled ref={ref}>
@@ -94,7 +114,10 @@ export const BookLayout: React.FC<BookLayoutProps> = ({ children }) => {
 						variant='text'
 						onClick={() => ref.current?.close()}
 					/>
-					<BookContentNavigation onNavigate={() => ref.current?.close()} />
+					<BookContentNavigation
+						onNavigate={() => ref.current?.close()}
+						bookContent={bookContent}
+					/>
 				</ContentDialogWrapper>
 			</DialogStyled>
 		</BookLayoutStyled>

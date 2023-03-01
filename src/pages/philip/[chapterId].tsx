@@ -1,318 +1,135 @@
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize';
+import rehypePrism from 'rehype-prism-plus';
+import rehypeSlug from 'rehype-slug';
+import MDXComponenets from 'src/components/MDXComponents';
+import {
+	BookContent,
+	Chapter,
+} from 'src/components/philip/BookContentNavigation/bookContent';
 import { BookLayout } from 'src/components/philip/BookLayout';
+import { MustachiIcon } from 'src/components/philip/IconSource';
 import { Text } from 'src/components/philip/Text';
-import { Title3 } from 'src/components/philip/Title';
+import { Title3, Title4 } from 'src/components/philip/Title';
+import { color } from 'src/theme';
+import { Pagination } from 'src/utils/Pagination';
+import {
+	findPaths,
+	generateBookContent,
+	getPagination,
+	readChapter,
+} from 'src/utils/read';
+import styled from 'styled-components';
 
-export default function ChapterDetail() {
+export const getStaticPaths: GetStaticPaths = p => {
+	const paths = findPaths();
+
+	return {
+		paths,
+		fallback: false,
+	};
+};
+
+interface PageProps {
+	source: MDXRemoteSerializeResult<
+		Record<string, unknown>,
+		Record<string, string>
+	>;
+	bookContent: BookContent;
+	currentChapter: Chapter;
+	pagination: Pagination;
+}
+
+const MDXRemoteWrapperStyled = styled('div')({
+	display: 'contents',
+	[`& > ${Title4} + Title4`]: {
+		background: 'red',
+	},
+	[`& > ${Text} img`]: {
+		maxWidth: '100%',
+	},
+	'& h1, & h2': {
+		color: color.secondary.main,
+		[`& svg`]: {
+			maxWidth: '2rem',
+			maxHeight: '2rem',
+			verticalAlign: 'middle',
+		},
+	},
+});
+
+export const getStaticProps: GetStaticProps<
+	PageProps,
+	{ chapterId: string }
+> = async ({ params }) => {
+	const { content } = await readChapter(params?.chapterId);
+	const pagination = await getPagination(params?.chapterId);
+
+	const { bookContent, currentChapter } = await generateBookContent(
+		params?.chapterId,
+	);
+
+	if (!bookContent || !currentChapter)
+		throw new Error('There is a missing property');
+
+	const mdxSource = await serialize(content, {
+		mdxOptions: {
+			rehypePlugins: [rehypeSlug, rehypePrism],
+			format: 'mdx',
+		},
+	});
+
+	return {
+		props: { source: mdxSource, bookContent, currentChapter, pagination },
+	};
+};
+
+export default function ChapterDetail({
+	source,
+	bookContent,
+	currentChapter,
+	pagination,
+}: PageProps) {
 	return (
-		<BookLayout>
-			<Title3 as='h1' id='title1'>
-				Title 1
-			</Title3>
-			<Text>
-				Lets talk about waterfall, yeah, the bad boy in town, the one everybody
-				hates. Waterfall in The main idea is:
-			</Text>
-			<Text>
-				1- We get the requirements, what we want to do, the stakeholders needs.
-				<br />
-				2- You plan how to do it, often comes with an analysis and design of the
-				solution.
-				<br />
-				3- You implement it, creating working software.
-				<br />
-				4- You deliver the software and wait for feedback, creating
-				documentation during the process.
-				<br />
-				5- Maintenance of the working solution. Once we deliver the solution, we
-				ask for feedback and if we need to touch anything, we start the process
-				all over again.
-			</Text>
-
-			<Text>
-				This is awesome as long as the requirements are super stable and we know
-				they will not change during implementation, something that in the real
-				world is practically impossible as they are ALWAYS changing. If we were
-				a fabric we wouldnt have any of these issues, as we know the specific
-				required materials to create something, we put them in the machine, and
-				the result is always going to be the same. But we work with software
-				solutions to meet peoples needs, and these are always changing,
-				evolving. Here comes the biggest problem with the waterfall methodology.
-				We have to wait until the end of the implementation to receive feedback
-				and then start the whole process again, so what if the user needs have
-				changed in the meantime ? Weve just wasted a lot of useful time.
-			</Text>
-			<Text>
-				Lets talk about waterfall, yeah, the bad boy in town, the one everybody
-				hates. Waterfall in The main idea is:
-			</Text>
-			<Text>
-				1- We get the requirements, what we want to do, the stakeholders needs.
-				<br />
-				2- You plan how to do it, often comes with an analysis and design of the
-				solution.
-				<br />
-				3- You implement it, creating working software.
-				<br />
-				4- You deliver the software and wait for feedback, creating
-				documentation during the process.
-				<br />
-				5- Maintenance of the working solution. Once we deliver the solution, we
-				ask for feedback and if we need to touch anything, we start the process
-				all over again.
-			</Text>
-
-			<Text>
-				This is awesome as long as the requirements are super stable and we know
-				they will not change during implementation, something that in the real
-				world is practically impossible as they are ALWAYS changing. If we were
-				a fabric we wouldnt have any of these issues, as we know the specific
-				required materials to create something, we put them in the machine, and
-				the result is always going to be the same. But we work with software
-				solutions to meet peoples needs, and these are always changing,
-				evolving. Here comes the biggest problem with the waterfall methodology.
-				We have to wait until the end of the implementation to receive feedback
-				and then start the whole process again, so what if the user needs have
-				changed in the meantime ? Weve just wasted a lot of useful time.
-			</Text>
-			<Text>
-				Lets talk about waterfall, yeah, the bad boy in town, the one everybody
-				hates. Waterfall in The main idea is:
-			</Text>
-			<Text>
-				1- We get the requirements, what we want to do, the stakeholders needs.
-				<br />
-				2- You plan how to do it, often comes with an analysis and design of the
-				solution.
-				<br />
-				3- You implement it, creating working software.
-				<br />
-				4- You deliver the software and wait for feedback, creating
-				documentation during the process.
-				<br />
-				5- Maintenance of the working solution. Once we deliver the solution, we
-				ask for feedback and if we need to touch anything, we start the process
-				all over again.
-			</Text>
-
-			<Text>
-				This is awesome as long as the requirements are super stable and we know
-				they will not change during implementation, something that in the real
-				world is practically impossible as they are ALWAYS changing. If we were
-				a fabric we wouldnt have any of these issues, as we know the specific
-				required materials to create something, we put them in the machine, and
-				the result is always going to be the same. But we work with software
-				solutions to meet peoples needs, and these are always changing,
-				evolving. Here comes the biggest problem with the waterfall methodology.
-				We have to wait until the end of the implementation to receive feedback
-				and then start the whole process again, so what if the user needs have
-				changed in the meantime ? Weve just wasted a lot of useful time.
-			</Text>
-
-			<Title3 as='h1' id='title2'>
-				Title 2
-			</Title3>
-			<Text>
-				Lets talk about waterfall, yeah, the bad boy in town, the one everybody
-				hates. Waterfall in The main idea is:
-			</Text>
-			<Text>
-				1- We get the requirements, what we want to do, the stakeholders needs.
-				<br />
-				2- You plan how to do it, often comes with an analysis and design of the
-				solution.
-				<br />
-				3- You implement it, creating working software.
-				<br />
-				4- You deliver the software and wait for feedback, creating
-				documentation during the process.
-				<br />
-				5- Maintenance of the working solution. Once we deliver the solution, we
-				ask for feedback and if we need to touch anything, we start the process
-				all over again.
-			</Text>
-
-			<Text>
-				This is awesome as long as the requirements are super stable and we know
-				they will not change during implementation, something that in the real
-				world is practically impossible as they are ALWAYS changing. If we were
-				a fabric we wouldnt have any of these issues, as we know the specific
-				required materials to create something, we put them in the machine, and
-				the result is always going to be the same. But we work with software
-				solutions to meet peoples needs, and these are always changing,
-				evolving. Here comes the biggest problem with the waterfall methodology.
-				We have to wait until the end of the implementation to receive feedback
-				and then start the whole process again, so what if the user needs have
-				changed in the meantime ? Weve just wasted a lot of useful time.
-			</Text>
-			<Text>
-				Lets talk about waterfall, yeah, the bad boy in town, the one everybody
-				hates. Waterfall in The main idea is:
-			</Text>
-			<Text>
-				1- We get the requirements, what we want to do, the stakeholders needs.
-				<br />
-				2- You plan how to do it, often comes with an analysis and design of the
-				solution.
-				<br />
-				3- You implement it, creating working software.
-				<br />
-				4- You deliver the software and wait for feedback, creating
-				documentation during the process.
-				<br />
-				5- Maintenance of the working solution. Once we deliver the solution, we
-				ask for feedback and if we need to touch anything, we start the process
-				all over again.
-			</Text>
-
-			<Text>
-				This is awesome as long as the requirements are super stable and we know
-				they will not change during implementation, something that in the real
-				world is practically impossible as they are ALWAYS changing. If we were
-				a fabric we wouldnt have any of these issues, as we know the specific
-				required materials to create something, we put them in the machine, and
-				the result is always going to be the same. But we work with software
-				solutions to meet peoples needs, and these are always changing,
-				evolving. Here comes the biggest problem with the waterfall methodology.
-				We have to wait until the end of the implementation to receive feedback
-				and then start the whole process again, so what if the user needs have
-				changed in the meantime ? Weve just wasted a lot of useful time.
-			</Text>
-			<Text>
-				Lets talk about waterfall, yeah, the bad boy in town, the one everybody
-				hates. Waterfall in The main idea is:
-			</Text>
-			<Text>
-				1- We get the requirements, what we want to do, the stakeholders needs.
-				<br />
-				2- You plan how to do it, often comes with an analysis and design of the
-				solution.
-				<br />
-				3- You implement it, creating working software.
-				<br />
-				4- You deliver the software and wait for feedback, creating
-				documentation during the process.
-				<br />
-				5- Maintenance of the working solution. Once we deliver the solution, we
-				ask for feedback and if we need to touch anything, we start the process
-				all over again.
-			</Text>
-
-			<Text>
-				This is awesome as long as the requirements are super stable and we know
-				they will not change during implementation, something that in the real
-				world is practically impossible as they are ALWAYS changing. If we were
-				a fabric we wouldnt have any of these issues, as we know the specific
-				required materials to create something, we put them in the machine, and
-				the result is always going to be the same. But we work with software
-				solutions to meet peoples needs, and these are always changing,
-				evolving. Here comes the biggest problem with the waterfall methodology.
-				We have to wait until the end of the implementation to receive feedback
-				and then start the whole process again, so what if the user needs have
-				changed in the meantime ? Weve just wasted a lot of useful time.
-			</Text>
-
-			<Title3 as='h1' id='title3'>
-				Title 3
-			</Title3>
-			<Text>
-				Lets talk about waterfall, yeah, the bad boy in town, the one everybody
-				hates. Waterfall in The main idea is:
-			</Text>
-			<Text>
-				1- We get the requirements, what we want to do, the stakeholders needs.
-				<br />
-				2- You plan how to do it, often comes with an analysis and design of the
-				solution.
-				<br />
-				3- You implement it, creating working software.
-				<br />
-				4- You deliver the software and wait for feedback, creating
-				documentation during the process.
-				<br />
-				5- Maintenance of the working solution. Once we deliver the solution, we
-				ask for feedback and if we need to touch anything, we start the process
-				all over again.
-			</Text>
-
-			<Text>
-				This is awesome as long as the requirements are super stable and we know
-				they will not change during implementation, something that in the real
-				world is practically impossible as they are ALWAYS changing. If we were
-				a fabric we wouldnt have any of these issues, as we know the specific
-				required materials to create something, we put them in the machine, and
-				the result is always going to be the same. But we work with software
-				solutions to meet peoples needs, and these are always changing,
-				evolving. Here comes the biggest problem with the waterfall methodology.
-				We have to wait until the end of the implementation to receive feedback
-				and then start the whole process again, so what if the user needs have
-				changed in the meantime ? Weve just wasted a lot of useful time.
-			</Text>
-			<Text>
-				Lets talk about waterfall, yeah, the bad boy in town, the one everybody
-				hates. Waterfall in The main idea is:
-			</Text>
-			<Text>
-				1- We get the requirements, what we want to do, the stakeholders needs.
-				<br />
-				2- You plan how to do it, often comes with an analysis and design of the
-				solution.
-				<br />
-				3- You implement it, creating working software.
-				<br />
-				4- You deliver the software and wait for feedback, creating
-				documentation during the process.
-				<br />
-				5- Maintenance of the working solution. Once we deliver the solution, we
-				ask for feedback and if we need to touch anything, we start the process
-				all over again.
-			</Text>
-
-			<Text>
-				This is awesome as long as the requirements are super stable and we know
-				they will not change during implementation, something that in the real
-				world is practically impossible as they are ALWAYS changing. If we were
-				a fabric we wouldnt have any of these issues, as we know the specific
-				required materials to create something, we put them in the machine, and
-				the result is always going to be the same. But we work with software
-				solutions to meet peoples needs, and these are always changing,
-				evolving. Here comes the biggest problem with the waterfall methodology.
-				We have to wait until the end of the implementation to receive feedback
-				and then start the whole process again, so what if the user needs have
-				changed in the meantime ? Weve just wasted a lot of useful time.
-			</Text>
-			<Text>
-				Lets talk about waterfall, yeah, the bad boy in town, the one everybody
-				hates. Waterfall in The main idea is:
-			</Text>
-			<Text>
-				1- We get the requirements, what we want to do, the stakeholders needs.
-				<br />
-				2- You plan how to do it, often comes with an analysis and design of the
-				solution.
-				<br />
-				3- You implement it, creating working software.
-				<br />
-				4- You deliver the software and wait for feedback, creating
-				documentation during the process.
-				<br />
-				5- Maintenance of the working solution. Once we deliver the solution, we
-				ask for feedback and if we need to touch anything, we start the process
-				all over again.
-			</Text>
-
-			<Text>
-				This is awesome as long as the requirements are super stable and we know
-				they will not change during implementation, something that in the real
-				world is practically impossible as they are ALWAYS changing. If we were
-				a fabric we wouldnt have any of these issues, as we know the specific
-				required materials to create something, we put them in the machine, and
-				the result is always going to be the same. But we work with software
-				solutions to meet peoples needs, and these are always changing,
-				evolving. Here comes the biggest problem with the waterfall methodology.
-				We have to wait until the end of the implementation to receive feedback
-				and then start the whole process again, so what if the user needs have
-				changed in the meantime ? Weve just wasted a lot of useful time.
-			</Text>
+		<BookLayout
+			bookContent={bookContent}
+			currentChapter={currentChapter}
+			pagination={pagination}
+		>
+			<MDXRemoteWrapperStyled>
+				<MDXRemote
+					{...source}
+					components={{
+						...MDXComponenets,
+						h1: ({ children, ref, ...props }) => (
+							<Title3 as='h1' {...props}>
+								{children}
+							</Title3>
+						),
+						h2: ({ children, ref, ...props }) => (
+							<Title4 as='h2' {...props}>
+								<MustachiIcon /> {children}
+							</Title4>
+						),
+						pre: ({ children, ref, ...props }) => (
+							<div style={{ display: 'grid', overflowX: 'auto' }}>
+								<pre {...props}>{children}</pre>
+							</div>
+						),
+						p: ({ children, ref, ...props }) => (
+							<Text as='p' {...props}>
+								{children}
+							</Text>
+						),
+						li: ({ children, ref, ...props }) => (
+							<Text as='li' {...props}>
+								{children}
+							</Text>
+						),
+					}}
+				/>
+			</MDXRemoteWrapperStyled>
 		</BookLayout>
 	);
 }
