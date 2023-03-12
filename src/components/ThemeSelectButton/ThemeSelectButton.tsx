@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from 'src/components/philip/Button';
-import { Icon } from 'src/components/philip/Icon';
-import { ThemeIcon } from 'src/components/philip/IconSource';
+import { Button } from 'src/components/Button';
+import { Icon } from 'src/components/Icon';
+import { ThemeIcon } from 'src/components/IconSource';
 import { media } from 'src/theme';
 import styled from 'styled-components';
 

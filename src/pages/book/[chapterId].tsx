@@ -3,15 +3,15 @@ import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import rehypePrism from 'rehype-prism-plus';
 import rehypeSlug from 'rehype-slug';
-import MDXComponenets from 'src/components/MDXComponents';
 import {
 	BookContent,
 	Chapter,
-} from 'src/components/philip/BookContentNavigation/bookContent';
-import { BookLayout } from 'src/components/philip/BookLayout';
-import { MustachiIcon } from 'src/components/philip/IconSource';
-import { Text } from 'src/components/philip/Text';
-import { Title3, Title4 } from 'src/components/philip/Title';
+} from 'src/components/BookContentNavigation/bookContent';
+import { BookLayout } from 'src/components/BookLayout';
+import { MustachiIcon } from 'src/components/IconSource';
+import MDXComponenets from 'src/components/MDXComponents';
+import { Text } from 'src/components/Text';
+import { Title3, Title4 } from 'src/components/Title';
 import { color } from 'src/theme';
 import { Pagination } from 'src/utils/Pagination';
 import {

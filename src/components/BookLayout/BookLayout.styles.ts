@@ -1,5 +1,5 @@
-import { Button } from 'src/components/philip/Button';
-import { IconButton } from 'src/components/philip/IconButton';
+import { Button } from 'src/components/Button';
+import { IconButton } from 'src/components/IconButton';
 import { color, deviceSize, media } from 'src/theme';
 import styled, { css, keyframes } from 'styled-components';
 

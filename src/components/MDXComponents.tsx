@@ -1,4 +1,4 @@
-import { Text } from './philip/Text';
+import { Text } from './Text';
 
 const MDXComponenets = {
 	Text,

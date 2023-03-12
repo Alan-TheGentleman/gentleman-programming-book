@@ -43,7 +43,7 @@ export async function getPagination(chapterId?: string) {
 		return {
 			chapterId,
 			name: data.name,
-			link: constants.URL + '/philip' + '/' + chapterId + '#' + data.id,
+			link: constants.URL + '/book' + '/' + chapterId + '#' + data.id,
 		};
 	});
 
@@ -69,10 +69,10 @@ export async function generateBookContent(chapterId?: string) {
 			chapterId,
 			name: data.name,
 			order: data.order,
-			link: constants.URL + '/philip' + '/' + chapterId + '#' + data.id,
+			link: constants.URL + '/book' + '/' + chapterId + '#' + data.id,
 			titleList: data.titleList.map(title => ({
 				name: title.name,
-				link: constants.URL + '/philip' + '/' + chapterId + '#' + title.id,
+				link: constants.URL + '/book' + '/' + chapterId + '#' + title.id,
 			})),
 		};
 	});

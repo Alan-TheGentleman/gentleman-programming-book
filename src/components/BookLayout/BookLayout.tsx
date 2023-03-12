@@ -3,23 +3,23 @@ import React from 'react';
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from 'react-icons/fa';
 import { GoBook } from 'react-icons/go';
 import { MdClose } from 'react-icons/md';
-import { BookContentNavigation } from 'src/components/philip/BookContentNavigation';
+import { BookContentNavigation } from 'src/components/BookContentNavigation';
 import {
 	BookContent,
 	Chapter,
-} from 'src/components/philip/BookContentNavigation/bookContent';
-import { ChapterContent } from 'src/components/philip/BookContentNavigation/ChapterContent';
-import { Button } from 'src/components/philip/Button';
-import { Icon } from 'src/components/philip/Icon';
-import { IconButton } from 'src/components/philip/IconButton';
+} from 'src/components/BookContentNavigation/bookContent';
+import { ChapterContent } from 'src/components/BookContentNavigation/ChapterContent';
+import { Button } from 'src/components/Button';
+import { Icon } from 'src/components/Icon';
+import { IconButton } from 'src/components/IconButton';
 import {
 	MenuIcon,
 	ThemeIcon,
 	TranslateIcon,
 	ZoomInText,
 	ZoomOutText,
-} from 'src/components/philip/IconSource';
-import { ThemePicker } from 'src/components/philip/ThemePicker';
+} from 'src/components/IconSource';
+import { ThemePicker } from 'src/components/ThemePicker';
 import { Pagination } from 'src/utils/Pagination';
 
 import {

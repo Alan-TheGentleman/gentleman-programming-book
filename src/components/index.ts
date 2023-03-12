@@ -1,1 +1,1 @@
-export * from './philip/BookContentNavigation';
+export * from './BookContentNavigation';
