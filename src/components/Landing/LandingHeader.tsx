@@ -2,19 +2,17 @@ import Link from 'next/link';
 import React from 'react';
 import { Button } from 'src/components/Button';
 import { IconButton } from 'src/components/IconButton';
-import {
-	TranslateIcon,
-	ZoomInText,
-	ZoomOutText,
-} from 'src/components/IconSource';
+import { ZoomInText, ZoomOutText } from 'src/components/IconSource';
 import { DiscordIcon } from 'src/components/IconSource/DiscordIcon';
 import { InstagramIcon } from 'src/components/IconSource/InstagramIcon';
 import { SpotifyIcon } from 'src/components/IconSource/SpotifyIcon';
 import { TwitchIcon } from 'src/components/IconSource/TwitchIcon';
 import { YoutubeIcon } from 'src/components/IconSource/YoutubeIcon';
+import { LanguageSelect } from 'src/components/LanguajeSelect/LanguajeSelect';
 import { ThemePicker } from 'src/components/ThemePicker';
 import { ThemeSelectButton } from 'src/components/ThemeSelectButton';
 import { media } from 'src/theme';
+import { zoomIn, zoomOut } from 'src/utils';
 import { socialNetworks } from 'src/utils/socialNetwork';
 import styled from 'styled-components';
 
@@ -81,20 +79,19 @@ export const LandingHeader: React.FC = () => {
 			</SocialNetworksStyled>
 
 			<SettingActions>
-				<IconButton
-					colorScheme='primary'
-					variant='text'
-					asIcon={<TranslateIcon />}
-				/>
+				<LanguageSelect />
+
 				<IconButton
 					colorScheme='primary'
 					variant='text'
 					asIcon={<ZoomOutText />}
+					onClick={zoomOut}
 				/>
 				<IconButton
 					colorScheme='primary'
 					variant='text'
 					asIcon={<ZoomInText />}
+					onClick={zoomIn}
 				/>
 
 				<ThemePicker trigger={<ThemeSelectButton />} />
