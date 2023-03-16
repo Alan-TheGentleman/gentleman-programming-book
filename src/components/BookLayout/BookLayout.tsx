@@ -20,6 +20,7 @@ import {
 	ZoomOutText,
 } from 'src/components/IconSource';
 import { ThemePicker } from 'src/components/ThemePicker';
+import { zoomIn, zoomOut } from 'src/utils';
 import { Pagination } from 'src/utils/Pagination';
 
 import {
@@ -37,19 +38,21 @@ type BookLayoutProps = {
 	bookContent?: BookContent;
 	currentChapter: Chapter;
 	pagination: Pagination;
+	id?: string;
 };
 
-export const BookLayout: React.FC<BookLayoutProps> = ({
-	children,
-	bookContent,
-	currentChapter,
-	pagination,
-}) => {
+export const BookLayout = React.forwardRef<
+	HTMLDivElement | null,
+	BookLayoutProps
+>(function BookLayout(
+	{ children, bookContent, currentChapter, pagination, id },
+	ref,
+) {
 	const router = useRouter();
-	const ref = React.useRef<HTMLDialogElement | null>(null);
+	const modalRef = React.useRef<HTMLDialogElement | null>(null);
 
 	return (
-		<BookLayoutStyled>
+		<BookLayoutStyled id={id} ref={ref}>
 			<ContentWrapperStyled>{children}</ContentWrapperStyled>
 
 			<PaginationStyled>
@@ -66,7 +69,7 @@ export const BookLayout: React.FC<BookLayoutProps> = ({
 				<IconButton
 					asIcon={<GoBook />}
 					colorScheme='secondary'
-					onClick={() => ref.current?.showModal()}
+					onClick={() => modalRef.current?.showModal()}
 				/>
 
 				<Button
@@ -82,8 +85,8 @@ export const BookLayout: React.FC<BookLayoutProps> = ({
 
 			<ReaderConfigButtonsStyled>
 				<IconButton variant='text' asIcon={<TranslateIcon />} />
-				<IconButton variant='text' asIcon={<ZoomOutText />} />
-				<IconButton variant='text' asIcon={<ZoomInText />} />
+				<IconButton variant='text' asIcon={<ZoomOutText />} onClick={zoomOut} />
+				<IconButton variant='text' asIcon={<ZoomInText />} onClick={zoomIn} />
 				<ThemePicker
 					justIcons
 					trigger={
@@ -97,7 +100,7 @@ export const BookLayout: React.FC<BookLayoutProps> = ({
 			</ReaderConfigButtonsStyled>
 
 			<AsideStyled>
-				<Button onClick={() => ref.current?.showModal()}>
+				<Button onClick={() => modalRef.current?.showModal()}>
 					<Icon>
 						<MenuIcon />
 					</Icon>{' '}
@@ -107,19 +110,19 @@ export const BookLayout: React.FC<BookLayoutProps> = ({
 				<ChapterContent chapter={currentChapter} />
 			</AsideStyled>
 
-			<DialogStyled ref={ref}>
+			<DialogStyled ref={modalRef}>
 				<ContentDialogWrapper>
 					<IconButton
 						asIcon={<MdClose />}
 						variant='text'
-						onClick={() => ref.current?.close()}
+						onClick={() => modalRef.current?.close()}
 					/>
 					<BookContentNavigation
-						onNavigate={() => ref.current?.close()}
+						onNavigate={() => modalRef.current?.close()}
 						bookContent={bookContent}
 					/>
 				</ContentDialogWrapper>
 			</DialogStyled>
 		</BookLayoutStyled>
 	);
-};
+});

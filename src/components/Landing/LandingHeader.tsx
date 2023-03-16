@@ -15,6 +15,7 @@ import { YoutubeIcon } from 'src/components/IconSource/YoutubeIcon';
 import { ThemePicker } from 'src/components/ThemePicker';
 import { ThemeSelectButton } from 'src/components/ThemeSelectButton';
 import { media } from 'src/theme';
+import { zoomIn, zoomOut } from 'src/utils';
 import { socialNetworks } from 'src/utils/socialNetwork';
 import styled from 'styled-components';
 
@@ -90,11 +91,13 @@ export const LandingHeader: React.FC = () => {
 					colorScheme='primary'
 					variant='text'
 					asIcon={<ZoomOutText />}
+					onClick={zoomOut}
 				/>
 				<IconButton
 					colorScheme='primary'
 					variant='text'
 					asIcon={<ZoomInText />}
+					onClick={zoomIn}
 				/>
 
 				<ThemePicker trigger={<ThemeSelectButton />} />

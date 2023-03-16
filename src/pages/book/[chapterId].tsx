@@ -1,17 +1,24 @@
+/* eslint-disable @next/next/no-img-element */
+// eslint-disable-next-line simple-import-sort/imports
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import rehypePrism from 'rehype-prism-plus';
 import rehypeSlug from 'rehype-slug';
 import {
+	BookLayout,
+	MustachiIcon,
+	SelectedMenu,
+	ZoomImageConfig,
+} from 'src/components';
+import {
 	BookContent,
 	Chapter,
 } from 'src/components/BookContentNavigation/bookContent';
-import { BookLayout } from 'src/components/BookLayout';
-import { MustachiIcon } from 'src/components/IconSource';
 import MDXComponenets from 'src/components/MDXComponents';
 import { Text } from 'src/components/Text';
 import { Title3, Title4 } from 'src/components/Title';
+
 import { color } from 'src/theme';
 import { Pagination } from 'src/utils/Pagination';
 import {
@@ -97,39 +104,43 @@ export default function ChapterDetail({
 			currentChapter={currentChapter}
 			pagination={pagination}
 		>
-			<MDXRemoteWrapperStyled>
-				<MDXRemote
-					{...source}
-					components={{
-						...MDXComponenets,
-						h1: ({ children, ref, ...props }) => (
-							<Title3 as='h1' {...props}>
-								{children}
-							</Title3>
-						),
-						h2: ({ children, ref, ...props }) => (
-							<Title4 as='h2' {...props}>
-								<MustachiIcon /> {children}
-							</Title4>
-						),
-						pre: ({ children, ref, ...props }) => (
-							<div style={{ display: 'grid', overflowX: 'auto' }}>
-								<pre {...props}>{children}</pre>
-							</div>
-						),
-						p: ({ children, ref, ...props }) => (
-							<Text as='p' {...props}>
-								{children}
-							</Text>
-						),
-						li: ({ children, ref, ...props }) => (
-							<Text as='li' {...props}>
-								{children}
-							</Text>
-						),
-					}}
-				/>
-			</MDXRemoteWrapperStyled>
+			<SelectedMenu wrapperId='selectable-container'>
+				<MDXRemoteWrapperStyled>
+					<MDXRemote
+						{...source}
+						components={{
+							...MDXComponenets,
+
+							h1: ({ children, ref, ...props }) => (
+								<Title3 as='h1' {...props}>
+									{children}
+								</Title3>
+							),
+							h2: ({ children, ref, ...props }) => (
+								<Title4 as='h2' {...props}>
+									<MustachiIcon /> {children}
+								</Title4>
+							),
+							pre: ({ children, ref, ...props }) => (
+								<div style={{ display: 'grid', overflowX: 'auto' }}>
+									<pre {...props}>{children}</pre>
+								</div>
+							),
+							p: ({ children, ref, ...props }) => (
+								<Text as='p' {...props}>
+									{children}
+								</Text>
+							),
+							li: ({ children, ref, ...props }) => (
+								<Text as='li' {...props}>
+									{children}
+								</Text>
+							),
+						}}
+					/>
+				</MDXRemoteWrapperStyled>
+			</SelectedMenu>
+			<ZoomImageConfig />
 		</BookLayout>
 	);
 }
