@@ -112,8 +112,8 @@ interface PageProps {
 	bookContent: BookContent;
 }
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ params }) => {
-	const { bookContent } = await generateBookContent();
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+	const { bookContent } = await generateBookContent(locale);
 
 	if (!bookContent) throw new Error('There is a missing property');
 

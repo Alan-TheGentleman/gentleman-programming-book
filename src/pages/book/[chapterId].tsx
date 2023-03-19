@@ -34,7 +34,7 @@ export const getStaticPaths: GetStaticPaths = p => {
 
 	return {
 		paths,
-		fallback: false,
+		fallback: 'blocking',
 	};
 };
 
@@ -69,11 +69,12 @@ const MDXRemoteWrapperStyled = styled('div')({
 export const getStaticProps: GetStaticProps<
 	PageProps,
 	{ chapterId: string }
-> = async ({ params }) => {
-	const { content } = await readChapter(params?.chapterId);
-	const pagination = await getPagination(params?.chapterId);
+> = async ({ params, locale }) => {
+	const { content } = await readChapter(params?.chapterId, locale);
+	const pagination = await getPagination(params?.chapterId, locale);
 
 	const { bookContent, currentChapter } = await generateBookContent(
+		locale,
 		params?.chapterId,
 	);
 

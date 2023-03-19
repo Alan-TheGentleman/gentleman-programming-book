@@ -12,7 +12,7 @@ type Props = {
 
 export const Option: React.FC<Props> = ({ children, value, className }) => {
 	return (
-		<SelectItem value={value}>
+		<SelectItem value={value} onClick={e => e.stopPropagation()}>
 			<div className={className}>{children}</div>
 		</SelectItem>
 	);

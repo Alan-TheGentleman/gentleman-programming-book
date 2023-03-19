@@ -2,16 +2,13 @@ import Link from 'next/link';
 import React from 'react';
 import { Button } from 'src/components/Button';
 import { IconButton } from 'src/components/IconButton';
-import {
-	TranslateIcon,
-	ZoomInText,
-	ZoomOutText,
-} from 'src/components/IconSource';
+import { ZoomInText, ZoomOutText } from 'src/components/IconSource';
 import { DiscordIcon } from 'src/components/IconSource/DiscordIcon';
 import { InstagramIcon } from 'src/components/IconSource/InstagramIcon';
 import { SpotifyIcon } from 'src/components/IconSource/SpotifyIcon';
 import { TwitchIcon } from 'src/components/IconSource/TwitchIcon';
 import { YoutubeIcon } from 'src/components/IconSource/YoutubeIcon';
+import { LanguageSelect } from 'src/components/LanguajeSelect/LanguajeSelect';
 import { ThemePicker } from 'src/components/ThemePicker';
 import { ThemeSelectButton } from 'src/components/ThemeSelectButton';
 import { media } from 'src/theme';
@@ -82,11 +79,8 @@ export const LandingHeader: React.FC = () => {
 			</SocialNetworksStyled>
 
 			<SettingActions>
-				<IconButton
-					colorScheme='primary'
-					variant='text'
-					asIcon={<TranslateIcon />}
-				/>
+				<LanguageSelect />
+
 				<IconButton
 					colorScheme='primary'
 					variant='text'

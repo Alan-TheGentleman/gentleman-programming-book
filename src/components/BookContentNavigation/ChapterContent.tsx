@@ -79,7 +79,9 @@ export const ChapterContent: React.FC<ChapterContentProps> = ({
 	chapter,
 	onNavigate,
 }) => {
-	const { asPath } = useRouter();
+	const router = useRouter();
+	const [asPath, setAsPath] = React.useState<string | null>(null);
+
 	const [isOpen, setIsOpen] = React.useState(false);
 
 	const handleNavigate = (url: string) => {
@@ -90,24 +92,29 @@ export const ChapterContent: React.FC<ChapterContentProps> = ({
 	const handleOpen = () => setIsOpen(s => !s);
 
 	const isCurrentChapter = () => {
+		if (!asPath) return false;
 		return (
-			chapter.titleList.some(title => title.link.endsWith(asPath)) ||
-			asPath.includes(chapter.chapterId)
+			chapter?.titleList.some(title => title.link.endsWith(asPath)) ||
+			asPath.includes(chapter?.chapterId)
 		);
 	};
 
 	const _open = isOpen || isCurrentChapter();
 
+	React.useEffect(() => {
+		setAsPath(router.asPath);
+	}, [router.asPath]);
+
 	return (
 		<DetailsStyled
-			key={chapter.link}
+			key={chapter?.link}
 			open={true}
 			onClick={e => e.preventDefault()}
 		>
 			<SummaryStyled>
 				<ChapterNumberWrapperStyled>
 					<Title6 as='h3' colorScheme='secondary'>
-						Chapter Nº {chapter.order}
+						Chapter Nº {chapter?.order}
 					</Title6>
 					<IconButton
 						asIcon={<MdOutlineKeyboardArrowDown />}
@@ -119,20 +126,25 @@ export const ChapterContent: React.FC<ChapterContentProps> = ({
 					/>
 				</ChapterNumberWrapperStyled>
 
-				<Link passHref legacyBehavior href={chapter.link}>
-					<Title3 as='a' onClick={() => handleNavigate(chapter.link)}>
-						{chapter.name}
+				<Link passHref legacyBehavior href={chapter?.link || ''}>
+					<Title3 as='a' onClick={() => handleNavigate(chapter?.link)}>
+						{chapter?.name}
 					</Title3>
 				</Link>
 			</SummaryStyled>
 
 			<TitleListStyled data-open={_open}>
-				{chapter.titleList.map(title => (
+				{chapter?.titleList.map(title => (
 					<TitleItemStyled key={title.link}>
 						<Link passHref legacyBehavior href={title.link}>
 							<Title5
 								as='a'
-								data-active={title.link.endsWith(asPath)}
+								data-active={
+									asPath &&
+									decodeURIComponent(title.link).endsWith(
+										decodeURIComponent(asPath),
+									)
+								}
 								onClick={() => handleNavigate(title.link)}
 							>
 								<MustachiIcon /> {title.name}

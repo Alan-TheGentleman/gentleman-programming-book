@@ -15,10 +15,10 @@ import { IconButton } from 'src/components/IconButton';
 import {
 	MenuIcon,
 	ThemeIcon,
-	TranslateIcon,
 	ZoomInText,
 	ZoomOutText,
 } from 'src/components/IconSource';
+import { LanguageSelect } from 'src/components/LanguajeSelect';
 import { ThemePicker } from 'src/components/ThemePicker';
 import { zoomIn, zoomOut } from 'src/utils';
 import { Pagination } from 'src/utils/Pagination';
@@ -57,7 +57,7 @@ export const BookLayout = React.forwardRef<
 
 			<PaginationStyled>
 				<Button
-					disabled={!pagination.previousChapter?.link}
+					disabled={!pagination?.previousChapter?.link}
 					onClick={() => router.push(pagination.previousChapter?.link)}
 				>
 					<Icon>
@@ -73,7 +73,7 @@ export const BookLayout = React.forwardRef<
 				/>
 
 				<Button
-					disabled={!pagination.nextChapter?.link}
+					disabled={!pagination?.nextChapter?.link}
 					onClick={() => router.push(pagination.nextChapter?.link)}
 				>
 					<span>Next</span>{' '}
@@ -83,8 +83,8 @@ export const BookLayout = React.forwardRef<
 				</Button>
 			</PaginationStyled>
 
-			<ReaderConfigButtonsStyled>
-				<IconButton variant='text' asIcon={<TranslateIcon />} />
+			<ReaderConfigButtonsStyled onClick={e => e.stopPropagation()}>
+				<LanguageSelect />
 				<IconButton variant='text' asIcon={<ZoomOutText />} onClick={zoomOut} />
 				<IconButton variant='text' asIcon={<ZoomInText />} onClick={zoomIn} />
 				<ThemePicker
