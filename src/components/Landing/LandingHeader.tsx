@@ -30,7 +30,7 @@ const SettingActions = styled.div({
 			borderRadius: '100%',
 		},
 		display: 'grid',
-		gridTemplateColumns: 'repeat(auto-fit,2.2rem)',
+		gridTemplateColumns: 'repeat(auto-fit,2.8rem)',
 		gap: '10%',
 		justifyContent: 'center',
 		alignItems: 'center',

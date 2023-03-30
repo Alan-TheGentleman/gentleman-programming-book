@@ -25,7 +25,7 @@ export const ThemeSelectButton = React.forwardRef(function ThemeSelectButton<
 	Props extends React.ComponentProps<T> & Props2,
 >(props: Props, ref: Props['ref']) {
 	return (
-		<ThemeButtonStyled {...props} ref={ref as any}>
+		<ThemeButtonStyled {...props} ref={ref as any} colorScheme='secondary'>
 			<Icon>
 				<ThemeIcon />
 			</Icon>

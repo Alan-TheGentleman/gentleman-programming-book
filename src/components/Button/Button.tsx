@@ -3,16 +3,20 @@ import styled from 'styled-components';
 
 interface ButtonProps {
 	colorScheme?: Extract<Color, 'primary' | 'secondary'>;
+	variant?: 'solid' | 'text';
 }
 
 export const Button = styled.button.attrs(({ type, ...props }) => ({
 	...props,
 	type: type || 'button',
-}))<ButtonProps>(({ colorScheme = 'secondary' }) => {
+}))<ButtonProps>(({ colorScheme = 'primary', variant = 'solid' }) => {
 	return {
-		color: color[colorScheme].contrast,
-		backgroundColor: color[colorScheme].main,
-
+		color:
+			variant === 'text'
+				? color[colorScheme].main
+				: color[colorScheme].contrast,
+		backgroundColor:
+			variant === 'text' ? 'transparent' : color[colorScheme].main,
 		alignItems: 'center',
 		justifyContent: 'center',
 		border: 'none',
@@ -25,9 +29,17 @@ export const Button = styled.button.attrs(({ type, ...props }) => ({
 		paddingInline: '0.8rem',
 		transition: 'all 0.2s ease-in-out',
 		'&:hover, &:focus': {
-			backgroundColor: color[colorScheme].dark,
+			color:
+				variant === 'text'
+					? color[colorScheme].dark
+					: color[colorScheme].contrast,
+			backgroundColor:
+				variant === 'text'
+					? color[colorScheme].transparent
+					: color[colorScheme].dark,
 		},
 		'&[disabled]': {
+			filter: 'grayscale(60%) contrast(80%)',
 			pointerEvents: 'none',
 		},
 		[media.up('md')]: { fontSize: fontSize.lg },

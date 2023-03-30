@@ -112,7 +112,11 @@ export const ReaderConfigButtonsStyled = styled.div({
 	[`& > ${IconButton}`]: { aspectRatio: '1 / 1' },
 
 	[media.down('lg')]: {
-		gridTemplateColumns: 'repeat(4,2.8rem)',
+		position: 'sticky',
+		background: color.background.default,
+		top: '0',
+		paddingBlock: '0.75rem',
+		gridTemplateColumns: 'repeat(5,2.8rem)',
 	},
 	[media.up('lg')]: {
 		gridTemplateRows: 'repeat(4,2.8rem)',

@@ -1,6 +1,11 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { FaLongArrowAltLeft, FaLongArrowAltRight } from 'react-icons/fa';
+import {
+	FaHome,
+	FaLongArrowAltLeft,
+	FaLongArrowAltRight,
+} from 'react-icons/fa';
 import { GoBook } from 'react-icons/go';
 import { MdClose } from 'react-icons/md';
 import { BookContentNavigation } from 'src/components/BookContentNavigation';
@@ -20,7 +25,7 @@ import {
 } from 'src/components/IconSource';
 import { LanguageSelect } from 'src/components/LanguajeSelect';
 import { ThemePicker } from 'src/components/ThemePicker';
-import { zoomIn, zoomOut } from 'src/utils';
+import { constants, zoomIn, zoomOut } from 'src/utils';
 import { Pagination } from 'src/utils/Pagination';
 
 import {
@@ -57,6 +62,7 @@ export const BookLayout = React.forwardRef<
 
 			<PaginationStyled>
 				<Button
+					colorScheme='secondary'
 					disabled={!pagination?.previousChapter?.link}
 					onClick={() => router.push(pagination.previousChapter?.link)}
 				>
@@ -73,6 +79,7 @@ export const BookLayout = React.forwardRef<
 				/>
 
 				<Button
+					colorScheme='secondary'
 					disabled={!pagination?.nextChapter?.link}
 					onClick={() => router.push(pagination.nextChapter?.link)}
 				>
@@ -84,6 +91,14 @@ export const BookLayout = React.forwardRef<
 			</PaginationStyled>
 
 			<ReaderConfigButtonsStyled onClick={e => e.stopPropagation()}>
+				<Link href={constants.URL} legacyBehavior>
+					<IconButton
+						as='a'
+						asIcon={<FaHome></FaHome>}
+						variant='text'
+						colorScheme='secondary'
+					/>
+				</Link>
 				<LanguageSelect />
 				<IconButton variant='text' asIcon={<ZoomOutText />} onClick={zoomOut} />
 				<IconButton variant='text' asIcon={<ZoomInText />} onClick={zoomIn} />
@@ -100,7 +115,10 @@ export const BookLayout = React.forwardRef<
 			</ReaderConfigButtonsStyled>
 
 			<AsideStyled>
-				<Button onClick={() => modalRef.current?.showModal()}>
+				<Button
+					onClick={() => modalRef.current?.showModal()}
+					colorScheme='secondary'
+				>
 					<Icon>
 						<MenuIcon />
 					</Icon>{' '}

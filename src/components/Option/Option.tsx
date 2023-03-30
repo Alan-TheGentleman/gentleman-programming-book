@@ -2,7 +2,9 @@ import * as SelectPrimitives from '@radix-ui/react-select';
 import React from 'react';
 import styled from 'styled-components';
 
-const SelectItem = styled(SelectPrimitives.SelectItem)({});
+const SelectItem = styled(SelectPrimitives.SelectItem)({
+	cursor: 'pointer',
+});
 
 type Props = {
 	children: React.ReactNode;
