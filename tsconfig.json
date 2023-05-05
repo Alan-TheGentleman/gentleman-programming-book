@@ -15,8 +15,13 @@
 		"jsx": "preserve",
 		"incremental": true,
 		"baseUrl": ".",
-		"paths": {}
+		"paths": {
+			"@/theme/*": ["src/modules/theme/*"],
+			"@/shared/*": ["src/modules/shared/*"],
+			"@/tests/*": ["__TESTS__/*"],
+			"@/*": ["*"]
+		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "templates", "old"]
 }

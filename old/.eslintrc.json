@@ -1,0 +1,23 @@
+{
+	"root": true,
+	"extends": [
+		"eslint:recommended",
+		"standard",
+		"next/core-web-vitals",
+		"prettier"
+	],
+	"plugins": ["simple-import-sort", "import"],
+	"overrides": [
+		{
+			"files": ["__TESTS__/**"],
+			"rules": { "import/first": "off", "no-undef": "off" }
+		}
+	],
+	"rules": {
+		"simple-import-sort/imports": "error",
+		"simple-import-sort/exports": "error",
+		"import/first": "error",
+		"import/newline-after-import": "error",
+		"import/no-duplicates": "error"
+	}
+}
