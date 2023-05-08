@@ -1,23 +1,30 @@
 import { createThemeContract } from '@vanilla-extract/css';
 
+import * as contractUtils from '@/theme/utils/contractUtils';
+
 import { sharedTheme } from './shared.theme.css';
+
+// const
 
 export const themeVars = createThemeContract({
 	...sharedTheme,
 	color: {
+		dark: null,
+		light: null,
+		sepia: null,
+		outline: null,
+
+		black: null,
 		bg1: null,
 		bg1Contrast: null,
+		bg1ContrastLight: null,
 
-		primary: null,
-		primaryLight: null,
-		primaryDark: null,
-		primaryContrast: null,
-		primaryTransparent: null,
+		neutral: contractUtils.createScaleWithAlphas(),
+		primary: contractUtils.createScaleWithAlphas(),
 
-		secondary: null,
-		secondaryLight: null,
-		secondaryDark: null,
-		secondaryContrast: null,
-		secondaryTransparent: null,
+		secondary: contractUtils.createScaleWithAlphas(),
+
+		tertiary: contractUtils.createScaleWithAlphas(),
+		accent: contractUtils.createScaleWithAlphas(),
 	},
 });

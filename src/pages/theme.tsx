@@ -25,7 +25,7 @@ export default function Theme() {
 						value={themeColor}
 						onChange={e => {
 							const value = e.target.value as ThemeColor;
-							// console.log(value);
+
 							// MyLocalStorageRepo().save(localStorageKeys.themeColor, value);
 							// document.documentElement.classList.value = themeClass[value];
 							changeThemeColor(value);

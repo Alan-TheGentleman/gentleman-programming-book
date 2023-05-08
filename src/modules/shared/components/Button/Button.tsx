@@ -1,28 +1,46 @@
+import clsx from 'clsx';
+import Link from 'next/link';
 import React from 'react';
 
 import * as ButtonCss from './Button.css';
 
-type ButtonProps = {
-	children?: React.ReactNode;
-} & ButtonCss.ButtonVariants;
+type Tag = 'button' | 'a';
 
-export const Button: React.FC<ButtonProps> = ({
-	children,
-	colorScheme,
-	disabled,
-	variant,
-	...props
-}) => {
+type ButtonProps<T extends Tag> = {
+	children?: React.ReactNode;
+	as?: T;
+} & ButtonCss.ButtonVariants &
+	(T extends 'a' ? Parameters<typeof Link>['0'] : React.ComponentProps<T>);
+
+export const Button = React.forwardRef(function Button<T extends Tag>(
+	{
+		children,
+		colorScheme,
+		className,
+		size,
+		disabled,
+		variant,
+		as: component,
+		...props
+	}: ButtonProps<T>,
+	ref: React.ForwardedRef<unknown>,
+) {
+	const Tag = component === 'a' ? Link : component || 'button';
 	return (
-		<button
-			className={ButtonCss.buttonRecipe({
-				colorScheme,
-				variant,
-				disabled,
-			})}
-			{...props}
+		<Tag
+			className={clsx(
+				ButtonCss.buttonRecipe({
+					colorScheme,
+					variant,
+					disabled,
+					size,
+				}),
+				className,
+			)}
+			{...(props as any)}
+			ref={ref}
 		>
 			{children}
-		</button>
+		</Tag>
 	);
-};
+}) as <T extends Tag>(props: ButtonProps<T>) => React.ReactElement<T>;

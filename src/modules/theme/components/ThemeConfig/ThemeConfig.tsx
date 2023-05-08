@@ -13,6 +13,7 @@ export const ThemeConfig = () => {
 			MyLocalStorageRepo().save(localStorageKeys.themeColor, themeColorCurrent);
 
 			if (themeColorCurrent === themeColorEnum.values.System) return;
+
 			document.documentElement.classList.value = themeClass[themeColorCurrent];
 		});
 

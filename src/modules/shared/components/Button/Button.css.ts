@@ -1,6 +1,8 @@
 import { createVar } from '@vanilla-extract/css';
 import { recipe, type RecipeVariants } from '@vanilla-extract/recipes';
 
+import * as sharedCss from '@/src/styles/shared.css';
+import { media } from '@/theme/config';
 import { darkTheme } from '@/theme/config/modes/dark.theme.css';
 import { themeVars } from '@/theme/config/modes/theme.contract.css';
 
@@ -24,57 +26,61 @@ const vars = {
 };
 
 export const buttonRecipe = recipe({
-	base: {
-		borderWidth: 0,
-		paddingInline: themeVars.space.space10,
-		paddingBlock: themeVars.space.space08,
-		borderRadius: themeVars.radii.base,
-		transition: 'color 0.2s ease-in-out, background 0.2s ease-in-out',
-		fontFamily: themeVars.font.inter,
-		fontWeight: '400',
-		fontSize: '1rem',
-		letterSpacing: '0.05rem',
-	},
+	base: [
+		sharedCss.outline,
+		{
+			borderWidth: 0,
+			paddingInline: themeVars.space.space10,
+			paddingBlock: themeVars.space.space08,
+			borderRadius: themeVars.radii.base,
+			transition: 'color 0.2s ease-in-out, background 0.2s ease-in-out',
+			fontFamily: themeVars.font.inter,
+			fontWeight: '600',
+			fontSize: '1rem',
+			letterSpacing: '0.05rem',
+			textDecoration: 'none',
+		},
+	],
 
 	variants: {
 		colorScheme: {
 			primary: {
 				vars: {
-					[vars.colorSolid]: themeVars.color.primaryContrast,
-					[vars.bgSolid]: themeVars.color.primary,
-					[vars.bgSolidHover]: themeVars.color.primaryDark,
+					[vars.colorSolid]: themeVars.color.neutral.base,
+					[vars.bgSolid]: themeVars.color.primary.base,
+					[vars.bgSolidHover]: themeVars.color.primary._500,
 
 					[vars.bgOutline]: 'transparent',
-					[vars.bgOutlineHover]: themeVars.color.primaryTransparent,
-					[vars.borderOutline]: `1px solid ${themeVars.color.primary}`,
-					[vars.colorOutline]: themeVars.color.primary,
+					[vars.bgOutlineHover]: themeVars.color.primary._400_30,
+					[vars.borderOutline]: `1px solid ${themeVars.color.primary.base}`,
+					[vars.colorOutline]: themeVars.color.primary.base,
 
 					[vars.bgGhost]: 'transparent',
-					[vars.bgGhostHover]: themeVars.color.primaryTransparent,
-					[vars.colorGhost]: themeVars.color.primary,
+					[vars.bgGhostHover]: themeVars.color.primary._400_30,
+					[vars.colorGhost]: themeVars.color.primary.base,
 
 					[vars.bgLink]: 'transparent',
-					[vars.colorLink]: themeVars.color.primary,
+					[vars.colorLink]: themeVars.color.primary.base,
 					[vars.decorationLink]: 'underline',
 				},
 			},
 			secondary: {
 				vars: {
-					[vars.colorSolid]: themeVars.color.secondaryContrast,
-					[vars.bgSolid]: themeVars.color.secondary,
-					[vars.bgSolidHover]: themeVars.color.secondaryDark,
+					[vars.colorSolid]: themeVars.color.secondary._50,
+					[vars.bgSolid]: themeVars.color.secondary.base,
+					[vars.bgSolidHover]: themeVars.color.secondary._800,
 
 					[vars.bgOutline]: 'transparent',
-					[vars.bgOutlineHover]: themeVars.color.secondaryTransparent,
-					[vars.borderOutline]: `1px solid ${themeVars.color.secondaryLight}`,
-					[vars.colorOutline]: themeVars.color.secondary,
+					[vars.bgOutlineHover]: themeVars.color.secondary._200_30,
+					[vars.borderOutline]: `1px solid ${themeVars.color.secondary._600}`,
+					[vars.colorOutline]: themeVars.color.secondary.base,
 
 					[vars.bgGhost]: 'transparent',
-					[vars.bgGhostHover]: themeVars.color.secondaryTransparent,
-					[vars.colorGhost]: themeVars.color.secondary,
+					[vars.bgGhostHover]: themeVars.color.secondary._200_30,
+					[vars.colorGhost]: themeVars.color.secondary.base,
 
 					[vars.bgLink]: 'transparent',
-					[vars.colorLink]: themeVars.color.secondary,
+					[vars.colorLink]: themeVars.color.secondary.base,
 					[vars.decorationLink]: 'underline',
 				},
 				selectors: {
@@ -140,6 +146,49 @@ export const buttonRecipe = recipe({
 				},
 			},
 		},
+		size: {
+			xs: {
+				fontSize: themeVars.fontSize.xs,
+				'@media': {
+					[media.up('md')]: {
+						fontSize: themeVars.fontSize.sm,
+					},
+				},
+			},
+			sm: {
+				fontSize: themeVars.fontSize.sm,
+				'@media': {
+					[media.up('md')]: {
+						fontSize: themeVars.fontSize.md,
+					},
+				},
+			},
+			md: {
+				fontSize: themeVars.fontSize.md,
+				'@media': {
+					[media.up('md')]: {
+						fontSize: themeVars.fontSize.lg,
+					},
+				},
+			},
+			lg: {
+				fontSize: themeVars.fontSize.lg,
+				'@media': {
+					[media.up('md')]: {
+						fontSize: themeVars.fontSize.xl,
+					},
+				},
+			},
+			xl: {
+				fontSize: themeVars.fontSize.xl,
+				'@media': {
+					[media.up('md')]: {
+						fontSize: themeVars.fontSize.xl2,
+					},
+				},
+			},
+		},
+
 		disabled: {
 			true: {
 				opacity: 0.5,
@@ -151,6 +200,7 @@ export const buttonRecipe = recipe({
 	defaultVariants: {
 		colorScheme: 'primary',
 		variant: 'solid',
+		size: 'md',
 	},
 });
 

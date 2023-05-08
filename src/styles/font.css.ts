@@ -4,7 +4,6 @@ const merriweather = 'merriweather';
 const inter = 'inter';
 
 // Merriweather
-
 globalFontFace(merriweather, {
 	src: 'url("/fonts/Merriweather-Black.ttf") format("truetype")',
 	fontDisplay: 'block',

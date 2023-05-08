@@ -1,4 +1,4 @@
-import { mediaHelper } from '@/theme/utils/mediaHelper';
+import { mediaHelper } from '@/theme/utils';
 
 export const deviceSize = {
 	xs: 480,

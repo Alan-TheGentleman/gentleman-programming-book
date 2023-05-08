@@ -335,3 +335,6 @@ globalStyle('template', {
 globalStyle('[hidden]', {
 	display: 'none',
 });
+globalStyle('svg', {
+	verticalAlign: 'middle',
+});
