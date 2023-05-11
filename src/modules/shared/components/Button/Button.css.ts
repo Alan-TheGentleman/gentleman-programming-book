@@ -39,6 +39,12 @@ export const buttonRecipe = recipe({
 			fontSize: '1rem',
 			letterSpacing: '0.05rem',
 			textDecoration: 'none',
+			selectors: {
+				'&[disabled]': {
+					filter: 'grayscale(0.2) brightness(0.7)',
+					pointerEvents: 'none',
+				},
+			},
 		},
 	],
 
@@ -189,12 +195,11 @@ export const buttonRecipe = recipe({
 			},
 		},
 
-		disabled: {
-			true: {
-				opacity: 0.5,
-				pointerEvents: 'none',
-			},
-		},
+		// disabled: {
+		// 	true: {
+
+		// 	},
+		// },
 	},
 
 	defaultVariants: {

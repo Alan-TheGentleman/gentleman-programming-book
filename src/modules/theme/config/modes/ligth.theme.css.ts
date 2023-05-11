@@ -74,19 +74,5 @@ export const lightTheme = createTheme(themeVars, {
 			800: '#432c07',
 			900: '#1a0e00',
 		}),
-
-		accent: addAlphasToScale({
-			base: '#1CEBBE',
-			50: '#dbfff8',
-			100: '#b2faeb',
-			200: '#85f6dd',
-			300: '#58f1d0',
-			400: '#2cecc3',
-			500: '#13d3a9',
-			600: '#02a484',
-			700: '#00755e',
-			800: '#004737',
-			900: '#001913',
-		}),
 	},
 });

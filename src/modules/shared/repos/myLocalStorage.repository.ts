@@ -3,7 +3,8 @@ import { type ObjectValuesInfer } from '@/shared/utils';
 import { type LocalStorageRepository } from './localStorage.interface';
 
 export const localStorageKeys = {
-	themeColor: '[THEME]_COLOR_STORAGED',
+	themeColor: '[THEME]_COLOR_SCHEME',
+	bookmark: '[BOOKMARK]_CHAPTER',
 } as const;
 
 export type LocalStorageKeys = ObjectValuesInfer<typeof localStorageKeys>;

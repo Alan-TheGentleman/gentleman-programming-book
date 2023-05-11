@@ -2,8 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 
-import * as BookChapterCss from '@/book/components/BookChapterIndex/BookChapterIndex.css';
-import { BookChapterIndex } from '@/book/models/bookContent';
+import { BookChapter } from '@/book/models/bookContent';
 import {
 	Accordion,
 	AccordionItem,
@@ -12,26 +11,25 @@ import {
 	Icon,
 	MustachiIcon,
 } from '@/shared/components';
+import { AccordionProps } from '@/shared/components/Accordion/Accordion';
+import { localStorageKeys, MyLocalStorageRepo } from '@/shared/repos';
 
-type BookChapterIndexProps = {
-	content: BookChapterIndex | BookChapterIndex[];
-	className?: string;
-	type: 'multiple' | 'single';
+import * as BookChapterCss from './BookChapterIndex.css';
+
+type BookChapterIndexProps = AccordionProps & {
+	items: BookChapter | BookChapter[];
 };
 
 export const BookChapterIndex: React.FC<BookChapterIndexProps> = ({
-	content,
+	items,
 	className,
-	type,
+	...props
 }) => {
-	const _content = Array.isArray(content) ? content : [content];
+	const _content = Array.isArray(items) ? items : [items];
 
 	return (
-		<Accordion
-			className={clsx(BookChapterCss.accordion, className)}
-			type={type}
-		>
-			{_content.map((chapter, idx) => (
+		<Accordion className={clsx(BookChapterCss.accordion, className)} {...props}>
+			{_content.map(chapter => (
 				<AccordionItem
 					key={chapter.link}
 					className={clsx(BookChapterCss.accordionItem)}
@@ -42,17 +40,17 @@ export const BookChapterIndex: React.FC<BookChapterIndexProps> = ({
 							className={BookChapterCss.accordionButton}
 						>
 							<Heading
-								as='h2'
+								component='h2'
 								fontSize='xs'
 								className={BookChapterCss.accordionButtonText}
 							>
 								<Heading
-									as='div'
+									component='div'
 									fontSize='lg'
 									color='primary'
 									className={BookChapterCss.accordionButtonTextSub}
 								>
-									Chapter {idx + 1}
+									Chapter {chapter.order}
 									<Icon
 										as={<FaChevronDown />}
 										size='xs'
@@ -61,8 +59,9 @@ export const BookChapterIndex: React.FC<BookChapterIndexProps> = ({
 								</Heading>
 
 								<Heading
-									as='a'
+									component='a'
 									onClick={e => e.stopPropagation()}
+									title={chapter.name}
 									href={chapter.link}
 									className={BookChapterCss.accordionButtonTitle}
 									fontSize='xl3'
@@ -79,14 +78,25 @@ export const BookChapterIndex: React.FC<BookChapterIndexProps> = ({
 									key={title.link}
 									className={BookChapterCss.accordionPanelItem}
 								>
-									<Icon as={<MustachiIcon />} size='xl2' />
+									<Icon
+										className={BookChapterCss.accordionPanelItemIcon}
+										as={<MustachiIcon />}
+										size='xl2'
+									/>
 									<Heading
-										as='a'
+										component='a'
 										fontSize='xl'
+										title={title.value}
+										onClick={() =>
+											MyLocalStorageRepo().save(
+												localStorageKeys.bookmark,
+												title.link,
+											)
+										}
 										href={title.link}
 										className={BookChapterCss.accordionPanelItemText}
 									>
-										{title.name}
+										{title.value}
 									</Heading>
 								</div>
 							))}

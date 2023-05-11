@@ -39,7 +39,7 @@ export const iconRecipe = recipe({
 					},
 				},
 			},
-			xl: {
+			lg: {
 				fontSize: themeVars.fontSize.xl2,
 				'@media': {
 					[media.up('md')]: {
@@ -47,7 +47,7 @@ export const iconRecipe = recipe({
 					},
 				},
 			},
-			xl2: {
+			xl: {
 				fontSize: themeVars.fontSize.xl3,
 				'@media': {
 					[media.up('md')]: {
@@ -55,11 +55,19 @@ export const iconRecipe = recipe({
 					},
 				},
 			},
-			xl3: {
+			xl2: {
 				fontSize: themeVars.fontSize.xl4,
 				'@media': {
 					[media.up('md')]: {
 						fontSize: themeVars.fontSize.xl5,
+					},
+				},
+			},
+			xl3: {
+				fontSize: themeVars.fontSize.xl5,
+				'@media': {
+					[media.up('md')]: {
+						fontSize: themeVars.fontSize.xl6,
 					},
 				},
 			},

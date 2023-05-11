@@ -24,3 +24,8 @@ export const outline = style({
 		},
 	},
 });
+
+export const listReset = style({
+	listStyle: 'none',
+	padding: 0,
+});

@@ -1,5 +1,6 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
+import * as sharedCss from '@/src/styles/shared.css';
 import { media } from '@/theme/config';
 import { sepiaTheme } from '@/theme/config/modes/sepia.theme.css';
 import { themeVars } from '@/theme/config/modes/theme.contract.css';
@@ -113,13 +114,6 @@ export const mustachiWrapper = style({
 	},
 });
 
-export const heroButton = style({
-	marginInlineEnd: 'auto',
-	marginBlockStart: themeVars.space.space16,
-	borderRadius: themeVars.radii.full,
-	paddingInline: themeVars.space.space32,
-});
-
 const rotation = keyframes({
 	'0%': {
 		transform: 'rotateY(-500deg) scale(0)',
@@ -130,12 +124,19 @@ const rotation = keyframes({
 });
 
 export const mustache = style({
+	height: 'auto',
 	maxWidth: '12rem',
 	aspectRatio: '1/1',
 	verticalAlign: 'middle',
-	height: 'auto',
 	objectFit: 'cover',
 	animation: `${rotation} 700ms linear`,
+});
+
+export const heroButton = style({
+	marginInlineEnd: 'auto',
+	marginBlockStart: themeVars.space.space16,
+	borderRadius: themeVars.radii.full,
+	paddingInline: themeVars.space.space32,
 });
 
 export const main = style({
@@ -154,17 +155,20 @@ export const footer = style({
 	marginInline: 'auto',
 });
 
-export const footerList = style({
-	display: 'flex',
-	flexDirection: 'column',
-	gap: themeVars.space.space32,
-	marginInline: 'auto',
-	'@media': {
-		[media.up('md')]: {
-			flexDirection: 'row',
+export const footerList = style([
+	sharedCss.listReset,
+	{
+		display: 'flex',
+		flexDirection: 'column',
+		gap: themeVars.space.space32,
+		marginInline: 'auto',
+		'@media': {
+			[media.up('md')]: {
+				flexDirection: 'row',
+			},
 		},
 	},
-});
+]);
 
 export const footerItem = style({
 	// maxWidth: themeVars.dimensions.sm,

@@ -3,7 +3,9 @@ import React from 'react';
 
 import * as IconCss from '@/shared/components/Icon/Icon.css';
 
-type IconProps = { as: React.ReactElement } & IconCss.IconVariants &
+type IconProps = {
+	as: React.ReactElement;
+} & IconCss.IconVariants &
 	React.ComponentProps<'i'>;
 
 export const Icon: React.FC<IconProps> = ({

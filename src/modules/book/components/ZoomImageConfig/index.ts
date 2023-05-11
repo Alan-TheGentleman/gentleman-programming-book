@@ -1,0 +1,1 @@
+export { ZoomImageConfig } from './ZoomImageConfig';

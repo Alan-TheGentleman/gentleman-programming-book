@@ -1,4 +1,5 @@
 import '@/src/styles/global.css';
+import '@/src/styles/rehype-prism-theme.css';
 
 import type { AppProps } from 'next/app';
 

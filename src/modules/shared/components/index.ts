@@ -1,5 +1,6 @@
 export * from './Accordion';
 export * from './Button';
+export * from './Dialog';
 export * from './Heading';
 export * from './Hr';
 export * from './Icon';

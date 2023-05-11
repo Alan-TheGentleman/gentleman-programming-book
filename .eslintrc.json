@@ -3,36 +3,20 @@
 	"extends": [
 		"plugin:prettier/recommended",
 		"plugin:react/recommended",
-		"plugin:jest/recommended",
 		"plugin:react-hooks/recommended",
 		"next/core-web-vitals",
 		"standard",
 		"plugin:@typescript-eslint/recommended",
 		"prettier"
 	],
-	// "extends": [
-	// 	"standard",
-	// 	"plugin:import/typescript",
-	// 	"next/core-web-vitals",
-	// 	"plugin:prettier/recommended",
-	// 	"plugin:@typescript-eslint/recommended",
-	// 	"eslint:recommended"
-	// ],
 	"plugins": [
 		"react",
-		"jest",
 		"react-hooks",
 		"@typescript-eslint",
 		"simple-import-sort",
-		"prettier"
+		"prettier",
+		"import"
 	],
-	// "plugins": [
-	// 	"prettier",
-	// 	"@typescript-eslint",
-	// 	"@typescript-eslint/eslint-plugin",
-	// 	"simple-import-sort",
-	// 	"import"
-	// ],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"project": "./tsconfig.json",

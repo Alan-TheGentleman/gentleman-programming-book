@@ -25,6 +25,5 @@ export const themeVars = createThemeContract({
 		secondary: contractUtils.createScaleWithAlphas(),
 
 		tertiary: contractUtils.createScaleWithAlphas(),
-		accent: contractUtils.createScaleWithAlphas(),
 	},
 });

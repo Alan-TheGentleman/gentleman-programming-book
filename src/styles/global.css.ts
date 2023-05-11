@@ -26,15 +26,19 @@ globalStyle('html', {
 	fontSize: htmlFontSize,
 });
 
-globalStyle('html,body,#__next', {
-	// display: 'flex',
-	// flexDirection: 'column',
-	// flex: '1',
-	// minHeight: '100%',
-	// maxWidth: '100%',
+globalStyle('html,*', {
+	scrollBehavior: `smooth !important` as 'smooth',
 });
 
-globalStyle('ul,li', {
-	listStyle: 'none',
-	padding: 0,
+globalStyle('::-webkit-scrollbar-track', {
+	background: themeVars.color.primary.base_50,
 });
+
+globalStyle('::-webkit-scrollbar', { width: '4px', maxHeight: '4px' });
+
+globalStyle('::-webkit-scrollbar-thumb', {
+	background: themeVars.color.primary._600,
+	borderRadius: '100vh',
+});
+
+globalStyle('html,body,#__next', {});

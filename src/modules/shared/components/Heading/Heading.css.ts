@@ -5,7 +5,7 @@ import { media } from '@/theme/config';
 import { darkTheme } from '@/theme/config/modes/dark.theme.css';
 import { lightTheme } from '@/theme/config/modes/ligth.theme.css';
 import { themeVars } from '@/theme/config/modes/theme.contract.css';
-import { ColorVariants } from '@/theme/utils/ColorsVariants';
+import { ColorVariants } from '@/theme/utils/colorsVariants';
 
 const color = createVar();
 

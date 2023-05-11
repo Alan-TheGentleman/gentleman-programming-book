@@ -9,8 +9,6 @@ import { ThemeColor, themeColorEnum } from '@/theme/config';
 
 import * as ThemeSelectCss from './ThemeSelect.css';
 
-// type ThemeSelectProps = {};
-
 const themeColorss = [
 	{
 		icon: (
@@ -55,7 +53,7 @@ export const ThemeSelect: React.FC = () => {
 				// console.log(value);
 				// MyLocalStorageRepo().save(localStorageKeys.themeColor, value);
 				// document.documentElement.classList.value = themeClass[value];
-				console.log(value);
+
 				changeThemeColor(value);
 			}}
 		>

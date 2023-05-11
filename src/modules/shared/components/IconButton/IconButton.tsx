@@ -12,16 +12,20 @@ type IconButtonProps<T extends AllowedAs> = {
 } & (T extends 'a' ? Parameters<typeof Link>['0'] : React.ComponentProps<T>) &
 	IconButtonCss.IconButtonVariants;
 
-export function IconButton<T extends AllowedAs>({
-	colorScheme,
-	variant,
-	size,
-	icon,
-	component,
-	ref,
-	className,
-	...props
-}: IconButtonProps<T>) {
+export const IconButton = React.forwardRef(function IconButton<
+	T extends AllowedAs,
+>(
+	{
+		colorScheme,
+		variant,
+		size,
+		icon,
+		component,
+		className,
+		...props
+	}: IconButtonProps<T>,
+	ref: React.ForwardedRef<HTMLElement>,
+) {
 	const Tag = component === 'a' ? Link : component || 'button';
 
 	return (
@@ -37,9 +41,10 @@ export function IconButton<T extends AllowedAs>({
 					className,
 				])}
 				{...(props as any)}
+				ref={ref}
 			>
 				{icon}
 			</Tag>
 		</>
 	);
-}
+});

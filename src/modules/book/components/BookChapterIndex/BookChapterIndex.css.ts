@@ -78,6 +78,11 @@ export const accordionItemPanel = style({
 export const accordionPanelItem = style({
 	display: 'flex',
 	columnGap: themeVars.space.space08,
+	alignItems: 'center',
+});
+
+export const accordionPanelItemIcon = style({
+	alignSelf: 'baseline',
 });
 
 export const accordionPanelItemText = style([

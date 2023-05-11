@@ -1,11 +1,17 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import { describe, expect } from 'vitest';
 
-import { Button } from '@/shared/components';
+import { BookRepository } from '@/book/repository/book.repo';
+import Home from '@/src/pages';
 
-describe('example test', () => {
-	it('should be true', () => {
-		render(<Button>example</Button>);
+describe('home', () => {
+	it.concurrent('home', async () => {
+		const bookContent = BookRepository().findAllChapters('en');
 
-		expect(screen.getByText('example')).toBeInTheDocument();
+		render(<Home chapterIndexList={bookContent} />);
+		const main = within(screen.getByRole('main'));
+		expect(
+			main.getByRole('heading', { level: 2, name: /clean agile/i }),
+		).toBeDefined();
 	});
 });

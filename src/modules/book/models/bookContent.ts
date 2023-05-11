@@ -1,11 +1,11 @@
 export interface ChapterTitle {
-	name: string;
 	link: string;
+	value: string;
 }
 export interface BookChapter {
-	chapterId: string;
+	id: string;
+	link: string;
 	name: string;
 	order: number;
-	link: string;
 	titleList: ChapterTitle[];
 }
