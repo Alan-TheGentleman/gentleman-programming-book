@@ -1,0 +1,1 @@
+export { ThemeConfig } from './ThemeConfig';
