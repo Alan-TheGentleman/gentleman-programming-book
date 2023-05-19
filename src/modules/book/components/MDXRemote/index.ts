@@ -1,0 +1,1 @@
+export { MDXRemote } from './MDXRemote';

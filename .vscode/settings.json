@@ -1,4 +1,6 @@
 {
-	"exportall.config.relExclusion": ["/src/utils/read.ts"],
-	"editor.formatOnSave": true
+	"editor.formatOnSave": true,
+	"exportall.config.relExclusion": [
+		"/src/modules/book/schemes/pathListSchema.ts"
+	]
 }

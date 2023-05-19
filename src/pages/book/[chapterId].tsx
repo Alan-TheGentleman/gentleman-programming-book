@@ -1,85 +1,65 @@
-/* eslint-disable @next/next/no-img-element */
-// eslint-disable-next-line simple-import-sort/imports
+/* eslint-disable simple-import-sort/imports */
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
+import { useRouter } from 'next/router';
+import { HiHome, HiSelector } from 'react-icons/hi';
 import rehypePrism from 'rehype-prism-plus';
 import rehypeSlug from 'rehype-slug';
+
 import {
-	BookLayout,
-	MustachiIcon,
-	SelectedMenu,
+	BookChapterIndex,
+	MDXRemote,
+	ShareMenu,
 	ZoomImageConfig,
-} from 'src/components';
+} from '@/book/components';
+import { useFontSize } from '@/book/hooks';
+import { BookChapter, Pagination } from '@/book/models';
+import { BookRepository } from '@/book/repository/book.repo';
+import { pathListScheme } from '@/book/schemes';
 import {
-	BookContent,
-	Chapter,
-} from 'src/components/BookContentNavigation/bookContent';
-import MDXComponenets from 'src/components/MDXComponents';
-import { Text } from 'src/components/Text';
-import { Title3, Title4 } from 'src/components/Title';
+	Button,
+	Dialog,
+	IconButton,
+	MenuIcon,
+	Option,
+	Select,
+	TranslateIcon,
+	ZoomInText,
+	ZoomOutText,
+} from '@/shared/components';
+import { SEO } from '@/shared/components/SEO';
+import * as chapterDetailCss from '@/src/styles/ChapterDetail.css';
+import { ThemeSelect } from '@/theme/components';
 
-import { color } from 'src/theme';
-import { Pagination } from 'src/utils/Pagination';
-import {
-	findPaths,
-	generateBookContent,
-	getPagination,
-	readChapter,
-} from 'src/utils/read';
-import styled from 'styled-components';
+export const getStaticPaths: GetStaticPaths = ({ locales = [] }) => {
+	type Paths = Awaited<ReturnType<GetStaticPaths>>['paths'][0];
+	const pathList = new Set<Paths>();
 
-export const getStaticPaths: GetStaticPaths = p => {
-	const paths = findPaths();
+	const paths = BookRepository().findPaths();
+
+	for (const path of paths) {
+		for (const locale of locales) {
+			pathList.add({ params: { chapterId: path }, locale });
+		}
+	}
 
 	return {
-		paths,
+		paths: pathListScheme.parse(Array.from(pathList)),
 		fallback: 'blocking',
 	};
 };
-
-interface PageProps {
-	source: MDXRemoteSerializeResult<
-		Record<string, unknown>,
-		Record<string, string>
-	>;
-	bookContent: BookContent;
-	currentChapter: Chapter;
-	pagination: Pagination;
-}
-
-const MDXRemoteWrapperStyled = styled('div')({
-	display: 'contents',
-	[`& > ${Title4} + Title4`]: {
-		background: 'red',
-	},
-	[`& > ${Text} img`]: {
-		maxWidth: '100%',
-	},
-	'& h1, & h2': {
-		color: color.secondary.main,
-		[`& svg`]: {
-			maxWidth: '2rem',
-			maxHeight: '2rem',
-			verticalAlign: 'middle',
-		},
-	},
-});
 
 export const getStaticProps: GetStaticProps<
 	PageProps,
 	{ chapterId: string }
 > = async ({ params, locale }) => {
-	const { content } = await readChapter(params?.chapterId, locale);
-	const pagination = await getPagination(params?.chapterId, locale);
-
-	const { bookContent, currentChapter } = await generateBookContent(
-		locale,
-		params?.chapterId,
-	);
-
-	if (!bookContent || !currentChapter)
-		throw new Error('There is a missing property');
+	const {
+		chapter: currentChapter,
+		pagination,
+		content,
+	} = BookRepository().findChapter(params?.chapterId || '', locale);
+	const chapterList = BookRepository().findAllChapters(locale);
 
 	const mdxSource = await serialize(content, {
 		mdxOptions: {
@@ -89,59 +69,151 @@ export const getStaticProps: GetStaticProps<
 	});
 
 	return {
-		props: { source: mdxSource, bookContent, currentChapter, pagination },
+		props: {
+			mdxSource,
+			chapterList,
+			currentChapter,
+			pagination,
+		},
 	};
 };
 
+interface PageProps {
+	mdxSource: MDXRemoteSerializeResult;
+	chapterList: BookChapter[];
+	currentChapter: BookChapter;
+	pagination: Pagination;
+}
 export default function ChapterDetail({
-	source,
-	bookContent,
-	currentChapter,
 	pagination,
+	chapterList,
+	currentChapter,
+	mdxSource,
 }: PageProps) {
-	return (
-		<BookLayout
-			bookContent={bookContent}
-			currentChapter={currentChapter}
-			pagination={pagination}
-		>
-			<SelectedMenu wrapperId='selectable-container'>
-				<MDXRemoteWrapperStyled>
-					<MDXRemote
-						{...source}
-						components={{
-							...MDXComponenets,
+	const fontSize = useFontSize();
+	const router = useRouter();
 
-							h1: ({ children, ref, ...props }) => (
-								<Title3 as='h1' {...props}>
-									{children}
-								</Title3>
-							),
-							h2: ({ children, ref, ...props }) => (
-								<Title4 as='h2' {...props}>
-									<MustachiIcon /> {children}
-								</Title4>
-							),
-							pre: ({ children, ref, ...props }) => (
-								<div style={{ display: 'grid', overflowX: 'auto' }}>
-									<pre {...props}>{children}</pre>
-								</div>
-							),
-							p: ({ children, ref, ...props }) => (
-								<Text as='p' {...props}>
-									{children}
-								</Text>
-							),
-							li: ({ children, ref, ...props }) => (
-								<Text as='li' {...props}>
-									{children}
-								</Text>
-							),
-						}}
-					/>
-				</MDXRemoteWrapperStyled>
-			</SelectedMenu>
+	return (
+		<>
+			<SEO
+				title='Gentleman Programming Book'
+				siteTitle={currentChapter.name}
+				locale={router.locale}
+			/>
+
 			<ZoomImageConfig />
-		</BookLayout>
+
+			<div className={chapterDetailCss.layout}>
+				<header className={chapterDetailCss.header}>
+					<nav className={chapterDetailCss.navigation}>
+						<ul className={chapterDetailCss.settingsControlContainer}>
+							<li className={chapterDetailCss.containerItem}>
+								<Dialog
+									classNameContent={chapterDetailCss.dialogIndex}
+									trigger={
+										<IconButton
+											icon={<MenuIcon />}
+											variant='ghost'
+											colorScheme='secondary'
+										/>
+									}
+									body={
+										<BookChapterIndex
+											type='multiple'
+											items={chapterList}
+											defaultValue={[currentChapter.link]}
+										/>
+									}
+								/>
+							</li>
+
+							<li className={chapterDetailCss.containerItem}>
+								<IconButton
+									icon={<HiHome />}
+									variant='ghost'
+									colorScheme='secondary'
+									component='a'
+									href='/'
+								/>
+							</li>
+							<li className={chapterDetailCss.containerItem}>
+								<Select
+									value={router.locale}
+									colorScheme='secondary'
+									leftIcon={<TranslateIcon />}
+									aria-labelledby='language-select'
+									onChange={value =>
+										router.push(router.asPath, undefined, { locale: value })
+									}
+									rightIcon={<HiSelector width='1em' height='1em' />}
+								>
+									<Option value='es'>Es</Option>
+									<Option value='en'>En</Option>
+								</Select>
+							</li>
+							<li className={chapterDetailCss.containerItem}>
+								<IconButton
+									colorScheme='secondary'
+									variant='ghost'
+									icon={<ZoomOutText />}
+									onClick={fontSize.decreaseFontSize}
+								/>
+							</li>
+							<li className={chapterDetailCss.containerItem}>
+								<IconButton
+									colorScheme='secondary'
+									variant='ghost'
+									icon={<ZoomInText />}
+									onClick={fontSize.increaseFontSize}
+								/>
+							</li>
+
+							<li className={chapterDetailCss.containerItem}>
+								<ThemeSelect />
+							</li>
+						</ul>
+					</nav>
+
+					<ShareMenu />
+				</header>
+
+				<main className={chapterDetailCss.main}>
+					<MDXRemote {...mdxSource} />
+				</main>
+
+				<div className={chapterDetailCss.paginationControls}>
+					<Button
+						size='lg'
+						onClick={() =>
+							pagination.previousChapter &&
+							router.push(pagination.previousChapter)
+						}
+						disabled={!pagination.previousChapter}
+						className={chapterDetailCss.controlButton}
+					>
+						Previous
+					</Button>
+
+					<Button
+						size='lg'
+						onClick={() =>
+							pagination.nextChapter && router.push(pagination.nextChapter)
+						}
+						disabled={!pagination.nextChapter?.link}
+						className={chapterDetailCss.controlButton}
+					>
+						Next
+					</Button>
+				</div>
+
+				<aside className={chapterDetailCss.aside}>
+					<BookChapterIndex
+						type='single'
+						items={currentChapter}
+						value={currentChapter.link}
+					/>
+				</aside>
+			</div>
+		</>
 	);
 }

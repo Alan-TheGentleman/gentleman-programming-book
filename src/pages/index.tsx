@@ -1,190 +1,235 @@
-import mustachiIMG from 'assets/mustache.png';
 import { GetStaticProps } from 'next';
-import Head from 'next/head';
 import Image from 'next/image';
-import NextLink from 'next/link';
-import { BookContent } from 'src/components/BookContentNavigation/bookContent';
-import { ChapterContent } from 'src/components/BookContentNavigation/ChapterContent';
-import { Icon } from 'src/components/Icon';
-import { IconButton } from 'src/components/IconButton';
-import { DiscordIcon } from 'src/components/IconSource/DiscordIcon';
-import { TwitchIcon } from 'src/components/IconSource/TwitchIcon';
-import { LandingHeader } from 'src/components/Landing/LandingHeader';
-import { Link } from 'src/components/Link';
-import { Text } from 'src/components/Text';
-import { Title2 } from 'src/components/Title';
-import { color, deviceSize, media } from 'src/theme';
-import { generateBookContent } from 'src/utils/read';
-import { socialNetworks } from 'src/utils/socialNetwork';
-import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { HiSelector } from 'react-icons/hi';
+import { ImQuotesLeft, ImQuotesRight } from 'react-icons/im';
 
-const HeroStyled = styled.div({
-	marginBlockStart: '3rem',
-	textAlign: 'center',
-	maxWidth: '40rem',
-	marginInline: 'auto',
+import { BookChapterIndex } from '@/book/components';
+import { useFontSize } from '@/book/hooks/useFontSize';
+import { BookChapter } from '@/book/models';
+import { BookRepository } from '@/book/repository/book.repo';
+import mustachiIMG from '@/public/img/mustache.png';
+import {
+	Button,
+	DiscordIcon,
+	Heading,
+	Hr,
+	Icon,
+	IconButton,
+	InstagramIcon,
+	Link,
+	Option,
+	Select,
+	SpotifyIcon,
+	Text,
+	TranslateIcon,
+	TwitchIcon,
+	YoutubeIcon,
+	ZoomInText,
+	ZoomOutText,
+} from '@/shared/components';
+import { SEO } from '@/shared/components/SEO';
+import { localStorageKeys, MyLocalStorageRepo } from '@/shared/repos';
+import * as blurImage from '@/src/data/blurImage';
+import { socialNetworksLinks } from '@/src/data/socialNetworkLinks';
+import * as HomeCss from '@/src/styles/Home.css';
+import { ThemeSelect } from '@/theme/components';
 
-	[`& > ${Title2}`]: {
-		marginBlock: '2rem 1rem',
-	},
-	[`& > ${Text}`]: {
-		'& > cite': { fontStyle: 'italic' },
-		'& > span': { color: color.accent.main, fontWeight: '700' },
-	},
-});
-
-const MustachiStyled = styled(Image)({
-	width: '100%',
-	maxWidth: '12rem',
-	height: '100%',
-	borderRadius: '100%',
-	aspectRatio: '1/1',
-	objectFit: 'cover',
-
-	background: color.background.logo,
-	boxShadow: `0 0 32px 2px ${color.background.logoTransparent}`,
-	backdropFilter: 'blur(4px)',
-	border: `1px solid ${color.background.logoTransparent}`,
-});
-
-const MainStyled = styled.main({
-	display: 'grid',
-	gap: '1rem',
-	maxWidth: '50rem',
-	marginInline: 'auto',
-	marginBlock: '4rem',
-	justifyContent: 'center',
-	alignItems: 'center',
-
-	'& details + details': {
-		marginBlockStart: '1rem',
-	},
-});
-
-const LandingPageStyled = styled.div({
-	padding: '1rem',
-	marginInline: 'auto',
-	maxWidth: deviceSize.xl3,
-	minHeight: '100vh',
-});
-
-const FooterStyled = styled.footer({
-	display: 'grid',
-
-	maxWidth: '54.1rem',
-	marginInline: 'auto',
-
-	[media.down('md')]: {
-		gap: '.5rem',
-		gridTemplateRows: 'auto auto',
-		'& > hr ': {
-			borderBlockStart: '1px',
-			borderColor: color.accent.dark,
-			width: '100%',
-		},
-	},
-	[media.up('md')]: {
-		gap: '1rem',
-		gridTemplateColumns: '1fr auto 1fr',
-		'& > hr ': {
-			margin: '0',
-			borderColor: color.accent.dark,
-			height: 'auto',
-		},
-	},
-});
-
-const HrMainFooterStyled = styled.hr({
-	marginBlock: '3rem 1rem',
-	borderColor: color.accent.dark,
-});
-
-const FooterItemStyled = styled.div({
-	display: 'grid',
-	gridTemplateColumns: 'auto 1fr',
-	columnGap: '1.5rem',
-	alignItems: 'center',
-
-	[`& > ${IconButton}`]: { marginInline: 'auto' },
-});
+const socialList = [
+	{ link: socialNetworksLinks.twitch, icon: <TwitchIcon /> },
+	{ link: socialNetworksLinks.youtube, icon: <YoutubeIcon /> },
+	{ link: socialNetworksLinks.discord, icon: <DiscordIcon /> },
+	{ link: socialNetworksLinks.instagram, icon: <InstagramIcon /> },
+	{ link: socialNetworksLinks.spotify, icon: <SpotifyIcon /> },
+];
 
 interface PageProps {
-	bookContent: BookContent;
+	chapterIndexList: BookChapter[];
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-	const { bookContent } = await generateBookContent(locale);
+	const chapterIndexList = BookRepository().findAllChapters(locale);
+	if (!chapterIndexList) throw new Error('There is a missing property');
 
-	if (!bookContent) throw new Error('There is a missing property');
-
-	return { props: { bookContent } };
+	return { props: { chapterIndexList } };
 };
 
-export default function Home({ bookContent }: PageProps) {
+export default function Home({ chapterIndexList }: PageProps) {
+	const router = useRouter();
+	const fontSize = useFontSize();
+	const startReadingLink = chapterIndexList[0]?.link;
+	const [bookMarkLink, setBookMarkLink] = React.useState<string | null>(null);
+
+	React.useEffect(() => {
+		setBookMarkLink(
+			MyLocalStorageRepo().find(localStorageKeys.bookmark) || null,
+		);
+	}, [bookMarkLink]);
+
 	return (
-		<LandingPageStyled>
-			<Head>
-				<title>Gentleman Programing book</title>
-				<meta name='description' content='Generated by create next app' />
-				<meta name='viewport' content='width=device-width, initial-scale=1' />
-				<link rel='icon' href='/favicon.ico' />
-			</Head>
-			<LandingHeader />
+		<>
+			<SEO title='Gentleman Programming Book' locale={router.locale} />
 
-			<HeroStyled>
-				<MustachiStyled src={mustachiIMG} alt='mustachi' />
+			<div className={HomeCss.layout}>
+				<header className={HomeCss.header}>
+					<ul className={HomeCss.socialListContainer}>
+						{socialList.map(({ link, icon }) => (
+							<li key={link} className={HomeCss.containerItem}>
+								<IconButton
+									key={link}
+									variant='ghost'
+									colorScheme='secondary'
+									component='a'
+									icon={icon}
+									href={link}
+									target='_blank'
+									rel='noreferrer'
+								/>
+							</li>
+						))}
+					</ul>
 
-				<Title2 as='h1'>Gentleman Programming Book</Title2>
+					<ul className={HomeCss.settingsControlContainer}>
+						<li className={HomeCss.containerItem}>
+							<Select
+								value={router.locale}
+								colorScheme='secondary'
+								leftIcon={<TranslateIcon />}
+								aria-labelledby='language-select'
+								onChange={value =>
+									router.push(router.asPath, undefined, { locale: value })
+								}
+								rightIcon={<HiSelector width='1em' height='1em' />}
+							>
+								<Option value='es'>Es</Option>
+								<Option value='en'>En</Option>
+							</Select>
+						</li>
+						<li className={HomeCss.containerItem}>
+							<IconButton
+								colorScheme='secondary'
+								variant='ghost'
+								icon={<ZoomOutText />}
+								onClick={fontSize.decreaseFontSize}
+							/>
+						</li>
+						<li className={HomeCss.containerItem}>
+							<IconButton
+								colorScheme='secondary'
+								variant='ghost'
+								icon={<ZoomInText />}
+								onClick={fontSize.increaseFontSize}
+							/>
+						</li>
 
-				<Text variant='subtitle'>
-					<span>“</span>A clean programmer is the best kind of programmer
-					<span>”</span>- by <cite>Alan Buscaglia</cite>
-				</Text>
-			</HeroStyled>
+						<li className={HomeCss.containerItem}>
+							<ThemeSelect />
+						</li>
+					</ul>
+				</header>
 
-			<MainStyled>
-				{bookContent.map(chapter => (
-					<ChapterContent key={chapter.link} chapter={chapter} />
-				))}
-			</MainStyled>
+				<div className={HomeCss.hero}>
+					<div className={HomeCss.mustachiWrapper}>
+						<Image
+							className={HomeCss.mustache}
+							src={mustachiIMG}
+							placeholder='blur'
+							width={200}
+							height={200}
+							blurDataURL={blurImage.mustachi}
+							alt='The happy Mustachi'
+						/>
+					</div>
 
-			<HrMainFooterStyled />
+					<Heading className={HomeCss.heroTitle} fontSize='xl5'>
+						Gentleman Programming Book
+					</Heading>
 
-			<FooterStyled>
-				<FooterItemStyled>
-					<Icon size='xl3' colorScheme='secondary'>
-						<TwitchIcon />
-					</Icon>
-
-					<Text as='span' variant='caption'>
-						Follow the Gentleman Programming{' '}
-						<NextLink href={socialNetworks.discord} passHref legacyBehavior>
-							<Link colorScheme='secondary' target='_blank'>
-								Discord
-							</Link>
-						</NextLink>{' '}
-						community and share with us about Clean Architecture and more!
+					<Text
+						component='blockquote'
+						fontSize='xl2'
+						className={HomeCss.heroQuote}
+					>
+						<sup>
+							<ImQuotesLeft className={HomeCss.heroQuoteIcon} />
+						</sup>{' '}
+						A clean programmer is the best kind of programmer{' '}
+						<sup>
+							<ImQuotesRight className={HomeCss.heroQuoteIcon} />
+						</sup>{' '}
+						<Text
+							className={HomeCss.heroQuoteCite}
+							component='cite'
+							fontSize='xl2'
+							color='primary'
+						>
+							- by Alan Buscaglia
+						</Text>
 					</Text>
-				</FooterItemStyled>
 
-				<hr />
+					<Button
+						component='a'
+						size='xl'
+						href={bookMarkLink || startReadingLink}
+						className={HomeCss.heroButton}
+					>
+						{bookMarkLink ? 'Continue reading' : 'Start reading'}
+					</Button>
 
-				<FooterItemStyled>
-					<Icon size='xl3' colorScheme='secondary'>
-						<DiscordIcon />
-					</Icon>
+					<Button
+						component='a'
+						href='/gentleman-programming-book.pdf'
+						download='Gentleman Programming Book'
+						target='_blank'
+						size='xl'
+						variant='outline'
+						className={HomeCss.heroButton}
+					>
+						Download
+					</Button>
+				</div>
 
-					<Text as='span' variant='caption'>
-						Follow the Gentleman Programming{' '}
-						<NextLink href={socialNetworks.twitch} passHref legacyBehavior>
-							<Link colorScheme='secondary' target='_blank'>
-								Twicth
-							</Link>
-						</NextLink>{' '}
-						and learn having fun!
-					</Text>
-				</FooterItemStyled>
-			</FooterStyled>
-		</LandingPageStyled>
+				<main className={HomeCss.main}>
+					<BookChapterIndex
+						className={HomeCss.mainBookIndex}
+						items={chapterIndexList}
+						type='multiple'
+					/>
+				</main>
+
+				<Hr />
+
+				<footer className={HomeCss.footer}>
+					<ul className={HomeCss.footerList}>
+						<div className={HomeCss.footerItem}>
+							<Icon as={<TwitchIcon />} size='xl3' />
+
+							<Text component='span'>
+								Follow the Gentleman Programming{' '}
+								<Link href={socialNetworksLinks.discord} target='_blank'>
+									Discord
+								</Link>{' '}
+								community and share with us about Clean Architecture and more!
+							</Text>
+						</div>
+
+						<Hr className={HomeCss.footerHr} />
+
+						<div className={HomeCss.footerItem}>
+							<Icon as={<DiscordIcon />} size='xl3' />
+
+							<Text component='span'>
+								Follow the Gentleman Programming{' '}
+								<Link href={socialNetworksLinks.twitch} target='_blank'>
+									Twicth
+								</Link>{' '}
+								and learn having fun!
+							</Text>
+						</div>
+					</ul>
+				</footer>
+			</div>
+		</>
 	);
 }
