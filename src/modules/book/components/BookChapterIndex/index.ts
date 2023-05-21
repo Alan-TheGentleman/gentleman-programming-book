@@ -1,1 +1,0 @@
-export { BookChapterIndex } from './BookChapterIndex';

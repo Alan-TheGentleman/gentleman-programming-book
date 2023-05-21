@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "ES2015",
+		"target": "es5",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"allowJs": true,
 		"skipLibCheck": true,
@@ -15,14 +15,8 @@
 		"jsx": "preserve",
 		"incremental": true,
 		"baseUrl": ".",
-		"paths": {
-			"@/book/*": ["src/modules/book/*"],
-			"@/theme/*": ["src/modules/theme/*"],
-			"@/shared/*": ["src/modules/shared/*"],
-			"@/tests/*": ["__TESTS__/*"],
-			"@/*": ["*"]
-		}
+		"paths": {}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-	"exclude": ["node_modules", "templates", "old"]
+	"exclude": ["node_modules"]
 }

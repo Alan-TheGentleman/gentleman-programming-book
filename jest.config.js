@@ -13,6 +13,7 @@ const createJestConfig = nextJest({
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 const customJestConfig = {
 	verbose: true,
+	preset: 'ts-jest',
 	rootDir: '.',
 	// Add more setup options before each test is run
 	setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
@@ -22,21 +23,13 @@ const customJestConfig = {
 	moduleFileExtensions: ['ts', 'js', 'json', 'tsx'],
 	modulePaths: [compilerOptions.baseUrl],
 	transform: {
-		'\\.css\\.ts$': '@vanilla-extract/jest-transform',
 		'^.+\\.(ts|tsx|js)$': 'ts-jest',
 	},
-	moduleNameMapper: {
-		...pathsToModuleNameMapper(
-			compilerOptions.paths /*, { prefix: '<rootDir>/' } */,
-		),
-	},
-
+	moduleNameMapper: pathsToModuleNameMapper(
+		compilerOptions.paths /*, { prefix: '<rootDir>/' } */,
+	),
 	testMatch: ['**/__TESTS__/**/*.spec.(ts|js|tsx)'],
-	testPathIgnorePatterns: [
-		'<rootDir>/node_modules/',
-		'<rootDir>/.next/',
-		'<rootDir>/old/',
-	],
+	// testMatch: ['<rootDir>/__TESTS__/**/*.spec.(ts|js|tsx)'],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
