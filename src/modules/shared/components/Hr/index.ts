@@ -1,1 +1,0 @@
-export { Hr } from './Hr';
