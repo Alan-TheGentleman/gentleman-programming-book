@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { localStorageKeys, MyLocalStorageRepo } from '@/shared/repos';
+import { localStorageKeys, MyLocalStorageService } from '@/shared/services';
 import { useThemeStore } from '@/shared/store';
 import { themeClass, ThemeColor, themeColorEnum } from '@/theme/config';
 
@@ -10,7 +10,10 @@ export const ThemeConfig = () => {
 
 	React.useEffect(() => {
 		const unSub = useThemeStore.subscribe(({ themeColorCurrent }) => {
-			MyLocalStorageRepo().save(localStorageKeys.themeColor, themeColorCurrent);
+			MyLocalStorageService().save(
+				localStorageKeys.themeColor,
+				themeColorCurrent,
+			);
 
 			if (themeColorCurrent === themeColorEnum.values.System) return;
 
@@ -21,7 +24,7 @@ export const ThemeConfig = () => {
 	});
 
 	React.useEffect(() => {
-		const themeColorStoraged = MyLocalStorageRepo().find<ThemeColor>(
+		const themeColorStoraged = MyLocalStorageService().find<ThemeColor>(
 			localStorageKeys.themeColor,
 		);
 

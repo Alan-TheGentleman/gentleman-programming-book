@@ -42,7 +42,7 @@ export const ThemeSelect: React.FC = () => {
 
 	return (
 		<Select
-			aria-labelledby='language-select'
+			title='theme-select'
 			value={themeColor}
 			leftIcon={<ThemeIcon />}
 			className={ThemeSelectCss.select}

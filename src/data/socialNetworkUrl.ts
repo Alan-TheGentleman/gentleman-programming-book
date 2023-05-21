@@ -1,4 +1,4 @@
-export const socialNetworksLinks = {
+export const socialNetworkUrl = {
 	twitch: 'https://www.twitch.tv/gentleman_programming/about',
 	youtube: 'https://www.youtube.com/@GentlemanProgramming',
 	spotify:

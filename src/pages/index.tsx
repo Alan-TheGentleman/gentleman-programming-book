@@ -6,9 +6,9 @@ import { HiSelector } from 'react-icons/hi';
 import { ImQuotesLeft, ImQuotesRight } from 'react-icons/im';
 
 import { BookChapterIndex } from '@/book/components';
-import { useFontSize } from '@/book/hooks/useFontSize';
+import { useFontSize } from '@/book/hooks';
 import { BookChapter } from '@/book/models';
-import { BookRepository } from '@/book/repository/book.repo';
+import { BookRepository } from '@/book/repository';
 import mustachiIMG from '@/public/img/mustache.png';
 import {
 	Button,
@@ -17,35 +17,30 @@ import {
 	Hr,
 	Icon,
 	IconButton,
-	InstagramIcon,
 	Link,
 	Option,
 	Select,
-	SpotifyIcon,
 	Text,
 	TranslateIcon,
 	TwitchIcon,
-	YoutubeIcon,
 	ZoomInText,
 	ZoomOutText,
 } from '@/shared/components';
 import { SEO } from '@/shared/components/SEO';
-import { localStorageKeys, MyLocalStorageRepo } from '@/shared/repos';
+import {
+	localStorageKeys,
+	LocalStorageService,
+	MyLocalStorageService,
+} from '@/shared/services';
 import * as blurImage from '@/src/data/blurImage';
-import { socialNetworksLinks } from '@/src/data/socialNetworkLinks';
+import { socialNetworkList } from '@/src/data/socialNetworkList';
+import { socialNetworkUrl } from '@/src/data/socialNetworkUrl';
 import * as HomeCss from '@/src/styles/Home.css';
 import { ThemeSelect } from '@/theme/components';
 
-const socialList = [
-	{ link: socialNetworksLinks.twitch, icon: <TwitchIcon /> },
-	{ link: socialNetworksLinks.youtube, icon: <YoutubeIcon /> },
-	{ link: socialNetworksLinks.discord, icon: <DiscordIcon /> },
-	{ link: socialNetworksLinks.instagram, icon: <InstagramIcon /> },
-	{ link: socialNetworksLinks.spotify, icon: <SpotifyIcon /> },
-];
-
 interface PageProps {
 	chapterIndexList: BookChapter[];
+	localStorageService?: LocalStorageService;
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
@@ -55,7 +50,10 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
 	return { props: { chapterIndexList } };
 };
 
-export default function Home({ chapterIndexList }: PageProps) {
+export default function Home({
+	chapterIndexList,
+	localStorageService = MyLocalStorageService(),
+}: PageProps) {
 	const router = useRouter();
 	const fontSize = useFontSize();
 	const startReadingLink = chapterIndexList[0]?.link;
@@ -63,9 +61,9 @@ export default function Home({ chapterIndexList }: PageProps) {
 
 	React.useEffect(() => {
 		setBookMarkLink(
-			MyLocalStorageRepo().find(localStorageKeys.bookmark) || null,
+			localStorageService.find(localStorageKeys.bookmark) || null,
 		);
-	}, [bookMarkLink]);
+	}, [localStorageService]);
 
 	return (
 		<>
@@ -74,14 +72,15 @@ export default function Home({ chapterIndexList }: PageProps) {
 			<div className={HomeCss.layout}>
 				<header className={HomeCss.header}>
 					<ul className={HomeCss.socialListContainer}>
-						{socialList.map(({ link, icon }) => (
+						{socialNetworkList.map(({ title, link, Icon }) => (
 							<li key={link} className={HomeCss.containerItem}>
 								<IconButton
 									key={link}
 									variant='ghost'
 									colorScheme='secondary'
 									component='a'
-									icon={icon}
+									title={title}
+									icon={<Icon />}
 									href={link}
 									target='_blank'
 									rel='noreferrer'
@@ -96,7 +95,7 @@ export default function Home({ chapterIndexList }: PageProps) {
 								value={router.locale}
 								colorScheme='secondary'
 								leftIcon={<TranslateIcon />}
-								aria-labelledby='language-select'
+								title='language-select'
 								onChange={value =>
 									router.push(router.asPath, undefined, { locale: value })
 								}
@@ -110,6 +109,7 @@ export default function Home({ chapterIndexList }: PageProps) {
 							<IconButton
 								colorScheme='secondary'
 								variant='ghost'
+								title='zoom-out'
 								icon={<ZoomOutText />}
 								onClick={fontSize.decreaseFontSize}
 							/>
@@ -117,6 +117,7 @@ export default function Home({ chapterIndexList }: PageProps) {
 						<li className={HomeCss.containerItem}>
 							<IconButton
 								colorScheme='secondary'
+								title='zoom-in'
 								variant='ghost'
 								icon={<ZoomInText />}
 								onClick={fontSize.increaseFontSize}
@@ -148,6 +149,7 @@ export default function Home({ chapterIndexList }: PageProps) {
 
 					<Text
 						component='blockquote'
+						role='blockquote'
 						fontSize='xl2'
 						className={HomeCss.heroQuote}
 					>
@@ -207,7 +209,11 @@ export default function Home({ chapterIndexList }: PageProps) {
 
 							<Text component='span'>
 								Follow the Gentleman Programming{' '}
-								<Link href={socialNetworksLinks.discord} target='_blank'>
+								<Link
+									href={socialNetworkUrl.discord}
+									title='discord'
+									target='_blank'
+								>
 									Discord
 								</Link>{' '}
 								community and share with us about Clean Architecture and more!
@@ -221,8 +227,12 @@ export default function Home({ chapterIndexList }: PageProps) {
 
 							<Text component='span'>
 								Follow the Gentleman Programming{' '}
-								<Link href={socialNetworksLinks.twitch} target='_blank'>
-									Twicth
+								<Link
+									href={socialNetworkUrl.twitch}
+									title='twitch'
+									target='_blank'
+								>
+									Twitch
 								</Link>{' '}
 								and learn having fun!
 							</Text>

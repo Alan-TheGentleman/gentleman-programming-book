@@ -1,6 +1,6 @@
 import { type ObjectValuesInfer } from '@/shared/utils';
 
-import { type LocalStorageRepository } from './localStorage.interface';
+import { type LocalStorageService } from './localStorage.interface';
 
 export const localStorageKeys = {
 	themeColor: '[THEME]_COLOR_SCHEME',
@@ -9,7 +9,7 @@ export const localStorageKeys = {
 
 export type LocalStorageKeys = ObjectValuesInfer<typeof localStorageKeys>;
 
-export function MyLocalStorageRepo(): LocalStorageRepository {
+export function MyLocalStorageService(): LocalStorageService {
 	return {
 		save: <Value>(key: LocalStorageKeys, value: Value): void => {
 			const _value: string =

@@ -12,7 +12,7 @@ import {
 	MustachiIcon,
 } from '@/shared/components';
 import { AccordionProps } from '@/shared/components/Accordion/Accordion';
-import { localStorageKeys, MyLocalStorageRepo } from '@/shared/repos';
+import { localStorageKeys, MyLocalStorageService } from '@/shared/services';
 
 import * as BookChapterCss from './BookChapterIndex.css';
 
@@ -88,7 +88,7 @@ export const BookChapterIndex: React.FC<BookChapterIndexProps> = ({
 										fontSize='xl'
 										title={title.value}
 										onClick={() =>
-											MyLocalStorageRepo().save(
+											MyLocalStorageService().save(
 												localStorageKeys.bookmark,
 												title.link,
 											)

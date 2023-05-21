@@ -17,6 +17,7 @@ type Props = {
 	side?: 'left' | 'right' | 'bottom' | 'top';
 	value?: string;
 	onChange?: (value: string) => void;
+	title?: string;
 } & SelectCss.SelectVariants &
 	SelectCss.OptionVariants;
 
@@ -32,6 +33,7 @@ export const Select: React.FC<Props> = ({
 	placeholder = 'Select an option…',
 	side = 'bottom',
 	variant = 'outline',
+	title,
 	onChange,
 }) => {
 	const triggerRef = React.useRef<HTMLButtonElement | null>(null);
@@ -69,6 +71,7 @@ export const Select: React.FC<Props> = ({
 						SelectCss.SelectRecipe({ colorScheme, variant }),
 						className,
 					)}
+					title={title}
 					ref={triggerRef}
 				>
 					{leftIcon && (
