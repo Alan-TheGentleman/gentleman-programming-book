@@ -23,24 +23,28 @@ function chapterLink(chapterId: string, locale = 'en') {
 }
 
 function readChapter(chapterId: string, locale: string) {
-	const _path = path.join(postsDirectory, locale, `${chapterId}.mdx`);
-	const fileContents = fs.readFileSync(_path, 'utf-8');
-	const { data, content } = matter(fileContents);
-	const metadata = chapterMetadataSchema.parse(data);
+	try {
+		const _path = path.join(postsDirectory, locale, `${chapterId}.mdx`);
+		const fileContents = fs.readFileSync(_path, 'utf-8');
+		const { data, content } = matter(fileContents);
+		const metadata = chapterMetadataSchema.parse(data);
 
-	return {
-		content,
-		chapter: chapterScheme.parse({
-			id: chapterId,
-			link: chapterLink(chapterId, locale),
-			name: metadata.name,
-			order: metadata.order,
-			titleList: metadata.titleList.map(title => ({
-				value: title.name,
-				link: `${chapterLink(chapterId, locale)}#${title.tagId}`,
-			})),
-		}),
-	};
+		return {
+			content,
+			chapter: chapterScheme.parse({
+				id: chapterId,
+				link: chapterLink(chapterId, locale),
+				name: metadata.name,
+				order: metadata.order,
+				titleList: metadata.titleList.map(title => ({
+					value: title.name,
+					link: `${chapterLink(chapterId, locale)}#${title.tagId}`,
+				})),
+			}),
+		};
+	} catch (error) {
+		throw new Error(`Chapter ${chapterId} not found`);
+	}
 }
 
 export function BookRepository(): BookRepository {

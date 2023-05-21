@@ -78,12 +78,13 @@ export const getStaticProps: GetStaticProps<
 	};
 };
 
-interface PageProps {
+export interface PageProps {
 	mdxSource: MDXRemoteSerializeResult;
 	chapterList: BookChapter[];
 	currentChapter: BookChapter;
 	pagination: Pagination;
 }
+
 export default function ChapterDetail({
 	pagination,
 	chapterList,
@@ -114,6 +115,7 @@ export default function ChapterDetail({
 										<IconButton
 											icon={<MenuIcon />}
 											variant='ghost'
+											title='index'
 											colorScheme='secondary'
 										/>
 									}
@@ -132,6 +134,7 @@ export default function ChapterDetail({
 									icon={<HiHome />}
 									variant='ghost'
 									colorScheme='secondary'
+									title='home'
 									component='a'
 									href='/'
 								/>
@@ -141,7 +144,7 @@ export default function ChapterDetail({
 									value={router.locale}
 									colorScheme='secondary'
 									leftIcon={<TranslateIcon />}
-									aria-labelledby='language-select'
+									title='language-select'
 									onChange={value =>
 										router.push(router.asPath, undefined, { locale: value })
 									}
@@ -155,6 +158,7 @@ export default function ChapterDetail({
 								<IconButton
 									colorScheme='secondary'
 									variant='ghost'
+									title='zoom-out'
 									icon={<ZoomOutText />}
 									onClick={fontSize.decreaseFontSize}
 								/>
@@ -163,6 +167,7 @@ export default function ChapterDetail({
 								<IconButton
 									colorScheme='secondary'
 									variant='ghost'
+									title='zoom-in'
 									icon={<ZoomInText />}
 									onClick={fontSize.increaseFontSize}
 								/>
@@ -199,14 +204,14 @@ export default function ChapterDetail({
 						onClick={() =>
 							pagination.nextChapter && router.push(pagination.nextChapter)
 						}
-						disabled={!pagination.nextChapter?.link}
+						disabled={!pagination.nextChapter}
 						className={chapterDetailCss.controlButton}
 					>
 						Next
 					</Button>
 				</div>
 
-				<aside className={chapterDetailCss.aside}>
+				<aside className={chapterDetailCss.aside} aria-label='index'>
 					<BookChapterIndex
 						type='single'
 						items={currentChapter}

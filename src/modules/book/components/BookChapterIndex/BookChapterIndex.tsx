@@ -12,17 +12,23 @@ import {
 	MustachiIcon,
 } from '@/shared/components';
 import { AccordionProps } from '@/shared/components/Accordion/Accordion';
-import { localStorageKeys, MyLocalStorageService } from '@/shared/services';
+import {
+	localStorageKeys,
+	LocalStorageService,
+	MyLocalStorageService,
+} from '@/shared/services';
 
 import * as BookChapterCss from './BookChapterIndex.css';
 
 type BookChapterIndexProps = AccordionProps & {
 	items: BookChapter | BookChapter[];
+	localStorageService?: LocalStorageService;
 };
 
 export const BookChapterIndex: React.FC<BookChapterIndexProps> = ({
 	items,
 	className,
+	localStorageService = MyLocalStorageService(),
 	...props
 }) => {
 	const _content = Array.isArray(items) ? items : [items];
@@ -60,7 +66,13 @@ export const BookChapterIndex: React.FC<BookChapterIndexProps> = ({
 
 								<Heading
 									component='a'
-									onClick={e => e.stopPropagation()}
+									onClick={e => {
+										e.stopPropagation();
+										localStorageService.save(
+											localStorageKeys.bookmark,
+											chapter.link,
+										);
+									}}
 									title={chapter.name}
 									href={chapter.link}
 									className={BookChapterCss.accordionButtonTitle}
@@ -88,7 +100,7 @@ export const BookChapterIndex: React.FC<BookChapterIndexProps> = ({
 										fontSize='xl'
 										title={title.value}
 										onClick={() =>
-											MyLocalStorageService().save(
+											localStorageService.save(
 												localStorageKeys.bookmark,
 												title.link,
 											)
