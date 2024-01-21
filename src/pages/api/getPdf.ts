@@ -18,6 +18,7 @@ export default async function handler(
 		'http://localhost:3000/',
 		'http://localhost:3000/book/Chapter01_Clean-Agile',
 		'http://localhost:3000/book/Chapter02_Communication-First-and-Foremost',
+		'http://localhost:3000/book/Chapter03_Hexagonal_Architecture',
 	];
 
 	const browser = await P.chromium.launch({ headless: true });
