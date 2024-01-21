@@ -49,21 +49,21 @@ Una parte que no vemos es que la cocina en sí necesita recursos para poder comp
 
 ## Pasos recomendados para trabajar en arquitectura hexagonal con ejemplo de aplicación
 
-- 1. Piensa atentamente en los requisitos.
+- 1- Piensa atentamente en los requisitos.
 Un ejemplo que ilustra esta distinción es una aplicación que administra cuentas bancarias de usuarios y que debe permitir el registro de usuarios mayores de 18 años.
-- 2. Identifica la lógica de negocios que debes cumplir.
+- 2- Identifica la lógica de negocios que debes cumplir.
 En el ejemplo del sistema de reservas de vuelos, la lógica de negocios podría incluir la validación de la disponibilidad de los vuelos y la asignación de asientos a los pasajeros, así como la gestión de pagos y la emisión de boletos.
-- 3. Identifica qué acciones debe proveer tu hexágono para poder satisfacer la lógica requerida.
+- 3- Identifica qué acciones debe proveer tu hexágono para poder satisfacer la lógica requerida.
 En el ejemplo del sistema de reservas de vuelos, las acciones que el hexágono debe proveer podrían incluir: buscar vuelos disponibles, reservar un vuelo, asignar asientos a los pasajeros, gestionar pagos y emitir boletos.
-- 4. Identifica los recursos necesarios para poder satisfacer dicha lógica y quién puede proporcionarlos.
+- 4- Identifica los recursos necesarios para poder satisfacer dicha lógica y quién puede proporcionarlos.
 En el ejemplo del sistema de reservas de vuelos, los recursos necesarios podrían incluir: una base de datos de vuelos y asientos, un proveedor de pagos en línea y un servicio de emisión de boletos. En este paso, es importante identificar quién puede proporcionar estos recursos y cómo se integrarán en el sistema.
-- 5. Crea los puertos necesarios para los drivers y drivens.
+- 5- Crea los puertos necesarios para los drivers y drivens.
 En el ejemplo del sistema de reservas de vuelos, los puertos necesarios podrían incluir: un puerto de búsqueda de vuelos, un puerto de reservas, un puerto de asignación de asientos, un puerto de gestión de pagos y un puerto de emisión de boletos. Es importante que estos puertos estén diseñados para interactuar con los drivers (interfaces de usuario) y los drivens (bases de datos, proveedores de pagos, etc.) de forma clara y coherente.
-- 6. Crea adaptadores de tipo Stub/Mocked para satisfacer de forma inmediata las solicitudes y poner a prueba tu hexágono.
+- 6- Crea adaptadores de tipo Stub/Mocked para satisfacer de forma inmediata las solicitudes y poner a prueba tu hexágono.
 En este paso, se crean adaptadores para los drivers y drivens que imitan su comportamiento real, pero que se pueden usar para probar el hexágono de forma inmediata sin depender de los sistemas externos. Por ejemplo, se podrían crear adaptadores Stub/Mocked para la base de datos de vuelos y asientos, el proveedor de pagos en línea y el servicio de emisión de boletos.
-- 7. Crea las pruebas necesarias que deben pasar de manera satisfactoria para que tu hexágono satisfaga la solicitud.
+- 7- Crea las pruebas necesarias que deben pasar de manera satisfactoria para que tu hexágono satisfaga la solicitud.
 En este paso, se crean pruebas para validar que el hexágono funciona según lo esperado y que satisface los requisitos del sistema. Por ejemplo, se podrían crear pruebas para validar que se pueden buscar vuelos disponibles, reservar un vuelo, asignar asientos a los pasajeros, gestionar pagos y emitir boletos de forma exitosa.
-- 8. Crea la lógica dentro de tu hexágono para poder satisfacer los casos de uso.
+- 8- Crea la lógica dentro de tu hexágono para poder satisfacer los casos de uso.
 En este paso, se crea la lógica de negocio dentro del hexágono para poder satisfacer los casos de uso identificados en el paso 2. En el ejemplo del sistema de reservas de vuelos, se podría crear la lógica para validar la disponibilidad de los vuelos y asientos, asignar los asientos a los pasajeros y gestionar el proceso de pago y emisión de boletos. Esta lógica debe estar diseñada de tal manera que sea fácilmente modificable y escalable en el futuro si se requieren cambios o mejoras en el sistema. También es importante que esta lógica esté separada de la lógica específica de los drivers y drivens para facilitar el mantenimiento y la evolución del sistema en el futuro.
 
 Para trabajar en arquitectura hexagonal, es fundamental seguir un proceso metódico y cuidadoso. En primer lugar, es crucial leer detenidamente los requerimientos para poder pensar en la mejor forma de resolverlos. Es esencial reconocer la lógica de negocios y los casos de uso necesarios para satisfacerla. Como recordarás de la explicación anterior, esto es fundamental para asegurarnos de que estamos cubriendo todas las necesidades.
