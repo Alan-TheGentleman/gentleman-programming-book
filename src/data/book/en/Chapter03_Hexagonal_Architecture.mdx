@@ -49,21 +49,21 @@ A part we don't see is that the kitchen itself needs resources to complete the o
 
 ## Recommended Steps for Working with Hexagonal Architecture with Application Example
 
-### 1. Carefully Consider Requirements.
+- 1. Carefully Consider Requirements.
 An example illustrating this distinction is an application that manages user bank accounts and must allow the registration of users over 18 years old.
-### 2. Identify the Business Logic You Need to Fulfill.
+- 2. Identify the Business Logic You Need to Fulfill.
 In the example of the flight reservation system, business logic could include validating flight availability and assigning seats to passengers, as well as managing payments and issuing tickets.
-### 3. Identify What Actions Your Hexagon Must Provide to Satisfy the Required Logic.
+- 3. Identify What Actions Your Hexagon Must Provide to Satisfy the Required Logic.
 In the example of the flight reservation system, the actions that the hexagon must provide could include: searching for available flights, reserving a flight, assigning seats to passengers, managing payments, and issuing tickets.
-### 4. Identify the Resources Needed to Satisfy That Logic and Who Can Provide Them.
+- 4. Identify the Resources Needed to Satisfy That Logic and Who Can Provide Them.
 In the example of the flight reservation system, the necessary resources could include: a database of flights and seats, an online payment provider, and a ticket issuance service. At this step, it is essential to identify who can provide these resources and how they will be integrated into the system.
-### 5. Create the Necessary Ports for Drivers and Drivens.
+- 5. Create the Necessary Ports for Drivers and Drivens.
 In the example of the flight reservation system, the necessary ports could include: a flight search port, a reservation port, a seat assignment port, a payment management port, and a ticket issuance port. It is important that these ports are designed to interact with drivers (user interfaces) and drivens (databases, payment providers, etc.) clearly and consistently.
-### 6. Create Stub/Mocked Adapters to Immediately Satisfy Requests and Test Your Hexagon.
+- 6. Create Stub/Mocked Adapters to Immediately Satisfy Requests and Test Your Hexagon.
 In this step, adapters are created for drivers and drivens that mimic their real behavior but can be used to test the hexagon immediately without depending on external systems. For example, Stub/Mocked adapters could be created for the flights and seats database, the online payment provider, and the ticket issuance service.
-### 7. Create the Necessary Tests That Must Pass Successfully for Your Hexagon to Satisfy the Request.
+- 7. Create the Necessary Tests That Must Pass Successfully for Your Hexagon to Satisfy the Request.
 In this step, tests are created to validate that the hexagon works as expected and satisfies the system requirements. For example, tests could be created to validate that available flights can be searched, a flight can be reserved, seats can be assigned to passengers, payments can be managed, and tickets can be issued successfully.
-### 8. Create the Logic Inside Your Hexagon to Satisfy Use Cases.
+- 8. Create the Logic Inside Your Hexagon to Satisfy Use Cases.
 In this step, business logic is created inside the hexagon to satisfy the use cases identified in step 2. In the example of the flight reservation system, logic could be created to validate flight and seat availability, assign seats to passengers, and manage the payment and ticket issuance process. This logic should be designed in a way that is easily modifiable and scalable in the future if changes or improvements to the system are required. It is also important that this logic is separated from the specific logic of drivers and drivens to facilitate maintenance and evolution of the system in the future.
 
 To work with hexagonal architecture, it is crucial to follow a methodical and careful process. First and foremost, it is essential to read the requirements carefully to think about the best way to solve them. It is crucial to recognize the business logic and necessary use cases to fulfill it, as you will remember from the previous explanation; this is essential to ensure that all needs are covered.
