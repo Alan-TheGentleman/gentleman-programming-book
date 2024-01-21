@@ -1,0 +1,208 @@
+---
+id: 'arquitectura_hexagonal'
+order: 3
+name: 'Arquitectura Hexagonal'
+titleList:
+  [
+    {
+      name: 'Problemas del enfoque en cascada',
+      tagId: 'problemas-del-enfoque-en-cascada',
+    },
+    { name: '¿Por qué ser ágil?', tagId: 'por-qué-agile' },
+    {
+      name: 'Por qué crees que estás haciendo agile pero en realidad... no lo estás haciendo',
+      tagId: 'por-qué-piensas-que-estás-haciendo-agile-pero-en-realidad--no-lo-estás-haciendo',
+    },
+    { name: 'Programación extrema', tagId: 'programación-extrema' },
+    { name: 'Desarrollo guiado por pruebas (TDD)', tagId: 'tdd' },
+    {
+      name: 'Diseño atómico, desde la perspectiva del Front End',
+      tagId: 'diseño-atómico-punto-de-vista-de-front-end',
+    },
+    { name: 'Programación funcional', tagId: 'programación-funcional' },
+    { name: 'Historias de usuario y TDD', tagId: 'historia-de-usuario-y-tdd' },
+  ]
+---
+
+# Arquitectura Hexagonal
+
+La arquitectura hexagonal es ampliamente utilizada y con razón. Esta arquitectura defiende la "separación de preocupaciones", lo que significa que la lógica de negocios se divide en diferentes servicios o hexágonos, los cuales se comunican entre sí a través de adaptadores a los recursos que necesitan para satisfacer las mismas.
+
+## Hexágono y sus actores
+
+Se le llama hexagonal porque su forma se asemeja a un hexágono con una línea vertical que lo divide por la mitad. La mitad izquierda se refiere a los actores primarios, quienes llevan a cabo la acción inicial que da comienzo al funcionamiento del hexágono. Estos actores no se comunican directamente con el servicio, sino que utilizan un adaptador. La parte derecha representa a los actores secundarios, quienes proveen los recursos necesarios para que el hexágono pueda ejecutar la lógica interna.
+
+Los adaptadores son piezas clave en la arquitectura hexagonal, ya que se encargan de mediar la comunicación entre dos entidades para que estas puedan interactuar de forma cómoda. Por ejemplo, en un servicio que provee información de los usuarios se utiliza el término "username" para identificar el nombre del usuario, mientras que en otro servicio se utiliza el término "userIdentifier" para la misma acción. Aquí es donde el adaptador interviene para realizar una serie de transformaciones y que la información sea utilizada de la forma más conveniente para cada entidad. En definitiva, los adaptadores facilitan la integración de los diferentes componentes del sistema y la interoperabilidad entre ellos.
+
+Cuando un adaptador se comunica con un actor primario se le llama driver, mientras que cuando se comunica con un recurso necesario se le llama driven. Los drivens se encuentran a la derecha de la línea vertical en la imagen hexagonal y es importante destacar que también pueden representar a otros servicios. En este caso, la comunicación entre servicios debe ser a través de los adaptadores correspondientes, los drivers para el servicio que otorga el recurso y los drivens para el servicio que lo solicita. Así, un servicio puede actuar como actor primario de otro servicio.
+
+## Puertos y recursos
+
+El siguiente concepto importante a comprender es el de los puertos. Estos indican las limitaciones que tienen tanto nuestro servicio como los adaptadores, y representan las diferentes funcionalidades que deben proporcionar a los actores primarios y secundarios para satisfacer las solicitudes y proveer los recursos necesarios.
+
+## Tipos de lógica en un servicio
+
+Para comprender las diferentes tipos de lógica que se pueden encontrar dentro de un servicio, es útil distinguir entre la lógica de negocio, la de organización y los casos de uso. Un ejemplo que ilustra esta distinción es una aplicación que administra cuentas bancarias de usuarios y que debe permitir el registro de usuarios mayores de 18 años.
+
+- **Lógica de negocio:** esta es la lógica que proviene del producto y no está afectada por cambios externos. En este ejemplo, el requisito de que los usuarios deban ser mayores de 18 años no tiene su origen en una limitación técnica, sino en una necesidad propia de la aplicación que estamos desarrollando. También el hecho de que se deba crear un registro de usuario es una lógica de negocio, ya que es una necesidad específica de la aplicación.
+- **Lógica de organización:** es similar a la lógica de negocio, pero se reutiliza en más de un proyecto de una misma organización. Por ejemplo, la metodología utilizada para validar y registrar tarjetas de crédito en nuestra aplicación podría ser una lógica de organización que se utiliza en varios proyectos dentro de la misma empresa.
+- **Casos de uso:** son aquellos que tienen una limitación técnica y pueden cambiar si el uso de la aplicación cambia. Por ejemplo, los requisitos para registrar un usuario podrían no ser un caso de uso, ya que no existe ninguna limitación técnica para validar los campos de un formulario. Sin embargo, la disposición del mensaje de error, su color, tamaño, etc. sí pueden afectar el uso de la aplicación, lo que convierte a estos elementos en casos de uso. La posición y forma de mostrar los campos en la pantalla también pueden ser un caso de uso, ya que afecta al SEO de la aplicación si se produce un cambio en el content layout shift.
+
+## Ejemplo de aplicación: La pizzería en forma de hexágono
+
+Uno de los ejemplos más conocidos es el de una pizzería donde una persona quiere hacer un pedido. Para ello, se fijará en el menú las diferentes opciones, pedirá al cajero su pedido, éste comunicará a la cocina el encargo, la cocina realizará la serie de procedimientos necesarios para cumplir con el requisito y devolverá el pedido ya completo al cajero para que éste se entregue al comprador. Si pensamos detenidamente en cada una de las entidades del ejemplo, podremos encontrar que el comprador es el actor principal, el menú con las diferentes opciones es el puerto, el cajero es el adaptador y la cocina es nuestro servicio.
+
+El consumidor pedirá un producto viendo el menú y solo podrá pedir lo que vea en el mismo. A su vez, ese mismo pedido que de cara al público puede tener un nombre llamativo, seguramente para la cocina se llame de una manera más simplificada para aumentar la eficiencia del proceso. El cajero conoce esta nomenclatura y es el encargado de poder gestionar una correcta comunicación entre el consumidor y la cocina. Lo que para uno es una pizza margarita, para otro es la número 53.
+
+Una parte que no vemos es que la cocina en sí necesita recursos para poder completar el pedido. Esto quiere decir que tanto el queso, el tomate y el resto de ingredientes deben ser solicitados para poder gestionar las órdenes. Para esto, seguramente hay un encargado que se encuentre entre el restaurante y un proveedor de materia prima. Y nuevamente, lo que para uno es tomate, para otro es el producto ABC. Aquí vemos el claro ejemplo de un actor secundario, el proveedor, que se comunica por medio de un intermediario, el encargado, para proveer los recursos necesarios a nuestro hexágono.
+
+## Pasos recomendados para trabajar en arquitectura hexagonal con ejemplo de aplicación
+
+###1. Piensa atentamente en los requisitos.
+Un ejemplo que ilustra esta distinción es una aplicación que administra cuentas bancarias de usuarios y que debe permitir el registro de usuarios mayores de 18 años.
+###2. Identifica la lógica de negocios que debes cumplir.
+En el ejemplo del sistema de reservas de vuelos, la lógica de negocios podría incluir la validación de la disponibilidad de los vuelos y la asignación de asientos a los pasajeros, así como la gestión de pagos y la emisión de boletos.
+###3. Identifica qué acciones debe proveer tu hexágono para poder satisfacer la lógica requerida.
+En el ejemplo del sistema de reservas de vuelos, las acciones que el hexágono debe proveer podrían incluir: buscar vuelos disponibles, reservar un vuelo, asignar asientos a los pasajeros, gestionar pagos y emitir boletos.
+###4. Identifica los recursos necesarios para poder satisfacer dicha lógica y quién puede proporcionarlos.
+En el ejemplo del sistema de reservas de vuelos, los recursos necesarios podrían incluir: una base de datos de vuelos y asientos, un proveedor de pagos en línea y un servicio de emisión de boletos. En este paso, es importante identificar quién puede proporcionar estos recursos y cómo se integrarán en el sistema.
+###5. Crea los puertos necesarios para los drivers y drivens.
+En el ejemplo del sistema de reservas de vuelos, los puertos necesarios podrían incluir: un puerto de búsqueda de vuelos, un puerto de reservas, un puerto de asignación de asientos, un puerto de gestión de pagos y un puerto de emisión de boletos. Es importante que estos puertos estén diseñados para interactuar con los drivers (interfaces de usuario) y los drivens (bases de datos, proveedores de pagos, etc.) de forma clara y coherente.
+###6. Crea adaptadores de tipo Stub/Mocked para satisfacer de forma inmediata las solicitudes y poner a prueba tu hexágono.
+En este paso, se crean adaptadores para los drivers y drivens que imitan su comportamiento real, pero que se pueden usar para probar el hexágono de forma inmediata sin depender de los sistemas externos. Por ejemplo, se podrían crear adaptadores Stub/Mocked para la base de datos de vuelos y asientos, el proveedor de pagos en línea y el servicio de emisión de boletos.
+###7. Crea las pruebas necesarias que deben pasar de manera satisfactoria para que tu hexágono satisfaga la solicitud.
+En este paso, se crean pruebas para validar que el hexágono funciona según lo esperado y que satisface los requisitos del sistema. Por ejemplo, se podrían crear pruebas para validar que se pueden buscar vuelos disponibles, reservar un vuelo, asignar asientos a los pasajeros, gestionar pagos y emitir boletos de forma exitosa.
+###8. Crea la lógica dentro de tu hexágono para poder satisfacer los casos de uso.
+En este paso, se crea la lógica de negocio dentro del hexágono para poder satisfacer los casos de uso identificados en el paso 2. En el ejemplo del sistema de reservas de vuelos, se podría crear la lógica para validar la disponibilidad de los vuelos y asientos, asignar los asientos a los pasajeros y gestionar el proceso de pago y emisión de boletos. Esta lógica debe estar diseñada de tal manera que sea fácilmente modificable y escalable en el futuro si se requieren cambios o mejoras en el sistema. También es importante que esta lógica esté separada de la lógica específica de los drivers y drivens para facilitar el mantenimiento y la evolución del sistema en el futuro.
+
+Para trabajar en arquitectura hexagonal, es fundamental seguir un proceso metódico y cuidadoso. En primer lugar, es crucial leer detenidamente los requerimientos para poder pensar en la mejor forma de resolverlos. Es esencial reconocer la lógica de negocios y los casos de uso necesarios para satisfacerla. Como recordarás de la explicación anterior, esto es fundamental para asegurarnos de que estamos cubriendo todas las necesidades.
+
+Una vez que hayamos identificado los requisitos y los recursos necesarios, es momento de crear nuestros puertos. Para hacerlo, debemos reconocer los métodos esenciales que deben estar disponibles para nuestros actores primarios y secundarios. Esto nos permitirá controlar los accesos y salidas al servicio. Por convención, los nombres de los puertos deben comenzar con la palabra "For", seguida de la acción que deben realizar. Por ejemplo, si necesitamos un puerto para realizar una acción de registro, podríamos llamarlo "ForRegistering". También podemos reducir la cantidad de puertos si asociamos diferentes acciones relacionadas, como "ForAuthenticating", que proveerá las acciones de registro y login.
+
+Siguiendo estos pasos y manteniendo una atención cuidadosa a los detalles, podremos trabajar de forma efectiva en arquitectura hexagonal y lograr resultados óptimos en nuestros proyectos.
+
+A continuación, debemos crear nuestros adaptadores driver y driven. Para ello, recomiendo utilizar como nombre del adaptador el realizador de la acción, seguido de la acción en sí. Por ejemplo, en nuestro caso, podríamos llamarlos Registerer o Authenticator, respectivamente.
+
+Los adaptadores, en primer lugar, deben ser del tipo stub y proporcionar información controlada que pueda utilizarse para satisfacer la lógica de negocios y los tests de la misma. De esta manera, podremos cerrar nuestro hexágono y dejarlo listo para la implementación.
+
+Con nuestros adaptadores completos, procedemos a utilizar TDD (Desarrollo Guiado por Pruebas, por sus siglas en inglés). Crearemos los tests necesarios para cumplir con los casos de uso, de manera que se pueda comprobar el correcto funcionamiento de la lógica al implementarla.
+
+Nuestro servicio debe disponer de las entidades necesarias para el tipado, satisfacer los métodos proporcionados en los puertos primarios y cumplir con los casos de uso. El servicio es responsable de recibir una solicitud, buscar los recursos necesarios mediante los adaptadores secundarios y utilizarlos para cumplir con los casos de uso y, por lo tanto, con la lógica de negocios.
+
+
+## Ejemplo de código siguiendo la temática de aplicación bancaria:
+
+```typescript
+// Clase que representa el hexágono
+export class BankAccountService {
+  private bankAccountPort: BankAccountPort;
+
+  constructor(bankAccountPort: BankAccountPort) {
+    this.bankAccountPort = bankAccountPort;
+  }
+
+  /**
+   * Método para crear una nueva cuenta bancaria.
+   * @param name - El nombre del titular de la cuenta.
+   * @param age - La edad del titular de la cuenta.
+   * @throws AgeNotAllowedException si la edad no es permitida.
+   */
+  public createBankAccount(name: string, age: number): void | AgeNotAllowedException {
+    if (age >= 18) {
+      const bankAccount = new BankAccount(name, age);
+      this.bankAccountPort.saveBankAccount(bankAccount);
+    } else {
+      throw new AgeNotAllowedException("La edad mínima para crear una cuenta bancaria es de 18 años.");
+    }
+  }
+}
+
+// Archivo bank-account-port.ts
+// Interfaz que define el puerto para acceder a la base de datos de cuentas bancarias
+export interface BankAccountPort {
+  saveBankAccount(bankAccount: BankAccount): void;
+}
+
+// Archivo bank-account.ts
+// Clase que representa la entidad de una cuenta bancaria
+export class BankAccount {
+  private name: string;
+  private age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  public getName(): string {
+    return this.name;
+  }
+
+  public getAge(): number {
+    return this.age;
+  }
+}
+
+// Archivo age-not-allowed-exception.ts
+// Excepción personalizada para cuando la edad no está permitida
+export class AgeNotAllowedException extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AgeNotAllowedException";
+  }
+}
+
+// Archivo bank-account-repository.ts
+// Clase que implementa el puerto para acceder a la base de datos de cuentas bancarias
+export class BankAccountRepository implements BankAccountPort {
+  private bankAccounts: BankAccount[] = [];
+
+  public saveBankAccount(bankAccount: BankAccount): void {
+    this.bankAccounts.push(bankAccount);
+  }
+}
+
+// Archivo bank-account-controller.ts
+// Clase que representa el driver para la creación de cuentas bancarias
+import { BankAccountService } from "./bank-account-service";
+import { AgeNotAllowedException } from "./age-not-allowed-exception";
+
+export class BankAccountController {
+  private bankAccountService: BankAccountService;
+
+  constructor(bankAccountService: BankAccountService) {
+    this.bankAccountService = bankAccountService;
+  }
+
+  /**
+   * Método para crear una nueva cuenta bancaria.
+   * @param name - El nombre del titular de la cuenta.
+   * @param age - La edad del titular de la cuenta.
+   */
+  public createBankAccount(name: string, age: number): void {
+    try {
+      this.bankAccountService.createBankAccount(name, age);
+      console.log("La cuenta bancaria se ha creado correctamente.");
+    } catch (e) {
+      if (e instanceof AgeNotAllowedException) {
+        console.log(e.message);
+      } else {
+        console.log("Ha ocurrido un error al crear la cuenta bancaria.");
+      }
+    }
+  }
+}
+
+// Archivo main.ts
+// Ejemplo de uso
+import { BankAccountRepository } from "./bank-account-repository";
+import { BankAccountService } from "./bank-account-service";
+import { BankAccountController } from "./bank-account-controller";
+
+const bankAccountPort = new BankAccountRepository();
+const bankAccountService = new BankAccountService(bankAccountPort);
+const bankAccountController = new BankAccountController(bankAccountService);
+
+bankAccountController.createBankAccount("John Doe", 20);
+bankAccountController.createBankAccount("Jane Doe", 16);
+```

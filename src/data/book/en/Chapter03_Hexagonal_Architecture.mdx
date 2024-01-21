@@ -1,0 +1,207 @@
+---
+id: 'hexagonal_architecture'
+order: 3
+name: 'Hexagonal Architecture'
+titleList:
+  [
+    {
+      name: 'Issues with Waterfall Approach',
+      tagId: 'issues-with-waterfall-approach',
+    },
+    { name: 'Why Be Agile?', tagId: 'why-be-agile' },
+    {
+      name: "Why You Think You're Doing Agile But You're Actually Not",
+      tagId: 'why-you-think-youre-doing-agile-but-youre-actually-not',
+    },
+    { name: 'Extreme Programming', tagId: 'extreme-programming' },
+    { name: 'Test-Driven Development (TDD)', tagId: 'tdd' },
+    {
+      name: 'Atomic Design from a Front-End Perspective',
+      tagId: 'atomic-design-front-end-perspective',
+    },
+    { name: 'Functional Programming', tagId: 'functional-programming' },
+    { name: 'User Stories and TDD', tagId: 'user-stories-and-tdd' },
+  ]
+---
+
+# Hexagonal Architecture
+
+Hexagonal architecture is widely used and for good reason. This architecture advocates for "separation of concerns," meaning that business logic is divided into different services or hexagons, which communicate with each other through adapters to the resources they need to fulfill their purposes.
+
+## Hexagon and its Actors
+
+It is called hexagonal because its shape resembles a hexagon with a vertical line dividing it in half. The left half refers to primary actors, who initiate the action that starts the hexagon's operation. These actors do not communicate directly with the service; instead, they use an adapter. The right side represents secondary actors, who provide the resources needed for the hexagon to execute its internal logic.
+
+Adapters are key components in hexagonal architecture as they mediate communication between two entities so that they can interact comfortably. For example, in a service that provides user information, the term "username" might be used to identify the user's name, while in another service, the term "userIdentifier" might be used for the same action. Here is where the adapter intervenes to perform a series of transformations, allowing the information to be used in the most convenient way for each entity. In essence, adapters facilitate the integration of different components of the system and interoperability between them.
+
+When an adapter communicates with a primary actor, it is called a driver, while when communicating with a required resource, it is called driven. The drivens are on the right side of the vertical line in the hexagonal diagram, and it is important to note that they can also represent other services. In this case, communication between services should occur through the corresponding adapters, drivers for the service providing the resource and drivens for the service requesting it. Thus, a service can act as the primary actor for another service.
+
+## Ports and Resources
+
+The next important concept to understand is that of ports. These indicate the limitations that both our service and adapters have and represent the different functionalities they must provide to primary and secondary actors to meet requests and provide necessary resources.
+
+## Types of Logic in a Service
+
+To understand the different types of logic within a service, it is useful to distinguish between business logic, organizational logic, and use cases. An example illustrating this distinction is an application that manages user bank accounts and must allow registration of users over 18 years old.
+
+- **Business Logic:** This is logic that comes from the product and is not affected by external changes. In this example, the requirement that users must be over 18 years old does not stem from a technical limitation but from a specific need of the application being developed. Also, the need to create a user record is business logic, as it is a specific requirement of the application.
+- **Organizational Logic:** It is similar to business logic but is reused in more than one project within the same organization. For example, the methodology used to validate and register credit cards in our application could be organizational logic used in several projects within the same company.
+- **Use Cases:** These are cases that have a technical limitation and can change if the application's use changes. For example, the requirements for registering a user might not be a use case, as there is no technical limitation to validate the fields of a form. However, the arrangement of the error message, its color, size, etc. can affect the application's use, making these elements use cases. The position and form of displaying fields on the screen can also be a use case, as it affects the application's SEO if there is a change in the content layout shift.
+
+## Application Example: The Hexagonal Pizza Shop
+
+One of the most well-known examples is that of a pizzeria where a person wants to place an order. To do this, they will look at the menu with different options, tell the cashier their order, the cashier will communicate the order to the kitchen, the kitchen will perform the necessary procedures to meet the requirement, and return the completed order to the cashier for delivery to the buyer. If we think carefully about each entity in the example, we can find that the buyer is the main actor, the menu with different options is the port, the cashier is the adapter, and the kitchen is our service.
+
+The consumer will order a product by looking at the menu and can only order what they see on it. At the same time, that same order, which may have a catchy name for the public, probably has a simpler name for the kitchen to increase process efficiency. The cashier knows this nomenclature and is responsible for managing proper communication between the consumer and the kitchen. What is a margarita pizza for one person is number 53 for another.
+
+A part we don't see is that the kitchen itself needs resources to complete the order. This means that both the cheese, tomato, and other ingredients must be requested to manage orders. For this, there is probably someone in charge between the restaurant and a raw material supplier. Again, what is tomato for one person is product ABC for another. Here we see the clear example of a secondary actor, the supplier, communicating through an intermediary, the person in charge, to provide the necessary resources to our hexagon.
+
+## Recommended Steps for Working with Hexagonal Architecture with Application Example
+
+###1. Carefully Consider Requirements.
+An example illustrating this distinction is an application that manages user bank accounts and must allow the registration of users over 18 years old.
+###2. Identify the Business Logic You Need to Fulfill.
+In the example of the flight reservation system, business logic could include validating flight availability and assigning seats to passengers, as well as managing payments and issuing tickets.
+###3. Identify What Actions Your Hexagon Must Provide to Satisfy the Required Logic.
+In the example of the flight reservation system, the actions that the hexagon must provide could include: searching for available flights, reserving a flight, assigning seats to passengers, managing payments, and issuing tickets.
+###4. Identify the Resources Needed to Satisfy That Logic and Who Can Provide Them.
+In the example of the flight reservation system, the necessary resources could include: a database of flights and seats, an online payment provider, and a ticket issuance service. At this step, it is essential to identify who can provide these resources and how they will be integrated into the system.
+###5. Create the Necessary Ports for Drivers and Drivens.
+In the example of the flight reservation system, the necessary ports could include: a flight search port, a reservation port, a seat assignment port, a payment management port, and a ticket issuance port. It is important that these ports are designed to interact with drivers (user interfaces) and drivens (databases, payment providers, etc.) clearly and consistently.
+###6. Create Stub/Mocked Adapters to Immediately Satisfy Requests and Test Your Hexagon.
+In this step, adapters are created for drivers and drivens that mimic their real behavior but can be used to test the hexagon immediately without depending on external systems. For example, Stub/Mocked adapters could be created for the flights and seats database, the online payment provider, and the ticket issuance service.
+###7. Create the Necessary Tests That Must Pass Successfully for Your Hexagon to Satisfy the Request.
+In this step, tests are created to validate that the hexagon works as expected and satisfies the system requirements. For example, tests could be created to validate that available flights can be searched, a flight can be reserved, seats can be assigned to passengers, payments can be managed, and tickets can be issued successfully.
+###8. Create the Logic Inside Your Hexagon to Satisfy Use Cases.
+In this step, business logic is created inside the hexagon to satisfy the use cases identified in step 2. In the example of the flight reservation system, logic could be created to validate flight and seat availability, assign seats to passengers, and manage the payment and ticket issuance process. This logic should be designed in a way that is easily modifiable and scalable in the future if changes or improvements to the system are required. It is also important that this logic is separated from the specific logic of drivers and drivens to facilitate maintenance and evolution of the system in the future.
+
+To work with hexagonal architecture, it is crucial to follow a methodical and careful process. First and foremost, it is essential to read the requirements carefully to think about the best way to solve them. It is crucial to recognize the business logic and necessary use cases to fulfill it, as you will remember from the previous explanation; this is essential to ensure that all needs are covered.
+
+Once requirements and necessary resources have been identified, it is time to create our ports. To do this, we must recognize the essential methods that must be available for our primary and secondary actors. This will allow us to control access and exits to the service. By convention, port names should start with the word "For," followed by the action they must perform. For example, if we need a port to perform a registration action, we could call it "ForRegistering." We can also reduce the number of ports if we associate different related actions, such as "ForAuthenticating," which will provide registration and login actions.
+
+Following these steps and paying careful attention to details, we can effectively work on hexagonal architecture and achieve optimal results in our projects.
+
+Next, we need to create our driver and driven adapters. To do this, I recommend using the performer of the action as the adapter name, followed by the action itself. For example, in our case, we could call them Registerer or Authenticator, respectively.
+
+The adapters, first and foremost, must be of the stub type and provide controlled information that can be used to satisfy business logic and tests. This way, we can close our hexagon and get it ready for implementation.
+
+With our adapters complete, we proceed to use Test-Driven Development (TDD). We will create the necessary tests to meet the use cases, so we can verify the correct functioning of the logic when implementing it.
+
+Our service must have the necessary entities for typing, satisfy the methods provided in the primary ports, and meet the use cases. The service is responsible for receiving a request, finding the necessary resources through secondary adapters, and using them to meet use cases and, therefore, business logic.
+
+## Code Example Following the Theme of a Banking Application:
+
+```typescript
+// Class representing the hexagon
+export class BankAccountService {
+  private bankAccountPort: BankAccountPort;
+
+  constructor(bankAccountPort: BankAccountPort) {
+    this.bankAccountPort = bankAccountPort;
+  }
+
+  /**
+   * Method to create a new bank account.
+   * @param name - The name of the account holder.
+   * @param age - The age of the account holder.
+   * @throws AgeNotAllowedException if the age is not allowed.
+   */
+  public createBankAccount(name: string, age: number): void | AgeNotAllowedException {
+    if (age >= 18) {
+      const bankAccount = new BankAccount(name, age);
+      this.bankAccountPort.saveBankAccount(bankAccount);
+    } else {
+      throw new AgeNotAllowedException("The minimum age to create a bank account is 18 years.");
+    }
+  }
+}
+
+// File bank-account-port.ts
+// Interface defining the port to access the database of bank accounts
+export interface BankAccountPort {
+  saveBankAccount(bankAccount: BankAccount): void;
+}
+
+// File bank-account.ts
+// Class representing the entity of a bank account
+export class BankAccount {
+  private name: string;
+  private age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  public getName(): string {
+    return this.name;
+  }
+
+  public getAge(): number {
+    return this.age;
+  }
+}
+
+// File age-not-allowed-exception.ts
+// Custom exception for when the age is not allowed
+export class AgeNotAllowedException extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AgeNotAllowedException";
+  }
+}
+
+// File bank-account-repository.ts
+// Class implementing the port to access the database of bank accounts
+export class BankAccountRepository implements BankAccountPort {
+  private bankAccounts: BankAccount[] = [];
+
+  public saveBankAccount(bankAccount: BankAccount): void {
+    this.bankAccounts.push(bankAccount);
+  }
+}
+
+// File bank-account-controller.ts
+// Class representing the driver for creating bank accounts
+import { BankAccountService } from "./bank-account-service";
+import { AgeNotAllowedException } from "./age-not-allowed-exception";
+
+export class BankAccountController {
+  private bankAccountService: BankAccountService;
+
+  constructor(bankAccountService: BankAccountService) {
+    this.bankAccountService = bankAccountService;
+  }
+
+  /**
+   * Method to create a new bank account.
+   * @param name - The name of the account holder.
+   * @param age - The age of the account holder.
+   */
+  public createBankAccount(name: string, age: number): void {
+    try {
+      this.bankAccountService.createBankAccount(name, age);
+      console.log("The bank account has been created successfully.");
+    } catch (e) {
+      if (e instanceof AgeNotAllowedException) {
+        console.log(e.message);
+      } else {
+        console.log("An error occurred while creating the bank account.");
+      }
+    }
+  }
+}
+
+// File main.ts
+// Usage example
+import { BankAccountRepository } from "./bank-account-repository";
+import { BankAccountService } from "./bank-account-service";
+import { BankAccountController } from "./bank-account-controller";
+
+const bankAccountPort = new BankAccountRepository();
+const bankAccountService = new BankAccountService(bankAccountPort);
+const bankAccountController = new BankAccountController(bankAccountService);
+
+bankAccountController.createBankAccount("John Doe", 20);
+bankAccountController.createBank
+```
