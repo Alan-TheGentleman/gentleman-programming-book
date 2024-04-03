@@ -1,0 +1,266 @@
+---
+id: 'GoLang'
+order: 4
+name: 'How To GoLang'
+titleList:
+  - name: 'How to GoLang'
+    tagId: 'how-to-golang'
+  - name: 'Advantages'
+    tagId: 'advantages'
+  - name: 'Recommended Structure'
+    tagId: 'recommended-structure'
+  - name: 'Hows does GoLang Work?'
+    tagId: 'hows-dows-golang-work'
+  - name: 'Types'
+    tagId: 'types'
+  - name: 'Structs'
+    tagId: 'structs'
+  - name: 'Arrays'
+    tagId: 'arrays'
+  - name: 'Make Method'
+    tagId: 'make-method'
+  - name: 'Pointers'
+    tagId: 'pointers'
+---
+
+## How to GoLang
+
+An AMAZING language created by Google in collaboration with Rob Pike, Ken Thomson, and Robert Griesemer.
+
+### Advantages:
+- Fast, compiles directly into machine code without using an interpreter.
+- Easy to learn, very good documentation, and many things are simplified.
+- Scales very well, supports concurrent programming through "GoRoutines".
+- Automatic garbage collector, automatic memory management.
+- Included formatting engine, no need for third parties.
+- No libraries required for testing or benchmarks because they are already included.
+- Very little boilerplate for creating applications.
+- Has an API for network programming, included as a standard library.
+- VERY fast, in some benchmarks it is faster than backend applications made in Java and Rust.
+- Built-in template system, GREAT for working with HTMX.
+
+### Recommended Structure:
+- **ui** (frontend-related content in case of server-side rendering)
+-- *html* (templates)
+-- *static* (multimedia and style static content)
+---- *assets*
+---- *css*
+- **internal** (content related to tools and reusable entities throughout the project)
+-- *models*
+-- *utils*
+- **cmd**
+-- *web* (contains the application logic)
+---- *domain* (business logic)
+---- *routes* (available routes)
+
+## How does GoLang Work?
+
+GoLang uses a base file called go.mod, which will contain the main module that will be called the same as the project, and also the version of Go used. Then each file will have the extension ".go" to identify that it is a package belonging to the language.
+
+But... what is a package? 
+If you come from JavaScript you can think of it in the same way as an ES module since it is used to encapsulate related logic. But unlike ES modules, the package is identified by the lines of code "package packageName" in camel case the name of the package in question and it imports the location of the package. Different files containing logic belonging to the same package can be arranged separately BUT they must be under the same parent folder as this is of utmost importance to later import said package in different ones.
+
+To import a different package is done through the word "import" plus the path to which the package belongs.
+
+```go
+import "miProject/cmd/web/routes"
+```
+
+If you need more than one package at a time, it is not necessary to repeat the line of code since it can be grouped using "()" the various packages:
+
+```go
+import (
+    "miProject/cmd/web/routes"
+    "miProject/internal/models"
+)
+```
+
+It is worth mentioning that then Go will relate the final name of the path with the use of the package so in order to use logic contained in it will be done thinking of it as if it were an object, where each property represents a logical element of the package:
+
+```go
+routes.MyRoute
+```
+
+Private and public package methods:
+
+If the method starts with lowercase it is a private method, it cannot be accessed from outside the package itself.
+
+```go
+func myFunction()
+```
+
+If the method starts with uppercase it is a public method, it can be accessed by importing the package from another.
+
+```go
+func MyFunction()
+```
+
+Package scope
+
+Let's see a Go file
+
+```go
+package main - package name
+
+import "fmt" - fmt package is imported, no path because it's Go's own
+
+var number int = 2
+
+func main() {
+    i, j := 42, 2701 - local variables to the method, i with value 42 and j with value 2701
+
+    fmt.Println(i) - using the "Println" method of the "fmt" package
+}
+```
+
+You surely have noticed something, "number" has a type "int" preceding the value assignment, while "i" and "j" do not, this is because like Typescript, Go infers the type for those primitives. Let's see how to work with types.
+
+### Types
+
+- **bool** = true / false
+- **string** = string of characters
+- **int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr** = integer numeric values with their limits, these are generally 32 bits on 32-bit systems and 64 for 64-bit systems. Integer should be used unless there is a specific reason to use a restricted value.
+- **byte** === uint8
+- **rune** === int32 
+- **float32, float64** = represents real numeric values 
+- **complex64, complex128** = complex numbers that have a real part and an imaginary part.
+
+### Structs
+
+Represents a collection of properties, you can think of it as a Typescript interface, as it represents the contract that must be followed when creating a property. Important, if you want that property to be accessible outside the package, remember it should start with "uppercase".
+
+```go
+type Person struct {
+    Name string
+    LastName string
+    Age int
+}
+
+var person = Person {
+    Name: "Gentleman",
+    LastName: "Programming",
+    Age: 31
+}
+
+fmt.Println(person.Name)
+```
+
+Another way:
+
+```go
+var person2 = Person {
+    Name: "Gentleman",
+    LastName: "Programming",
+    Age: 31
+}
+```
+
+### Arrays
+
+Now the fun begins, arrays are quite different from what we are used to as they MUST have the maximum number of elements they are going to contain inside:
+
+```go
+var a [10]int - creates an array of 10 elements of type int
+
+a[0] = "Gentleman"
+```
+
+Or also
+
+```go
+var a = [2]int{2, 3}
+
+fmt.Println(a) - [2 3]
+```
+
+If we need it to be dynamic we can talk about "slices".
+A "slice" is a portion of an existing array or a representation of a collection of elements of a certain type.
+
+```go
+var primes = [6]int{2 ,3 ,5, 7, 11, 13}
+var s []int = primes[1:4] - creates a slice using "primes" as a base from position 1 to 4
+
+fmt.Println(s) - [3 5 7] 
+
+s = append(s , 14)
+
+fmt.Println(s) - [3 5 7 14] 
+
+fmt.Println(primes) - [2 3 5 7 14 13]
+```
+
+You can also omit values ​​for maximum and minimum ranges making them have default values:
+
+```go
+var a [10]int
+
+is the same as
+
+a[0:10]
+a[:10]
+a[0:]
+a[:]
+```
+
+### Make Method
+
+To create dynamic slices you can use the included "make" method, this will create an array filled with empty elements and return a slice referring to it. The "len" method can be used to see how many elements it currently contains and "cap" to see its capacity, that is, how many elements it can hold.
+
+```go
+a := make([]int, 0, 5)  // len(a)=0 cap(a)=5
+```
+
+### Pointers
+
+If you come from Javascript...
+
+ this will take a bit, but let's see together the following example:
+
+```go
+type ElementType struct {
+    name string 
+}
+
+var exampleElement = ElementType {
+    name: "Gentleman",
+} 
+
+func MyFunction(element ElementType) {
+    ...
+}
+
+MyFunction(exampleElement)
+```
+```markdown
+Here you might think that we are working on the element "exampleElement", but it's quite the opposite. By default, Go will create a copy of the element itself to work with it, so the usage of "element" inside the function "MyFunction" is different from "exampleElement"... it's a copy.
+
+So if we want to work with the same element passed as a parameter to the function, a pointer must be used. Normally when we create a variable, we mistakenly say that we create a property that holds a value inside it, when in reality what we are doing is creating a memory space, containing a value inside it, and then creating a reference (pointer) to that memory space which is represented by the name we give to our property:
+
+```go
+var a = 1
+```
+
+It creates a memory space which inside it contains the value "1" and we create a reference to that memory space called "a". The difference with Javascript is that this reference is not passed to the method unless we have created a pointer to it!
+
+```go
+var p *int // pointer "p" that will reference a property of type "int"
+
+i := 42
+p = &i // create a direct pointer to the property "i"
+
+// If we want to access the value referenced by the pointer "p", we use the pointer's name preceded by the "*" symbol
+fmt.Println(*p) // 42
+
+*p = 21
+
+fmt.Println(*p) // 21
+```
+
+Where this changes is if we point to a "struct", as it would be a bit cumbersome to do (*p).Property, it reduces to using it as if it were the struct itself:
+
+```go
+v := Person{"Gentleman"}
+p := &v
+p.Name = "Programming"
+fmt.Println(v) // {Programming}
+```

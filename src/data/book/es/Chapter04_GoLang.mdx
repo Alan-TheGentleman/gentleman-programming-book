@@ -1,0 +1,264 @@
+---
+id: 'GoLang'
+order: 4
+name: 'How To GoLang'
+titleList:
+  - name: 'Cómo utilizar GoLang'
+    tagId: 'how-to-golang'
+  - name: 'Ventajas'
+    tagId: 'advantages'
+  - name: 'Estructura Recomendada'
+    tagId: 'recommended-structure'
+  - name: '¿Cómo funciona GoLang?'
+    tagId: 'hows-dows-golang-work'
+  - name: 'Tipos'
+    tagId: 'types'
+  - name: 'Estructuras'
+    tagId: 'structs'
+  - name: 'Arreglos'
+    tagId: 'arrays'
+  - name: 'Método make'
+    tagId: 'make-method'
+  - name: 'Punteros'
+    tagId: 'pointers'
+---
+
+## Cómo utilizar GoLang
+
+Un LENGUAJE INCREÍBLE creado por Google en colaboración con Rob Pike, Ken Thomson y Robert Griesemer.
+
+### Ventajas:
+- Rápido, compila directamente en código de máquina sin usar un intérprete.
+- Fácil de aprender, muy buena documentación y muchas cosas están simplificadas.
+- Escala muy bien, soporta programación concurrente a través de "GoRoutines".
+- Recolector de basura automático, gestión automática de memoria.
+- Motor de formato incluido, no se necesita de terceros.
+- No se necesitan bibliotecas para pruebas o benchmarks porque ya están incluidas.
+- Muy poco boilerplate para crear aplicaciones.
+- Tiene una API para programación de redes, incluida como una biblioteca estándar.
+- MUY rápido, en algunas pruebas de referencia es más rápido que las aplicaciones backend hechas en Java y Rust.
+- Sistema de plantillas incorporado, GENIAL para trabajar con HTMX.
+
+### Estructura Recomendada:
+- **ui** (contenido relacionado con el frontend en caso de renderización del lado del servidor)
+  - *html* (plantillas)
+  - *static* (contenido multimedia y estático de estilos)
+    - *assets*
+    - *css*
+- **internal** (contenido relacionado con herramientas y entidades reutilizables en todo el proyecto)
+  - *models*
+  - *utils*
+- **cmd**
+  - *web* (contiene la lógica de la aplicación)
+    - *domain* (lógica de negocio)
+    - *routes* (rutas disponibles)
+
+## ¿Cómo funciona GoLang?
+
+GoLang utiliza un archivo base llamado go.mod, que contendrá el módulo principal que se llamará igual que el proyecto, y también la versión de Go utilizada. Luego, cada archivo tendrá la extensión ".go" para identificar que es un paquete perteneciente al lenguaje.
+
+Pero... ¿qué es un paquete?
+Si vienes de JavaScript, puedes pensarlo de la misma manera que un módulo de ES ya que se utiliza para encapsular lógica relacionada. Pero a diferencia de los módulos de ES, el paquete se identifica mediante las líneas de código "package nombreDelPaquete" en camel case el nombre del paquete en cuestión e importa la ubicación del mismo. Se pueden disponer diferentes archivos de forma separada que contienen lógica perteneciente al mismo paquete PERO deben de estar bajo la misma carpeta padre ya que esta es de suma importancia para luego importar dicho paquete en otros distintos.
+
+Para importar un paquete diferente se realiza mediante la palabra "import" más la ruta a la cual pertenece el paquete.
+
+```go
+import "miProject/cmd/web/routes"
+```
+
+Si necesitas más de un paquete a la vez, no es necesario repetir la línea de código ya que puede agruparse por medio de "()" los diversos paquetes:
+
+```go
+import (
+    "miProject/cmd/web/routes"
+    "miProject/internal/models"
+)
+```
+
+Cabe destacar que luego Go relacionará el nombre final de la ruta con el uso del paquete por lo que para poder utilizar lógica contenida en el mismo se realizará pensando en este como si de un objeto se tratase, donde cada propiedad representa un elemento lógico del paquete:
+
+```go
+routes.MyRoute
+```
+
+Métodos privados y públicos del paquete:
+
+Si el método empieza en minúsculas es un método privado, no podrá accederse desde fuera del paquete mismo.
+
+```go
+func myFunction()
+```
+
+Si el método empieza en mayúsculas es un método público, se podrá acceder al importar el paquete desde otro.
+
+```go
+func MyFunction()
+```
+
+Alcance del paquete
+
+Veamos un archivo de Go
+
+```go
+package main - nombre del
+
+ paquete
+
+import "fmt" - se importa el paquete de nombre fmt, no posee ruta porque es propio de Go
+
+var numero int = 2
+
+func main() {
+    i, j := 42, 2701 - variables locales al método, i con valor 42 y j con valor 2701
+
+    fmt.Println(i) - se hace uso del método “Println” del paquete “fmt”
+}
+```
+
+Seguro te habrás dado cuenta de algo, “numero” posee un tipo “int” que precede a la asignación del valor, mientras que “i” y “j” no, esto es porque al igual que Typescript, Go infiere el tipo para aquellos primitivos. Veamos cómo trabajar con tipos.
+
+### Tipos
+
+- **bool** = true / false
+- **string** = cadena de caracteres
+- **int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr** = valores numéricos enteros con sus límites, estos generalmente son de 32 bits en sistemas de 32 bit y y 64 para los sistemas de 64. Se debería usar integer a menos que tengamos una razón específica para usar un valor restringido.
+- **byte** === uint8
+- **rune** === int32 
+- **float32, float64** = representa valores numéricos reales 
+- **complex64, complex128** = números complejos que poseen una parte real y una parte imaginaria.
+
+### Estructuras
+
+Representa a una colección de propiedades, puedes pensarlo como una interfaz de Typescript, ya que representa el contrato que debe seguirse a la hora de crear una propiedad. Importante, si quieres que esa property sea accesible fuera del paquete, recuerda que empiece en “mayúsculas”.
+
+```go
+type Persona struct {
+    Nombre string
+    Apellido string
+    Edad int
+}
+
+var persona = Persona {
+    Nombre: "Gentleman",
+    Apellido: "Programming",
+    Edad: 31
+}
+
+fmt.Println(persona.Nombre)
+```
+
+Otra forma:
+
+```go
+var persona2 = Persona {
+    Nombre: "Gentleman",
+    Apellido: "Programming",
+    Edad: 31
+}
+```
+
+### Arreglos
+
+Ahora se viene lo divertido, los arreglos son bastante diferentes a lo que estamos acostumbrados ya que DEBEN de tener el número máximo de elementos que van a contener en su interior:
+
+```go
+var a [10]int - creamos un arreglo de 10 elementos de tipo int
+
+a[0] = "Gentleman"
+```
+
+O también
+
+```go
+var a = [2]int{2, 3}
+
+fmt.Println(a) - [2 3]
+```
+
+Si necesitamos que este sea dinámico podemos hablar sobre “slices”.
+Un “slice” es una porción de un arreglo ya existente o una representación de una colección de elementos de un cierto tipo.
+
+```go
+var primos = [6]int{2 ,3 ,5, 7, 11, 13}
+var s []int = primos[1:4] - creamos un slice utilizando “primos” como base desde la posición 1 a la 4
+
+fmt.Println(s) - [3 5 7] 
+
+s = append(s , 14)
+
+fmt.Println(s) - [3 5 7 14] 
+
+fmt.Println(primos) - [2 3 5 7 14 13]
+```
+
+También puedes omitir los valores a los rangos máximos y mínimos haciendo que estos tengan valores por defecto:
+
+```go
+var a [10]int
+
+es lo mismo que
+
+a[0:10]
+a[:10]
+a[0:]
+a[:]
+```
+
+### Método make
+
+Para crear slices dinámicos puedes utilizar el método incluido “make”, este creara un arreglo relleno de vacíos y retornara un slice que se refiera al mismo. Se puede utilizar el método “len” para ver su cuántos elementos contiene actualmente y “cap” para ver su capacidad, eso quiere decir, cuantos elementos puede albergar.
+
+```go
+a := make([]int, 0, 5)  // len(a)=0 cap(a)=5
+```
+
+### Punteros
+
+Si vienes de Javascript... esto costará un poco, pero veamos juntos el siguiente ejemplo:
+
+```go
+type TipoElemento struct {
+    nombre string 
+}
+
+var elementoEjemplo = TipoElemento {
+    nombre: "Gentleman",
+} 
+
+func MiFuncion(elemento TipoElemento) {
+    ...
+}
+
+MiFuncion(elementoEjemplo)
+```
+
+Aquí pensarás que estamos trabajando sobre el elemento “elementoEjemplo” pero es todo lo contrario, por defecto, Go creará una copia del elemento en sí para trabajarlo, por lo que el uso de “elemento” dentro del método “MiFuncion” es diferente a “elementoEjemplo”… es una copia.
+
+Entonces si queremos trabajar con el mismo elemento el cual pasamos por parámetro a la función, se debe de utilizar un puntero. Normalmente cuando creamos una variable decimos equívocamente que creamos una propiedad la cual posee un valor en su interior, cuando en realidad lo que estamos haciendo es crear un espacio de memoria, contener un valor en su interior y luego crear una referencia (puntero) a dicho espacio de memoria el cual es representado por el nombre que ponemos a nuestra propiedad:
+
+```go
+var a = 1
+```
+
+Se crea un espacio de memoria el cual en su interior contiene el valor “1” y creamos una referencia a dicho espacio de memoria llamado “a”. La diferencia con Javascript es que esa referencia no se pasa al método a menos que hayamos creado un puntero al mismo !
+
+```go
+var p *int - puntero “p” que hará referencia a una propiedad de tipo “int”
+
+i := 42
+p = &i - creamos un puntero directo a la propiedad “i”
+
+Si queremos acceder al valor referenciado por el puntero “p”, usaremos el nombre del puntero precedido por el símbolo “*”
+
+fmt.Println(*p) - 42
+
+*p = 21
+
+fmt.Println(*p) - 21
+
+Donde esto cambia es si apuntamos a un “struct”, ya que sería un poco molesto hacer (*p).Propiedad, se reduce a utilizarlo como si fuera el struct mismo:
+
+v := Persona{“Gentleman”}
+p := &v
+p.Nombre = “Programming”
+fmt.Println(v) - {Programming}
