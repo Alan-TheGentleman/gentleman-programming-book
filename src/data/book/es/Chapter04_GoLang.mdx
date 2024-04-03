@@ -4,30 +4,30 @@ order: 4
 name: 'How To GoLang'
 titleList:
   - name: 'Cómo utilizar GoLang'
-    tagId: 'how-to-golang'
+    tagId: 'cómo-utilizar-golang'
   - name: 'Ventajas'
-    tagId: 'advantages'
+    tagId: 'ventajas'
   - name: 'Estructura Recomendada'
-    tagId: 'recommended-structure'
-  - name: '¿Cómo funciona GoLang?'
-    tagId: 'hows-dows-golang-work'
+    tagId: 'estructura-recomendada'
+  - name: 'Cómo funciona GoLang'
+    tagId:'cómo-funciona-golang'
   - name: 'Tipos'
-    tagId: 'types'
+    tagId: 'tipos'
   - name: 'Estructuras'
-    tagId: 'structs'
+    tagId: 'estructuras'
   - name: 'Arreglos'
-    tagId: 'arrays'
+    tagId: 'arreglos'
   - name: 'Método make'
-    tagId: 'make-method'
+    tagId: 'método-make'
   - name: 'Punteros'
-    tagId: 'pointers'
+    tagId: 'punteros'
 ---
 
 ## Cómo utilizar GoLang
 
 Un LENGUAJE INCREÍBLE creado por Google en colaboración con Rob Pike, Ken Thomson y Robert Griesemer.
 
-### Ventajas:
+## Ventajas:
 - Rápido, compila directamente en código de máquina sin usar un intérprete.
 - Fácil de aprender, muy buena documentación y muchas cosas están simplificadas.
 - Escala muy bien, soporta programación concurrente a través de "GoRoutines".
@@ -39,7 +39,7 @@ Un LENGUAJE INCREÍBLE creado por Google en colaboración con Rob Pike, Ken Thom
 - MUY rápido, en algunas pruebas de referencia es más rápido que las aplicaciones backend hechas en Java y Rust.
 - Sistema de plantillas incorporado, GENIAL para trabajar con HTMX.
 
-### Estructura Recomendada:
+## Estructura Recomendada:
 - **ui** (contenido relacionado con el frontend en caso de renderización del lado del servidor)
   - *html* (plantillas)
   - *static* (contenido multimedia y estático de estilos)
@@ -53,7 +53,7 @@ Un LENGUAJE INCREÍBLE creado por Google en colaboración con Rob Pike, Ken Thom
     - *domain* (lógica de negocio)
     - *routes* (rutas disponibles)
 
-## ¿Cómo funciona GoLang?
+## Cómo funciona GoLang
 
 GoLang utiliza un archivo base llamado go.mod, que contendrá el módulo principal que se llamará igual que el proyecto, y también la versión de Go utilizada. Luego, cada archivo tendrá la extensión ".go" para identificar que es un paquete perteneciente al lenguaje.
 
@@ -117,7 +117,7 @@ func main() {
 
 Seguro te habrás dado cuenta de algo, “numero” posee un tipo “int” que precede a la asignación del valor, mientras que “i” y “j” no, esto es porque al igual que Typescript, Go infiere el tipo para aquellos primitivos. Veamos cómo trabajar con tipos.
 
-### Tipos
+## Tipos
 
 - **bool** = true / false
 - **string** = cadena de caracteres
@@ -127,7 +127,7 @@ Seguro te habrás dado cuenta de algo, “numero” posee un tipo “int” que 
 - **float32, float64** = representa valores numéricos reales 
 - **complex64, complex128** = números complejos que poseen una parte real y una parte imaginaria.
 
-### Estructuras
+## Estructuras
 
 Representa a una colección de propiedades, puedes pensarlo como una interfaz de Typescript, ya que representa el contrato que debe seguirse a la hora de crear una propiedad. Importante, si quieres que esa property sea accesible fuera del paquete, recuerda que empiece en “mayúsculas”.
 
@@ -157,7 +157,7 @@ var persona2 = Persona {
 }
 ```
 
-### Arreglos
+## Arreglos
 
 Ahora se viene lo divertido, los arreglos son bastante diferentes a lo que estamos acostumbrados ya que DEBEN de tener el número máximo de elementos que van a contener en su interior:
 
@@ -204,7 +204,7 @@ a[0:]
 a[:]
 ```
 
-### Método make
+## Método make
 
 Para crear slices dinámicos puedes utilizar el método incluido “make”, este creara un arreglo relleno de vacíos y retornara un slice que se refiera al mismo. Se puede utilizar el método “len” para ver su cuántos elementos contiene actualmente y “cap” para ver su capacidad, eso quiere decir, cuantos elementos puede albergar.
 
@@ -212,7 +212,7 @@ Para crear slices dinámicos puedes utilizar el método incluido “make”, est
 a := make([]int, 0, 5)  // len(a)=0 cap(a)=5
 ```
 
-### Punteros
+## Punteros
 
 Si vienes de Javascript... esto costará un poco, pero veamos juntos el siguiente ejemplo:
 

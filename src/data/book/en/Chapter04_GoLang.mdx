@@ -9,8 +9,8 @@ titleList:
     tagId: 'advantages'
   - name: 'Recommended Structure'
     tagId: 'recommended-structure'
-  - name: 'Hows does GoLang Work?'
-    tagId: 'hows-dows-golang-work'
+  - name: 'How does GoLang Work'
+    tagId: 'how-does-golang-work'
   - name: 'Types'
     tagId: 'types'
   - name: 'Structs'
@@ -23,11 +23,11 @@ titleList:
     tagId: 'pointers'
 ---
 
-## How to GoLang
+# How to GoLang
 
 An AMAZING language created by Google in collaboration with Rob Pike, Ken Thomson, and Robert Griesemer.
 
-### Advantages:
+## Advantages:
 - Fast, compiles directly into machine code without using an interpreter.
 - Easy to learn, very good documentation, and many things are simplified.
 - Scales very well, supports concurrent programming through "GoRoutines".
@@ -39,7 +39,7 @@ An AMAZING language created by Google in collaboration with Rob Pike, Ken Thomso
 - VERY fast, in some benchmarks it is faster than backend applications made in Java and Rust.
 - Built-in template system, GREAT for working with HTMX.
 
-### Recommended Structure:
+## Recommended Structure:
 - **ui** (frontend-related content in case of server-side rendering)
 -- *html* (templates)
 -- *static* (multimedia and style static content)
@@ -53,7 +53,7 @@ An AMAZING language created by Google in collaboration with Rob Pike, Ken Thomso
 ---- *domain* (business logic)
 ---- *routes* (available routes)
 
-## How does GoLang Work?
+## How does GoLang Work
 
 GoLang uses a base file called go.mod, which will contain the main module that will be called the same as the project, and also the version of Go used. Then each file will have the extension ".go" to identify that it is a package belonging to the language.
 
@@ -115,7 +115,7 @@ func main() {
 
 You surely have noticed something, "number" has a type "int" preceding the value assignment, while "i" and "j" do not, this is because like Typescript, Go infers the type for those primitives. Let's see how to work with types.
 
-### Types
+## Types
 
 - **bool** = true / false
 - **string** = string of characters
@@ -125,7 +125,7 @@ You surely have noticed something, "number" has a type "int" preceding the value
 - **float32, float64** = represents real numeric values 
 - **complex64, complex128** = complex numbers that have a real part and an imaginary part.
 
-### Structs
+## Structs
 
 Represents a collection of properties, you can think of it as a Typescript interface, as it represents the contract that must be followed when creating a property. Important, if you want that property to be accessible outside the package, remember it should start with "uppercase".
 
@@ -155,7 +155,7 @@ var person2 = Person {
 }
 ```
 
-### Arrays
+## Arrays
 
 Now the fun begins, arrays are quite different from what we are used to as they MUST have the maximum number of elements they are going to contain inside:
 
@@ -202,7 +202,7 @@ a[0:]
 a[:]
 ```
 
-### Make Method
+## Make Method
 
 To create dynamic slices you can use the included "make" method, this will create an array filled with empty elements and return a slice referring to it. The "len" method can be used to see how many elements it currently contains and "cap" to see its capacity, that is, how many elements it can hold.
 
