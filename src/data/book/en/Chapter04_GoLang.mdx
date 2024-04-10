@@ -21,6 +21,28 @@ titleList:
     tagId: 'make-method'
   - name: 'Pointers'
     tagId: 'pointers'
+  - name: 'Default Values'
+    tagId: 'default-values'
+  - name: 'Range Loop'
+    tagId: 'range-loop'
+  - name: 'Maps'
+    tagId: 'maps'
+  - name: 'Mutating Maps'
+    tagId: 'mutating-maps'
+  - name: 'Functions'
+    tagId: 'functions'
+  - name: 'Function Values'
+    tagId: 'function-values'
+  - name: 'Closures'
+    tagId: 'closures'
+  - name: 'Methods'
+    tagId: 'methods'
+  - name: 'Interfaces'
+    tagId: 'interfaces'
+  - name: 'Interface Values with Nil'
+    tagId: 'interfaces'
+  - name: 'Empty Interfaces'
+    tagId: 'empty-interfaces'
 ---
 
 # How to GoLang
@@ -259,4 +281,317 @@ v := Person{"Gentleman"}
 p := &v
 p.Name = "Programming"
 fmt.Println(v) // {Programming}
+```
+
+##Default Values
+
+In Go, when you declare a variable without explicitly assigning a value, it takes on a default value based on its type. Here's a table summarizing the defaults:
+
+| Type        | Default Value |
+|--------------|----------------|
+| `bool`       | `false`        |
+| `string`     | `""` (empty string) |
+| Numeric Types | `0`             |
+| `array`       | `nil` (uninitialized) |
+| `map`        | `nil` (uninitialized) |
+| `slice`      | `nil` (uninitialized) |
+| `pointer`    | `nil` (uninitialized) |
+| `function`   | `nil` (uninitialized) |
+
+## Range Loop
+
+The `range` loop is a powerful construct for iterating over sequences like slices, arrays, maps, and strings. It provides two components: the index (`i`) and the value (`v`) of each element. Here are three common variations:
+
+* **Full Iteration:**
+
+```go
+var arr = []int{5, 4, 3, 2, 1}
+
+for i, v := range arr {
+  fmt.Printf("index: %d, value: %d\n", i, v)
+}
+```
+
+This approach iterates over both the index and value of each element in `arr`.
+
+* **Ignoring Index:**
+
+```go
+for _, v := range arr {
+  fmt.Printf("value: %d\n", v)
+}
+```
+
+The underscore (`_`) discards the index information, focusing only on the element values.
+
+* **Ignoring Value:**
+
+```go
+for i, _ := range arr {
+  fmt.Printf("index: %d\n", i)
+}
+```
+
+Similarly, you can use an underscore to skip the value and access only the indices.
+
+## Maps
+
+Maps are unordered collections that associate unique keys (of any hashable type) with values. Go provides two ways to create and work with maps:
+
+1. **Using `make` Function:**
+
+   ```go
+   type Persona struct {
+     DNI, Nombre string
+   }
+
+   var m map[string]Persona
+
+   func main() {
+     m = make(map[string]Persona)
+     m["123"] = Persona{"123", "pepe"}
+     fmt.Println(m["123"])
+   }
+   ```
+
+2. **Map Literal:**
+
+   ```go
+   type Persona struct {
+     DNI, Nombre string
+   }
+
+   var m = map[string]Persona{
+     "123": Persona{"123", "pepe"},
+     "124": Persona{"124", "jorge"},
+   }
+
+   func main() {
+     fmt.Println(m)
+   }
+   ```
+
+   Map literals offer a concise way to initialize maps with key-value pairs.
+
+## Mutating Maps
+
+* **Insertion:**
+
+   ```go
+   m[key] = element
+   ```
+
+   Adds a new key-value pair to the map `m`.
+
+* **Retrieval:**
+
+   ```go
+   element = m[key
+   ```
+
+## Functions
+
+Functions are reusable blocks of code that perform specific tasks. They are declared with the `func` keyword, followed by the function name, parameter list (if any), return type (if any), and the function body enclosed in curly braces.
+
+Here's an example:
+
+```go
+func greet(name string) string {
+  return "Hello, " + name + "!"
+}
+
+func main() {
+  message := greet("Golang")
+  fmt.Println(message)
+}
+```
+
+## Function Values
+
+Functions can be assigned to variables, allowing you to pass them around like any other value. This enables powerful techniques like higher-order functions.
+
+Here's an example demonstrating how to pass a function as an argument and call it indirectly:
+
+```go
+func CallCallback(callBack func(float64, float64) float64) float64 {
+  return callBack(3, 4)
+}
+
+func hypot(x, y float64) float64 {
+  return math.Sqrt(x*x + y*y)
+}
+
+func main() {
+  fmt.Println(hypot(5, 12))
+  fmt.Println(CallCallback(hypot))
+}
+```
+
+## Closures
+
+Closures are a special type of function that captures variables from its enclosing environment. This allows the closure to access and manipulate these variables even after the enclosing function has returned.
+
+Here's an example of a closure that creates an "adder" function with a persistent sum:
+
+```go
+func adder() func(int) int {
+  sum := 0
+
+  return func(x int) int {
+    sum += x
+    return sum
+  }
+}
+
+func main() {
+  pos, neg := adder(), adder()
+
+  for i := 0; i < 10; i++ {
+    fmt.Println(
+      pos(i),
+      neg(-2*i),
+    )
+  }
+}
+```
+
+## Methods
+
+Go doesn't have classes, but it allows defining methods on types (structs, interfaces). A method is a function associated with a type, taking a receiver argument (usually the type itself) that implicitly refers to the object the method is called on.
+
+Here's an example of a `Persona` struct with a `Saludar` method:
+
+```go
+type Persona struct {
+  Nombre, Apellido string
+}
+
+func (p Persona) Saludar() string {
+  return "Hola " + p.Nombre
+}
+
+func main() {
+  p := Persona{"Pepe", "Perez"}
+  fmt.Println(p.Saludar())
+}
+```
+
+Methods can also be defined on non-struct types:
+
+```go
+type Nombre string
+
+func (n Nombre) Saludar() string {
+  return "Hola " + string(n)
+}
+
+func main() {
+  nombre := Nombre("Pepe")
+  fmt.Println(nombre.Saludar())
+}
+```
+
+Methods can accept pointers as receivers, enabling modifications to the original object:
+
+```go
+type Persona struct {
+  nombre, apellido string
+}
+
+func (p *Persona) cambiarNombre(n string) {
+  p.nombre = n
+}
+
+func main() {
+  p := Persona{"pepe", "perez"}
+  p.cambiarNombre("juan")
+  fmt.Println(p) // Output: {juan perez}
+
+  pp := &Persona{"puntero", "persona"}
+  pp.cambiarNombre("punteroNuevoNombre")
+  fmt.Println(*pp) // Output: {punteroNuevoNombre persona}
+}
+```
+
+Go automatically dereferences pointer receivers when necessary, so you don't always need to use the explicit `*` operator.
+
+## Interfaces
+
+Interfaces define a set of methods that a type must implement. They provide a way to achieve polymorphism, allowing different types to be used interchangeably as long as they implement the required methods.
+
+Here's an example of an `Interface` that defines two methods, `Saludar` and `Moverse`:
+
+```go
+type Persona interface {
+  Saludar() string
+  Moverse() string
+}
+
+type Alumno struct {
+  Nombre string
+}
+
+func (a Alumno) Saludar() string {
+  return "Hola " + a.Nombre
+}
+
+func (a Alumno) Moverse() string {
+  return "Estoy caminando"
+}
+
+func main() {
+  var persona Persona = Alumno{
+    "Pepe",
+  }
+
+  fmt.Println(persona.Saludar())
+  fmt.Println(persona.Moverse())
+}
+```
+
+## Interface Values with Nil
+
+Interface values can be `nil`, indicating that they don't hold a reference to any specific object. Here's an example demonstrating how to handle `nil` interface values:
+
+```go
+type I interface {
+  M()
+}
+
+type T struct {
+  S string
+}
+
+func (t *T) M() {
+  if t == nil {
+    fmt.Println("<nil>")
+    return
+  }
+  fmt.Println(t.S)
+}
+
+func main() {
+  var i I
+
+  var t *T
+  i = t
+  describe(i)
+  i.M() // Output: <nil>
+
+  i = &T{"hello"}
+  describe(i)
+  i.M() // Output: hello
+}
+
+func describe(i I) {
+  fmt.Printf("(%v, %T)\n", i, i)
+}
+```
+
+## Empty Interfaces
+
+If you don't know the specific methods an interface might require beforehand, you can create an empty interface using the `interface{}` type. This allows you to store any value in the interface, but you won't be able to call methods on it directly.
+
+```go
+var i interface{}
 ```
