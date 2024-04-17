@@ -43,6 +43,18 @@ titleList:
     tagId: 'valores-de-interfaces-con-nil'
   - name: 'Interfaces Vacías'
     tagId: 'interfaces-vacías'
+  - name: 'Aserción de tipo'
+    tagId: 'aserción-de-tipo'
+  - name: 'Switch de tipo'
+    tagId: 'switch-de-tipo'
+  - name: 'Stringers'
+    tagId: 'stringers'
+  - name: 'Errores'
+    tagId: 'errores'
+  - name: 'Lectores'
+    tagId: 'lectores'
+  - name: 'Imágenes'
+    tagId: 'imágenes'
 ---
 
 # Cómo usar GoLang
@@ -597,4 +609,322 @@ Si no conoces los métodos específicos que una interfaz podría requerir de ant
 
 ```go
 var i interface{}
+```
+
+Aquí tienes la traducción en formato Markdown:
+
+---
+
+## Aserción de tipo
+
+Cuando usamos una interfaz vacía `interface{}`, podemos utilizar cualquier tipo de dato, PERO, esto también viene con problemas. ¿Cómo sabemos si el parámetro de un método es del tipo esperado si es una interfaz vacía? Aquí es donde las Aserciones de Tipo resultan útiles, ya que proporcionan la posibilidad de probar si la interfaz vacía es del tipo esperado.
+
+```go
+t := i.(T)
+```
+
+Esto significa que el valor de la interfaz `i` tiene el tipo concreto `T` y asigna el valor subyacente `T` a la variable `t`.
+
+Si `i` no tiene un tipo `T`, esto provocará un error en tiempo de ejecución (panic).
+
+Puedes probar si la interfaz contiene un tipo específico usando un segundo parámetro, al igual que lo hacemos con `err`:
+
+```go
+t, ok := i.(T)
+```
+
+Esto guardará `true` o `false` dentro de `ok`. Si es `false`, `t` guardará un valor cero y no ocurrirá ningún error en tiempo de ejecución.
+
+```go
+func main() {
+    var i interface{} = "hello"
+
+    s := i.(string)
+    fmt.Println(s) // hello
+
+    s, ok := i.(string)
+    fmt.Println(s, ok) // hello true
+
+    f, ok := i.(float64)
+    fmt.Println(f, ok) // 0 false
+
+    f = i.(float64) // panic: conversión de interfaz: la interfaz {} es string, no float64
+    fmt.Println(f) // nada, generará un error antes
+  }
+```
+
+## Switch de tipo
+
+Proporciona la posibilidad de hacer más de una aserción de tipo en serie.
+
+Al igual que un switch regular, pero usamos tipos en lugar de valores, y los últimos se compararán con el tipo del valor contenido por la interfaz dada.
+
+```go
+switch v := i.(type) {
+    case T: 
+    // si v tiene tipo T
+    case S:
+    // si v tiene tipo S
+    default:
+    // si v no tiene ni tipo T ni tipo S, tendrá el mismo tipo que "i"
+  }
+```
+
+Aclaración: al igual que las Aserciones de Tipo, usamos un tipo como parámetro `i.(T)`, pero en lugar de usar `T`, necesitamos usar la palabra clave `type`.
+
+Esto es excelente cuando ejecutamos lógicas diferentes que dependen del tipo del parámetro:
+
+```go
+type Saludador interface {
+    Saludar()
+}
+
+type Persona struct {
+    Nombre string
+}
+
+func (p Persona) Saludar() {
+    fmt.Printf("¡Hola, mi nombre es %s!\n", p.Nombre)
+}
+
+type Numero int
+
+func (n Numero) Saludar() {
+    if n%2 == 0 {
+        fmt.Printf("¡Hola, soy un número par: %d!\n", n)
+    } else {
+        fmt.Printf("¡Hola, soy un número impar: %d!\n", n)
+    }
+}
+
+func main() {
+    saludadores := []Saludador{
+        Persona{"Alice"},
+        Persona{"Bob"},
+        Numero(3),
+        Numero(4),
+    }
+
+    for _, saludador := range saludadores {
+        switch valor := saludador.(type) {
+        case Persona:
+            valor.Saludar()
+        case Numero:
+            valor.Saludar()
+        }
+    }
+}
+```
+
+## Stringers
+
+Es un tipo que se define a sí mismo como `string`, está definido por el paquete `fmt` y se utiliza para imprimir valores.
+
+```go
+type Persona struct {
+  Nombre string
+  Edad int
+}
+
+func (p Persona) String() string {
+  return fmt.Sprintf("%v (%% años)", p.Nombre, p.Edad)
+}
+
+func main() {
+    a := Persona{"Gentleman Programming", 32}
+    z := Persona{"Alan Buscaglia", 32}
+
+    fmt.Println(a, z) // Gentleman Programming (32 años) Alan Buscaglia (32 años)
+  }
+```
+
+Ejemplo usando Stringers para modificar la forma en que mostramos una dirección IP al usar fmt.Println :
+
+```go
+type IPAddr [4]byte
+
+func (ip IPAddr) String() string {
+  str := ""
+  
+	for i, ipValor := range ip {
+    str += fmt.Sprint(ipValor)
+
+		if i < len(ip)-1 {
+			str += "."
+		}	
+  }
+	
+	return fmt.Sprintf("%s", str)
+}
+
+// TODO: Agregar un método "String() string" a IPAddr.
+
+func main() {
+	hosts := map[string]IPAddr{
+		"loopback":  {127, 0, 0, 1},
+		"googleDNS": {8, 8, 8, 8},
+	}
+
+	for _, ip := range hosts {
+		fmt.Println(ip)
+	}
+}
+```
+
+## Errores
+
+Para mostrar errores, Go utiliza valores de `error` para expresar `estados de error`, y para esto, existe el tipo `error` y es similar a la interfaz `fmt.Stringer`:
+
+```go
+type error interface {
+  Error() string
+}
+```
+
+Exactamente como con `fmt.Stringer`, el paquete `fmt` busca la interfaz `error` al imprimir valores. Normalmente, los métodos devuelven un valor de `error` y deberíamos usarlo para gestionar qué hacer en caso de que sea diferente a `nil`:
+
+```go
+i, err := strconv.Atoi("42")
+
+if err != nil {
+  fmt.Println("no se pudo convertir el número: %v\n", err)
+  return
+}
+
+fmt.Println("Entero convertido: ", i)
+```
+
+## Lectores
+
+Otra gran interfaz que representa el extremo de lectura de un flujo de datos, estos datos pueden ser transmitidos a través de archivos, conexiones de red, compresores, cifrados, etc.
+
+Y tiene un método `Read`:
+
+```go
+func (T) Read(b []byte) (n int, err error)
+```
+
+Este método poblará el array de bytes con datos y devolverá el número de bytes poblados y un valor de error. Devuelve un error de `io.EOF` cuando termina el flujo.
+
+```go
+func main() {
+  data := "Gentleman Programming"
+
+
+  // crea un nuevo io.Reader leyendo desde data
+  lector := strings.NewReader(data)
+
+  // crea un buffer para almacenar los datos copiados
+  var buffer strings.Builder
+
+  // copia los datos del lector a un buffer. io.Copy lee del lector y escribe en el escritor hasta que se alcanza EOF en el lector o ocurre un error
+  n, err := io.Copy(&buffer, lector)
+ 
+  if err != nil {
+    fmt.Println("Error:", err)
+
+
+  } else {
+      fmt.Println("\n%d bytes copiados exitosamente. \n", n)
+
+      // accede a los datos copiados en el buffer
+      fmt.Println("Datos copiados:", buffer.String())
+    }
+}
+```
+
+Ejemplo, ¡obtengamos una cadena cifrada y descifrémosla!
+
+```go
+package main
+
+import (
+	"io"
+	"os"
+	"strings"
+)
+
+type rot13Reader struct {
+	r io.Reader
+}
+
+func (rr *rot13Reader) Read(p []byte) (n int, err error) {
+	n, err = rr.r.Read(p)
+	for i := 0; i < n; i++ {
+		if (p[i] >= 'A' && p[i] <= 'Z') || (p[i] >= 'a' && p[i] <= 'z') {
+			if p[i] <= 'Z' {
+        // p[i] - 'A' calcula la posición del carácter actual en relación con 'A', luego agregamos 13 ya que el algoritmo ROT13 desplaza cada letra en el alfabeto 13 posiciones,
+        // luego aplicamos '%26' para asegurarnos de que el resultado esté dentro del rango del alfabeto (26 letras)
+        // y al final agregamos 'A' que convierte el resultado nuevamente al valor ASCII de una letra
+				p[i] = (p[i]-'A'+13)%26 + 'A'
+			} else {
+				p[i] = (p[i]-'a'+13)%26 + 'a'
+			}
+		}
+	}
+	return
+}
+
+func main() {
+	s := strings.NewReader("Lbh penpxrq gur pbqr!")
+	r := rot13Reader{s}
+	io.Copy(os.Stdout, &r)
+}
+```
+
+## Imágenes
+
+El paquete `images` define la interfaz `Image`, que es una herramienta poderosa para trabajar con imágenes ya que puedes crear, manipular y decodificar varios tipos de imágenes como PNG, JPEG, GIF, BMP, y más:
+
+```go
+package image
+
+type Image interface {
+  ColorModel() color.Model
+  Bounds() Rectangle
+  At(x, y int) color.Color
+}
+```
+
+Creemos una imagen pequeña y negra con un píxel rojo en el centro:
+
+```go
+package main
+
+import (
+	"image"
+	"image/color"
+	"image/png"
+	"os"
+)
+
+func main() {
+	// Crea una nueva imagen RGBA con dimensiones 100x100
+	img := image.NewRGBA(image.Rect(0, 0, 100, 100))
+
+	// Establece todos los píxeles en negro
+	for x := 0; x < 100; x++ {
+		for y := 0; y < 100; y++ {
+			img.Set(x, y, color.Black)
+		}
+	}
+
+	// Establece el píxel en el centro en rojo
+	img.Set(50, 50, color.RGBA{255, 0, 0, 255})
+
+	// Crea un archivo PNG para guardar la imagen
+	archivo, err := os.Create("imagen_simple.png")
+	if err != nil {
+		panic(err)
+	}
+	defer archivo.Close()
+
+	// Codifica la imagen al formato PNG y guárdala en el archivo
+	err = png.Encode(archivo, img)
+	if err != nil {
+		panic(err)
+	}
+
+	println("¡Imagen simple generada exitosamente!")
+}
 ```

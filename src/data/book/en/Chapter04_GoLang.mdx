@@ -43,6 +43,18 @@ titleList:
     tagId: 'interfaces'
   - name: 'Empty Interfaces'
     tagId: 'empty-interfaces'
+  - name: 'Type Assertion'
+    tagId: 'type-assertion'
+  - name: 'Type Switches'
+    tagId: 'type-switches'
+  - name: 'Stringers'
+    tagId: 'stringers'
+  - name: 'Errors'
+    tagId: 'errors'
+  - name: 'Readers'
+    tagId: 'readers'
+  - name: 'Images'
+    tagId: 'images'
 ---
 
 # How to GoLang
@@ -595,3 +607,319 @@ If you don't know the specific methods an interface might require beforehand, yo
 ```go
 var i interface{}
 ```
+
+## Type Assertion
+
+When we use an empty interface ```go interface{}```, we may use any kind of type BUT, this also comes with problems. How do we know if the parameter of a method is of the expected type if if it's an empty interface ?
+Here's where Type Assertions come handy, as they provide the possiblity of testing if the empty interface is of the expected type.
+
+```go
+t := i.(T)
+```
+
+This means that the interface value ```i``` holds the concrete type ```T``` and assigns the underlying ```T``` value to the variable ```t```.
+
+If ```i``` does not hold a ```T```, this will trigger a panic.
+
+You can test if the interfaces faclue holds a specific type by using a second parameter, just like we do with ```err```:
+
+```go
+t, ok := i.(T)
+```
+
+This will save true or false inside ```ok```. If false, ```t``` will save a zero value inside and no panic will occur.
+
+```go
+func main() {
+    var i interface{} = "hello"
+
+    s := i.(string)
+    fmt.Println(s) // hello
+
+    s, ok := i.(string)
+    fmt.Println(s, ok) // hello true
+
+    f, ok := i.(float64)
+    fmt.Println(f, ok) // 0 false
+
+    f = i.(float64) // panic: interface conversion: interface {} is string, not float64
+    fmt.Println(f) // nothing, it will panic before
+  }
+```
+
+## Type Switches
+
+It provides the possiblity of doing more than one Type Assertion in series.
+
+Just like a regular switch statemenet, but we use types instead of values, and the later ones will be compared against the type of the value held by the given interface value.
+
+```go
+switch v := i.(type) {
+    case T: 
+    // if v has type T
+    case S:
+    // if v has type S
+    default:
+    // if v has neither type T or S, it will have the same type as "i"
+  }
+```
+
+Acclaration: just like Type Assertions, we use a type as a parameter ```go i.(T)```, but instead of using ```T```, we need to use the keyword ```type```.
+
+This is great when executing different logics which depends on the type of the parameter:
+
+```go
+type Greeter interface {
+    SayHello()
+}
+
+type Person struct {
+    Name string
+}
+
+func (p Person) SayHello() {
+    fmt.Printf("Hello, my name is %s!\n", p.Name)
+}
+
+type Number int
+
+func (n Number) SayHello() {
+    if n%2 == 0 {
+        fmt.Printf("Hello, I'm an even number: %d!\n", n)
+    } else {
+        fmt.Printf("Hello, I'm an odd number: %d!\n", n)
+    }
+}
+
+func main() {
+    greeters := []Greeter{
+        Person{"Alice"},
+        Person{"Bob"},
+        Number(3),
+        Number(4),
+    }
+
+    for _, greeter := range greeters {
+        switch value := greeter.(type) {
+        case Person:
+            value.SayHello()
+        case Number:
+            value.SayHello()
+        }
+    }
+}
+```
+
+## Stringers
+
+It's a type that defines itself as a ```string```, it's defined by the ```fmt``` package and it's used to print values.
+
+
+```go
+type Person struct {
+  Name string
+  Age int
+}
+
+func (p Person) String() string {
+  return fmt.Sprintf("%v (%v years)", p.Name, p.Age)
+}
+
+func main() {
+    a := Person{"Gentleman Programming", 32}
+    z := Person{"Alan Buscaglia", 32}
+
+    fmt.Println(a, z) // Gentleman Programming (32 years) Alan Buscaglia (32 years)
+  }
+```
+
+Example using Stringers to modify the way we show an IpAdress when using fmt.Println :
+
+```go
+type IPAddr [4]byte
+
+func (ip IPAddr) String() string {
+  str := ""
+  
+	for i, ipValue := range ip {
+    str += fmt.Sprint(ipValue)
+
+		if i < len(ip)-1 {
+			str += "."
+		}	
+  }
+	
+	return fmt.Sprintf("%s", str)
+}
+
+// TODO: Add a "String() string" method to IPAddr.
+
+func main() {
+	hosts := map[string]IPAddr{
+		"loopback":  {127, 0, 0, 1},
+		"googleDNS": {8, 8, 8, 8},
+	}
+
+	for _, ip := range hosts {
+		fmt.Println(ip)
+	}
+}
+```
+
+## Errors
+
+To show erros, Go uses ```error``` values to express ```error states```, and for this, the ```error``` type exists and it's similar to the ```fmt.Stringer``` interface:
+
+```go
+type error interface {
+  Error() string
+}
+```
+
+Exactly as with ```fmt.Stringer``` the ```fmt``` package looks for the ```error``` interface when printing values. Normally methods return an ```error``` value and we should use it to manage what to do in case it's different to ```nil```:
+
+```go
+i, err := strconv.Atoi("42")
+
+if err != nil {
+  fmt.Println("couldn't convert number: %v\n", err)
+  return
+}
+
+fmt.Println("Converted integer: ", i)
+```
+
+## Readers
+
+Another great interface which represents the read end of a stream of data, this data may be streamed over files, network connections, compressors, ciphers, etc.
+
+And it has a ```Read``` method:
+
+```go
+func (T) Read(b []byte) (n int, err error)
+```
+
+This method will populate the byte array with data and returns the number of bytes populated and an error value. It returns an ```io.EOF``` error when the stream ends.
+
+```go
+func main() {
+  data := "Gentleman Programming"
+
+
+  // create a new io.Reader reading from data
+  reader := strings.NewReader(data)
+
+  // create a buffer to store the copied data
+  var buffer strings.Builder
+
+  // copy data from the reader to a buffer. io.Copy reads from the reader and writes to the writer until either EOF is reached on the reader or an error occurs
+  n, err := io.Copy(&buffer, reader)
+ 
+  if err != nil {
+    fmt.Println("Error:", err)
+  } else {
+      fmt.Println("\n%d bytes copied successfully. \n", n)
+
+      // access the data copied into the buffer
+      fmt.Println("Copied Data:", buffer.String())
+    }
+}
+```
+
+Example, let's get a ciphered string and decode it !
+
+```go
+package main
+
+import (
+	"io"
+	"os"
+	"strings"
+)
+
+type rot13Reader struct {
+	r io.Reader
+}
+
+func (rr *rot13Reader) Read(p []byte) (n int, err error) {
+	n, err = rr.r.Read(p)
+	for i := 0; i < n; i++ {
+		if (p[i] >= 'A' && p[i] <= 'Z') || (p[i] >= 'a' && p[i] <= 'z') {
+			if p[i] <= 'Z' {
+        // p[i] - 'A' calculates the position of the current character relative to 'A', then we add 13 as the ROT13 algorithm shifts each letter in the alphabet by 13 positions, 
+        // then we apply '%26' to ensure that the result is within the range of the alphabet (26 letters) 
+        // and at the end we add 'A' wich converts the result back to the ASCII value of a letter
+				p[i] = (p[i]-'A'+13)%26 + 'A'
+			} else {
+				p[i] = (p[i]-'a'+13)%26 + 'a'
+			}
+		}
+	}
+	return
+}
+
+func main() {
+	s := strings.NewReader("Lbh penpxrq gur pbqr!")
+	r := rot13Reader{s}
+	io.Copy(os.Stdout, &r)
+}
+```
+
+## Images
+
+The package ```iamges``` defines the ```Image``` interface, which is a powerful tool to work with images as you can create, manipulate, and decode various types of images such as PNG, JPEG, GIF, BMP, and more:
+
+```go
+package image
+
+type Image interface {
+  ColorModel() color.Model
+  Bounds() Rectangle
+  At(x, y int) color.Color
+}
+```
+
+Let's create a black small image with a red pixel in the center:
+
+```go
+package main
+
+import (
+	"image"
+	"image/color"
+	"image/png"
+	"os"
+)
+
+func main() {
+	// Create a new RGBA image with dimensions 100x100
+	img := image.NewRGBA(image.Rectangle(0, 0, 100, 100))
+
+	// Set all pixels to black
+	for x := 0; x < 100; x++ {
+		for y := 0; y < 100; y++ {
+			img.Set(x, y, color.Black)
+		}
+	}
+
+	// Set the pixel at the center to red
+	img.Set(50, 50, color.RGBA{255, 0, 0, 255})
+
+	// Create a PNG file to save the image
+	file, err := os.Create("simple_image.png")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	// Encode the image to PNG format and save it to the file
+	err = png.Encode(file, img)
+	if err != nil {
+		panic(err)
+	}
+
+	println("Simple image generated successfully!")
+}
+```
+
+
