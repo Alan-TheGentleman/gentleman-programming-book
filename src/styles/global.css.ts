@@ -42,3 +42,7 @@ globalStyle('::-webkit-scrollbar-thumb', {
 });
 
 globalStyle('html,body,#__next', {});
+
+globalStyle('h3', {
+	color: themeVars.color.primary.base,
+});
