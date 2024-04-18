@@ -1,0 +1,277 @@
+---
+id: 'nvim-gentleman-guide'
+order: 5
+name: 'NVIM Gentleman Guide'
+titleList:
+  - name: 'What is NVIM?'
+    tagId: 'what-is-nvim'
+  - name: 'Why I Love NVIM'
+    tagId: 'why-i-love-nvim'
+  - name: 'Installation'
+    tagId: 'installation'
+  - name: 'Configuration'
+    tagId: 'configuration'
+  - name: 'Basics'
+    tagId: 'basics'
+  - name: 'NVIM Motions'
+    tagId: 'nvim-motions'
+  - name: 'Visual Mode'
+    tagId: 'visual-mode'
+  - name: 'Block Visual Mode'
+    tagId: 'block-visual-mode'
+  - name: 'Visual Line Mode'
+    tagId: 'visual-line-mode'
+  - name: 'Insert Mode'
+    tagId: 'insert-mode'
+  - name: 'Command Mode'
+    tagId: 'command-mode'
+  - name: 'Buffers'
+    tagId: 'buffers'
+  - name: 'Marks'
+    tagId: 'marks'
+  - name: 'Recordings'
+    tagId: 'recordings'
+---
+
+# NVIM Gentleman Guide !
+
+First of all... What is NVIM ?
+
+Vim was first invented on the 2nd of November 1991 by Bram Moolenaar. Vim is a highly configurable text editor built to enable efficient text editing. It is an improved version of the vi editor distributed with most UNIX systems. Vim is often called a "programmer's editor," and so useful for programming that many consider it an entire IDE. It's not just for programmers, though. Vim is perfect for all kinds of text editing, from composing email to editing configuration files.
+
+So... what is NVIM then ?
+
+NVIM is a fork of Vim, with a lot of new features, better performance, and a lot of new plugins and configurations. It is a text editor that is highly configurable and can be used for programming, writing, and editing text files. The most funny part is that it isn't even released yet ! as the time of writting this guide, NVIM is still in the beta phase 0.9.5. But it is stable enough to be used as a daily driver.
+
+### Why I love NVIM ? 
+
+EFficiency, Speed, and Customization. Let's talk about me a little bit, Im a software engineer, and I spend most of my time writing code. I have tried a lot of text editors and IDEs, but I always come back to Vim. Why ? because it is fast, efficient, and highly customizable. But Vim has its own problems, it is hard to configure, and it has a steep learning curve for beginners, but as a Dark Souls lover... I love the challenge. Once you master the beast, you will never go back. 
+Having the power of not leaving my keyboard, learn something new every day, play with new plugins, and create my own configurations is what makes me love Vim. It can run anywhere, on any platform, it's fast, it's light, you can share your config really easily, and it is open-source. And the best part... you look amazing while using it, a lot of people will ask you "what is that ?" and you will feel like a hacker in a movie, running commands and shortcuts and showing the power of your efficiency.
+
+Ok, let's start this guide, I will show you how to install NVIM, configure it, and use it as a daily driver. I will show you how to install plugins, create your own configurations, and make it look amazing. Let's start with the installation.
+
+## Instalattion
+
+### Previous Requirements
+
+(Execute all commands using the system default terminal, we will change it later)
+
+WINDOWS USERS: 
+
+First, let's install WSL (https://learn.microsoft.com/en-us/windows/wsl/install), this is a must-have for windows users, it will allow you to run a full Linux distribution on your windows machine and I recommend using the version 2 as it uses the whole machine resources. 
+
+```bash
+wsl --install
+wsl --set-default-version 2
+```
+
+As we are now running a full linux distribution on our windows machine, the next steps will be the same for all platforms, being windows, mac, or linux.
+
+1- Install Homebrew, this is a package manager for macOS and Linux, it will allow you to install a lot of packages and tools easily and it's always up to date.
+
+```bash
+set install_script (curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
+```
+
+Include HomeBrew Path in your shell profile
+```bash
+Change 'YourUserName' with the device username
+
+(echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/YourUserName/.bashrc
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+```
+
+2- Install build-essential, this is a package that contains a list of essential packages for building software and we will need it to compile some plugins. This step is not needed for macOS users.
+```bash
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install build-essential
+```
+3- Install NVIM, we will install NVIM using Homebrew, this will install the latest version of NVIM and all its dependencies.
+```bash
+brew install nvim
+```
+
+4- Install Node and NPM, needed for web development plugins and some language servers.
+```bash
+brew install node
+brew install npm
+```
+
+5- Install GIT, we will need GIT to clone repositories.
+```bash
+brew install git
+```
+
+6- Install FISH, this is a shell that is highly customizable and has a lot of features, I recommend using it as your default shell. Some of it's amazing features are autocompletion and syntax highlighting.
+```bash
+
+```bash
+brew install fish
+// set as default:
+
+which fish
+// this will return a path, let‘s call it whichFishResultingPath
+
+// add it as an available shell
+echo whichFishResultingPath | sudo tee -a /etc/shells
+
+// set it as default
+sudo chsh -s wichFishResultingPath
+```
+
+7- Install Oh My Fish, this is a framework for fish shell, it will allow you to install themes, plugins, and configure your shell easily.
+```bash
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+```
+
+8- Install the following dependencies needed to execute LazyVim
+
+```bash
+brew install gcc
+brew install fzf
+brew install fd
+brew install ripgrep
+```
+
+9- Install Zellij, this is a terminal multiplexer, it will allow you to split your terminal in multiple panes and execute multiple commands at the same time.
+
+```bash
+brew install zellij
+```
+
+10 - Install Wezterm, this is a terminal emulator, it is highly customizable and has a lot of features, I recommend using it as your default terminal. One of the strongest features is the GPU acceleration, it will make your terminal faster and more responsive and that it's written in lua, the same language that LAZYVIM uses.
+
+```bash
+https://wezfurlong.org/wezterm/index.html
+```
+
+11- Install Iosevka Term Nerd Font, this is a font that is highly customizable and has a lot of features, I recommend using it as your default font. It has a lot of ligatures and special characters that will make your terminal look amazing. A nerd font is a font that has a lot of special characters and ligatures that will make your terminal look amazing and it's needed to render icons.
+
+```bash
+https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/IosevkaTerm.zip
+```
+
+12- Now let me share my custom repository that contains all my configurations for NVIM, FISH, Wezterm, and Zellij.
+
+```bash
+https://github.com/Gentleman-Programming/Gentleman.Dots
+```
+
+Just follow the steps and you will have a fully customized and gentlemanized terminal and code editor. One last thing before continuin, we will use some plugins that are already configured inside the repository and are managed by LazyVim, an amazing package manager that will allow you to install and update plugins easily. 
+
+Now that we have everything... let's start learning how to configure NVIM !
+
+## Configuration
+
+As we are using my custom repository, all the configurations are already done, but I will explain how to configure NVIM and how to install plugins and create your own configurations.
+As previously said, we are using LazyVim, http://www.lazyvim.org/, an amazing package manager that will allow you to install and update plugins smoothly like butter, it also provides already configured plugins that will make your life easier.
+
+But first, let's learn how to install plugins manually.
+
+If you see the nvim folder structure you will find a "plugins" folder, it will contain a number of files representing each one of the installed plugins by our hand. Each file will contain the plugin name and the repository URL. To install a plugin manually, you will need to create a new file inside the "plugins" folder and add the following content.
+
+```bash
+return {
+    "repository-url",
+}
+```
+
+And that's it, the next time you open NVIM, the plugin will be installed automatically.
+
+To access a LazyVim management window, just open nvim using the command "nvim" at your terminal and then type the following command ":LazyVim", this will open a window with all the installed plugins and their status, you can install, update, and remove plugins using this window.
+
+Now, to acess all extra already configured plugins provided by LazyVim, just type the following command ":LazyVimExtra", this will open a window with all the available plugins, you can install, update, and remove plugins using this window.
+
+To install a new programming language, type ":MasonInstall" and select the language you want to install, this will install all the necessary plugins and configurations for that language and that's it, you are ready to go.
+
+To stablish new keybindings, just open the "keymaps.lua" file inside the "lua" folder and add the following content.
+
+```bash
+vim.keymap.set('mode', 'whatDoYouWantToPress', 'WhatDoYouWantToDo')
+```
+
+The mode represents the mode you are going to use, it can be "n" for normal mode, "i" for insert mode, "v" for visual mode, and "c" for command mode. The second parameter represents the key you want to press, and the third parameter represents the action you want to do. You shuld come back later to this part after we touch the basics of vim modes.
+
+## Basics
+
+Nvim has 4 modes, Normal, Insert, Visual, and Command. Each one of them has its own purpose and shortcuts.
+
+### Normal Mode
+
+At this mode, you can navigate through the text, delete, copy, paste, and execute commands. You can enter this mode by pressing the "ESC" key. In resume, this is the mode you will spend most of your time and where we will move across our code.
+
+Horizontal Movement
+
+To navigate, we will NOT use the arrow keys, we will use the "h" key to move left, the "j" key to move down, the "k" key to move up, and the "l" key to move right. This is the most efficient way to navigate through the text and it will make you look like a pro.
+
+I really recommend you to use the "hjkl" keys to navigate, it will make you more efficient and you will not need to move your hands from the home row. Efficiency is the name of the game.
+
+To jump to the beginning of the line, use the "0" key, to jump to the end of the line, use the "$" key. To jump to the beginning of the file, use the "gg" keys, to jump to the end of the file, use the "G" key. It's always the same, if you press a command you will do something, and if you press "Shift" while doing it, you will do the opposite.
+
+To correctly move horizontally throug a line, you will need to use the "w" key to jump to the beginning of the next word, the "b" key to jump to the beginning of the previous word, the "e" key to jump to the end of the next word, and the "ge" key to jump to the end of the previous word. You can also use the amazing "f" key to jump to a specific character in the line, just press "f" and then the character you want to jump to, and that's it, you are there.And I said before, if you use "Shift" while doing it, you will do the opposite, moving to the previous ocurrency. You can also use the "s" key to search for a character, this is using a plugin called "Sneak", it will allow you to search for a character and jump to it after pressing the key that will appear next to all the ocurrences.
+
+Vertical Movement
+
+To navigate vertically, you can use the "Ctrl" key with the "u" key to move up half a page, the "Ctrl" key with the "d" key to move down half a page, the "Ctrl" key with the "b" key to move up a page, and the "Ctrl" key with the "f" key to move down a page. This is the most efficient way to navigate through the text as we don't know where that particular piece of logic is, so we can move pretty quickly this way and find what we are looking for.
+
+Another great way of navigating vertically is using the "Shift" key with the "{" and "}" keys, this will allow you to jump to the next or previous paragraph, and this is one of the things that makes me love NVIM, if your code is clean and correctly indented, you will be able to jump through the code really quickly and find what you are looking for, IT'S TEACHING YOU TO WRITE CLEAN CODE !!
+
+If you want to jump to a particular line, you can use the ":" key, this will open the command mode, and then you can type the line number you want to jump to, and that's it, you are there.
+
+### Visual Mode
+
+This mode is used to select text, you can enter this mode by pressing the "v" key. You can use the same commands as the normal mode, but now you can select text. You can also use the "Shift" key with the "v" key to select the whole line. Again we can use motions to select text, for example, if we want to select the next 10 lines, we can use the "10j" command, and if we want to select the next 10 words, we can use the "10w" command. And if we want to select the next 10 characters, we can use the "10l" command.
+
+### Block Visual Mode
+
+This mode is used to select a block of text, you can enter this mode by pressing the "Ctrl" key with the "v" key. You can use the same commands as the normal mode, but now you can select a block of text. Again we can use motions to select text, for example, if we want to select the next 10 lines, we can use the "10j" command, and if we want to select the next 10 words, we can use the "10w" command. And if we want to select the next 10 characters, we can use the "10l" command.
+
+A block of text is a rectangle of text, and you can copy, paste, and delete it. You can also use the "Shift" key with the "I" key to insert text in a block, and the "Shift" key with the "A" key to append text in a block. 
+
+It's also useful to write a lot of lines at the same time, for example, if you want to write a comment in multiple lines, you can use the "Ctrl" key with the "v" key to select the lines you want to write the comment, and then use the "Shift" key with the "I" key to insert the comment, and that's it, you are done after you press the "ESC" key.
+
+### Visual Line Mode
+
+This mode is used to select a line of text, you can enter this mode by pressing the "Shift" key with the "v" key. You can use the same commands as the normal mode, but now you can select a line of text. Again we can use motions to select text, for example, if we want to select the next 10 lines, we can use the "10j" command, and if we want to select the next 10 words, we can use the "10w" command. And if we want to select the next 10 characters, we can use the "10l" command.
+
+### Insert Mode
+
+This is the mode you will use to write text, you can enter this mode by pressing the "i" key. You can use the same commands as the normal mode, but now you can write text. You can also use the "Shift" key with the "i" key to insert text at the beginning of the line, and the "A" key to append text at the end of the line, and the same if you want to start writting at a specific character, you can use "i" to insert before the character and "a" to append after the character.
+You can also use the "o" key to insert a new line below the current line, and the "O" key to insert a new line above the current line. Using the "Ctrl" key with the "w" key will delete the last word, and using the "Ctrl" key with the "u" key will delete the last line while being in insert mode. Another useful command is the "Ctrl" key with the "n" key, this will autocomplete the text you are writing, and it's really useful when you are writing code. And if you want to exit the insert mode, you can use the "ESC" key.
+
+### Command Mode
+
+This mode is used to execute commands, you can enter this mode by pressing the ":" key. Here is were we can exit NVIM !!! Just do ":q" and that's it ! if you have changes, first save them by using ":w" and if you want to force the exit ":q!". Another cool thing is that you can do more than one command at once, for example, if you want to save and exit, you can use ":wq". 
+
+One cofiguration I recommend it's setting the number of lines to relative by doing ":set relativenumber", this will allow you to see the line number relative to the line you are in, and it's really helpful to know where you are in the file. You can do this by typing the following command ":set relativenumber", and we want this as we can move to a specific line really quickly by using a number and the direction we want to go to, for example, if we want to jump to the 10th line above us, we can use the "10k" command, and if we want to jump to the 10th line below us, we can use the "10j" command.
+
+## Nvim Motions
+
+And this introduces the concept of "Motions" in NVIM, each command we type is a motion, and it's created by combining a number, a direction, and a command. For example, if we want to delete the next 10 lines, we can use the "10dd" command, and if we want to copy the next 10 lines, we can use the "10yy" command. This is the most efficient way to navigate through the text and and one of the strongest features of NVIM.
+
+Now let's use what we have learned to delete, copy, and paste text.
+
+To delete text, we can use the "d" key, and then the motion we want to use, for example, if we want to delete the next 10 lines, we can use the "10dd" command, and if we want to delete the next 10 words, we can use the "10dw" command. And if we want to delete the next 10 characters, we can use the "10dl" command, and if we want to delete the whole line we can use the "dd" command.
+
+To copy text, we can use the "y" key, and then the motion we want to use, for example, if we want to copy the next 10 lines, we can use the "10yy" command, and if we want to copy the next 10 words, we can use the "10yw" command. And if we want to copy the next 10 characters, we can use the "10yl" command, and if we want to copy the whole line we can use the "yy" command.
+
+To paste text, we can use the "p" key, this will paste the text after the cursor, and if we want to paste the text before the cursor, we can use the "P" key.
+
+## Registers
+
+And now's the funny thing, have you seen what happens when we delete or copy text ? the text is saved in a register, and we can access it by using the "p" key, and we can access the last deleted text by using the "P" key. This is something a lot of beginners hate because they don't know what a register is or how to access it, so let me explain it to you.
+
+A register is a place where the text is saved, and we can access it by using "Leader" (normally "Space") and the double quote key, sometimes we need to do "Leader" and double quote two times if you layout is International, and a panel will appear with all the registers, and you will see that the lates copied text is saved in the "0" register, so now that we know this, you can access it by using the "0p" command. And if you want to access the last deleted text, you can use the "1p" command.
+
+## Buffers
+
+A buffer is a place where the text is saved, and you can access it by using the "Leader" key and "be", and a panel will appear with all the buffers, and you can navigate through them by using the "j" and "k" keys. You can also use the "d" key to delete a buffer. One way of thinking of buffers is like tabs, you can have multiple buffers open at the same time, and you can navigate through them, each time you open a file a new buffer is created and saved into memory, and if you open the same buffer in two places at the same time you will see that if you change something in one buffer, it will change in the other buffer too. There's a special command I created so you can clear all buffers but the current one for those special times where you have been coding for hours and the performance is a little bit slow, you can do "Leader" and "bq".
+
+## Marks
+
+Marks are amazing, you can create a new mark by using the "m" key and then a letter, for example, if you want to create a new mark in the current line, you can use the "ma" command, and if you want to jump to that mark, you can use the "`a" command. If you want to delete a mark, do ":delm keyOfTheMark", and to delete ALL the marks ":delm!" .Marks are saved in the current buffer, and you can use them to navigate through the text quickly.
+
+## Recordings
+
+Now this is amazing and super useful, let's say we need to do an action multiples times and its super tedious to do so, what NVIM provides is a way to replicate a set of commands by creating a macro, you can start recording by using the "q" key and then a letter, for example, if you want to start recording a macro in the "a" register, you can use the "qa" command, and then you can do the actions you want to replicate, and then you can stop recording by using the "q" key. To replay the macro, you can use the "@" key and then the letter, for example, if you want to replay the macro in the "a" register, you can use the "@a" command. This is super useful and will make you more efficient. And again you can use motions with your recordings, for example, if you want to delete the next 10 lines and copy them, you can use the "qad10jyy" command, and then you can replay the macro by using the "@a" command, and also you can replicate the macro multiple times by using the "10@a" command.
