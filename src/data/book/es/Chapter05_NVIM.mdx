@@ -1,0 +1,280 @@
+---
+id: 'nvim-gentleman-guide'
+order: 5
+name: 'Guía Gentil de NVIM'
+titleList:
+  - name: '¿Qué es NVIM?'
+    tagId: 'que-es-nvim'
+  - name: '¿Por qué amo NVIM?'
+    tagId: 'por-que-amo-nvim'
+  - name: 'Instalación'
+    tagId: 'instalacion'
+  - name: 'Configuración'
+    tagId: 'configuracion'
+  - name: 'Conceptos Básicos'
+    tagId: 'conceptos-basicos'
+  - name: 'Movimientos de NVIM'
+    tagId: 'movimientos-nvim'
+  - name: 'Modo Visual'
+    tagId: 'modo-visual'
+  - name: 'Modo de Bloque Visual'
+    tagId: 'modo-bloque-visual'
+  - name: 'Modo de Línea Visual'
+    tagId: 'modo-linea-visual'
+  - name: 'Modo de Inserción'
+    tagId: 'modo-insercion'
+  - name: 'Modo de Comandos'
+    tagId: 'modo-comandos'
+  - name: 'Buffers'
+    tagId: 'buffers'
+  - name: 'Marcas'
+    tagId: 'marcas'
+  - name: 'Grabaciones'
+    tagId: 'grabaciones'
+---
+
+# Guía Gentil de NVIM !
+
+¡Primero que nada... ¿Qué es NVIM?
+
+Vim fue inventado por primera vez el 2 de noviembre de 1991 por Bram Moolenaar. Vim es un editor de texto altamente configurable construido para permitir una edición eficiente de texto. Es una versión mejorada del editor vi distribuido con la mayoría de los sistemas UNIX. Vim a menudo se llama un "editor para programadores", y es tan útil para la programación que muchos lo consideran un IDE completo. Pero no es solo para programadores. Vim es perfecto para todo tipo de edición de texto, desde componer correos electrónicos hasta editar archivos de configuración.
+
+Entonces... ¿Qué es NVIM entonces?
+
+NVIM es un fork de Vim, con muchas características nuevas, mejor rendimiento y muchos nuevos complementos y configuraciones. Es un editor de texto altamente configurable que se puede usar para programar, escribir y editar archivos de texto. ¡Lo más divertido es que ni siquiera ha sido lanzado todavía! En el momento de escribir esta guía, NVIM todavía está en la fase beta 0.9.5. Pero es lo suficientemente estable como para usarse a diario.
+
+### ¿Por qué amo NVIM?
+
+Eficiencia, Velocidad y Personalización. Permíteme hablarte un poco de mí, soy un ingeniero de software y paso la mayor parte de mi tiempo escribiendo código. He probado muchos editores de texto y entornos de desarrollo integrado (IDE), pero siempre vuelvo a Vim. ¿Por qué? Porque es rápido, eficiente y altamente personalizable. Pero Vim tiene sus propios problemas, es difícil de configurar y tiene una curva de aprendizaje pronunciada para los principiantes, pero como amante de Dark Souls... Me encanta el desafío. Una vez que dominas la bestia, nunca volverás atrás. Tener el poder de no alejarme de mi teclado, aprender algo nuevo todos los días, jugar con nuevos complementos y crear mis propias configuraciones es lo que me hace amar Vim. Puede ejecutarse en cualquier lugar, en cualquier plataforma, es rápido, es ligero, puedes compartir tu configuración muy fácilmente y es de código abierto. Y la mejor parte... te ves increíble usándolo, mucha gente te preguntará "¿qué es eso?" y te sentirás como un hacker en una película, ejecutando comandos y atajos y mostrando el poder de tu eficiencia.
+
+Bien, comencemos esta guía, te mostraré cómo instalar NVIM, configurarlo y usarlo como tu editor principal. Te mostraré cómo instalar complementos, crear tus propias configuraciones y hacer que se vea increíble. Comencemos con la instalación.
+
+## Instalación
+
+### Requisitos previos
+
+(Ejecuta todos los comandos usando el terminal predeterminado del sistema, lo cambiaremos más tarde)
+
+USUARIOS DE WINDOWS:
+
+Primero, instalemos WSL (https://learn.microsoft.com/en-us/windows/wsl/install), esto es imprescindible para los usuarios de Windows, te permitirá ejecutar una distribución completa de Linux en tu máquina con Windows y recomiendo usar la versión 2 ya que utiliza todos los recursos de la máquina.
+
+```bash
+wsl --install
+wsl --set-default-version 2
+```
+
+Como ahora estamos ejecutando una distribución completa de Linux en nuestra máquina con Windows, los siguientes pasos serán los mismos para todas las plataformas, ya sea Windows, macOS o Linux.
+
+1- Instala Homebrew, este es un administrador de paquetes para macOS y Linux, te permitirá instalar muchos paquetes y herramientas fácilmente y siempre está actualizado.
+
+```bash
+set install_script (curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
+```
+
+Incluye la ruta de HomeBrew en tu perfil de shell
+```bash
+Cambia 'TuNombreDeUsuario' por el nombre de usuario del dispositivo
+
+(echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/YourUserName/.bashrc
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+```
+
+2- Instala build-essential, este es un paquete que contiene una lista de paquetes esenciales para compilar software y lo necesitaremos para compilar algunos complementos. Este paso no es necesario para los usuarios de macOS.
+```bash
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install build-essential
+```
+3- Instala NVIM, instalaremos NVIM usando Homebrew, esto instalará la última versión de NVIM y todas sus dependencias.
+```bash
+brew install nvim
+```
+
+4- Instala Node y NPM, necesarios para los complementos de desarrollo web y algunos servidores de lenguaje.
+```bash
+brew install node
+brew install npm
+```
+
+5- Instala GIT, necesitaremos GIT para clonar repositorios.
+```bash
+brew install git
+```
+
+6- Instala FISH, este es un shell altamente personalizable que tiene muchas funciones, te recomiendo usarlo como tu shell predeterminado. Algunas de sus increíbles características son la autocompletación y el resaltado de sintaxis.
+```bash
+
+```bash
+brew install fish
+// establecer como predeterminado:
+
+which fish
+// esto devolverá una ruta, llamémosla whichFishResultingPath
+
+// agregarlo como un shell disponible
+echo whichFishResultingPath | sudo tee -a /etc/shells
+
+// establecerlo como predeterminado
+sudo chsh -s wichFishResultingPath
+```
+
+7- Instala Oh My Fish, este es un marco para el shell fish, te permitirá instalar temas, complementos y configurar tu shell fácilmente.
+```bash
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+```
+
+8- Instala las siguientes dependencias necesarias para ejecutar LazyVim
+
+```bash
+brew install gcc
+brew install fzf
+brew install fd
+brew install ripgrep
+```
+
+9- Instala Zellij, este es un multiplexor de terminal, te permitirá dividir tu terminal en múltiples paneles y ejecutar múltiples comandos al mismo tiempo.
+
+```bash
+brew install zellij
+```
+
+10 - Instala Wezterm, este es un emulador de terminal, es altamente personalizable y tiene muchas características, te recomiendo usarlo como tu terminal predeterminado. Una de las características más fuertes es la aceleración de GPU, hará que tu terminal sea más rápida y receptiva y está escrito en lua, el mismo lenguaje que utiliza LAZYVIM.
+
+```bash
+https://wezfurlong.org/wezterm/index.html
+```
+
+11- Instala Iose
+
+vka Term Nerd Font, esta es una fuente altamente personalizable y tiene muchas características, te recomiendo usarla como tu fuente predeterminada. Tiene muchas ligaduras y caracteres especiales que harán que tu terminal se vea increíble. Una fuente nerd es una fuente que tiene muchos caracteres especiales y ligaduras que harán que tu terminal se vea increíble y se necesita para renderizar iconos.
+
+```bash
+https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/IosevkaTerm.zip
+```
+
+12- Ahora permíteme compartirte mi repositorio personalizado que contiene todas mis configuraciones para NVIM, FISH, Wezterm y Zellij.
+
+```bash
+https://github.com/Gentleman-Programming/Gentleman.Dots
+```
+
+Solo sigue los pasos y tendrás un terminal y un editor de código completamente personalizados y gentlemanizados. Una última cosa antes de continuar, usaremos algunos complementos que ya están configurados dentro del repositorio y están gestionados por LazyVim, un increíble administrador de paquetes que te permitirá instalar y actualizar complementos fácilmente.
+
+Ahora que tenemos todo... ¡comencemos a aprender cómo configurar NVIM!
+
+## Configuración
+
+Como estamos utilizando mi repositorio personalizado, todas las configuraciones ya están hechas, pero explicaré cómo configurar NVIM y cómo instalar complementos y crear tus propias configuraciones.
+Como se mencionó anteriormente, estamos utilizando LazyVim, http://www.lazyvim.org/, un increíble administrador de paquetes que te permitirá instalar y actualizar complementos sin problemas como la mantequilla, también proporciona complementos ya configurados que harán tu vida más fácil.
+
+Pero primero, aprendamos cómo instalar complementos manualmente.
+
+Si observas la estructura de carpetas de nvim, encontrarás una carpeta "plugins", que contendrá varios archivos que representan cada uno de los complementos instalados manualmente. Cada archivo contendrá el nombre del complemento y la URL del repositorio. Para instalar un complemento manualmente, necesitarás crear un nuevo archivo dentro de la carpeta "plugins" y agregar el siguiente contenido.
+
+```bash
+return {
+    "url-del-repositorio",
+}
+```
+
+Y eso es todo, la próxima vez que abras NVIM, el complemento se instalará automáticamente.
+
+Para acceder a una ventana de gestión de LazyVim, simplemente abre nvim usando el comando "nvim" en tu terminal y luego escribe el siguiente comando ":LazyVim", esto abrirá una ventana con todos los complementos instalados y su estado, puedes instalar, actualizar y eliminar complementos usando esta ventana.
+
+Ahora, para acceder a todos los complementos extra ya configurados proporcionados por LazyVim, simplemente escribe el siguiente comando ":LazyVimExtra", esto abrirá una ventana con todos los complementos disponibles, puedes instalar, actualizar y eliminar complementos usando esta ventana.
+
+Para instalar un nuevo lenguaje de programación, escribe ":MasonInstall" y selecciona el lenguaje que deseas instalar, esto instalará todos los complementos y configuraciones necesarios para ese lenguaje y eso es todo, estás listo para comenzar.
+
+Para establecer nuevos atajos de teclado, simplemente abre el archivo "keymaps.lua" dentro de la carpeta "lua" y agrega el siguiente contenido.
+
+```bash
+vim.keymap.set('modo', 'quéQuieresPresionar', 'QuéQuieresHacer')
+```
+
+El modo representa el modo que vas a usar, puede ser "n" para el modo normal, "i" para el modo de inserción, "v" para el modo visual y "c" para el modo de comando. El segundo parámetro representa la tecla que deseas presionar y el tercer parámetro representa la acción que deseas realizar. Debes regresar a esta parte más tarde después de que toquemos los conceptos básicos de los modos de vim.
+
+## Conceptos básicos
+
+Nvim tiene 4 modos: Normal, Inserción, Visual y Comando. Cada uno de ellos tiene su propio propósito y atajos.
+
+### Modo Normal
+
+En este modo, puedes navegar por el texto, eliminar, copiar, pegar y ejecutar comandos. Puedes ingresar a este modo presionando la tecla "ESC". En resumen, este es el modo en el que pasarás la mayor parte de tu tiempo y donde nos moveremos a través de nuestro código.
+
+Movimiento Horizontal
+
+Para navegar, NO usaremos las teclas de flecha, usaremos la tecla "h" para moverse hacia la izquierda, la tecla "j" para moverse hacia abajo, la tecla "k" para moverse hacia arriba y la tecla "l" para moverse hacia la derecha. Esta es la forma más eficiente de navegar por el texto y te hará lucir como un profesional.
+
+Realmente te recomiendo usar las teclas "hjkl" para navegar, te hará más eficiente y no necesitarás mover las manos desde la fila de inicio. La eficiencia es el nombre del juego.
+
+Para saltar al principio de la línea, usa la tecla "0", para saltar al final de la línea, usa la tecla "$". Para saltar al principio del archivo, usa las teclas "gg", para saltar al final del archivo, usa la tecla "G". Siempre es lo mismo, si presionas un comando, harás algo, y si presionas "Shift" mientras lo haces, harás lo contrario.
+
+Para moverte horizontalmente correctamente a través de una línea, necesitarás usar la tecla "w" para saltar al principio de la siguiente palabra, la tecla "b" para saltar al principio de la palabra anterior, la tecla "e" para saltar al final de la siguiente palabra y la tecla "ge" para saltar al final de la palabra anterior. También puedes usar la increíble tecla "f" para saltar a un carácter específico en la línea, simplemente presiona "f" y luego el carácter al que deseas saltar, y eso es todo, estás allí. Y como dije antes, si usas "Shift" mientras lo haces, harás lo contrario, moviéndote a la ocurrencia anterior. También puedes usar la tecla "s" para buscar un carácter, esto utiliza un complemento llamado "Sneak", que te permitirá buscar un carácter y saltar a él después de presionar la tecla que aparecerá junto a todas las ocurrencias.
+
+Movimiento Vertical
+
+Para navegar verticalmente, puedes usar la tecla "Ctrl" con la tecla "u" para moverte hacia arriba medio página, la tecla "Ctrl" con la tecla "d" para moverte hacia abajo medio página, la tecla "Ctrl" con la tecla "b" para moverte hacia arriba una página y la tecla "Ctrl" con la tecla "f" para moverte hacia abajo una página. Esta es la forma más eficiente de navegar por el texto, ya que no sabemos dónde está esa parte específica de lógica, así que podemos movernos bastante rápido de esta manera y encontrar lo que estamos buscando.
+
+Otra excelente manera de navegar verticalmente es usar la tecla "Shift" con las teclas "{" y "}", esto te permitirá saltar al siguiente o al párrafo anterior, y esto es una de las cosas que me hace amar NVIM, si tu código está limpio y correctamente indentado, podrás saltar a través del código realmente rápido y encontrar lo que estás buscando, ¡TE ESTÁ ENSEÑANDO A ESCRIBIR CÓDIGO LIMPIO!
+
+Si deseas saltar a una línea específica, puedes usar la tecla ":", esto abrirá el modo de comando y luego puedes escribir el número de línea al que deseas saltar, y eso es todo, estás allí.
+
+### Modo Visual
+
+Este modo se utiliza para seleccionar texto, puedes ingresar a este modo presionando la tecla "v
+
+". Puedes usar los mismos comandos que en el modo normal, pero ahora puedes seleccionar texto. También puedes usar la tecla "Shift" con la tecla "v" para seleccionar toda la línea. Nuevamente, podemos usar movimientos para seleccionar texto, por ejemplo, si queremos seleccionar las próximas 10 líneas, podemos usar el comando "10j" y si queremos seleccionar las próximas 10 palabras, podemos usar el comando "10w". Y si queremos seleccionar los próximos 10 caracteres, podemos usar el comando "10l".
+
+### Modo de Bloque Visual
+
+Este modo se utiliza para seleccionar un bloque de texto, puedes ingresar a este modo presionando la tecla "Ctrl" junto con la tecla "v". Puedes usar los mismos comandos que en el modo normal, pero ahora puedes seleccionar un bloque de texto. Nuevamente, podemos usar movimientos para seleccionar texto, por ejemplo, si queremos seleccionar las próximas 10 líneas, podemos usar el comando "10j", y si queremos seleccionar las próximas 10 palabras, podemos usar el comando "10w". Y si queremos seleccionar los próximos 10 caracteres, podemos usar el comando "10l".
+
+Un bloque de texto es un rectángulo de texto, y puedes copiar, pegar y eliminarlo. También puedes usar la tecla "Shift" con la tecla "I" para insertar texto en un bloque, y la tecla "Shift" con la tecla "A" para agregar texto en un bloque.
+
+También es útil para escribir muchas líneas al mismo tiempo, por ejemplo, si quieres escribir un comentario en varias líneas, puedes usar la tecla "Ctrl" con la tecla "v" para seleccionar las líneas donde deseas escribir el comentario, y luego usar la tecla "Shift" con la tecla "I" para insertar el comentario, y eso es todo, estás hecho después de presionar la tecla "ESC".
+
+### Modo de Línea Visual
+
+Este modo se utiliza para seleccionar una línea de texto, puedes ingresar a este modo presionando la tecla "Shift" junto con la tecla "v". Puedes usar los mismos comandos que en el modo normal, pero ahora puedes seleccionar una línea de texto. Nuevamente, podemos usar movimientos para seleccionar texto, por ejemplo, si queremos seleccionar las próximas 10 líneas, podemos usar el comando "10j", y si queremos seleccionar las próximas 10 palabras, podemos usar el comando "10w". Y si queremos seleccionar los próximos 10 caracteres, podemos usar el comando "10l".
+
+### Modo de Inserción
+
+Este es el modo que utilizarás para escribir texto, puedes ingresar a este modo presionando la tecla "i". Puedes usar los mismos comandos que en el modo normal, pero ahora puedes escribir texto. También puedes usar la tecla "Shift" con la tecla "i" para insertar texto al principio de la línea, y la tecla "A" para agregar texto al final de la línea, y lo mismo si quieres comenzar a escribir en un carácter específico, puedes usar "i" para insertar antes del carácter y "a" para agregar después del carácter.
+También puedes usar la tecla "o" para insertar una nueva línea debajo de la línea actual, y la tecla "O" para insertar una nueva línea encima de la línea actual. Usar la tecla "Ctrl" con la tecla "w" eliminará la última palabra, y usar la tecla "Ctrl" con la tecla "u" eliminará la última línea mientras estás en modo de inserción. Otro comando útil es la tecla "Ctrl" con la tecla "n", esto autocompletará el texto que estás escribiendo, y es realmente útil cuando estás escribiendo código. Y si quieres salir del modo de inserción, puedes usar la tecla "ESC".
+
+### Modo de Comando
+
+Este modo se utiliza para ejecutar comandos, puedes ingresar a este modo presionando la tecla ":". ¡Aquí es donde podemos salir de NVIM! Simplemente escribe ":q" ¡y listo! si tienes cambios, primero guárdalos usando ":w" y si quieres forzar la salida ":q!". Otra cosa genial es que puedes hacer más de un comando a la vez, por ejemplo, si quieres guardar y salir, puedes usar ":wq".
+
+Una configuración que recomiendo es establecer el número de líneas de manera relativa haciendo ":set relativenumber", esto te permitirá ver el número de línea en relación con la línea en la que te encuentras, y es realmente útil para saber dónde estás en el archivo. Puedes hacer esto escribiendo el siguiente comando ":set relativenumber", y queremos esto ya que podemos movernos rápidamente a una línea específica usando un número y la dirección a la que queremos ir, por ejemplo, si queremos saltar a la décima línea arriba de nosotros, podemos usar el comando "10k", y si queremos saltar a la décima línea debajo de nosotros, podemos usar el comando "10j".
+
+## Movimientos en NVIM
+
+Y esto introduce el concepto de "Movimientos" en NVIM, cada comando que escribimos es un movimiento, y se crea combinando un número, una dirección y un comando. Por ejemplo, si queremos eliminar las próximas 10 líneas, podemos usar el comando "10dd", y si queremos copiar las próximas 10 líneas, podemos usar el comando "10yy". Esta es la forma más eficiente de navegar por el texto y una de las características más sólidas de NVIM.
+
+Ahora usemos lo que hemos aprendido para eliminar, copiar y pegar texto.
+
+Para eliminar texto, podemos usar la tecla "d", y luego el movimiento que queramos usar, por ejemplo, si queremos eliminar las próximas 10 líneas, podemos usar el comando "10dd", y si queremos eliminar las próximas 10 palabras, podemos usar el comando "10dw". Y si queremos eliminar los próximos 10 caracteres, podemos usar el comando "10dl", y si queremos eliminar toda la línea podemos usar el comando "dd".
+
+Para copiar texto, podemos usar la tecla "y", y luego el movimiento que queramos usar, por ejemplo, si queremos copiar las próximas 10 líneas, podemos usar el comando "10yy", y si queremos copiar las próximas 10 palabras, podemos usar el comando "10yw". Y si queremos copiar los próximos 10 caracteres, podemos usar el comando "10yl", y si queremos copiar toda la línea podemos usar el comando "yy".
+
+Para pegar texto, podemos usar la tecla "p", esto pegará el texto después del cursor, y si queremos pegar el texto antes del cursor, podemos usar la tecla "P".
+
+## Registros
+
+Y ahora viene lo divertido, ¿has visto qué sucede cuando eliminamos o copiamos texto? el texto se guarda en un registro, y podemos acceder a él usando la tecla "p", y podemos acceder al último texto eliminado usando la tecla "P". Esto es algo que muchos principiantes odian porque no saben qué es un registro o cómo acceder a él, así que déjame explicártelo.
+
+Un registro es un lugar donde se guarda el texto, y podemos acceder a él usando el "Leader" (normalmente "Space") y la tecla de comillas dobles, a veces necesitamos hacer "Leader" y comillas dobles dos veces si tu distribución es Internacional, y aparecerá un panel con todos los registros, y verás que el texto copiado más reciente se guarda en el registro "0", así que ahora que sabemos esto, puedes acceder a él usando el comando "0p". Y si quieres acceder al último texto eliminado, puedes usar el comando "1p".
+
+## Buffers
+
+Un buffer es un lugar donde se guarda el texto, y puedes acceder a él usando la tecla "Leader" y "be", y aparecerá un panel con todos los buffers, y puedes navegar por ellos usando las teclas "j" y "k". También puedes usar la tecla "d" para eliminar un buffer. Una forma de pensar en los buffers es como pestañas, puedes tener varios buffers abiertos al mismo tiempo, y puedes navegar por ellos, cada vez que abres un archivo se crea un nuevo buffer y se guarda en la memoria, y si abres el mismo buffer en dos lugares al mismo tiempo verás que si cambias algo en un buffer, cambiará en el otro buffer también. Hay un comando especial que creé para que puedas borrar todos los buffers excepto el actual para esos momentos especiales en los que has estado programando durante horas y el rendimiento es un poco lento, puedes hacer "Leader" y "bq".
+
+## Marcas
+
+Las marcas son increíbles, puedes crear una nueva marca usando la tecla "m" y luego una letra, por ejemplo, si quieres crear una nueva marca en la línea actual, puedes usar el comando "ma", y si quieres saltar a esa marca, puedes usar el comando "`a". Si quieres eliminar una marca, haz ":delm letraDeLaMarca", y para eliminar TODAS las marcas ":delm!". Las marcas se guardan en el buffer actual, y puedes usarlas para navegar rápidamente por el texto.
+
+## Grabaciones
+
+Ahora esto es increíble y súper útil, digamos que necesitamos hacer una acción múltiples veces y es súper tedioso hacerlo, lo que NVIM proporciona es una forma de replicar un conjunto de comandos creando una macro, puedes comenzar a grabar usando la tecla "q" y luego una letra, por ejemplo, si quieres comenzar a grabar una macro en el registro "a", puedes usar el comando "qa", y luego puedes hacer las acciones que quieras replicar, y luego puedes detener la grabación usando la tecla "q". Para reproducir la macro, puedes usar la tecla "@" y luego la letra, por ejemplo, si quieres reproducir la macro en el registro "a", puedes usar el comando "@a". Esto es súper útil y te hará más eficiente. Y nuevamente puedes usar movimientos con tus grabaciones, por ejemplo, si quieres eliminar las próximas 10 líneas y copiarlas, puedes usar el comando "qad10jyy", y luego puedes reproducir la macro usando el comando "@a", y también puedes replicar la macro varias veces usando el comando "10@a".
