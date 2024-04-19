@@ -39,17 +39,37 @@ titleList:
 
 ## ¿Qué es NVIM?
 
-Vim fue inventado por primera vez el 2 de noviembre de 1991 por Bram Moolenaar. Vim es un editor de texto altamente configurable construido para permitir una edición eficiente de texto. Es una versión mejorada del editor vi distribuido con la mayoría de los sistemas UNIX. Vim a menudo se llama un "editor para programadores", y es tan útil para la programación que muchos lo consideran un IDE completo. Pero no es solo para programadores. Vim es perfecto para todo tipo de edición de texto, desde componer correos electrónicos hasta editar archivos de configuración.
+Vim fue inventado por primera vez el 2 de noviembre de 1991 por Bram Moolenaar. Es un editor de texto altamente configurable construido para permitir una edición eficiente de texto.
+
+Es una versión mejorada del editor vi distribuido con la mayoría de los sistemas UNIX. Vim a menudo se llama un "editor para programadores", y es tan útil para la programación que muchos lo consideran un IDE completo.
+
+Pero no es solo para programadores. Vim es perfecto para todo tipo de edición de texto, desde componer correos electrónicos hasta editar archivos de configuración.
 
 Entonces... ¿Qué es NVIM entonces?
 
-NVIM es un fork de Vim, con muchas características nuevas, mejor rendimiento y muchos nuevos complementos y configuraciones. Es un editor de texto altamente configurable que se puede usar para programar, escribir y editar archivos de texto. ¡Lo más divertido es que ni siquiera ha sido lanzado todavía! En el momento de escribir esta guía, NVIM todavía está en la fase beta 0.9.5. Pero es lo suficientemente estable como para usarse a diario.
+NVIM es un fork de Vim, con muchas características nuevas, mejor rendimiento y muchos nuevos complementos y configuraciones.
+
+Es un editor de texto altamente configurable que se puede usar para programar, escribir y editar archivos de texto. ¡Lo más divertido es que ni siquiera ha sido lanzado todavía! En el momento de escribir esta guía, NVIM todavía está en la fase beta 0.9.5.
+
+Pero es lo suficientemente estable como para usarse a diario.
 
 ## ¿Por qué amo NVIM?
 
-Eficiencia, Velocidad y Personalización. Permíteme hablarte un poco de mí, soy un ingeniero de software y paso la mayor parte de mi tiempo escribiendo código. He probado muchos editores de texto y entornos de desarrollo integrado (IDE), pero siempre vuelvo a Vim. ¿Por qué? Porque es rápido, eficiente y altamente personalizable. Pero Vim tiene sus propios problemas, es difícil de configurar y tiene una curva de aprendizaje pronunciada para los principiantes, pero como amante de Dark Souls... Me encanta el desafío. Una vez que dominas la bestia, nunca volverás atrás. Tener el poder de no alejarme de mi teclado, aprender algo nuevo todos los días, jugar con nuevos complementos y crear mis propias configuraciones es lo que me hace amar Vim. Puede ejecutarse en cualquier lugar, en cualquier plataforma, es rápido, es ligero, puedes compartir tu configuración muy fácilmente y es de código abierto. Y la mejor parte... te ves increíble usándolo, mucha gente te preguntará "¿qué es eso?" y te sentirás como un hacker en una película, ejecutando comandos y atajos y mostrando el poder de tu eficiencia.
+Eficiencia, Velocidad y Personalización. Permíteme hablarte un poco de mí, soy un ingeniero de software y paso la mayor parte de mi tiempo escribiendo código.
 
-Bien, comencemos esta guía, te mostraré cómo instalar NVIM, configurarlo y usarlo como tu editor principal. Te mostraré cómo instalar complementos, crear tus propias configuraciones y hacer que se vea increíble. Comencemos con la instalación.
+He probado muchos editores de texto y entornos de desarrollo integrado (IDE), pero siempre vuelvo a Vim. ¿Por qué? Porque es rápido, eficiente y altamente personalizable.
+
+Pero Vim tiene sus propios problemas, es difícil de configurar y tiene una curva de aprendizaje pronunciada para los principiantes, pero como amante de Dark Souls... Me encanta el desafío.
+
+Una vez que dominas la bestia, nunca volverás atrás. Tener el poder de no alejarme de mi teclado, aprender algo nuevo todos los días, jugar con nuevos complementos y crear mis propias configuraciones es lo que me hace amar Vim.
+
+Puede ejecutarse en cualquier lugar, en cualquier plataforma, es rápido, es ligero, puedes compartir tu configuración muy fácilmente y es de código abierto. Y la mejor parte...
+
+te ves increíble usándolo, mucha gente te preguntará "¿qué es eso?" y te sentirás como un hacker en una película, ejecutando comandos y atajos y mostrando el poder de tu eficiencia.
+
+Bien, comencemos esta guía, te mostraré cómo instalar NVIM, configurarlo y usarlo como tu editor principal. Te mostraré cómo instalar complementos, crear tus propias configuraciones y hacer que se vea increíble.
+
+Comencemos con la instalación.
 
 ## Instalación
 
@@ -104,7 +124,8 @@ brew install npm
 brew install git
 ```
 
-6- Instala FISH, este es un shell altamente personalizable que tiene muchas funciones, te recomiendo usarlo como tu shell predeterminado. Algunas de sus increíbles características son la autocompletación y el resaltado de sintaxis.
+6- Instala FISH, este es un shell altamente personalizable que tiene muchas funciones, te recomiendo usarlo como tu shell predeterminado.
+Algunas de sus increíbles características son la autocompletación y el resaltado de sintaxis.
 ```bash
 
 ```bash
@@ -166,11 +187,14 @@ Ahora que tenemos todo... ¡comencemos a aprender cómo configurar NVIM!
 ## Configuración
 
 Como estamos utilizando mi repositorio personalizado, todas las configuraciones ya están hechas, pero explicaré cómo configurar NVIM y cómo instalar complementos y crear tus propias configuraciones.
+
 Como se mencionó anteriormente, estamos utilizando LazyVim, http://www.lazyvim.org/, un increíble administrador de paquetes que te permitirá instalar y actualizar complementos sin problemas como la mantequilla, también proporciona complementos ya configurados que harán tu vida más fácil.
 
 Pero primero, aprendamos cómo instalar complementos manualmente.
 
-Si observas la estructura de carpetas de nvim, encontrarás una carpeta "plugins", que contendrá varios archivos que representan cada uno de los complementos instalados manualmente. Cada archivo contendrá el nombre del complemento y la URL del repositorio. Para instalar un complemento manualmente, necesitarás crear un nuevo archivo dentro de la carpeta "plugins" y agregar el siguiente contenido.
+Si observas la estructura de carpetas de nvim, encontrarás una carpeta "plugins", que contendrá varios archivos que representan cada uno de los complementos instalados manualmente.
+
+Cada archivo contendrá el nombre del complemento y la URL del repositorio. Para instalar un complemento manualmente, necesitarás crear un nuevo archivo dentro de la carpeta "plugins" y agregar el siguiente contenido.
 
 ```bash
 return {
@@ -214,7 +238,9 @@ Para moverte horizontalmente correctamente a través de una línea, necesitarás
 
 Movimiento Vertical
 
-Para navegar verticalmente, puedes usar la tecla "Ctrl" con la tecla "u" para moverte hacia arriba medio página, la tecla "Ctrl" con la tecla "d" para moverte hacia abajo medio página, la tecla "Ctrl" con la tecla "b" para moverte hacia arriba una página y la tecla "Ctrl" con la tecla "f" para moverte hacia abajo una página. Esta es la forma más eficiente de navegar por el texto, ya que no sabemos dónde está esa parte específica de lógica, así que podemos movernos bastante rápido de esta manera y encontrar lo que estamos buscando.
+Para navegar verticalmente, puedes usar la tecla "Ctrl" con la tecla "u" para moverte hacia arriba medio página, la tecla "Ctrl" con la tecla "d" para moverte hacia abajo medio página, la tecla "Ctrl" con la tecla "b" para moverte hacia arriba una página y la tecla "Ctrl" con la tecla "f" para moverte hacia abajo una página.
+
+Esta es la forma más eficiente de navegar por el texto, ya que no sabemos dónde está esa parte específica de lógica, así que podemos movernos bastante rápido de esta manera y encontrar lo que estamos buscando.
 
 Otra excelente manera de navegar verticalmente es usar la tecla "Shift" con las teclas "{" y "}", esto te permitirá saltar al siguiente o al párrafo anterior, y esto es una de las cosas que me hace amar NVIM, si tu código está limpio y correctamente indentado, podrás saltar a través del código realmente rápido y encontrar lo que estás buscando, ¡TE ESTÁ ENSEÑANDO A ESCRIBIR CÓDIGO LIMPIO!
 
@@ -222,13 +248,15 @@ Si deseas saltar a una línea específica, puedes usar la tecla ":", esto abrir�
 
 ### Modo Visual
 
-Este modo se utiliza para seleccionar texto, puedes ingresar a este modo presionando la tecla "v
+Este modo se utiliza para seleccionar texto, puedes ingresar a este modo presionando la tecla "v". Puedes usar los mismos comandos que en el modo normal, pero ahora puedes seleccionar texto.
 
-". Puedes usar los mismos comandos que en el modo normal, pero ahora puedes seleccionar texto. También puedes usar la tecla "Shift" con la tecla "v" para seleccionar toda la línea. Nuevamente, podemos usar movimientos para seleccionar texto, por ejemplo, si queremos seleccionar las próximas 10 líneas, podemos usar el comando "10j" y si queremos seleccionar las próximas 10 palabras, podemos usar el comando "10w". Y si queremos seleccionar los próximos 10 caracteres, podemos usar el comando "10l".
+También puedes usar la tecla "Shift" con la tecla "v" para seleccionar toda la línea. Nuevamente, podemos usar movimientos para seleccionar texto, por ejemplo, si queremos seleccionar las próximas 10 líneas, podemos usar el comando "10j" y si queremos seleccionar las próximas 10 palabras, podemos usar el comando "10w". Y si queremos seleccionar los próximos 10 caracteres, podemos usar el comando "10l".
 
 ### Modo de Bloque Visual
 
-Este modo se utiliza para seleccionar un bloque de texto, puedes ingresar a este modo presionando la tecla "Ctrl" junto con la tecla "v". Puedes usar los mismos comandos que en el modo normal, pero ahora puedes seleccionar un bloque de texto. Nuevamente, podemos usar movimientos para seleccionar texto, por ejemplo, si queremos seleccionar las próximas 10 líneas, podemos usar el comando "10j", y si queremos seleccionar las próximas 10 palabras, podemos usar el comando "10w". Y si queremos seleccionar los próximos 10 caracteres, podemos usar el comando "10l".
+Este modo se utiliza para seleccionar un bloque de texto, puedes ingresar a este modo presionando la tecla "Ctrl" junto con la tecla "v". Puedes usar los mismos comandos que en el modo normal, pero ahora puedes seleccionar un bloque de texto.
+
+Nuevamente, podemos usar movimientos para seleccionar texto, por ejemplo, si queremos seleccionar las próximas 10 líneas, podemos usar el comando "10j", y si queremos seleccionar las próximas 10 palabras, podemos usar el comando "10w". Y si queremos seleccionar los próximos 10 caracteres, podemos usar el comando "10l".
 
 Un bloque de texto es un rectángulo de texto, y puedes copiar, pegar y eliminarlo. También puedes usar la tecla "Shift" con la tecla "I" para insertar texto en un bloque, y la tecla "Shift" con la tecla "A" para agregar texto en un bloque.
 
@@ -236,22 +264,31 @@ También es útil para escribir muchas líneas al mismo tiempo, por ejemplo, si 
 
 ### Modo de Línea Visual
 
-Este modo se utiliza para seleccionar una línea de texto, puedes ingresar a este modo presionando la tecla "Shift" junto con la tecla "v". Puedes usar los mismos comandos que en el modo normal, pero ahora puedes seleccionar una línea de texto. Nuevamente, podemos usar movimientos para seleccionar texto, por ejemplo, si queremos seleccionar las próximas 10 líneas, podemos usar el comando "10j", y si queremos seleccionar las próximas 10 palabras, podemos usar el comando "10w". Y si queremos seleccionar los próximos 10 caracteres, podemos usar el comando "10l".
+Este modo se utiliza para seleccionar una línea de texto, puedes ingresar a este modo presionando la tecla "Shift" junto con la tecla "v".
+
+Puedes usar los mismos comandos que en el modo normal, pero ahora puedes seleccionar una línea de texto. Nuevamente, podemos usar movimientos para seleccionar texto, por ejemplo, si queremos seleccionar las próximas 10 líneas, podemos usar el comando "10j", y si queremos seleccionar las próximas 10 palabras, podemos usar el comando "10w". Y si queremos seleccionar los próximos 10 caracteres, podemos usar el comando "10l".
 
 ### Modo de Inserción
 
 Este es el modo que utilizarás para escribir texto, puedes ingresar a este modo presionando la tecla "i". Puedes usar los mismos comandos que en el modo normal, pero ahora puedes escribir texto. También puedes usar la tecla "Shift" con la tecla "i" para insertar texto al principio de la línea, y la tecla "A" para agregar texto al final de la línea, y lo mismo si quieres comenzar a escribir en un carácter específico, puedes usar "i" para insertar antes del carácter y "a" para agregar después del carácter.
-También puedes usar la tecla "o" para insertar una nueva línea debajo de la línea actual, y la tecla "O" para insertar una nueva línea encima de la línea actual. Usar la tecla "Ctrl" con la tecla "w" eliminará la última palabra, y usar la tecla "Ctrl" con la tecla "u" eliminará la última línea mientras estás en modo de inserción. Otro comando útil es la tecla "Ctrl" con la tecla "n", esto autocompletará el texto que estás escribiendo, y es realmente útil cuando estás escribiendo código. Y si quieres salir del modo de inserción, puedes usar la tecla "ESC".
+
+También puedes usar la tecla "o" para insertar una nueva línea debajo de la línea actual, y la tecla "O" para insertar una nueva línea encima de la línea actual. Usar la tecla "Ctrl" con la tecla "w" eliminará la última palabra, y usar la tecla "Ctrl" con la tecla "u" eliminará la última línea mientras estás en modo de inserción. 
+
+Otro comando útil es la tecla "Ctrl" con la tecla "n", esto autocompletará el texto que estás escribiendo, y es realmente útil cuando estás escribiendo código. Y si quieres salir del modo de inserción, puedes usar la tecla "ESC".
 
 ### Modo de Comando
 
-Este modo se utiliza para ejecutar comandos, puedes ingresar a este modo presionando la tecla ":". ¡Aquí es donde podemos salir de NVIM! Simplemente escribe ":q" ¡y listo! si tienes cambios, primero guárdalos usando ":w" y si quieres forzar la salida ":q!". Otra cosa genial es que puedes hacer más de un comando a la vez, por ejemplo, si quieres guardar y salir, puedes usar ":wq".
+Este modo se utiliza para ejecutar comandos, puedes ingresar a este modo presionando la tecla ":". ¡Aquí es donde podemos salir de NVIM! Simplemente escribe ":q" ¡y listo! si tienes cambios, primero guárdalos usando ":w" y si quieres forzar la salida ":q!".
+
+Otra cosa genial es que puedes hacer más de un comando a la vez, por ejemplo, si quieres guardar y salir, puedes usar ":wq".
 
 Una configuración que recomiendo es establecer el número de líneas de manera relativa haciendo ":set relativenumber", esto te permitirá ver el número de línea en relación con la línea en la que te encuentras, y es realmente útil para saber dónde estás en el archivo. Puedes hacer esto escribiendo el siguiente comando ":set relativenumber", y queremos esto ya que podemos movernos rápidamente a una línea específica usando un número y la dirección a la que queremos ir, por ejemplo, si queremos saltar a la décima línea arriba de nosotros, podemos usar el comando "10k", y si queremos saltar a la décima línea debajo de nosotros, podemos usar el comando "10j".
 
 ## Movimientos en NVIM
 
-Y esto introduce el concepto de "Movimientos" en NVIM, cada comando que escribimos es un movimiento, y se crea combinando un número, una dirección y un comando. Por ejemplo, si queremos eliminar las próximas 10 líneas, podemos usar el comando "10dd", y si queremos copiar las próximas 10 líneas, podemos usar el comando "10yy". Esta es la forma más eficiente de navegar por el texto y una de las características más sólidas de NVIM.
+Y esto introduce el concepto de "Movimientos" en NVIM, cada comando que escribimos es un movimiento, y se crea combinando un número, una dirección y un comando.
+
+Por ejemplo, si queremos eliminar las próximas 10 líneas, podemos usar el comando "10dd", y si queremos copiar las próximas 10 líneas, podemos usar el comando "10yy". Esta es la forma más eficiente de navegar por el texto y una de las características más sólidas de NVIM.
 
 Ahora usemos lo que hemos aprendido para eliminar, copiar y pegar texto.
 
@@ -269,12 +306,24 @@ Un registro es un lugar donde se guarda el texto, y podemos acceder a él usando
 
 ## Buffers
 
-Un buffer es un lugar donde se guarda el texto, y puedes acceder a él usando la tecla "Leader" y "be", y aparecerá un panel con todos los buffers, y puedes navegar por ellos usando las teclas "j" y "k". También puedes usar la tecla "d" para eliminar un buffer. Una forma de pensar en los buffers es como pestañas, puedes tener varios buffers abiertos al mismo tiempo, y puedes navegar por ellos, cada vez que abres un archivo se crea un nuevo buffer y se guarda en la memoria, y si abres el mismo buffer en dos lugares al mismo tiempo verás que si cambias algo en un buffer, cambiará en el otro buffer también. Hay un comando especial que creé para que puedas borrar todos los buffers excepto el actual para esos momentos especiales en los que has estado programando durante horas y el rendimiento es un poco lento, puedes hacer "Leader" y "bq".
+Un buffer es un lugar donde se guarda el texto, y puedes acceder a él usando la tecla "Leader" y "be", y aparecerá un panel con todos los buffers, y puedes navegar por ellos usando las teclas "j" y "k".
+
+También puedes usar la tecla "d" para eliminar un buffer. Una forma de pensar en los buffers es como pestañas, puedes tener varios buffers abiertos al mismo tiempo, y puedes navegar por ellos, cada vez que abres un archivo se crea un nuevo buffer y se guarda en la memoria, y si abres el mismo buffer en dos lugares al mismo tiempo verás que si cambias algo en un buffer, cambiará en el otro buffer también.
+
+Hay un comando especial que creé para que puedas borrar todos los buffers excepto el actual para esos momentos especiales en los que has estado programando durante horas y el rendimiento es un poco lento, puedes hacer "Leader" y "bq".
 
 ## Marcas
 
-Las marcas son increíbles, puedes crear una nueva marca usando la tecla "m" y luego una letra, por ejemplo, si quieres crear una nueva marca en la línea actual, puedes usar el comando "ma", y si quieres saltar a esa marca, puedes usar el comando "`a". Si quieres eliminar una marca, haz ":delm letraDeLaMarca", y para eliminar TODAS las marcas ":delm!". Las marcas se guardan en el buffer actual, y puedes usarlas para navegar rápidamente por el texto.
+Las marcas son increíbles, puedes crear una nueva marca usando la tecla "m" y luego una letra, por ejemplo, si quieres crear una nueva marca en la línea actual, puedes usar el comando "ma", y si quieres saltar a esa marca, puedes usar el comando "`a".
+
+Si quieres eliminar una marca, haz ":delm letraDeLaMarca", y para eliminar TODAS las marcas ":delm!". Las marcas se guardan en el buffer actual, y puedes usarlas para navegar rápidamente por el texto.
 
 ## Grabaciones
 
-Ahora esto es increíble y súper útil, digamos que necesitamos hacer una acción múltiples veces y es súper tedioso hacerlo, lo que NVIM proporciona es una forma de replicar un conjunto de comandos creando una macro, puedes comenzar a grabar usando la tecla "q" y luego una letra, por ejemplo, si quieres comenzar a grabar una macro en el registro "a", puedes usar el comando "qa", y luego puedes hacer las acciones que quieras replicar, y luego puedes detener la grabación usando la tecla "q". Para reproducir la macro, puedes usar la tecla "@" y luego la letra, por ejemplo, si quieres reproducir la macro en el registro "a", puedes usar el comando "@a". Esto es súper útil y te hará más eficiente. Y nuevamente puedes usar movimientos con tus grabaciones, por ejemplo, si quieres eliminar las próximas 10 líneas y copiarlas, puedes usar el comando "qad10jyy", y luego puedes reproducir la macro usando el comando "@a", y también puedes replicar la macro varias veces usando el comando "10@a".
+Ahora esto es increíble y súper útil, digamos que necesitamos hacer una acción múltiples veces y es súper tedioso hacerlo, lo que NVIM proporciona es una forma de replicar un conjunto de comandos creando una macro, puedes comenzar a grabar usando la tecla "q" y luego una letra, por ejemplo, si quieres comenzar a grabar una macro en el registro "a", puedes usar el comando "qa", y luego puedes hacer las acciones que quieras replicar, y luego puedes detener la grabación usando la tecla "q".
+
+Para reproducir la macro, puedes usar la tecla "@" y luego la letra, por ejemplo, si quieres reproducir la macro en el registro "a", puedes usar el comando "@a". 
+
+Esto es súper útil y te hará más eficiente.
+
+Y nuevamente puedes usar movimientos con tus grabaciones, por ejemplo, si quieres eliminar las próximas 10 líneas y copiarlas, puedes usar el comando "qad10jyy", y luego puedes reproducir la macro usando el comando "@a", y también puedes replicar la macro varias veces usando el comando "10@a".
