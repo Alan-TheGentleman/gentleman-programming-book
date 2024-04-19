@@ -55,6 +55,18 @@ titleList:
     tagId: 'lectores'
   - name: 'Imágenes'
     tagId: 'imágenes'
+  - name: 'GoRoutines'
+    tagId: 'goroutines'
+  - name: 'Canales'
+    tagId: 'canales'
+  - name: 'Canales con Búfer'
+    tagId: 'canales-con-búfer'
+  - name: 'Range y Close'
+    tagId: 'range-y-close'
+  - name: 'GoRoutines Select'
+    tagId: 'select'
+  - name: 'Mutex'
+    tagId: 'mutex'
 ---
 
 # Cómo usar GoLang
@@ -922,5 +934,485 @@ func main() {
 	}
 
 	println("¡Imagen simple generada exitosamente!")
+}
+```
+
+## GoRoutines
+
+Como mencionamos anteriormente, Go es un lenguaje que admite la programación concurrente a través de "GoRoutines". Una GoRoutine es un hilo ligero gestionado por el tiempo de ejecución de Go, lo que te permite ejecutar múltiples funciones concurrentemente.
+
+PERO es diferente a otros lenguajes, ya que es un hilo virtual que se ejecuta en un hilo real y es gestionado por el tiempo de ejecución de Go.
+
+Para ejecutar una función como GoRoutine, solo necesitas agregar la palabra clave `go` antes de la llamada a la función:
+
+```go
+	go f(x, y, z)
+```
+
+Esto ejecutará la función `f(x, y, z)` concurrentemente en una nueva GoRoutine. Los parámetros se evalúan en el momento de la llamada a la función, por lo que si cambian más tarde, la GoRoutine usará los valores actualizados.
+
+Veamos un ejemplo:
+
+```go
+package main
+
+import (
+  "fmt"
+)
+
+func say(s string) {
+  for i := 0; i < 3; i++ {
+    fmt.Println(s)
+  }
+}
+
+func main() {
+  // Lanza una nueva goroutine para ejecutar la función say con "Hello"
+  go say("Hello")
+
+  // Imprime "World" 3 veces en la función principal
+  for i := 0; i < 3; i++ {
+    fmt.Println("Gentleman")
+  }
+}
+```
+
+Cuando ejecutas este código, la salida no será necesariamente "Hello" seguido de "Gentleman" tres veces cada uno. Esto se debe a que las goroutines se ejecutan concurrentemente. Podrías ver "Hello" y "Gentleman" mezclados.
+
+Las goroutines son ligeras, por lo que puedes crear miles de ellas sin ningún problema de rendimiento. Son gestionadas por el tiempo de ejecución de Go, que las programa eficientemente en hilos reales del sistema operativo.
+
+Otra gran característica es que se ejecutan en el mismo espacio de direcciones, por lo que pueden comunicarse entre sí utilizando canales para compartir memoria, pero esto también debe ser gestionado y sincronizado.
+
+Para hacerlo, podemos usar los `canales`:
+
+## Canales
+
+Serán nuestra forma de comunicarnos entre goroutines, son tipados y se pueden utilizar para enviar y recibir datos con el operador de canal `<-`:
+
+```go
+ch <- v // Envía v al canal ch.
+v := <-ch // Recibe de ch y asigna el valor a v.
+```
+
+Los datos fluirán en la dirección de la flecha, por lo que si quieres enviar datos a un canal, debes usar la flecha que apunta al canal, y si quieres recibir datos de un canal, debes usar la flecha que apunta desde el canal.
+
+También puedes crear un canal con la función `make`:
+
+```go
+ch := make(chan int)
+```
+
+Esto creará un canal que enviará y recibirá enteros.
+
+Por defecto, los envíos y recepciones bloquean hasta que el otro lado esté listo. Esto permite que las goroutines se sincronicen sin que tengamos que gestionar manualmente esa sincronización.
+
+```go
+package main
+
+import (
+  "fmt"
+)
+
+func say(s string, ch chan string) {
+  for i := 0; i < 3; i++ {
+    fmt.Println(s)
+    ch <- s // Envía "Hello" al canal después de cada impresión
+  }
+}
+
+func main() {
+  // Crea un canal para almacenar cadenas
+  ch := make(chan string)
+
+  // Lanza una nueva goroutine para ejecutar la función say
+  go say("Hello", ch)  
+
+  // Espera infinitamente mensajes en el canal (asegura que se impriman todos los "Hello")
+  for {
+    msg := <-ch // Recibe mensaje del canal
+    fmt.Println("Received:", msg)
+  }
+
+  fmt.Println("Gentleman") // Imprime "Gentleman" después de recibir todos los mensajes
+}
+```
+
+## Canales con Búfer
+
+Todos los canales pueden tener un búfer, esto significa que pueden contener un número limitado de valores sin que haya un receptor correspondiente para esos valores.
+
+Cuando el canal está lleno, el remitente se bloqueará hasta que el receptor haya recibido un valor. Esto es extremadamente útil cuando quieres enviar múltiples valores y no quieres perderlos si el receptor no está listo.
+
+```go
+ch := make(chan int, 100)
+```
+
+Esto creará un canal que puede contener hasta 100 enteros.
+
+Si envías más de 100 valores al canal, el remitente se bloqueará hasta que el receptor haya recibido algunos valores.
+
+```go
+func main() {
+	ch := make(chan int, 2)
+	ch <- 1
+	ch <- 2
+	ch <- 3 // error fatal: todas las goroutines están dormidas - ¡deadlock!
+
+	fmt.Println(<-ch)
+	fmt.Println(<-ch)
+	fmt.Println(<-ch)
+}
+```
+
+## Range y Close
+
+¡Puedes cerrar un canal en cualquier momento! Un momento recomendado para cerrar un canal es cuando deseas señalar que no se enviarán más valores en él y quien debe hacerlo debería ser el remitente, nunca el receptor, ya que enviar en un canal cerrado causará un pánico:
+
+```go
+v, ok := <-ch
+ok será false si no hay más valores para recibir y el canal está cerrado.
+```
+
+Para recibir valores de un canal hasta que se cierre, puedes usar ```range```:
+
+```go
+for i:= range ch {
+	fmt.Println(i)
+}
+```
+
+¿Necesitamos cerrarlos? No necesariamente, solo si el receptor necesita saber que no se enviarán más valores, o si el remitente necesita decirle al receptor que ha terminado de enviar valores, de esta manera terminaremos el bucle ```range```.
+
+Ejemplo:
+```go
+func say(s string, ch chan string) {
+  for i := 0; i < 3; i++ {
+    fmt.Println(s)
+    ch <- s // Envía "Hello" al canal después de cada impresión
+  }
+  close(ch) // Cierra el canal después de enviar los mensajes
+}
+
+func main() {
+  // Crea un canal para almacenar cadenas
+  ch := make(chan string)
+
+  // Lanza una nueva goroutine para ejecutar la función say
+  go say("Hello", ch)  
+
+  // Bucle para recibir e imprimir mensajes hasta que el canal se cierre
+  for {
+    msg, ok := <-ch // Recibe el mensaje y verifica el estado abierto del canal
+    if !ok {
+      break // Salir del bucle si el canal está cerrado
+    }
+    fmt.Println("Received:", msg)
+  }
+
+  fmt.Println("Mensajes recibidos. Saliendo.")
+}
+```
+
+## Selección de GoRoutines
+
+La declaración ```select``` permite que una goroutine espere en múltiples operaciones de comunicación. Se bloquea hasta que uno de sus casos pueda ejecutarse, luego ejecuta ese caso.
+
+Es útil cuando deseas esperar en múltiples canales y realizar acciones diferentes según qué canal esté listo.
+
+```go
+func say(s string, ch chan string) {
+  for i := 0; i < 3; i++ {
+    fmt.Println(s)
+    ch <- s // Envía "Hello" al canal después de cada impresión
+  }
+  // Cierra el canal después de que el bucle termine de enviar mensajes
+  close(ch)
+}
+
+func main() {
+  // Crea un canal para almacenar cadenas
+  ch := make(chan string)
+
+  // Lanza una nueva goroutine para ejecutar la función say
+  go say("Hello", ch)
+
+  // Usa select para manejar mensajes desde el canal o un tiempo de espera
+  for {
+    select {
+    case msg, ok := <-ch: // Recibe el mensaje y verifica el estado abierto del canal
+      if !ok {
+        fmt.Println("Canal cerrado. Saliendo.")
+        break
+      }
+      fmt.Println("Received:", msg)
+    case <-time.After(1 * time.Second): // Expira después de 1 segundo si no se recibe ningún mensaje
+      fmt.Println("Tiempo de espera esperando mensaje.")
+      break
+    }
+  }
+}
+```
+
+También puedes usar un caso ```default``` en una declaración ```select```, esto se ejecutará si ningún otro caso está listo:
+
+```go
+func say(s string, ch chan string) {
+  for i := 0; i < 3; i++ {
+    fmt.Println(s)
+    ch <- s // Envía "Hello" al canal después de cada impresión
+  }
+  close(ch) // Cierra el canal después de enviar mensajes
+}
+
+func main() {
+  // Crea un canal para almacenar cadenas
+  ch := make(chan string)
+
+  // Lanza una nueva goroutine para ejecutar la función say
+  go say("Hello", ch)  
+
+  // Usa select con un caso predeterminado
+  for {
+    select {
+    case msg, ok := <-ch:
+      if !ok {
+        fmt.Println("Canal cerrado. Saliendo.")
+        break
+      }
+      fmt.Println("Received:", msg)
+    case <-time.After(1 * time.Second):
+      fmt.Println("Tiempo de espera esperando mensaje.")
+      break
+    default:
+      fmt.Println("Nada para recibir o aún no se ha agotado el tiempo de espera.")
+    }
+  }
+}
+```
+
+Ahora hagamos un ejercicio donde comprobaremos si dos árboles de nodos tienen la misma secuencia de valores:
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func isSameSequence(root1, root2 *TreeNode) bool {
+	seq1 := make(map[int]bool)
+	seq2 := make(map[int]bool)
+
+	traverse(root1, seq1)
+	traverse(root2, seq2)
+
+	return equal(seq1, seq2)
+}
+
+func traverse(node *TreeNode, seq map[int]bool) {
+	if node == nil {
+		return
+	}
+
+	seq[node.Val] = true
+	traverse(node.Left, seq)
+	traverse(node.Right, seq)
+}
+
+func equal(seq1, seq2 map[int]bool) bool {
+	if len(seq1) != len(seq2) {
+		return false
+	}
+
+	for val := range seq1 {
+		if !seq2[val] {
+			return false
+		}
+	}
+
+	return true
+}
+
+func main() {
+    // Construyendo el primer árbol binario
+    root1 := &TreeNode{
+        Val: 3,
+        Left: &TreeNode{
+            Val: 1,
+            Left: &TreeNode{
+                Val: 1,
+            },
+            Right: &TreeNode{
+                Val: 2,
+            },
+        },
+        Right: &TreeNode{
+            Val: 8,
+            Left: &TreeNode{
+                Val: 5,
+            },
+            Right: &TreeNode{
+                Val: 13,
+            },
+        },
+    }
+
+    // Construyendo el segundo árbol binario
+    root2 := &TreeNode{
+        Val: 8,
+        Left: &TreeNode{
+            Val: 3,
+            Left: &TreeNode{
+                Val: 1,
+                Left: &TreeNode{
+                    Val: 1,
+                },
+                Right: &TreeNode{
+                    Val: 2,
+                },
+            },
+            Right: &TreeNode{
+                Val: 5,
+            },
+        },
+        Right: &TreeNode{
+                Val: 13,
+				},
+    }
+
+    fmt.Println(isSameSequence(root1, root2)) // Salida: true
+}
+```
+
+## Mutex
+
+Algo de lo que debemos cuidarnos al trabajar con GoRoutines es el acceso a la memoria compartida, donde más de una GoRoutine puede acceder al mismo espacio de memoria al mismo tiempo, lo que puede provocar grandes conflictos.
+
+Este concepto se llama ```exclusión mutua```, y se resuelve mediante el uso de ```mutexes```, que se utilizan para sincronizar el acceso a la memoria compartida.
+
+```go
+import ("sync")
+
+var mu sync.Mutex
+```
+
+Tiene dos métodos, ```Lock``` y ```Unlock```, que se utilizan para proteger la memoria compartida:
+
+```go
+func safeIncrement() {
+	mu.Lock() // bloquea la memoria compartida
+	defer mu.Unlock() // desbloquea la memoria compartida cuando la función retorna
+	count++ // incrementa la memoria compartida
+}
+```
+
+Aquí estamos utilizando la declaración ```defer``` para asegurar que el mutex se desbloquee cuando la función retorne, incluso si entra en pánico.
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+type SequenceCollector struct {
+	sequence map[int]bool
+}
+
+func isSameSequence(root1, root2 *TreeNode) bool {
+	seq1 := &SequenceCollector{sequence: make(map[int]bool)}
+	seq2 := &SequenceCollector{sequence: make(map[int]bool)}
+
+	traverse(root1, seq1)
+	traverse(root2, seq2)
+
+	return equal(seq1.sequence, seq2.sequence)
+}
+
+func traverse(node *TreeNode, seq *SequenceCollector) {
+	if node == nil {
+		return
+	}
+
+	seq.sequence[node.Val] = true
+
+	traverse(node.Left, seq)
+	traverse(node.Right, seq)
+}
+
+func equal(seq1, seq2 map[int]bool) bool {
+	if len(seq1) != len(seq2) {
+		return false
+	}
+
+	for val := range seq1 {
+		if !seq2[val] {
+			return false
+		}
+	}
+
+	return true
+}
+
+func main() {
+	// Construyendo el primer árbol binario
+	root1 := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val: 1,
+			Left: &TreeNode{
+				Val: 1,
+			},
+			Right: &TreeNode{
+				Val: 2,
+			},
+		},
+		Right: &TreeNode{
+			Val: 8,
+			Left: &TreeNode{
+				Val: 5,
+			},
+			Right: &TreeNode{
+				Val: 13,
+			},
+		},
+	}
+
+	// Construyendo el segundo árbol binario
+	root2 := &TreeNode{
+		Val: 8,
+		Left: &TreeNode{
+			Val: 3,
+			Left: &TreeNode{
+				Val: 1,
+				Left: &TreeNode{
+					Val: 1,
+				},
+				Right: &TreeNode{
+					Val: 2,
+				},
+			},
+			Right: &TreeNode{
+				Val: 5,
+			},
+		},
+		Right: &TreeNode{
+			Val: 13,
+		},
+	}
+
+	fmt.Println(isSameSequence(root1, root2)) // Salida: true
 }
 ```
