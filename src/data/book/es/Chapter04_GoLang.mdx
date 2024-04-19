@@ -1319,24 +1319,36 @@ package main
 
 import (
 	"fmt"
+	"sync"
 )
 
 type TreeNode struct {
-	Val   int
 	Left  *TreeNode
 	Right *TreeNode
+	Val   int
 }
 
 type SequenceCollector struct {
 	sequence map[int]bool
+	mutex    sync.Mutex
 }
 
 func isSameSequence(root1, root2 *TreeNode) bool {
 	seq1 := &SequenceCollector{sequence: make(map[int]bool)}
 	seq2 := &SequenceCollector{sequence: make(map[int]bool)}
 
-	traverse(root1, seq1)
-	traverse(root2, seq2)
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		traverse(root1, seq1)
+	}()
+
+	go func() {
+		defer wg.Done()
+		traverse(root2, seq2)
+	}()
 
 	return equal(seq1.sequence, seq2.sequence)
 }
@@ -1346,7 +1358,9 @@ func traverse(node *TreeNode, seq *SequenceCollector) {
 		return
 	}
 
+	seq.mutex.Lock()
 	seq.sequence[node.Val] = true
+	seq.mutex.Unlock()
 
 	traverse(node.Left, seq)
 	traverse(node.Right, seq)
@@ -1367,7 +1381,6 @@ func equal(seq1, seq2 map[int]bool) bool {
 }
 
 func main() {
-	// Construyendo el primer árbol binario
 	root1 := &TreeNode{
 		Val: 3,
 		Left: &TreeNode{
@@ -1389,8 +1402,6 @@ func main() {
 			},
 		},
 	}
-
-	// Construyendo el segundo árbol binario
 	root2 := &TreeNode{
 		Val: 8,
 		Left: &TreeNode{
@@ -1413,6 +1424,6 @@ func main() {
 		},
 	}
 
-	fmt.Println(isSameSequence(root1, root2)) // Salida: true
+	fmt.Println(isSameSequence(root1, root2)) // true
 }
 ```
