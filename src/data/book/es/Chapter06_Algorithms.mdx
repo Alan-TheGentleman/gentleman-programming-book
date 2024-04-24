@@ -1,0 +1,429 @@
+---
+id: 'algoritmos-a-la-manera-caballerosa'
+order: 6
+name: 'Algoritmos a la Manera Caballerosa'
+titleList:
+  - name: 'Notación Big O'
+    tagId: 'notacion-big-o'
+  - name: 'Conocimientos Previos Necesarios'
+    tagId: 'conocimientos-previos-necesarios'
+  - name: 'Tipos de Notación Big O'
+    tagId: 'tipos-de-notacion-big-o'
+  - name: 'Ejemplos Usando Código'
+    tagId: 'ejemplos-usando-codigo'
+  - name: 'Complejidad en el Peor Caso, el Mejor Caso y el Caso Promedio'
+    tagId: 'complejidad-casos'
+  - name: 'Complejidad Espacial'
+    tagId: 'complejidad-espacial'
+---
+
+# Algoritmos a la Manera Caballerosa
+
+## Notación Big O
+
+"Cómo el código se ralentiza a medida que crece la cantidad de datos"
+
+1. El rendimiento de un algoritmo depende de la cantidad de datos que se le proporciona.
+2. Número de pasos necesarios para completar. Algunas máquinas ejecutan algoritmos más rápido que otras, por lo que simplemente tomamos el número de pasos necesarios.
+3. Ignorar operaciones más pequeñas, constantes. O(N + 1) -> O(N) donde N representa la cantidad de datos.
+
+```typescript
+function sumar(n: number): number {
+  let suma = 0;
+
+  for(let i = 0; i < n; i++) {
+    suma += i;
+  }
+
+  return suma;
+}
+
+// si n es igual a 10, entonces O(N) son 10 pasos, si n es igual a 100, entonces O(N) son 100 pasos
+```
+
+Aquí podemos ver que O(N) es lineal, lo que significa que la cantidad de pasos depende del número de datos que se nos proporciona.
+
+```typescript
+function saludar(nombre: string):  string{
+  return `¡Hola ${nombre}!`
+}
+
+// si n es igual a 10, entonces O(1) son 3 pasos... ¿3? ¡SÍ, 3 pasos!
+
+// 1 - Crear nuevo objeto de cadena para almacenar el resultado (asignando memoria para la nueva cadena)
+// 2 - Concatenar la cadena '¡Hola' con el resultado.
+// 3 - Devolver la cadena concatenada.
+```
+Pero ahora tenemos O(1) ya que la cantidad de pasos no depende de la cantidad de datos que se nos proporciona, siempre será 1.
+
+### Conocimientos Previos Necesarios
+
+* El 'Logaritmo' de un número es la potencia a la que se debe elevar la base para producir ese número. Por ejemplo, el logaritmo base 2 de 8 es 3 porque 2^3 = 8.
+
+* 'Lineal' significa que el número de pasos crece linealmente con la cantidad de datos.
+
+* El 'Cuadrático' de un número es el cuadrado de ese número. Por ejemplo, el cuadrado de 3 es 9 porque 3^2 = 9.
+
+* 'Exponencial' de un número es la potencia de la base elevada a ese número. Por ejemplo, el exponencial de 2 elevado a la potencia de 3 es 8 porque 2^3 = 8.
+
+* 'Factorial' de un número es el producto de todos los enteros positivos menores o iguales a ese número. Por ejemplo, el factorial de 3 es 6 porque 3! = 3 * 2 * 1 = 6.
+
+* 'Quicksort' es un algoritmo de ordenación que utiliza la estrategia de dividir y conquistar para ordenar una matriz. Es una ordenación por comparación y no es estable.
+Divide y vencerás es una estrategia para resolver un problema dividiéndolo en partes más pequeñas y resolviendo cada parte individualmente.
+
+### Tipos de Notación Big O
+
+```
+- O(1) - Tiempo constante - Siempre el mismo número de pasos independientemente de la cantidad de datos
+- O(log N) - Tiempo logarítmico - El número de pasos crece logarítmicamente (búsqueda binaria)
+- O(N) - Tiempo lineal - El número de pasos crece linealmente (bucles)
+- O(N log N) - Tiempo linealítmico - El número de pasos crece linealítmicamente (ordenación rápida)
+- O(N^2) - Tiempo cuadrático - El número de pasos crece cuadráticamente (bucles anidados)
+- O(2^N) - Tiempo exponencial - El número de pasos crece exponencialmente (algoritmos recursivos)
+- O(N!) - Tiempo factorial - El número de pasos crece factorialmente (algoritmos de fuerza bruta, aquellos que prueban todas las soluciones posibles)
+```
+
+Ejemplo con N igual a 1000:
+
+```
+- O(1) - 1 paso
+- O(log N) - 10 pasos
+- O(N) - 1000 pasos, mil pasos
+- O(N log N) - 10000 pasos, diez mil pasos
+- O(N^2) - 1000000 pasos, un millón de pasos
+- O(2^N) - 2^1000 pasos
+- O(N!) - 1000! pasos, factorial de 1000
+```
+
+La idea principal es que queremos evitar los algoritmos de tiempo exponencial y factorial ya que crecen muy rápido y no son eficientes en absoluto, A MENOS que estemos seguros de que la cantidad de datos que se nos proporciona es muy pequeña, ya que en realidad puede ser más rápido que otros algoritmos.
+
+#### Calificación de letras para la Notación Big O, de mejor a peor, teniendo en cuenta que estamos utilizando un gran conjunto de datos:
+
+```
+- O(1) - Tiempo constante - A
+- O(log N) - Tiempo logarítmico - B
+- O(N) - Tiempo lineal - C
+- O(N log N) - Tiempo linealítmico - D
+- O(N^2) - Tiempo cuadrático - F
+- O(2^N) - Tiempo exponencial - F
+- O(N!) - Tiempo factorial - F
+```
+### Ejemplos usando código 
+
+### O(1) - Tiempo constante
+
+```typescript
+  function sayHi(n: string):  string{
+    return `Hola ${n}`
+  }
+```
+
+Aquí está por qué es O(1):
+
+* El algoritmo realiza una cantidad constante de trabajo, independientemente del tamaño de la entrada.
+* El número de pasos necesarios para completar el algoritmo no depende del tamaño de la entrada.
+
+Por lo tanto, la complejidad temporal del algoritmo es O(1) en todos los casos.
+
+### O(log N) - Tiempo logarítmico
+
+```typescript
+  // teniendo el siguiente array que representa los números del 0 al 9 en orden
+  const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  // queremos encontrar el índice de un número en el array ordenado
+  function binarySearch(arr: number[], target: number): number {
+    // inicializamos los punteros izquierdo y derecho
+    let left = 0;
+    let right = arr.length - 1;
+
+    // mientras que left sea menor o igual que right, seguimos buscando el target
+    while (left <= right) {
+      // obtenemos el medio del array para compararlo con el target
+        // iteramos usando el medio del array para encontrar el target porque sabemos que el array está ordenado y podemos descartar la mitad del array en cada iteración
+      const mid = Math.floor((left + right) / 2); // índice medio
+      const midValue = arr[mid]; // valor medio
+
+      // si el valor medio es el target, devolvemos el índice
+      if (midValue === target) {
+        return mid;
+      }
+
+      // si el valor medio es menor que el target, buscamos el lado derecho del array actualizando el puntero izquierdo
+      if (midValue < target) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+    return -1; // target no encontrado
+  }
+```
+
+En la búsqueda binaria, el algoritmo divide continuamente el intervalo de búsqueda a la mitad hasta que se encuentra el elemento objetivo o el intervalo de búsqueda se vacía.
+Con cada iteración, el algoritmo descarta la mitad del espacio de búsqueda en función de una comparación con el elemento medio del intervalo actual.
+
+Aquí está por qué es O(log N):
+
+* En cada iteración del bucle while, el espacio de búsqueda se divide a la mitad.
+* Este proceso de división continúa hasta que el espacio de búsqueda se reduce a un solo elemento o se encuentra el objetivo.
+* Dado que el espacio de búsqueda se divide a la mitad en cada iteración, el número de iteraciones requeridas para alcanzar el elemento objetivo crece de forma logarítmica con el tamaño del array de entrada.
+
+Por lo tanto, la complejidad temporal de la búsqueda binaria es O(log N) en promedio.
+
+### O(N) - Tiempo lineal
+
+```typescript
+  function sum(n: number): number {
+    let sum = 0;
+    for(let i = 0; i < n; i++) {
+      sum += i;
+    }
+    return sum;
+  }
+```
+
+Aquí está por qué es O(N):
+
+* El algoritmo itera sobre el array de entrada una vez, realizando una cantidad constante de trabajo para cada elemento.
+* El número de iteraciones es directamente proporcional al tamaño del array de entrada.
+* A medida que aumenta el tamaño de la entrada, el número de pasos necesarios para completar el algoritmo crece linealmente.
+
+Por lo tanto, la complejidad temporal del algoritmo es O(N) en el peor de los casos.
+
+### O(N log N) - Tiempo linealítmico
+
+```typescript
+  // teniendo el siguiente array
+  const arr = [5, 3, 8, 4, 2, 1, 9, 7, 6];
+
+  // queremos ordenar el array usando el algoritmo quick sort
+  function quickSort(arr: number[]): number[] {
+    // primero verificamos si el array tiene solo un elemento o ningún elemento
+    if (arr.length <= 1) {
+      return arr;
+    }
+
+    // obtenemos el pivote como el último elemento del array, el pivote es el elemento con el que vamos a comparar el resto de los elementos
+    const pivot = arr[arr.length - 1];
+
+    // creamos dos arrays, uno para los elementos menores que el pivote y otro para los elementos mayores que el pivote
+    const left = [];
+    const right = [];
+
+    // iteramos sobre el array y comparamos cada elemento con el pivote
+    for (let i = 0; i < arr.length - 1; i++) {
+      // si el elemento es menor que el pivote, lo agregamos al array izquierdo
+      if (arr[i] < pivot) {
+        left.push(arr[i]);
+      } else {
+        // si el elemento es mayor que el pivote, lo agregamos al array derecho
+        right.push(arr[i]);
+      }
+    }
+
+    // llamamos recursivamente a la función quickSort en los arrays izquierdo y derecho y concatenamos los resultados
+    return [...quickSort(left), pivot, ...quickSort(right)];
+  }
+```
+Aquí está por qué es O(N log N):
+
+* El algoritmo divide el array en dos subarrays basados en un elemento pivote y ordena recursivamente estos subarrays.
+* Cada paso de particionamiento implica iterar sobre todo el array una vez, lo que lleva un tiempo O(N). Sin embargo, el array suele dividirse de tal manera que el tamaño de los subarrays se reduce con cada llamada recursiva. Esto resulta en una complejidad temporal de O(N log N) en promedio.
+
+#### O(N^2) - Tiempo cuadrático
+
+```typescript
+  // Dado el siguiente arreglo
+  const arr = [5, 3, 8, 4, 2, 1, 9, 7, 6];
+
+  // Queremos ordenar el arreglo usando el algoritmo de ordenamiento burbuja
+  function bubbleSort(arr: number[]): number[] {
+
+    // Iteramos sobre el arreglo
+    for (let i = 0; i < arr.length; i++) {
+
+      // Iteramos sobre el arreglo nuevamente
+      for (let j = 0; j < arr.length - 1; j++) {
+
+        // Comparamos elementos adyacentes y los intercambiamos si están en el orden incorrecto
+        if (arr[j] > arr[j + 1]) {
+          
+          // Intercambiamos los elementos
+          const temp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = temp;
+        }
+      }
+    }
+    return arr;
+  }
+```
+
+Aquí está por qué es O(N^2):
+
+* El ordenamiento burbuja funciona repasando la lista repetidamente, comparando elementos adyacentes y cambiándolos si están en el orden incorrecto.
+* En el peor de los casos, donde el arreglo está en orden inverso, el ordenamiento burbuja necesitará hacer N pasadas a través del arreglo, cada pasada requiriendo N-1 comparaciones e intercambios.
+* Esto resulta en un total de N * (N-1) comparaciones e intercambios, lo que se simplifica a O(N^2) en términos de complejidad temporal.
+
+
+#### O(2^N) - Tiempo exponencial
+
+```typescript
+  // Queremos calcular el enésimo número de Fibonacci usando un algoritmo recursivo
+  function fibonacci(n: number): number {
+
+    // Verificamos si n es 0 o 1 como el caso base de la recursión porque la secuencia de Fibonacci comienza con 0 y 1
+    if (n <= 1) {
+      return n;
+    }
+
+    // Llamamos recursivamente a la función fibonacci para calcular el enésimo número de Fibonacci
+    return fibonacci(n - 1) + fibonacci(n - 2);
+  }
+```
+
+Aquí está por qué es O(2^N):
+
+* En cada llamada recursiva a la función fibonacci, se realizan dos llamadas recursivas adicionales con n - 1 y n - 2 como argumentos.
+* Esto conduce a un crecimiento exponencial en el número de llamadas recursivas a medida que n aumenta.
+* Cada nivel de recursión se bifurca en dos llamadas recursivas, lo que resulta en una estructura de llamadas recursivas similar a un árbol binario.
+* El número de llamadas de función se duplica con cada nivel de recursión, lo que lleva a un total de 2^N llamadas de función al calcular el enésimo número de Fibonacci.
+
+Por lo tanto, la complejidad temporal del algoritmo es O(2^N) en el peor de los casos.
+
+#### O(N!) - Tiempo factorial
+```typescript
+  // Dado el siguiente arreglo
+  const arr = [1, 2, 3];
+
+  // Queremos generar todas las permutaciones de un arreglo dado usando un algoritmo recursivo
+  function permute(arr: number[]): number[][] {
+    // Caso base: si el arreglo tiene solo un elemento, devolverlo como una sola permutación
+    if (arr.length <= 1) {
+      return [arr];
+    }
+
+    // Inicializamos un arreglo vacío para almacenar las permutaciones
+    const result: number[][] = [];
+
+    // Iteramos sobre cada elemento en el arreglo
+    for (let i = 0; i < arr.length; i++) {
+      // Generamos todas las permutaciones del arreglo excluyendo el elemento actual
+      const rest = arr.slice(0, i).concat(arr.slice(i + 1));
+      const permutations = permute(rest);
+
+      // Agregamos el elemento actual al principio de cada permutación
+      for (const perm of permutations) {
+        result.push([arr[i], ...perm]);
+      }
+    }
+    return result;
+  }
+```
+
+Aquí está por qué es O(N!):
+
+* En cada llamada recursiva a la función permute, el algoritmo genera permutaciones seleccionando cada elemento del arreglo como el primer elemento y luego generando recursivamente permutaciones de los elementos restantes.
+* El número de permutaciones crece factorialmente con el tamaño del arreglo de entrada.
+* Para cada elemento en el arreglo, hay (N-1)! permutaciones de los elementos restantes, donde N es el número de elementos en el arreglo.
+* Por lo tanto, el número total de permutaciones es N * (N-1) * (N-2) * ... * 1, que es factorial de N (N!).
+
+Por lo tanto, la complejidad temporal del algoritmo es O(N!) en el peor de los casos.
+
+### Complejidad en el peor caso, mejor caso y caso promedio
+
+- La complejidad temporal en el peor de los casos representa el número máximo de pasos que tarda un algoritmo en completarse para un tamaño de entrada dado. Proporciona un límite superior sobre el rendimiento del algoritmo. Es la medida más comúnmente utilizada de la complejidad temporal en entrevistas de trabajo.
+
+- La complejidad temporal en el mejor de los casos representa el número mínimo de pasos que tarda un algoritmo en completarse para un tamaño de entrada dado. Proporciona un límite inferior sobre el rendimiento del algoritmo. Es menos informativa que la complejidad en el peor de los casos y rara vez se usa en la práctica.
+
+- La complejidad temporal en el caso promedio representa el número esperado de pasos que tarda un algoritmo en completarse para un tamaño de entrada dado, promediado sobre todas las entradas posibles. Proporciona una estimación más realista del rendimiento de un algoritmo que la complejidad en el peor de los casos. Sin embargo, calcular la complejidad en el caso promedio puede ser desafiante y a menudo se evita a favor de la complejidad en el peor de los casos.
+
+### Complejidad espacial
+
+La complejidad espacial de un algoritmo es una medida de la cantidad de memoria que requiere para ejecutarse en función del tamaño de la entrada. Se suele expresar en términos de la cantidad máxima de memoria utilizada por el algoritmo en cualquier momento durante su ejecución.
+
+Es importante distinguir entre la complejidad temporal y la complejidad espacial, ya que un algoritmo con buena complejidad temporal puede tener una complejidad espacial deficiente, y viceversa. Por ejemplo, un algoritmo recursivo con complejidad temporal exponencial también puede tener complejidad espacial exponencial debido a las llamadas recursivas que consumen memoria.
+
+Pero algo a tener en cuenta es que la complejidad espacial no es tan importante como la complejidad temporal, ya que la memoria suele ser más económica que la potencia de procesamiento y, en escenarios de la vida real, generalmente omitimos el análisis de complejidad espacial y nos enfocamos en la complejidad temporal.
+
+Imagina que estás en un asado tradicional argentino. Tienes espacio limitado en la parrilla (similar a la memoria limitada en la informática), y quieres optimizar cuánta carne puedes cocinar a la vez.
+
+Ahora, comparemos la carne con los datos en un algoritmo. Cuando estás cocinando, tienes que considerar cuánto espacio ocupa cada corte de carne en la parrilla. De manera similar, en la informática, los algoritmos tienen que considerar cuánto espacio en memoria necesitan para almacenar y procesar datos.
+
+Pero aquí está la cuestión: en un asado, lo más importante suele ser cuán rápido puedes cocinar la carne y servirla a tus invitados. De manera similar, en la informática, el tiempo que tarda un algoritmo en ejecutarse (complejidad temporal) suele ser el factor más crítico para el rendimiento.
+
+Por lo tanto, si bien es esencial tener en cuenta cuánto espacio utiliza tu algoritmo, generalmente es más interesante centrarse en qué tan eficientemente puede resolver un problema en términos de tiempo.
+
+Por supuesto, en algunas situaciones, como si estás cocinando en un balcón pequeño o cocinando para una multitud, el espacio se vuelve más importante. De manera similar, en informática, si estás trabajando con recursos de memoria limitados o en un dispositivo con restricciones estrictas de memoria, deberás prestar más atención a la complejidad espacial.
+
+Pero en general, al igual que en un asado argentino, el equilibrio entre la complejidad temporal y espacial es clave para crear un resultado delicioso (o eficiente)!
+
+Sin embargo, hablemos de cómo se calcula la complejidad espacial, o "cuánto espacio ocupas" en el caso de nuestra analogía de asado. Al igual que evaluarías cuánto espacio ocupa cada corte de carne en la parrilla, en informática, necesitas considerar cuánta memoria consume cada estructura de datos o variable en tu algoritmo.
+
+Aquí hay un enfoque básico para calcular la complejidad espacial:
+
+1. **Identifica las Variables y Estructuras de Datos**: Observa el algoritmo e identifica todas las variables y estructuras de datos que utiliza. Estas podrían ser matrices, objetos u otros tipos de variables.
+
+2. **Determina el Espacio Utilizado por Cada Variable**: Para cada variable o estructura de datos, determina cuánto espacio ocupa en memoria. Por ejemplo, una matriz de enteros ocupará espacio proporcional al número de elementos multiplicado por el tamaño de cada entero.
+
+3. **Suma el Espacio**: Una vez que hayas determinado el espacio utilizado por cada variable, súmalos todos para obtener el espacio total utilizado por el algoritmo.
+
+4. **Considera el Espacio Auxiliar**: No olvides tener en cuenta cualquier espacio adicional utilizado por estructuras de datos auxiliares o llamadas de funciones. Por ejemplo, si tu algoritmo utiliza recursión, deberás considerar el espacio utilizado por la pila de llamadas.
+
+5. **Expresa la Complejidad Espacial**: Finalmente, expresa la complejidad espacial utilizando la notación Big O, al igual que haces con la complejidad temporal. Por ejemplo, si el espacio utilizado crece linealmente con el tamaño de la entrada, lo expresarías como O(N). Si crece cuadráticamente, lo expresarías como O(N^2), y así sucesivamente.
+
+Entonces, al igual que gestionas cuidadosamente el espacio en tu parrilla para que quepa la mayor cantidad de carne posible sin amontonarla, en informática, quieres optimizar el uso de memoria para almacenar y procesar datos de manera eficiente. Y al igual que encontrar el equilibrio perfecto entre carne y espacio en un asado argentino, encontrar el equilibrio adecuado entre la complejidad temporal y espacial en tu algoritmo es clave para crear un resultado delicioso (o eficiente)!
+
+#### ¡Ejemplo de tiempo!
+
+Utilicemos un algoritmo simple para encontrar la suma de elementos en una matriz como ejemplo para calcular la complejidad espacial.
+
+```typescript
+function sumArray(arr: number[]): number {
+    let sum = 0;  // Espacio utilizado por la variable sum: O(1)
+
+    for (let num of arr) {  // Espacio utilizado por la variable de bucle: O(1)
+        sum += num;  // Espacio utilizado por la variable temporal: O(1)
+    }
+
+    return sum;  // Espacio utilizado por el valor devuelto: O(1)
+}
+```
+
+En este ejemplo:
+
+1. Tenemos una variable `sum` para almacenar la suma de los elementos, que ocupa una cantidad constante de espacio, denotada como O(1).
+2. Tenemos una variable de bucle `num` que itera a través de cada elemento de la matriz. También ocupa una cantidad constante de espacio, O(1).
+3. Dentro del bucle, tenemos una variable temporal para almacenar la suma de cada elemento con `sum`, que nuevamente ocupa una cantidad constante de espacio, O(1).
+4. El valor devuelto de la función es la suma, que también ocupa una cantidad constante de espacio, O(1).
+
+Dado que cada variable y estructura de datos en este algoritmo ocupa una cantidad constante de espacio, la complejidad espacial total de este algoritmo es O(1).
+
+En resumen, la complejidad espacial de este algoritmo es constante, independientemente del tamaño de la matriz de entrada.
+
+Ahora consideremos un ejemplo donde creamos una nueva matriz para almacenar la suma acumulativa de elementos de la matriz de entrada.
+
+ Aquí está el algoritmo:
+
+```typescript
+function cumulativeSum(arr: number[]): number[] {
+    const result = []; // Espacio utilizado por la matriz resultante: O(N), donde N es el tamaño de la matriz de entrada
+    let sum = 0;  // Espacio utilizado por la variable sum: O(1)
+    for (let num of arr) {  // Espacio utilizado por la variable de bucle: O(1)
+        sum += num;  // Espacio utilizado por la variable temporal: O(1)
+        result.push(sum);  // Espacio utilizado por el nuevo elemento en la matriz resultante: O(1), pero ejecutado N veces
+    }
+    return result;  // Espacio utilizado por el valor devuelto (la matriz resultante): O(N)
+}
+```
+
+En este ejemplo:
+
+1. Tenemos una variable `result` para almacenar la suma acumulativa de elementos, que crece linealmente con el tamaño de la matriz de entrada `arr`. Cada elemento agregado a `result` contribuye a la complejidad espacial. Por lo tanto, el espacio utilizado por `result` es O(N), donde N es el tamaño de la matriz de entrada.
+2. Tenemos una variable de bucle `num` que itera a través de cada elemento de la matriz de entrada `arr`, que ocupa una cantidad constante de espacio, O(1).
+3. Dentro del bucle, tenemos una variable temporal `sum` para almacenar la suma acumulativa de elementos, que ocupa una cantidad constante de espacio, O(1).
+4. Dentro del bucle, agregamos un nuevo elemento a la matriz `result` para cada elemento en la matriz de entrada. Cada operación de agregado agrega un elemento a la matriz, por lo que también contribuye a la complejidad espacial. Sin embargo, como se ejecuta N veces (donde N es el tamaño de la matriz de entrada), el espacio utilizado por las operaciones de agregado es O(N).
+5. El valor devuelto de la función es la matriz `result`, que ocupa O(N) espacio.
+
+En general, la complejidad espacial de este algoritmo es O(N), donde N es el tamaño de la matriz de entrada. Esto se debe a que el espacio utilizado por la matriz `result` crece linealmente con el tamaño de la entrada.

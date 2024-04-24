@@ -1,0 +1,428 @@
+---
+id: 'algorithms-the-gentleman-way'
+order: 6
+name: 'Algorithms the Gentleman Way'
+titleList:
+  - name: 'Big O Notation'
+    tagId: 'big-o-notation'
+  - name: 'Needed Previous Knowledge'
+    tagId: 'needed-previous-knowledge'
+  - name: 'Types of Big O Notation'
+    tagId: 'types-of-big-o-notation'
+  - name: 'Examples Using Code'
+    tagId: 'examples-using-code'
+  - name: 'Worst-case, Best-case, and Average-case Complexity'
+    tagId: 'complexity-cases'
+  - name: 'Space Complexity'
+    tagId: 'space-complexity'
+---
+
+# Algorithms the Gentleman Way
+
+## Big O Notation
+
+"How code slows as data grows"
+
+1. Performance of an algorithm depends on the amount of data it is given.
+2. Number of steps needed to complete. Some machines run algorithms faster than others so we just take the number of steps needed.
+3. Ignore smaller operations, constants. O(N + 1) -> O(N) where N represents the amount of data.
+
+```typescript
+function sum(n: number): number {
+  const sum = 0;
+
+  for(let i = 0; i < n; i++) {
+    sum += i;
+  }
+
+  return sum;
+}
+
+// if n equals 10, then O(N) is 10 steps, if in equals 100, then O(N) is 100 steps
+```
+
+Here we can see that O(N) is linear which means that the amount of steps depends on the number of data we are given.
+
+```typescript
+function sayHi(n: string):  string{
+  return `Hi ${n}`
+}
+
+// if n equals 10, then O(1) is 3 step... 3 ? YES 3 steps
+
+// 1 - Create new string object to store the result (allocating memory for the new string)
+// 2 - Concatenate the 'Hi' string with the result.
+// 3 - Return the concatenated string.
+```
+But now we have O(1) as the amount of steps does not depend on the amount of data we are given, it will always be 1.
+
+### Needed previous knowledge
+
+* The 'Log' of a number is the power to which the base must be raised to produce that number. For example, the log base 2 of 8 is 3 because 2^3 = 8.
+
+* 'Linear' means that the number of steps grows linearly with the amount of data.
+
+* The 'Quadratic' of a number is the square of that number. For example, the quadratic of 3 is 9 because 3^2 = 9.
+
+* 'Exponential' of a number is the power of the base raised to that number. For example, the exponential of 2 to the power of 3 is 8 because 2^3 = 8.
+
+* 'Factorial' of a number is the product of all positive integers less than or equal to that number. For example, the factorial of 3 is 6 because 3! = 3 * 2 * 1 = 6.
+
+* 'Quicksort' is a sorting algorithm that uses the divide and conquer strategy to sort an array. It is a comparison sort and is not a stable sort.
+Divide and conquer is a strategy to solve a problem by breaking it into smaller parts and solving each part individually.
+
+### Types of Big O Notation
+
+```
+- O(1) - Constant time - Always the same number of steps regardless of the amount of data
+- O(log N) - Logarithmic time - The number of steps grows logarithmically (binary search)
+- O(N) - Linear time - The number of steps grows linearly (loops)
+- O(N log N) - Linearithmic time - The number of steps grows linearithmically (quick sort)
+- O(N^2) - Quadratic time - The number of steps grows quadratically (nested loops)
+- O(2^N) - Exponential time - The number of steps grows exponentially (recursive algorithms)
+- O(N!) - Factorial time - The number of steps grows factorially (brute force algorithms, those which try all possible solutions)
+```
+
+Example with N equal to 1000:
+
+```
+- O(1) - 1 step
+- O(log N) - 10 steps
+- O(N) - 1000 steps, a thousand steps
+- O(N log N) - 10000 steps, a ten thousand steps
+- O(N^2) - 1000000 steps, a million steps
+- O(2^N) - 2^1000 steps
+- O(N!) - 1000! steps, factorial of 1000
+```
+
+The main idea is that we want to avoid exponential and factorial time algorithms as they grow very fast and are not efficient at all, UNLESS we are sure that the amount of data we are given is very small as it can actually be faster than other algorithms.
+
+#### Letter grade for Big O Notation, from best to worst, taking in consideration we are using a big dataset of data:
+
+```
+- O(1) - Constant time - A
+- O(log N) - Logarithmic time - B
+- O(N) - Linear time - C
+- O(N log N) - Linearithmic time - D
+- O(N^2) - Quadratic time - F
+- O(2^N) - Exponential time - F
+- O(N!) - Factorial time - F
+```
+### Examples using code 
+
+#### O(1) - Constant time
+
+```typescript
+  function sayHi(n: string):  string{
+    return `Hi ${n}`
+  }
+```
+
+Here's why it's O(1):
+
+* The algorithm performs a constant amount of work, regardless of the size of the input.
+* The number of steps needed to complete the algorithm does not depend on the input size.
+
+Therefore, the time complexity of the algorithm is O(1) in all cases.
+
+#### O(log N) - Logarithmic time
+```typescript
+  // having the following array that represents the numbers from 0 to 9 in order
+  const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  // we want to find the index of a number in the sorted array
+  function binarySearch(arr: number[], target: number): number {
+    // initialize left and right pointers
+    let left = 0;
+    let right = arr.length - 1;
+
+    // while left is less or equal to right we keep searching for the target
+    while (left <= right) {
+      // get the middle of the array to compare with the target
+        // we iterate using the middle of the array to find the target because we know the array is sorted and we can discard half of the array in each iteration
+      const mid = Math.floor((left + right) / 2); // middle index
+      const midValue = arr[mid]; // middle value
+
+      // if the middle value is the target, return the index
+      if (midValue === target) {
+        return mid;
+      }
+
+      // if the middle value is less than the target, we search the right side of the array by updating the left pointer
+      if (midValue < target) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+    return -1; // target not found
+  }
+```
+
+In binary search, the algorithm continually divides the search interval in half until the target element is found or the search interval becomes empty. 
+With each iteration, the algorithm discards half of the search space based on a comparison with the middle element of the current interval.
+
+Here's why it's O(log N):
+
+* In each iteration of the while loop, the search space is halved.
+* This halving process continues until the search space is reduced to a single element or the target is found.
+* Since the search space is halved with each iteration, the number of iterations required to reach the target element grows logarithmically with the size of the input array.
+
+Thus, the time complexity of binary search is O(log N) on average.
+
+#### O(N) - Linear time
+
+```typescript
+  function sum(n: number): number {
+    const sum = 0;
+    for(let i = 0; i < n; i++) {
+      sum += i;
+    }
+    return sum;
+  }
+```
+
+Here's why it's O(N):
+
+* The algorithm iterates over the input array once, performing a constant amount of work for each element.
+* The number of iterations is directly proportional to the size of the input array.
+* As the input size increases, the number of steps needed to complete the algorithm grows linearly.
+
+Therefore, the time complexity of the algorithm is O(N) in the worst-case scenario.
+
+#### O(N log N) - Linearithmic time
+
+```typescript
+  // having the following array
+  const arr = [5, 3, 8, 4, 2, 1, 9, 7, 6];
+
+  // we want to sort the array using the quick sort algorithm
+  function quickSort(arr: number[]): number[] {
+    // first we check if the array has only one element or no elements
+    if (arr.length <= 1) {
+      return arr;
+    }
+
+    // we get the pivot as the last element of the array, the pivot is the element we are going to compare the rest of the elements with
+    const pivot = arr[arr.length - 1];
+
+    // we create two arrays, one for the elements less than the pivot and another for the elements greater than the pivot
+    const left = [];
+    const right = [];
+
+    // we iterate through the array and compare each element with the pivot
+    for (let i = 0; i < arr.length - 1; i++) {
+      // if the element is less than the pivot, we add it to the left array
+      if (arr[i] < pivot) {
+        left.push(arr[i]);
+      } else {
+        // if the element is greater than the pivot, we add it to the right array
+        right.push(arr[i]);
+      }
+    }
+
+    // we recursively call the quickSort function on the left and right arrays and concatenate the results
+    return [...quickSort(left), pivot, ...quickSort(right)];
+  }
+```
+Here's why it's O(N log N):
+
+* The algorithm partitions the array into two subarrays based on a pivot element and recursively sorts these subarrays.
+* Each partitioning step involves iterating over the entire array once, which takes O(N) time. However, the array is typically divided in a way that the size of the subarrays reduces with each recursive call. This results in a time complexity of O(N log N) on average.
+
+#### O(N^2) - Quadratic time
+
+```typescript
+  // having the following array
+  const arr = [5, 3, 8, 4, 2, 1, 9, 7, 6];
+
+  // we want to sort the array using the bubble sort algorithm
+  function bubbleSort(arr: number[]): number[] {
+
+    // we iterate through the array
+    for (let i = 0; i < arr.length; i++) {
+
+      // we iterate through the array again
+      for (let j = 0; j < arr.length - 1; j++) {
+
+        // we compare adjacent elements and swap them if they are in the wrong order
+        if (arr[j] > arr[j + 1]) {
+          
+          // we swap the elements
+          const temp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = temp;
+        }
+      }
+    }
+    return arr;
+  }
+```
+
+Here's why it's O(N^2):
+
+* Bubble sort works by repeatedly stepping through the list, comparing adjacent elements, and swapping them if they are in the wrong order.
+* In the worst-case scenario, where the array is in reverse sorted order, bubble sort will need to make N passes through the array, each pass requiring N-1 comparisons and swaps.
+* This results in a total of N * (N-1) comparisons and swaps, which simplifies to O(N^2) in terms of time complexity.
+
+
+#### O(2^N) - Exponential time
+
+```typescript
+  // we want to calculate the nth Fibonacci number using a recursive algorithm
+  function fibonacci(n: number): number {
+
+    // we check if n is 0 or 1 as the base case of the recursion because the Fibonacci sequence starts with 0 and 1
+    if (n <= 1) {
+      return n;
+    }
+
+    // we recursively call the fibonacci function to calculate the nth Fibonacci number
+    return fibonacci(n - 1) + fibonacci(n - 2);
+  }
+```
+
+Here's why it's O(2^N):
+
+* In each recursive call to the fibonacci function, two additional recursive calls are made with n - 1 and n - 2 as arguments.
+* This leads to an exponential growth in the number of recursive calls as n increases.
+* Each level of recursion branches into two recursive calls, resulting in a binary tree-like structure of recursive calls.
+* The number of function calls doubles with each level of recursion, leading to a total of 2^N function calls when calculating the nth Fibonacci number.
+
+Therefore, the time complexity of the algorithm is O(2^N) in the worst-case scenario.
+
+#### O(N!) - Factorial time
+```typescript
+  // having the following array
+  const arr = [1, 2, 3];
+
+  // we want to generate all permutations of a given array using a recursive algorithm
+  function permute(arr: number[]): number[][] {
+    // base case: if the array has only one element, return it as a single permutation
+    if (arr.length <= 1) {
+      return [arr];
+    }
+
+    // initialize an empty array to store permutations
+    const result: number[][] = [];
+
+    // iterate over each element in the array
+    for (let i = 0; i < arr.length; i++) {
+      // generate all permutations of the array excluding the current element
+      const rest = arr.slice(0, i).concat(arr.slice(i + 1));
+      const permutations = permute(rest);
+
+      // add the current element to the beginning of each permutation
+      for (const perm of permutations) {
+        result.push([arr[i], ...perm]);
+      }
+    }
+    return result;
+  }
+```
+
+Here's why it's O(N!):
+
+* In each recursive call to the permute function, the algorithm generates permutations by selecting each element of the array as the first element and then recursively generating permutations of the remaining elements.
+* The number of permutations grows factorially with the size of the input array.
+* For each element in the array, there are (N-1)! permutations of the remaining elements, where N is the number of elements in the array.
+* Therefore, the total number of permutations is N * (N-1) * (N-2) * ... * 1, which is N factorial (N!).
+
+Hence, the time complexity of the algorithm is O(N!) in the worst-case scenario.
+
+### Worst-case, best-case, and average-case complexity
+
+- The worst-case time complexity represents the maximum number of steps an algorithm takes to complete for a given input size. It provides an upper bound on the algorithm's performance. It is the most commonly used measure of time complexity in job interviews.
+
+- The best-case time complexity represents the minimum number of steps an algorithm takes to complete for a given input size. It provides a lower bound on the algorithm's performance. It is less informative than the worst-case complexity and is rarely used in practice.
+
+- The average-case time complexity represents the expected number of steps an algorithm takes to complete for a given input size, averaged over all possible inputs. It provides a more realistic estimate of an algorithm's performance than the worst-case complexity. However, calculating the average-case complexity can be challenging and is often avoided in favor of the worst-case complexity.
+
+### Space complexity
+
+The space complexity of an algorithm is a measure of the amount of memory it requires to run as a function of the input size. It is typically expressed in terms of the maximum amount of memory used by the algorithm at any point during its execution.
+
+It is important to distinguish between time complexity and space complexity, as an algorithm with good time complexity may have poor space complexity, and vice versa. For example, a recursive algorithm with exponential time complexity may also have exponential space complexity due to the recursive calls consuming memory.
+
+But something to have in mind is that space complexity is not as important as time complexity, as memory is usually cheaper than processing power and in real life scenarios, we usually skip the space complexity analysis and focus on time complexity.
+
+Imagine you're at a traditional Argentine barbecue, known as an "asado." You've got limited space on the grill (similar to limited memory in computing), and you want to optimize how much meat you can cook at once.
+
+Now, let's compare the meat (or "carne") to the data in an algorithm. When you're cooking, you have to consider how much space each cut of meat takes up on the grill. Similarly, in computing, algorithms have to consider how much memory space they need to store and process data.
+
+But here's the thing: at an asado, the most important factor is usually how quickly you can cook the meat and serve it to your guests. Similarly, in computing, the time it takes for an algorithm to run (time complexity) is often the most critical factor for performance.
+
+So, while it's essential to be mindful of how much space (or "espacio") your algorithm uses, it's usually more exciting to focus on how efficiently it can solve a problem in terms of time.
+
+Of course, in some situations, like if you're grilling on a tiny balcony or cooking for a huge crowd, space becomes more of a concern. Similarly, in computing, if you're working with limited memory resources or on a device with strict memory constraints, you'll need to pay closer attention to space complexity.
+
+But overall, just like at an Argentine barbecue, the balance between time and space complexity is key to creating a delicious (or efficient) outcome!
+
+However, let's talk about how you calculate the space complexity, or "cuánto espacio ocupas" in the case of our barbecue analogy. Just as you'd assess how much space each cut of meat takes up on the grill, in computing, you need to consider how much memory each data structure or variable in your algorithm consumes.
+
+Here's a basic approach to calculate space complexity:
+
+1. **Identify the Variables and Data Structures**: Look at the algorithm and identify all the variables and data structures it uses. These could be arrays, objects, or other types of variables.
+
+2. **Determine the Space Used by Each Variable**: For each variable or data structure, determine how much space it occupies in memory. For example, an array of integers will take up space proportional to the number of elements multiplied by the size of each integer.
+
+3. **Add Up the Space**: Once you've determined the space used by each variable, add them all up to get the total space used by the algorithm.
+
+4. **Consider Auxiliary Space**: Don't forget to account for any additional space used by auxiliary data structures or function calls. For example, if your algorithm uses recursion, you'll need to consider the space used by the call stack.
+
+5. **Express Space Complexity**: Finally, express the space complexity using Big O notation, just like you do with time complexity. For example, if the space used grows linearly with the size of the input, you'd express it as O(N). If it grows quadratically, you'd express it as O(N^2), and so on.
+
+So, just as you carefully manage the space on your grill to fit as much meat as possible without overcrowding, in computing, you want to optimize the use of memory to efficiently store and process data. And just like finding the perfect balance of meat and space at an Argentine barbecue, finding the right balance of space complexity in your algorithm is key to creating a delicious (or efficient) outcome!
+
+#### Example Time !!!
+
+Let's use a simple algorithm to find the sum of elements in an array as an example for calculating space complexity.
+
+```typescript
+function sumArray(arr: number[]): number {
+    let sum = 0;  // Space used by the sum variable: O(1)
+
+    for (let num of arr) {  // Space used by the loop variable: O(1)
+        sum += num;  // Space used by temporary variable: O(1)
+    }
+
+    return sum;  // Space used by the return value: O(1)
+}
+```
+
+In this example:
+
+1. We have one variable `sum` to store the sum of elements, which occupies a constant amount of space, denoted as O(1).
+2. We have a loop variable `num` that iterates through each element of the array. It also occupies a constant amount of space, O(1).
+3. Within the loop, we have a temporary variable to store the sum of each element with `sum`, which again occupies a constant amount of space, O(1).
+4. The return value of the function is the sum, which also occupies a constant amount of space, O(1).
+
+Since each variable and data structure in this algorithm occupies a constant amount of space, the overall space complexity of this algorithm is O(1).
+
+In summary, the space complexity of this algorithm is constant, regardless of the size of the input array.
+
+Now let's consider an example where we create a new array to store the cumulative sum of elements from the input array. Here's the algorithm:
+
+```typescript
+function cumulativeSum(arr: number[]): number[] {
+    const result = []; // Space used by the result array: O(N), where N is the size of the input array
+    let sum = 0;  // Space used by the sum variable: O(1)
+    for (let num of arr) {  // Space used by the loop variable: O(1)
+        sum += num;  // Space used by temporary variable: O(1)
+        result.push(sum);  // Space used by the new element in the result array: O(1), but executed N times
+    }
+    return result;  // Space used by the return value (the result array): O(N)
+}
+```
+
+In this example:
+
+1. We have a variable `result` to store the cumulative sum of elements, which grows linearly with the size of the input array `arr`. Each element added to `result` contributes to the space complexity. Therefore, the space used by `result` is O(N), where N is the size of the input array.
+2. We have a loop variable `num` that iterates through each element of the input array `arr`, which occupies a constant amount of space, O(1).
+3. Within the loop, we have a temporary variable `sum` to store the cumulative sum of elements, which occupies a constant amount of space, O(1).
+4. Inside the loop, we add a new element to the `result` array for each element in the input array. Each push operation adds an element to the array, so it also contributes to the space complexity. However, since it's executed N times (where N is the size of the input array), the space used by the push operations is O(N).
+5. The return value of the function is the `result` array, which occupies O(N) space.
+
+Overall, the space complexity of this algorithm is O(N), where N is the size of the input array. This is because the space used by the `result` array grows linearly with the size of the input.
+
+

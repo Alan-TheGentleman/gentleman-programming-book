@@ -21,6 +21,7 @@ export default async function handler(
 		'http://localhost:3000/book/Chapter03_Hexagonal_Architecture',
 		'http://localhost:3000/book/Chapter04_GoLang',
 		'http://localhost:3000/book/Chapter05_NVIM',
+		'http://localhost:3000/book/Chapter06_Algorithms',
 	];
 
 	const browser = await P.chromium.launch({ headless: true });
