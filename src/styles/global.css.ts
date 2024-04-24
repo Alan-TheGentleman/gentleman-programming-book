@@ -43,6 +43,6 @@ globalStyle('::-webkit-scrollbar-thumb', {
 
 globalStyle('html,body,#__next', {});
 
-globalStyle('h3', {
+globalStyle('h3,h4', {
 	color: themeVars.color.primary.base,
 });
