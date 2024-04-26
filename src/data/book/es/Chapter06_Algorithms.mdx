@@ -15,6 +15,8 @@ titleList:
     tagId: 'complejidad-en-el-peor-caso-el-mejor-caso-y-el-caso-promedio'
   - name: 'Complejidad Espacial'
     tagId: 'complejidad-espacial'
+  - name: 'Algoritmos'
+    tagId: 'algoritmos'
 ---
 
 # Algoritmos a la Manera Caballerosa
@@ -428,3 +430,142 @@ En este ejemplo:
 5. El valor devuelto de la función es la matriz `result`, que ocupa O(N) espacio.
 
 En general, la complejidad espacial de este algoritmo es O(N), donde N es el tamaño de la matriz de entrada. Esto se debe a que el espacio utilizado por la matriz `result` crece linealmente con el tamaño de la entrada.
+
+## Arreglos
+
+Cuando hablamos de arreglos, generalmente pensamos en colecciones ordenadas de elementos, ¿verdad? Pero en JavaScript, los arreglos son en realidad objetos. Entonces, ¿qué es un arreglo real, podrías preguntar? Bueno, un verdadero arreglo es un bloque contiguo de memoria donde cada elemento ocupa la misma cantidad de espacio.
+
+En un arreglo real, acceder a un elemento es súper rápido: es una operación de tiempo constante, lo que significa que lleva la misma cantidad de tiempo sin importar cuán grande sea el arreglo. ¿Por qué? Porque puedes calcular exactamente dónde está cada elemento en la memoria.
+
+Ahora, contrastemos eso con los arreglos de JavaScript. Se implementan como objetos, donde los índices son las claves. Entonces, cuando accedes a un elemento en un arreglo de JavaScript, en realidad estás accediendo a una propiedad de un objeto. Esto significa que acceder a elementos no es tan rápido; es una operación de tiempo lineal porque el motor de JavaScript tiene que buscar a través de las claves del objeto para encontrar la correcta.
+
+Para encontrar la ubicación en memoria de un elemento en un arreglo real, usas una fórmula simple:
+
+```typescript
+const index = base_address + offset * size_of_element;
+```
+
+Aquí, el `índice` es lo que usualmente llamamos el índice, pero es más como un desplazamiento. La `base_address` es el punto de inicio del arreglo en la memoria, y `size_of_element` es, bueno, el tamaño de cada elemento.
+
+Con esta fórmula, cada vez que buscas un elemento, estás realizando una operación de tiempo constante porque no importa cuán grande sea el arreglo, las matemáticas permanecen iguales.
+
+Ahora, ilustremos esto con algo de código:
+
+```typescript
+// Creemos un nuevo arreglo con 5 elementos
+const a = [1, 2, 3, 4, 5];
+
+// Calculemos el espacio total que ocupa el arreglo en memoria
+const totalSpace = array.length * 4; // asumiendo que cada elemento ocupa 4 bytes
+
+// Elijamos un índice
+const index = 3;
+
+// Calculemos la ubicación en memoria del elemento
+const sizeOfEachElement = 4; // cada elemento ocupa 4 bytes
+const baseAddress = array; // la referencia al propio arreglo
+const offset = index * sizeOfEachElement;
+const memoryLocation = baseAddress + offset;
+
+// Accedamos al elemento en la ubicación en memoria calculada
+const elementAtIndex = memoryLocation;
+
+console.log("El valor en el índice", index, "es:", elementAtIndex); // El valor en el índice 3 es: 4
+```
+
+En este ejemplo, estamos simulando cómo funciona un arreglo real bajo el capó. Calculamos la ubicación en memoria de un elemento usando el índice, y luego accedemos a esa ubicación en memoria para obtener el elemento.
+
+Ahora, visualicemos esto con Node.js, donde podemos echar un vistazo a lo que está sucediendo en la memoria:
+
+```javascript
+// Creamos un nuevo búfer de arreglo en Node.js
+const buffer = new ArrayBuffer(16); // 16 bytes de memoria
+
+// Verifiquemos el tamaño del búfer (en bytes)
+console.log("buffer.byteLength: " + buffer.byteLength); // Salida: buffer.byteLength: 16
+
+// Ahora creemos una nueva Int8Array, un arreglo tipado de enteros con signo de 8 bits
+const int8Array = new Int8Array(buffer);
+
+// Registremos el contenido de la Int8Array (todos ceros inicialmente)
+console.log(int8Array); // Salida: Int8Array(16) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+// Cada elemento en la Int8Array representa un solo byte en el búfer
+
+// Ahora cambiemos el valor del primer elemento del arreglo a 1
+int8Array[0] = 1;
+
+// Registremos nuevamente el contenido de la Int8Array y del búfer
+console.log(int8Array); // Salida: Int8Array(16) [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+console.log(buffer); // Observa cómo el búfer subyacente también se modifica (el primer byte se convierte en 1)
+// Salida: Búfer después del cambio: ArrayBuffer { [Uint8Contents]: <01 
+
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00> }
+
+// Las TypedArrays proporcionan una vista diferente de la misma memoria
+
+// Ahora creemos un arreglo de enteros con signo de 16 bits (usa 2 bytes por elemento)
+const int16Array = new Int16Array(buffer);
+
+// Registremos el contenido de la Int16Array (valores iniciales basados en el búfer)
+console.log(int16Array); // Salida: Int16Array(8) [1, 0, 0, 0, 0, 0, 0, 0]
+
+// La Int16Array tiene menos elementos porque usa más bytes por elemento, 2 bytes
+
+// Nuevamente, cambiemos un valor (tercer elemento) y observemos los efectos
+int16Array[2] = 4000;
+
+// Registremos el contenido de los tres arreglos y el búfer
+console.log(int16Array); // Salida: Int16Array(8) [1, 0, 4000, 0, 0, 0, 0, 0]
+console.log(buffer); // Observa cómo se modifican múltiples bytes en el búfer (quinto y sexto bytes)
+// Salida: ArrayBuffer { [Uint8Contents]: <01 00 00 00 a0 0f 00 00 00 00 00 00 00 00 00 00> } (los contenidos se modifican, por ejemplo, el quinto byte podría ser 0x0f)
+console.log(int8Array); // La vista de la Int8Array también se ve afectada (los quinto y sexto bytes cambian)
+// Salida: Int8Array(16) [1, 0, 0, 0, -96, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (el quinto byte es -96, el sexto byte es 15, se muestra en decimal)
+
+// Ahora creemos un arreglo de enteros con signo de 32 bits (usa 4 bytes por elemento)
+const int32Array = new Int32Array(buffer);
+
+// Registremos el contenido de la Int32Array (valores iniciales basados en el búfer)
+console.log(int32Array); // Salida: Int32Array(4) [1, 4000, 0, 0]
+
+// Incluso menos elementos debido al mayor tamaño de cada elemento, 4 bytes
+
+// Cambiemos el valor y observemos los efectos
+int32Array[2] = 100000;
+
+// Registremos el contenido de los tres arreglos y el búfer
+console.log(int32Array); // Salida: Int32Array(4) [1, 4000, 100000, 0]
+console.log(buffer); // ArrayBuffer { [Uint8Contents]: <01 00 00 00 a0 0f 00 00 10 27 00 00 00 00 00 00> } aún más bytes en el búfer se modifican (noveno, décimo, undécimo, duodécimo)
+console.log(int16Array); // Int16Array(8) [1, 0, 4000, 0, 10000, 0, 0, 0] (el cuarto elemento ahora es 10000)
+console.log(int8Array); // Int8Array(16) [1, 0, 0, 0, -96, 15, 0, 0, 16, 39, 0, 0, 0, 0, 0, 0] (los noveno, décimo, undécimo, duodécimo bytes ahora son 16, 39)
+```
+
+En este ejemplo de Node.js, estamos creando un búfer de 16 bytes, que es como un bloque de memoria. Luego, creamos diferentes arreglos tipados para ver esta memoria de manera diferente, como arreglos de diferentes tipos de enteros. Modificar uno de estos arreglos también cambia el búfer subyacente, mostrando cómo son vistas diferentes de la misma memoria.
+
+Ahora, volvamos al por qué estamos viendo decimales. Necesitaremos entender primero la representación de complemento a dos.
+
+Entonces, el complemento a dos es como el truco mágico que usamos en la informática para manejar tanto números positivos como negativos usando el mismo sistema binario. Imagina esto: en nuestros números binarios, el primer dígito desde la izquierda (el jefe grande, ¿sabes?) decide si el número es positivo o negativo. Si es 0, es positivo, y si es 1, es negativo.
+
+Ahora, para los números positivos, es pan comido. Solo los escribes en binario, como de costumbre. Por ejemplo, el número 3 en binario de 8 bits es 00000011. No hay problema allí, ¿verdad?
+
+Pero cuando se trata de números negativos, necesitamos un truco. Tomamos la representación binaria del número positivo, invertimos todos los bits (los 0 se convierten en 1 y los 1 se convierten en 0), y luego sumamos 1 al resultado. Esto nos da el complemento a dos del número negativo. Digamos que queremos representar -3. Primero, empezamos con la representación binaria de 3, que es 00000011. Luego, invertimos todos los bits para obtener 11111100, y finalmente, sumamos 1 a este resultado para obtener 11111101. Ese es el complemento a dos de -3 en binario de 8 bits.
+
+Ahora, ¿por qué hacemos todo esto? Bueno, es porque en informática nos gusta que las cosas estén ordenadas y sean consistentes. Con el complemento a dos, podemos usar las mismas reglas para sumar y restar tanto números positivos como negativos, sin necesidad de preocuparnos por casos especiales. Mantiene nuestra matemática bonita y limpia, como tomar mate en un día soleado en Buenos Aires.
+
+Ahora podemos ver por qué estamos viendo decimales.
+
+Cuando trabajas con 8 bits, los valores se representan en decimal, ya que el rango de un entero de 8 bits con signo es de -128 a 127. Si el valor se desborda, se envuelve dentro del rango:
+
+Cuando lidias con 8 bits, los valores se muestran en decimal porque, ya sabes, un entero de 8 bits con signo solo puede contener números de -128 a 127. Es como tener un espacio limitado en un autobús lleno: solo puedes meter a tanta gente.
+
+Ahora, imag
+
+ina que estás tratando de meter el número 4000. En binario, eso es `111110100000`. Pero aquí está la cosa: nuestro autobús solo llega hasta 127. Entonces, cuando intentas meter 4000 allí, es como intentar meter a un equipo de fútbol en un auto pequeño, simplemente no va a suceder.
+
+Cuando intentas meter 4000 en nuestro autobús de 8 bits, se desborda. Pero en lugar de causar caos, hace algo bastante genial: se envuelve. Ves, la ruta del autobús comienza de nuevo desde el principio, como un bucle interminable.
+
+Este "envolver" es donde las cosas se ponen interesantes. El bit más a la izquierda, el gran jefe del número, cambia su signo. Entonces, en lugar de ser positivo, se vuelve negativo. Es como dar la vuelta al autobús yendo en la dirección opuesta.
+
+Ahora, usamos nuestro truco anterior llamado complemento a dos para averiguar el nuevo número. Primero, invertimos todos los bits de `111110100000` para obtener `000001011111`. Luego, sumamos 1 a este número invertido, dándonos `000001100000`.
+
+¡Y voilà! Ese número binario `000001100000` representa -96 en decimal. Entonces, aunque intentaste meter 4000, nuestro pequeño autobús lo maneja como un campeón y te dice que es -96. ¡Esa es la magia del desbordamiento y el envolvimiento en un mundo de 8 bits!

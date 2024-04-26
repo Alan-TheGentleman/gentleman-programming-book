@@ -15,6 +15,8 @@ titleList:
     tagId: 'worst-case-best-case-and-average-case-complexity'
   - name: 'Space Complexity'
     tagId: 'space-complexity'
+  - name: 'Arrays'
+    tagId: 'arrays'
 ---
 
 # Algorithms the Gentleman Way
@@ -426,3 +428,139 @@ In this example:
 Overall, the space complexity of this algorithm is O(N), where N is the size of the input array. This is because the space used by the `result` array grows linearly with the size of the input.
 
 
+## Arrays
+
+When we talk about arrays, we usually think of ordered collections of elements, right? But in JavaScript, arrays are actually objects. So, what's a real array, you might ask? Well, a true array is a contiguous block of memory where each element takes up the same amount of space.
+
+In a real array, accessing an element is super quick—it's a constant time operation, meaning it takes the same amount of time no matter how big the array is. Why? Because you can calculate exactly where each element is in memory.
+
+Now, let's contrast that with JavaScript arrays. They're implemented as objects, where the indexes are the keys. So, when you access an element in a JavaScript array, you're actually accessing a property of an object. This means accessing elements isn't as snappy—it's a linear time operation because the JavaScript engine has to search through the object keys to find the right one.
+
+To find the memory location of an element in a real array, you use a simple formula:
+
+```typescript
+const index = base_address + offset * size_of_element;
+```
+
+Here, the `index` is what we usually call the index, but it's more like an offset. The `base_address` is the starting point of the array in memory, and `size_of_element` is, well, the size of each element.
+
+With this formula, every time you search for an element, you're performing a constant time operation because it doesn't matter how big the array is—the math stays the same.
+
+Now, let's illustrate this with some code:
+
+```typescript
+// Let's create a new array with 5 elements
+const a = [1, 2, 3, 4, 5];
+
+// Calculate the total space the array occupies in memory
+const totalSpace = array.length * 4; // assuming each element occupies 4 bytes
+
+// Choose an index
+const index = 3;
+
+// Calculate the memory location of the element
+const sizeOfEachElement = 4; // each element occupies 4 bytes
+const baseAddress = array; // the reference to the array itself
+const offset = index * sizeOfEachElement;
+const memoryLocation = baseAddress + offset;
+
+// Access the element at the calculated memory location
+const elementAtIndex = memoryLocation;
+
+console.log("Value at index", index, "is:", elementAtIndex); // Value at index 3 is: 4
+```
+
+In this example, we're simulating how a real array works under the hood. We calculate the memory location of an element using the index, and then we access that memory location to get the element.
+
+Now, let's visualize this with Node.js, where we can peek into what's happening in memory:
+
+```javascript
+// Create a new array buffer in Node.js
+const buffer = new ArrayBuffer(16); // 16 bytes of memory
+
+// Check the size of the buffer (in bytes)
+console.log("buffer.byteLength: " + buffer.byteLength); // Output: buffer.byteLength: 16
+
+// Now let's create a new Int8Array, a typed array of 8-bit signed integers
+const int8Array = new Int8Array(buffer);
+
+// Log the contents of the Int8Array (all zeros initially)
+console.log(int8Array); // Output: Int8Array(16) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+// Each element in the Int8Array represents a single byte in the buffer
+
+// Now let's change the value of the first element of the array to 1
+int8Array[0] = 1;
+
+// Log the contents of the Int8Array and buffer again
+console.log(int8Array); // Output: Int8Array(16) [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+console.log(buffer); // Notice how the underlying buffer is also modified (first byte becomes 1)
+// Output: Buffer after change: ArrayBuffer { [Uint8Contents]: <01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00> }
+
+// TypedArrays provide a different view of the same memory
+
+// Now let's create a 16-bit signed integer array (uses 2 bytes per element)
+const int16Array = new Int16Array(buffer);
+
+// Log the contents of the Int16Array (initial values based on buffer)
+console.log(int16Array); // Output: Int16Array(8) [1, 0, 0, 0, 0, 0, 0, 0]
+
+// The Int16Array has fewer elements because it uses more bytes per element, 2 bytes
+
+// Again, let's change a value (third element) and see the effects
+int16Array[2] = 4000;
+
+// Log the contents of all three arrays and the buffer
+console.log(int16Array); // Output: Int16Array(8) [1, 0, 4000, 0, 0, 0, 0, 0]
+console.log(buffer); // Notice how multiple bytes in the buffer are modified (5th and 6th bytes)
+// Output: ArrayBuffer { [Uint8Contents]: <01 00 00 00 a0 0f 00 00 00 00 00 00 00 00 00 00> } (contents are modified, e.g., 5th byte might be 0x0f)
+console.log(int8Array); // The view of the Int8Array is also affected  (5th and 6th bytes change)
+// Output: Int8Array(16) [1, 0, 0, 0, -96, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (5th byte is -96, 6th byte is 15, being shown in decimal)
+
+// Now let's create a 32-bit signed integer array (uses 4 bytes per element)
+const int
+
+32Array = new Int32Array(buffer);
+
+// Log the contents of the Int32Array (initial values based on buffer)
+console.log(int32Array); // Output: Int32Array(4) [1, 4000, 0, 0]
+
+// Even fewer elements due to the larger size of each element, 4 bytes
+
+// Let's change the value and observe the effects
+int32Array[2] = 100000;
+
+// Log the contents of all three arrays and the buffer
+console.log(int32Array); // Output: Int32Array(4) [1, 4000, 100000, 0]
+console.log(buffer); // ArrayBuffer { [Uint8Contents]: <01 00 00 00 a0 0f 00 00 10 27 00 00 00 00 00 00> } even more bytes in the buffer are modified (9th, 10th, 11th, 12th)
+console.log(int16Array); // Int16Array(8) [1, 0, 4000, 0, 10000, 0, 0, 0] (4th element is now 10000)
+console.log(int8Array); // Int8Array(16) [1, 0, 0, 0, -96, 15, 0, 0, 16, 39, 0, 0, 0, 0, 0, 0] (9th, 10th, 11th, 12th bytes are now 16, 39)
+```
+
+In this Node.js example, we're creating a buffer of 16 bytes, which is like a block of memory. Then, we create different typed arrays to view this memory differently—as arrays of different types of integers. Modifying one of these arrays also changes the underlying buffer, showing how they're different views of the same memory.
+
+Now, let's circle back to why we're seeing decimals. We'll need to understand two's complement representation first.
+
+So, two's complement is like the magic trick we use in computing to handle both positive and negative numbers using the same binary system. Picture this: in our binary numbers, the first digit from the left (the big boss, you know?) decides if the number is positive or negative. If it's 0, it's positive, and if it's 1, it's negative.
+
+Now, for the positive numbers, it's easy peasy. You just write them down in binary, as usual. For example, number 3 in 8-bit binary is 00000011. No problem there, right?
+
+But when it comes to negative numbers, we need a trick. We take the positive number's binary representation, flip all the bits (0s become 1s and 1s become 0s), and then add 1 to the result. This gives us the two's complement of the negative number. Let's say we want to represent -3. First, we start with 3's binary representation, which is 00000011. Then, we flip all the bits to get 11111100, and finally, we add 1 to get 11111101. That's the two's complement of -3 in 8-bit binary.
+
+Now, why do we do all this? Well, it's because in computing, we like things to be tidy and consistent. With two's complement, we can use the same rules for adding and subtracting both positive and negative numbers, without needing to worry about special cases. It keeps our math nice and clean, just like sipping on yerba mate on a sunny day in Buenos Aires.
+
+Now we can see why we are seeing decimals !
+
+When working with 8 bits, the values are being represented in decimal, as the range of an 8-bit signed integer is -128 to 127. If the value overflows, it wraps around the range:
+
+When you're dealing with 8 bits, the values are shown in decimal because, you know, an 8-bit signed integer can only hold numbers from -128 to 127. It's like having a limited space in a crowded bus—you can only fit so many people!
+
+Now, imagine you're trying to squeeze in the number 4000. In binary, that's `111110100000`. But here's the thing: our bus only goes up to 127. So, when you try to cram 4000 in there, it's like trying to fit a football team into a tiny car—it's just not gonna happen.
+
+Now, when you try to jam 4000 into our 8-bit bus, it overflows. But instead of causing chaos, it does something pretty neat: it wraps around. You see, the bus route starts again from the beginning, like a never-ending loop.
+
+This "wrapping around" is where things get interesting. The leftmost bit, the big boss of the number, flips its sign. So, instead of being positive, it becomes negative. It's like turning the bus around and going in the opposite direction!
+
+Now, we use our previous trick called two's complement to figure out the new number. First, we flip all the bits of `111110100000` to get `000001011111`. Then, we add 1 to this flipped number, giving us `000001100000`.
+
+And voilà! That binary number `000001100000` represents -96 in decimal. So, even though you tried to squeeze in 4000, our little bus handles it like a champ and tells you it's -96. That's the magic of overflow and wrap-around in an 8-bit world!
