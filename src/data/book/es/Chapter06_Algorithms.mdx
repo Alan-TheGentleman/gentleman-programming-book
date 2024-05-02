@@ -17,6 +17,12 @@ titleList:
     tagId: 'complejidad-espacial'
   - name: 'Arreglos'
     tagId: 'arreglos'
+  - name: '¿Cómo pensar?'
+    tagId: 'cómo-pensar'
+  - name: 'Búsqueda Lineal'
+    tagId: 'búsqueda-lineal'
+  - name: 'Búsqueda Binaria'
+    tagId: 'búsqueda-binaria'
 ---
 
 # Algoritmos a la Manera Caballerosa
@@ -569,3 +575,112 @@ Este "envolver" es donde las cosas se ponen interesantes. El bit más a la izqui
 Ahora, usamos nuestro truco anterior llamado complemento a dos para averiguar el nuevo número. Primero, invertimos todos los bits de `111110100000` para obtener `000001011111`. Luego, sumamos 1 a este número invertido, dándonos `000001100000`.
 
 ¡Y voilà! Ese número binario `000001100000` representa -96 en decimal. Entonces, aunque intentaste meter 4000, nuestro pequeño autobús lo maneja como un campeón y te dice que es -96. ¡Esa es la magia del desbordamiento y el envolvimiento en un mundo de 8 bits!
+
+## ¿Cómo pensar?
+
+Cuando estás hasta el cuello de código, entender los conceptos y aplicarlos para resolver esos problemas es la clave. ¿Mi consejo? Echa el resto comentando tu código, explicando cada paso dentro del método y DESPUÉS lánzate de lleno a la implementación.
+
+Así sabrás qué hacer y solo necesitarás descubrir cómo hacerlo.
+
+Ejemplo:
+
+```typescript
+function sumArray(arr: number[]): number {
+		// Inicializa la variable de suma para almacenar la suma de elementos
+		let sum = 0;  // O(1)
+
+		// Itera sobre cada elemento en el array
+		for (let num of arr) {  // O(N)
+				// Suma el elemento actual a la suma
+				sum += num;  // O(1)
+		}
+
+		// Devuelve la suma final
+		return sum;  // O(1)
+}
+```
+
+## Búsqueda Lineal
+
+Es el pan de cada día de los algoritmos, pero ¿realmente sabes cómo se las arregla para lucirse?
+
+Aquí está la jugada: estamos bailando a través de cada elemento de una colección, preguntando si el elemento que estamos buscando es el que tenemos frente a nosotros. ¿El gran jefe de JavaScript que usa este algoritmo? ¡El método `indexOf`, pibe!
+
+```typescript
+function indexOf(arr: number[], target: number): number {
+	// Itera sobre cada elemento en el array
+	for (let i = 0; i < arr.length; i++) {
+
+		// Comprueba si el elemento actual es igual al objetivo
+		if (arr[i] === target) {
+
+			// Si lo es, devuelve el índice del elemento
+			return i;
+		}
+	}
+
+	// Si el objetivo no aparece por ningún lado, devuelve -1
+	return -1;
+}
+```
+
+Entonces... ¿cuál es el peor escenario aquí que nos dará la Notación Big O? Que volvamos con las manos vacías o que el elemento que buscamos esté paseando al final del array, haciendo que este algoritmo sea O(N). A medida que N crece, también lo hace la complejidad, es como ver tu cintura después de devorar una montaña de alfajores.
+
+## Búsqueda Binaria
+
+Ahora, este es el rey de reyes, el mejor de los mejores y uno de los titanes en entrevistas profesionales y desafíos de programación. Veamos cuándo y cómo soltar su poder:
+
+¿El truco? ¡Dividir y conquistar, che! En lugar de jugar al escondite con cada elemento del array, cortamos esa cosa en dos y preguntamos, "¿Eh, estás a la izquierda o a la derecha?" Luego, seguimos cortando hasta que atrapemos a nuestro esquivo objetivo.
+
+```typescript
+function binarySearch(arr: number[], target: number): number {
+	// Inicializa los punteros izquierdo y derecho
+	// izquierdo comienza al principio del array
+	// derecho comienza al final del array
+	let left = 0;
+	let right = arr.length - 1;
+
+	// Continúa avanzando mientras el puntero izquierdo sea menor o igual al puntero derecho
+	while (left <= right) {
+		// Calcula el índice medio del espacio de búsqueda actual
+		const mid = Math.floor((left + right) / 2);
+
+		// Comprueba si el elemento medio es el objetivo
+		if (arr[mid] === target) {
+
+			// Si lo es, devuelve el índice del elemento
+			return mid;
+		} else if (arr[mid] < target) {
+
+			// Si el elemento medio es menor que el objetivo, ve hacia la derecha
+			left = mid + 1;
+		} else {
+
+			// Si el elemento medio es mayor que el objetivo, ve hacia la izquierda
+			right = mid - 1;
+		}
+	}
+}
+```
+
+Y con este ejemplo verás, claro como el agua en las noches más oscuras, que no estoy mintiendo:
+
+```typescript
+// necesitamos encontrar el índice del número objetivo dentro de un array de 1024 elementos
+
+1024 / 2 = 512 // lo dividimos a la mitad y vemos que el número objetivo está en la mitad derecha
+512 / 2 = 256 // lo dividimos a la mitad nuevamente y vemos que el número objetivo está en la mitad derecha
+256 / 2 = 128 // lo dividimos a la mitad nuevamente y vemos que el número objetivo está en la mitad derecha
+128 / 2 = 64 // lo dividimos a la mitad nuevamente y vemos que el número objetivo está en la mitad derecha
+64 / 2 = 32 // lo dividimos a la mitad nuevamente y vemos que el número objetivo está en la mitad derecha
+32 / 2 = 16 // lo dividimos a la mitad nuevamente y vemos que el número objetivo está en la mitad derecha
+16 / 2 = 8 // lo dividimos a la mitad nuevamente y vemos que el número objetivo está en la mitad derecha
+8 / 2 = 4 // lo dividimos a la mitad nuevamente y vemos que el número objetivo está en la mitad derecha
+4 / 2 = 2 // lo dividimos a la mitad nuevamente y vemos que el número objetivo está en la mitad derecha
+2 / 2 = 1 // lo dividimos a la mitad nuevamente y vemos que el número objetivo está en la mitad derecha
+1 / 2 = 0.5 // ya no podemos dividirlo más, así que nos detenemos
+
+// aquí viene la magia, si contamos el número de pasos tenemos un total de 10 pasos para encontrar el número objetivo
+// ¿sabes cuál es el logaritmo de 1024 en base 2? ¡es 10!
+log2(1024) = 10
+```

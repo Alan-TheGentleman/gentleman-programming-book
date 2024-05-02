@@ -17,6 +17,12 @@ titleList:
     tagId: 'space-complexity'
   - name: 'Arrays'
     tagId: 'arrays'
+  - name: 'How to think?'
+    tagId: 'how-to-think'
+  - name: 'Linear Search'
+    tagId: 'linear-search'
+  - name: 'Binary Search'
+    tagId: 'binary-search'
 ---
 
 # Algorithms the Gentleman Way
@@ -68,21 +74,7 @@ But now we have O(1) as the amount of steps does not depend on the amount of dat
 
 * 'Exponential' of a number is the power of the base raised to that number. For example, the exponential of 2 to the power of 3 is 8 because 2^3 = 8.
 
-* 'Factorial' of a number is the product of all positive integers less than or equal to that number. For example, the factorial of 3 is 6 because 3! = 3 * 2 * 1 = 6.
-
-* 'Quicksort' is a sorting algorithm that uses the divide and conquer strategy to sort an array. It is a comparison sort and is not a stable sort.
-Divide and conquer is a strategy to solve a problem by breaking it into smaller parts and solving each part individually.
-
-### Types of Big O Notation
-
-```bash
-- O(1) - Constant time - Always the same number of steps regardless of the amount of data
-- O(log N) - Logarithmic time - The number of steps grows logarithmically (binary search)
-- O(N) - Linear time - The number of steps grows linearly (loops)
-- O(N log N) - Linearithmic time - The number of steps grows linearithmically (quick sort)
-- O(N^2) - Quadratic time - The number of steps grows quadratically (nested loops)
-- O(2^N) - Exponential time - The number of steps grows exponentially (recursive algorithms)
-- O(N!) - Factorial time - The number of steps grows factorially (brute force algorithms, those which try all possible solutions)
+* 'Factorial' of a number is the product of all positive integers less than or equal to that number. For example, the factorial of 3 is 6 because 3!!) - Factorial time - The number of steps grows factorially (brute force algorithms, those which try all possible solutions)
 ```
 
 Example with N equal to 1000:
@@ -564,3 +556,112 @@ This "wrapping around" is where things get interesting. The leftmost bit, the bi
 Now, we use our previous trick called two's complement to figure out the new number. First, we flip all the bits of `111110100000` to get `000001011111`. Then, we add 1 to this flipped number, giving us `000001100000`.
 
 And voilà! That binary number `000001100000` represents -96 in decimal. So, even though you tried to squeeze in 4000, our little bus handles it like a champ and tells you it's -96. That's the magic of overflow and wrap-around in an 8-bit world!
+
+## How to think?
+
+When you're up to your eyeballs in code, understanding the concepts and applying them to crack those problems is the name of the game. My advice? Pour your heart and soul into commenting your code, explaining each step inside the method, and THEN dive into implementation.
+
+That way, you'll know what needs doing and just need to figure out how to pull it off.
+
+Example:
+
+```typescript
+function sumArray(arr: number[]): number {
+		// Initialize the sum variable to store the sum of elements
+		let sum = 0;  // O(1)
+
+		// Iterate over each element in the array
+		for (let num of arr) {  // O(N)
+				// Add the current element to the sum
+				sum += num;  // O(1)
+		}
+
+		// Return the final sum
+		return sum;  // O(1)
+}
+```
+
+## Linear Search
+
+It's the bread and butter of algorithms, but do you really know how it struts its stuff?
+
+Here's the scoop: we're sashaying through each element of a collection, asking if the element we're hunting down is the one staring us in the face. The JavaScript bigwig that uses this algorithm? The `indexOf` method, baby.
+
+```typescript
+function indexOf(arr: number[], target: number): number {
+	// Iterate over each element in the array
+	for (let i = 0; i < arr.length; i++) {
+
+		// Check if the current element is equal to the target
+		if (arr[i] === target) {
+
+			// If it is, return the index of the element
+			return i;
+		}
+	}
+
+	// If the target is nowhere to be found, return -1
+	return -1;
+}
+```
+
+So... what's the worst-case scenario here that'll give us the Big O Notation? That we come up empty-handed or that the element we're after is lounging at the end of the array, making this algorithm O(N). As N gets bigger, so does the complexity - it's like watching your waistline after devouring a mountain of alfajores.
+
+## Binary Search
+
+Now, this bad boy right here is the cream of the crop, the bee's knees, and one of the heavy hitters in professional interviews and coding showdowns. Let's unpack when and how to unleash its power:
+
+The name of the game? Divide and conquer, baby! Instead of playing tag with each element of the array, we slice that sucker in half and ask, "Hey, are you on the left or right?" Then, we keep slicing and dicing until we've nabbed our elusive target.
+
+```typescript
+function binarySearch(arr: number[], target: number): number {
+	// Initialize the left and right pointers
+	// left starts at the beginning of the array
+	// right starts at the end of the array
+	let left = 0;
+	let right = arr.length - 1;
+
+	// Keep on truckin' as long as the left pointer is less than or equal to the right pointer
+	while (left <= right) {
+		// Calculate the middle index of the current search space
+		const mid = Math.floor((left + right) / 2);
+
+		// Check if the middle element is the target
+		if (arr[mid] === target) {
+
+			// If it is, return the index of the element
+			return mid;
+		} else if (arr[mid] < target) {
+
+			// If the middle element is less than the target, swing right
+			left = mid + 1;
+		} else {
+
+			// If the middle element is greater than the target, veer left
+			right = mid - 1;
+		}
+	}
+}
+```
+
+And whit this example you will see, clear as light in the darkest nights that I'm not lying:
+
+```typescript
+// we need to find the index of the target number inside an array of 1024 elements
+
+1024 / 2 = 512 // we halve it and see that the target number is in the right half
+512 / 2 = 256 // we halve it again and see that the target number is in the right half
+256 / 2 = 128 // we halve it again and see that the target number is in the right half
+128 / 2 = 64 // we halve it again and see that the target number is in the right half
+64 / 2 = 32 // we halve it again and see that the target number is in the right half
+32 / 2 = 16 // we halve it again and see that the target number is in the right half
+16 / 2 = 8 // we halve it again and see that the target number is in the right half
+8 / 2 = 4 // we halve it again and see that the target number is in the right half
+4 / 2 = 2 // we halve it again and see that the target number is in the right half
+2 / 2 = 1 // we halve it again and see that the target number is in the right half
+1 / 2 = 0.5 // we can't halve it anymore, so we stop
+
+// here comes the magic, if we count the number of steps we have a total of 10 steps to find the target number
+// do you know what is the logarithm of 1024 in base 2? it's 10 !!
+log2(1024) = 10
+```
