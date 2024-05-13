@@ -58,12 +58,21 @@ export default function Home({
 	const fontSize = useFontSize();
 	const startReadingLink = chapterIndexList[0]?.link;
 	const [bookMarkLink, setBookMarkLink] = React.useState<string | null>(null);
+	const [pdfLink, setPdfLink] = React.useState<string>(
+		'/gentleman-programming-book',
+	);
 
 	React.useEffect(() => {
 		setBookMarkLink(
 			localStorageService.find(localStorageKeys.bookmark) || null,
 		);
 	}, [localStorageService]);
+
+	React.useEffect(() => {
+		if (router.locale === 'es')
+			setPdfLink('/gentleman-programming-book-es.pdf');
+		else setPdfLink('/gentleman-programming-book.pdf');
+	}, [router.locale]);
 
 	return (
 		<>
@@ -181,7 +190,7 @@ export default function Home({
 
 					<Button
 						component='a'
-						href='/gentleman-programming-book.pdf'
+						href={pdfLink}
 						download='Gentleman Programming Book'
 						target='_blank'
 						size='xl'

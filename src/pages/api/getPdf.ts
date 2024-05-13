@@ -24,6 +24,16 @@ export default async function handler(
 		'http://localhost:3000/book/Chapter06_Algorithms',
 	];
 
+	const pageListSpanish = [
+		'http://localhost:3000/es',
+		'http://localhost:3000/es/book/Chapter01_Clean-Agile',
+		'http://localhost:3000/es/book/Chapter02_Communication-First-and-Foremost',
+		'http://localhost:3000/es/book/Chapter03_Hexagonal_Architecture',
+		'http://localhost:3000/es/book/Chapter04_GoLang',
+		'http://localhost:3000/es/book/Chapter05_NVIM',
+		'http://localhost:3000/es/book/Chapter06_Algorithms',
+	];
+
 	const browser = await P.chromium.launch({ headless: true });
 
 	const context = await browser.newContext({
@@ -54,56 +64,68 @@ export default async function handler(
 		},
 	};
 
-	const pdfList = await Promise.all(
-		pageList.map(async (url, idx) => {
-			const page = await context.newPage();
-			await page.goto(url);
-			await page.emulateMedia({ media: 'screen' });
+	const processPdfList = async (list: string[]) =>
+		await Promise.all(
+			list.map(async (url, idx) => {
+				const page = await context.newPage();
+				await page.goto(url);
+				await page.emulateMedia({ media: 'screen' });
 
-			if (idx === 0) {
-				await page.addStyleTag({ content: styleTagContentHome });
+				if (idx === 0) {
+					await page.addStyleTag({ content: styleTagContentHome });
 
-				// Open all chapters
-				const buttonList = await page
-					.getByRole('main')
-					.getByRole('button')
-					.all();
-				await Promise.all(
-					buttonList.map(async btn => await btn.dispatchEvent('click')),
-				);
+					// Open all chapters
+					const buttonList = await page
+						.getByRole('main')
+						.getByRole('button')
+						.all();
+					await Promise.all(
+						buttonList.map(async btn => await btn.dispatchEvent('click')),
+					);
 
-				// Disable all links
-				const linkList = await page.getByRole('main').getByRole('link').all();
-				await Promise.all(
-					linkList.map(async link => {
-						await link.evaluate((node: HTMLAnchorElement) => (node.href = '#'));
-					}),
-				);
+					// Disable all links
+					const linkList = await page.getByRole('main').getByRole('link').all();
+					await Promise.all(
+						linkList.map(async link => {
+							await link.evaluate(
+								(node: HTMLAnchorElement) => (node.href = '#'),
+							);
+						}),
+					);
 
-				// hidde Download button
-				await page
-					.getByText(/download/i)
-					.evaluate((node: HTMLButtonElement) => {
-						node.style.display = 'none';
-					});
+					// hidde Download button
+					await page
+						.getByText(/download/i)
+						.evaluate((node: HTMLButtonElement) => {
+							node.style.display = 'none';
+						});
 
-				// hidde Start Reading button
-				await page
-					.getByText(/start reading/i)
-					.evaluate((node: HTMLButtonElement) => {
-						node.style.display = 'none';
-					});
-			} else {
-				await page.addStyleTag({ content: styleTagContent });
-			}
+					// hidde Start Reading button
+					await page
+						.getByText(/start reading/i)
+						.evaluate((node: HTMLButtonElement) => {
+							node.style.display = 'none';
+						});
+				} else {
+					await page.addStyleTag({ content: styleTagContent });
+				}
 
-			await page.waitForTimeout(1500);
-			return page.pdf(opt);
-		}),
-	);
+				await page.waitForTimeout(1500);
+				return page.pdf(opt);
+			}),
+		);
+
+	const pdfList = await processPdfList(pageList);
+	const pdfSpanishList = await processPdfList(pageListSpanish);
 
 	const merged = await merge(pdfList);
 	fs.writeFileSync('public/gentleman-programming-book.pdf', merged);
+
+	const mergedSpanish = await merge(pdfSpanishList);
+	fs.writeFileSync(
+		'public/es/gentleman-programming-book-es.pdf',
+		mergedSpanish,
+	);
 
 	await browser.close();
 
