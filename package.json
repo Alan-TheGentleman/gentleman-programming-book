@@ -24,7 +24,7 @@
 		"merge-pdf-buffers": "1.0.3",
 		"next": "13.3.4",
 		"next-mdx-remote": "4.4.1",
-		"playwright": "1.33.0",
+		"playwright": "^1.44.0",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-icons": "4.8.0",
