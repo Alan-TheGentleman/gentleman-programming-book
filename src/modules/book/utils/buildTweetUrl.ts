@@ -16,5 +16,5 @@ export const buildTweetUrl = (quote: string) => {
 	const pageUrl = encodeURIComponent(window.location.href);
 	const tweet = buildTweet(pageUrl, quote);
 
-	return `https://twitter.com/intent/tweet?url=${pageUrl}&text=${tweet}&via=alan_buscaglia`;
+	return `https://twitter.com/intent/tweet?url=${pageUrl}&text=${tweet}&via=G_Programming`;
 };
