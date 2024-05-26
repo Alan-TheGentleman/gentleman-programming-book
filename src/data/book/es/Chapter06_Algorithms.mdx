@@ -738,7 +738,7 @@ function findCrystalBall(altura: number[]): number {
 El problema con esta solución es que no se puede optimizar para que funcione en
 cualquier caso, ya que la búsqueda lineal busca en cada posición del arreglo y
 así sucesivamente, lo que significa que si el arreglo tiene muchos elementos, el
-tiempo de ejecución será muy grande.
+tiempo de ejecución será muy grande. 
 
 Así que vamos a buscar una solución más eficiente.
 
@@ -766,11 +766,12 @@ function findCrystalBall(altura: number[]): number {
 
 Funciona ? la verdad que no ! porque no estamos encontrando el momento justo en
 el que las bolas se encuentran, sino que estamos retornando el primer true que
-encontramos en vez del primero de todos. Además de esto, el tiempo de ejecución
-se mantiene linear con el tamaño del arreglo. Ya que el peor de los casos
-haremos 1/2 de la altura y si encontramos un true, tendremos que volver a la
-posición anterior y buscar cual es el punto de quiebre lo cual sigue siendo
-O(N).
+encontramos en vez del primero de todos. 
+Además de esto, si sumamos la condición de que una vez que una de las bolas se rompa, 
+ya no podrá volver a utilizarse, el tiempo de ejecución se mantendrá linear con el 
+tamaño del arreglo. Ya que el peor de los casos haremos 1/2 de la altura y si 
+encontramos un true, tendremos que volver a la posición anterior y buscar cual es el 
+punto de quiebre lo cual sigue siendo O().
 
 Asi que vamos a combinar todo lo que aprendimos hasta ahora para implementar una
 solucion increible y mucho más eficiente:
@@ -829,7 +830,7 @@ function findCrystalBall(altura: number[]): number {
 }
 ```
 
-Aunque las dos soluciones funcionan y parecen efectivas, la búsqueda binaria es
+Aunque las dos soluciones funcionan y parecen efectivas, la búsqueda linear es
 más eficiente !
 
 - N = 1000 pasos

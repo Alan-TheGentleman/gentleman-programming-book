@@ -727,7 +727,7 @@ function findCrystalBall(height: number[]): number {
 }
 ```
 
-Does it work? Not really! We're not finding the exact moment the balls meet, but rather returning the first true we find instead of the very first one. Additionally, the execution time remains linear with the size of the array. In the worst case, we will explore half the height, and if we find a true, we need to go back to the previous position and locate the exact breaking point, which remains O(N).
+Does it work? The truth is, no! Because we're not finding the exact moment when the balls meet. Instead, we're returning the first true we find, rather than the very first one. Additionally, if we consider the condition that once a ball breaks, it cannot be used again, the execution time remains linear with the size of the array. In the worst case, we will search through half the height, and if we find a true, we will need to go back to the previous position and determine the exact breaking point, which still results in O(N) complexity.
 
 So let's combine everything we've learned to implement a more incredible and much more efficient solution:
 
