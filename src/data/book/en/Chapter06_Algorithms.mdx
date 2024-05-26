@@ -665,3 +665,129 @@ And whit this example you will see, clear as the light that guide us in the dark
 // do you know what is the logarithm of 1024 in base 2? it's 10 !!
 log2(1024) = 10
 ```
+
+### Exercise of the Crystal Ball
+
+The crystal ball problem is a classic mathematical issue that is often tackled in programming interviews. It involves finding the position where two crystal balls meet and shatter when dropped from a certain height. The key here isn’t to know about the crystal balls, their falling from a height, or any other detail; we need to grasp the fundamentals and generalize to make it applicable in any scenario. If we can accomplish this, we can represent the height as an array of n elements, where 0 is the start of the fall, n is the maximum height, and the index is the place where the balls collide.
+
+```typescript
+// f = not found, t = found or previously encountered
+const height = [f, f, f, f, f, f, t, t, t, t, t];
+//             start              collision        end of the fall
+```
+
+#### Solution
+
+Let’s review the tools we already have to solve this problem:
+
+- **Arrays**: Arrays are data structures containing a set of elements of the same type. In this case, the heights of the balls.
+- **Loop**: Loop is a control structure that allows repeating a section of code a number of times. In this case, the number of repetitions is the number of elements in the array.
+- **If**: If is a control structure that allows executing a section of code if a condition is true. In this scenario, the condition is whether the element in the array is true or false.
+- Linear Search: Linear Search is a searching technique in which an element is searched sequentially in an array by checking each position of the array consecutively.
+- Binary Search: Binary Search is a searching technique in which an element is searched in an array by dividing the array into two parts and searching for the element in the part that most fits what we are looking for and so forth.
+
+```typescript
+// Linear search
+const height = [f, f, f, f, f, f, t, t, t, t, t];
+
+function findCrystalBall(height: number[]): number {
+  for (let i = 0; i < height.length; i++) {
+    if (height[i] === true) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+```
+
+The issue with this solution is that it cannot be optimized to work in every case, as linear search checks each position of the array consecutively, meaning if the array has many elements, the execution time will be very long.
+
+So, let’s look for a more efficient solution.
+
+```typescript
+// Binary search
+function findCrystalBall(height: number[]): number {
+  let start = 0;
+  let end = height.length - 1;
+
+  while (start <= end) {
+    const index = Math.floor((start + end) / 2);
+
+    if (height[index] === true) {
+      return index;
+    } else if (height[index] === false) {
+      start = index + 1;
+    } else {
+      end = index - 1;
+    }
+  }
+
+  return -1;
+}
+```
+
+Does it work? Not really! We're not finding the exact moment the balls meet, but rather returning the first true we find instead of the very first one. Additionally, the execution time remains linear with the size of the array. In the worst case, we will explore half the height, and if we find a true, we need to go back to the previous position and locate the exact breaking point, which remains O(N).
+
+So let's combine everything we've learned to implement a more incredible and much more efficient solution:
+
+1- We will reduce the size of the section cut so that instead of half the array, it is the square root of N, which significantly reduces the execution time.
+
+2- Once we find the first true, we will return to the point where the section cut begins (SQRT(N)) and search for the first true found linearly.
+
+```typescript
+function findCrystalBall(height: number[]): number {
+  const N = height.length;
+  const SQRT = Math.floor(Math.sqrt(N));
+
+  // Now we will reduce the size of the section cut so that instead of half the array, it is the square root of N
+  // and we traverse it linearly, the square root of N at a time
+  let i = SQRT;
+
+  for (; i < N; i += SQRT) {
+    if (height[i] === true) {
+      break;
+    }
+  }
+
+  i -= SQRT;
+
+  for (let j = 0; j < SQRT && i < N; i++, j++) {
+    if (height[i] === true) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+// Binary search
+function findCrystalBall(height: number[]): number {
+  let start = 0;
+  let end = height.length - 1;
+
+  while (start <= end
+
+) {
+    const index = Math.floor((start + end) / 2);
+
+    // check if the value at the mid position is 'true' and
+    // if it is the first 'true' in the array (the previous element must be 'false' if index is not 0)
+    if (height[index] === true)
+      if (index === 0 || height[index - 1] === false) return index;
+      else end = index - 1;
+    else start = index + 1;
+  }
+
+  return -1;
+}
+```
+
+While both solutions work and seem effective, binary search is more efficient!
+
+- N = 1000 steps
+- SQRT(N) = 100 steps
+- log2(N) = 10 steps
+
+
+![crystal-ball-algorithms](/algorithms/Crystal-Ball.svg 'crystal-ball-algorithms')

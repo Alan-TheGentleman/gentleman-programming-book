@@ -682,3 +682,158 @@ Y con este ejemplo verás, claro como una luz que nos guia en las noches más os
 // ¿sabes cuál es el logaritmo de 1024 en base 2? ¡es 10!
 log2(1024) = 10
 ```
+
+### Ejercicio de la bola de cristal
+
+El problema de la bola cristal es un problema matemático clásico que se toma en
+entrevistas de programción. Se trata de encontrar la posición en la que dos
+bolas cristales se encuentran y se rompen al caer de una determinada altura. Lo
+importante aquí no es saber que son bolas de cristal, de que caen de una altura
+o cualquier otro detalle, tenemos que entender las bases y generalizar para que
+funcione en cualquier caso. Si realizamos esta tarea, podremos decir que la
+altura en verdad es un arreglo de n elementos, siendo 0 el inicio de la caida, n
+la altura máxima y index el lugar donde chocan las bolas.
+
+```typescript
+// f = no se encuentran, t = se encuentran o se han encontrado previamente
+const altura = [f, f, f, f, f, f, t, t, t, t, t];
+//             inicio            choque        fin de la caida
+```
+
+#### Solución
+
+Veamos las herramientas que ya disponemos de para resolver este problema:
+
+- **Arrays**: Arrays son una estructura de datos que contiene un conjunto de
+  elementos de un mismo tipo. En este caso, la altura de las bolas.
+- **Loop**: Loop es una estructura de control que permite repetir una sección de
+  código un número de veces. En este caso, el número de veces que se deben
+  repetir es el número de elementos en el arreglo.
+- **If**: If es una estructura de control que permite ejecutar una sección de
+  código si una condición es verdadera. En este caso, la condición es si el
+  elemento en el arreglo es verdadero o falso.
+- Linear Search: Linear Search es una técnica de búsqueda en el que se busca un
+  elemento en un arreglo mediante la búsqueda lineal, buscando el elemento en
+  cada posición del arreglo y así sucesivamente.
+- Binary Search: Binary Search es una técnica de búsqueda en el que se busca un
+  elemento en un arreglo mediante la búsqueda binaria, particionando .el arreglo
+  en dos partes y buscando el elemento en la parte qué más se adecúe a lo que
+  estamos buscando y así sucesivamente.
+
+```typescript
+// Búsqueda lineal
+const altura = [f, f, f, f, f, f, t, t, t, t, t];
+
+function findCrystalBall(altura: number[]): number {
+  for (let i = 0; i < altura.length; i++) {
+    if (altura[i] === true) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+```
+
+El problema con esta solución es que no se puede optimizar para que funcione en
+cualquier caso, ya que la búsqueda lineal busca en cada posición del arreglo y
+así sucesivamente, lo que significa que si el arreglo tiene muchos elementos, el
+tiempo de ejecución será muy grande.
+
+Así que vamos a buscar una solución más eficiente.
+
+```typescript
+// Búsqueda binaria
+function findCrystalBall(altura: number[]): number {
+  let inicio = 0;
+  let fin = altura.length - 1;
+
+  while (inicio <= fin) {
+    const index = Math.floor((inicio + fin) / 2);
+
+    if (altura[index] === true) {
+      return index;
+    } else if (altura[index] === false) {
+      inicio = index + 1;
+    } else {
+      fin = index - 1;
+    }
+  }
+
+  return -1;
+}
+```
+
+Funciona ? la verdad que no ! porque no estamos encontrando el momento justo en
+el que las bolas se encuentran, sino que estamos retornando el primer true que
+encontramos en vez del primero de todos. Además de esto, el tiempo de ejecución
+se mantiene linear con el tamaño del arreglo. Ya que el peor de los casos
+haremos 1/2 de la altura y si encontramos un true, tendremos que volver a la
+posición anterior y buscar cual es el punto de quiebre lo cual sigue siendo
+O(N).
+
+Asi que vamos a combinar todo lo que aprendimos hasta ahora para implementar una
+solucion increible y mucho más eficiente:
+
+1- Vamos a reducir el tamaño del corte para que en vez de la mitad del arreglo,
+sea la raiz de N, y de esta manera se reduce considerablemente el tiempo de
+ejecución.
+
+2- Una vez que encontremos el primer true, vamos a volver al punto donde empieza
+la sección de corte SQRT()N) y buscamos el primer true que se encuentre de
+manera LINEAR.
+
+```typescript
+function findCrystalBall(altura: number[]): number {
+  const N = altura.length;
+  const SQRT = Math.floor(Math.sqrt(N));
+
+  // ahora vamos a reducir el tamaño del corte para que en vez de la mitad del arreglo, sea la raiz de N
+  // y lo recorremos de manera LINEAR, raiz de N cada vez
+  let i = SQRT;
+
+  for (; i < N; i += SQRT) {
+    if (altura[i] === true) {
+      break;
+    }
+  }
+
+  i -= SQRT;
+
+  for (let j = 0; j < SQRT && i < N; i++, j++) {
+    if (altura[i] === true) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+// Búsqueda binaria
+function findCrystalBall(altura: number[]): number {
+  let inicio = 0;
+  let fin = altura.length - 1;
+
+  while (inicio <= fin) {
+    const index = Math.floor((inicio + fin) / 2);
+
+    // comprueba si el valor en la posicíon media es 'true' y
+    // si es el primer 'true' del arreglo (el elemento anterior debe ser 'false' si index no es 0)
+    if (altura[index] === true)
+      if (index === 0 || altura[index - 1] === false) return index;
+      else fin = index - 1;
+    else inicio = index + 1;
+  }
+
+  return -1;
+}
+```
+
+Aunque las dos soluciones funcionan y parecen efectivas, la búsqueda binaria es
+más eficiente !
+
+- N = 1000 pasos
+- SQRT(N) = 100 pasos
+- log2(N) = 10 pasos
+
+![crystal-ball-algorithms](/algorithms/Crystal-Ball.svg 'crystal-ball-algorithms')
