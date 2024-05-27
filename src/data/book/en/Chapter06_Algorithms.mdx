@@ -23,6 +23,8 @@ titleList:
     tagId: 'linear-search'
   - name: 'Binary Search'
     tagId: 'binary-search'
+  - name: 'Bubble Sort'
+    tagId: 'bubble-sort'
 ---
 
 # Algorithms the Gentleman Way
@@ -791,3 +793,115 @@ While both solutions work and seem effective, binary search is more efficient!
 
 
 ![crystal-ball-algorithms](/algorithms/Crystal-Ball.svg 'crystal-ball-algorithms')
+
+## Bubble Sort
+
+Sorting is one of the most common tasks we perform daily as programmers, BUT many people don't really understand what's happening behind the scenes and rely on the famous "magic" functions that are part of every programming language.
+
+Believe it or not, sorting is one of the easiest things we can do! And the best part is that it's also one of the shortest algorithms to write.
+
+The main idea of bubble sort is that it iterates over an array, comparing each element with the next one. If the current element is greater than the next, they are swapped. What's important to note is that at the end of the first iteration, the largest element will have bubbled up to the end of the array. This allows us to iterate through the array again to continue sorting the remaining elements more efficiently, as we can exclude the last element from the previous iteration and so reduce the number of elements to be considered with each pass until the array is sorted.
+
+```typescript
+let unsortedArray = [3, 1, 4, 8, 2];
+
+// first iteration
+// compare the first with the second and swap them
+unsortedArray = [1, 3, 4, 8, 2];
+// compare the second with the third and leave them
+unsortedArray = [1, 3, 4, 8, 2];
+// compare the third with the fourth and leave them
+unsortedArray = [1, 3, 4, 8, 2];
+// compare the fourth with the fifth and swap them
+unsortedArray = [1, 3, 4, 2, 8]; // the largest number, 8, ends up at the end
+
+// second iteration excluding the 8 and iterate again
+
+// compare the first with the second and leave them
+unsortedArray = [1, 3, 4, 2];
+// compare the second with the third and leave them
+unsortedArray = [1, 3, 4, 2];
+// compare the third with the fourth and swap them
+unsortedArray = [1, 3, 2, 4]; // the next largest number, 4, ends up at the end
+
+// third iteration excluding the 4 and iterate again
+
+// compare the first with the second and leave them
+unsortedArray = [1, 3, 2];
+// compare the second with the third and swap them
+unsortedary = [1, 2, 3]; // the next number, 3, ends up at the end
+
+// fourth iteration excluding the 3 and iterate again
+
+// compare the first with the second and leave them
+unsortedArray = [1, 2]; // END
+```
+
+If we look closely, we can discern a hidden pattern in the code; after each iteration, the result is N - i, where N is the size of the array and i is the number of iterations we have performed so far.
+
+```typescript
+const unsortedArray = [3, 1, 4, 8, 2];
+
+// first iteration N - i = 4
+// result of the first iteration = [1, 3, 4, 2]
+
+// second iteration N - i = 3
+// result of the second iteration = [1, 3, 2]
+
+// third iteration N - i = 2
+// result of the third iteration = [1, 2]
+```
+
+If we generalize the pattern, we can say that the final result would be N - N + 1 because the generalized way to calculate the sum of elements in an array is: ((N + 1) * N) / 2
+
+```typescript
+Sum between 1 and 10 is 11
+Sum between 2 and 9 is 11
+Sum between 3 and 8 is 11
+Sum between 4 and 7 is 11
+.
+.
+.
+Sum between 5 and 6 is 11
+So, we can say that with N being 5 and N + 1 being 6, the final result would be
+(6 + 1) * 5 / 2 = 11
+
+Now, if we generalize the pattern within Big O notation, we can say that:
+
+1- N (N + 1) / 2
+2- N (N + 1) // removing constants elevating everything to 2
+3- N^2 + N
+// in Big O, we remove less significant values, if we're talking about VERY large numbers,
+// + N is VERY small in comparison
+4- N^2
+
+Thus, it remains O(N^2) in Big O notation
+```
+
+### Code
+
+```typescript
+function bubbleSort(array: number[]): number[] {
+  // define the size of the array
+  const N = array.length;
+
+  // iterate over the array
+
+
+  for (let i = 0; i < N; i++) {
+    // iterate over the array
+    for (let j = 0; j < N - 1 - i; j++) {
+      if (array[j] > array[j + 1]) {
+        // if it is greater, swap the elements
+        const temp = array[j];
+
+        // swap the element with the next one
+        array[j] = array[j + 1];
+        array[j + 1] = temp;
+      }
+    }
+  }
+
+  return array;
+}
+```
