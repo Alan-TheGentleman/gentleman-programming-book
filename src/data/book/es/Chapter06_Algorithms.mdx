@@ -23,6 +23,8 @@ titleList:
     tagId: 'búsqueda-lineal'
   - name: 'Búsqueda Binaria'
     tagId: 'búsqueda-binaria'
+  - name: 'Bubble Sort'
+    tagId: 'bubble-sort'
 ---
 
 # Algoritmos a la Manera Caballerosa
@@ -838,3 +840,129 @@ más eficiente !
 - log2(N) = 10 pasos
 
 ![crystal-ball-algorithms](/algorithms/Crystal-Ball.svg 'crystal-ball-algorithms')
+
+
+## Bubble Sort
+
+Sorting es una de las cosas que más hacemos en el día a día como programadores,
+PERO, mucha gente no sabe lo que realmente pasa y depende de las famosas
+funciones mágicas que son parte de todos los lenguajes de programación.
+
+Aunque no lo crean, hacer sorting es una de las cosas más fáciles que podemos
+hacer ! y lo mejor es que es también uno de los algoritmos más cortos a
+escribir.
+
+La idea principal del sorting por el método de burbujeo es que se recorrerá un
+arreglo, comparando cada elemento con el próximo, si el elemento es mayor que el
+próximo, se intercambiarán lugares. Lo importante a saber es que al final de la
+primera iteración, el elemento más grande se encontrará en el final del arreglo.
+Esto nos permite volver a iterar el arreglo para seguir ordenando el resto de
+elementos pero de una manera más eficiente, ya que no debemos incluir el último
+elemento del resultado de la anterior iteración y así se irá reduciendo la
+cantidad de elmentos ante cada pasada hasta que el arreglo sea ordenado.
+
+```typescript
+cont unsortedArray = [3, 1, 4, 8, 2];
+
+// primera iteración
+// comparamos el primero con el segundo y los cambiamos
+cont unsortedArray = [1, 3, 4, 8, 2];
+// comparamos el segundo con el tercero y los dejamos
+cont unsortedArray = [1, 3, 4, 8, 2];
+// comparamos el tercero con el cuarto y los dejamos
+cont unsortedArray = [1, 3, 4, 8, 2];
+// comparamos el cuarto con el quinto y los cambiamos
+cont unsortedArray = [1, 3, 4, 2, 8]; // queda el 8 al final, el número más grande
+
+// segunda iteración donde excluimos el 8 y volvemos a iterar
+
+// comparamos el primero con el segundo y los dejamos
+cont unsortedArray = [1, 3, 4, 2];
+// comparamos el segundo con el tercero y los dejamos
+cont unsortedArray = [1, 3, 4, 2];
+// comparamos el tercero con el cuarto y los cambiamos
+cont unsortedArray = [1, 3, 2, 4]; // el 4 queda al final, el número más grande
+
+// tercera iteración donde excluimos el 4 y volvemos a iterar
+
+// comparamos el primero con el segundo y los dejamos
+cont unsortedArray = [1, 3, 2];
+// comparamos el segundo con el tercero y los cambiamos
+cont unsortedArray = [1, 2, 3]; // el 3 queda al final, el número más grande
+
+// cuarta iteración donde excluimos el 3 y volvemos a iterar
+
+// comparamos el primero con el segundo y los dejamos
+cont unsortedArray = [1, 2]; // FIN
+```
+
+Si nos fijamos podemos descubrir un patrón encubierto en el código, ante cada
+iteración el resultado es N - i, donde N es el tamaño del arreglo y i es el
+número de iteraciones que hemos realizado hasta ahora.
+
+```typescript
+const unsortedArray = [3, 1, 4, 8, 2];
+
+// primera iteración N - i = 4
+// resultado de la primera iteración = [1, 3, 4, 2]
+
+// segunda iteración N - i = 3
+// resultado de la segunda iteración = [1, 3, 2 ]
+
+// tercera iteración N - i = 2
+// resultado de la tercera iteración = [1, 2]
+```
+
+Si generalizamos el patrón, podemos decir que el resultado final sería N - N + 1
+ya que la forma generalizada de calcular la sumatoria de elementos de un arreglo
+es: ((N + 1) \* N) / 2
+
+```typescript
+Sumatoria entre 1 y 10 es 11
+Sumatoria entre 2 y 9 es 11
+Sumatoria entre 3 y 8 es 11
+Sumatoria entre 4 y 7 es 11
+.
+.
+.
+Sumatoria entre 5 y 6 es 11
+Por lo que podemos decir que N siendo 5 y N + 1 siendo 6 el resultado final sería
+(6 + 1) \* 5 / 2 = 11
+
+Ahora si generalizamos el patrón dentro de la Big O, podemos decir que:
+
+1- N (N + 1) / 2
+2- N (N + 1) // eliminamos constantes elevando todo a 2
+3- N^2 + N
+// en Big O removemos valores insignificantes, si hablamos de números MUY grandes,
+// + N es un MUY chico en comparación
+4- N^2
+
+Quedando O (N^2) en Big O
+```
+
+### Código
+
+```typescript
+function bubbleSort(array: number[]): number[] {
+  // definimos el tamaño del arreglo
+  const N = array.length;
+
+  // iteramos sobre el arreglo
+  for (let i = 0; i < N; i++) {
+    // iteramos sobre el arreglo
+    for (let j = 0; j < N - 1 - i; j++) {
+      if (array[j] > array[j + 1]) {
+        // si es mayor, cambiamos el elemento
+        const temp = array[j];
+
+        // cambiamos el elemento con el siguiente
+        array[j] = array[j + 1];
+        array[j + 1] = temp;
+      }
+    }
+  }
+
+  return array;
+}
+```
