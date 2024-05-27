@@ -119,7 +119,7 @@ La idea principal es que queremos evitar los algoritmos de tiempo exponencial y 
 
 ### Ejemplos usando código 
 
-### O(1) - Tiempo constante
+#### O(1) - Tiempo constante
 
 ```typescript
   function sayHi(n: string):  string{
@@ -134,7 +134,7 @@ Aquí está por qué es O(1):
 
 Por lo tanto, la complejidad temporal del algoritmo es O(1) en todos los casos.
 
-### O(log N) - Tiempo logarítmico
+#### O(log N) - Tiempo logarítmico
 
 ```typescript
   // teniendo el siguiente array que representa los números del 0 al 9 en orden
@@ -180,7 +180,7 @@ Aquí está por qué es O(log N):
 
 Por lo tanto, la complejidad temporal de la búsqueda binaria es O(log N) en promedio.
 
-### O(N) - Tiempo lineal
+#### O(N) - Tiempo lineal
 
 ```typescript
   function sum(n: number): number {
@@ -200,7 +200,7 @@ Aquí está por qué es O(N):
 
 Por lo tanto, la complejidad temporal del algoritmo es O(N) en el peor de los casos.
 
-### O(N log N) - Tiempo linealítmico
+#### O(N log N) - Tiempo linealítmico
 
 ```typescript
   // teniendo el siguiente array
@@ -240,7 +240,7 @@ Aquí está por qué es O(N log N):
 * El algoritmo divide el array en dos subarrays basados en un elemento pivote y ordena recursivamente estos subarrays.
 * Cada paso de particionamiento implica iterar sobre todo el array una vez, lo que lleva un tiempo O(N). Sin embargo, el array suele dividirse de tal manera que el tamaño de los subarrays se reduce con cada llamada recursiva. Esto resulta en una complejidad temporal de O(N log N) en promedio.
 
-#### O(N^2) - Tiempo cuadrático
+### O(N^2) - Tiempo cuadrático
 
 ```typescript
   // Dado el siguiente arreglo
@@ -276,7 +276,7 @@ Aquí está por qué es O(N^2):
 * Esto resulta en un total de N * (N-1) comparaciones e intercambios, lo que se simplifica a O(N^2) en términos de complejidad temporal.
 
 
-#### O(2^N) - Tiempo exponencial
+### O(2^N) - Tiempo exponencial
 
 ```typescript
   // Queremos calcular el enésimo número de Fibonacci usando un algoritmo recursivo
@@ -301,7 +301,7 @@ Aquí está por qué es O(2^N):
 
 Por lo tanto, la complejidad temporal del algoritmo es O(2^N) en el peor de los casos.
 
-#### O(N!) - Tiempo factorial
+### O(N!) - Tiempo factorial
 ```typescript
   // Dado el siguiente arreglo
   const arr = [1, 2, 3];
