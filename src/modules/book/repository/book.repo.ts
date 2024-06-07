@@ -43,6 +43,7 @@ function readChapter(chapterId: string, locale: string) {
 			}),
 		};
 	} catch (error) {
+		console.log(error);
 		throw new Error(`Chapter ${chapterId} not found`);
 	}
 }

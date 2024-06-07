@@ -23,6 +23,7 @@ export default async function handler(
 		'http://localhost:3000/book/Chapter05_NVIM',
 		'http://localhost:3000/book/Chapter06_Algorithms',
 		'http://localhost:3000/book/Chapter07_Clean_Architecture',
+		'http://localhost:3000/book/Chapter08_Clean_Architecture_Front_End',
 	];
 
 	const pageListSpanish = [
@@ -34,6 +35,7 @@ export default async function handler(
 		'http://localhost:3000/es/book/Chapter05_NVIM',
 		'http://localhost:3000/es/book/Chapter06_Algorithms',
 		'http://localhost:3000/es/book/Chapter07_Clean_Architecture',
+		'http://localhost:3000/es/book/Chapter08_Clean_Architecture_Front_End',
 	];
 
 	const browser = await P.chromium.launch({ headless: true });

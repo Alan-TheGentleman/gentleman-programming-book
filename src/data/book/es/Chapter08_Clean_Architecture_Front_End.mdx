@@ -1,0 +1,522 @@
+---
+id: 'aplicación-de-clean-architecture-en-el-front-end'
+order: 8
+name: 'Aplicación de Clean Architecture en el Front End'
+titleList:
+  - name: 'Conceptos Clave de Clean Architecture'
+    tagId: 'conceptos-clave-de-clean-architecture'
+  - name: 'Ejemplo'
+    tagId: 'ejemplo'
+  - name: 'Estructura Propuesta para la Aplicación Bancaria'
+    tagId: 'estructura-propuesta-para-la-aplicación-bancaria'
+  - name: 'Dominio (Entities Models y Business Rules)'
+    tagId: 'dominio-entities-models-y-business-rules'
+  - name: 'Casos de Uso (Use Cases)'
+    tagId: 'casos-de-uso-use-cases'
+  - name: 'Adaptadores (Interface Adapters)'
+    tagId: 'adaptadores-interface-adapters'
+  - name: 'Frameworks y Drivers'
+    tagId: 'frameworks-y-drivers'
+  - name: 'Enfoque Orgánico de la Estructura de Carpetas'
+    tagId: 'enfoque-orgánico-de-la-estructura-de-carpetas'
+  - name: 'Introducción a la Regla del Alcance'
+    tagId: 'introducción-a-la-regla-del-alcance'
+  - name: 'Aplicando Clean Architecture con la Regla del Alcance'
+    tagId: 'aplicando-clean-architecture-con-la-regla-del-alcance'
+  - name: 'Estructura Modular por Funcionalidad'
+    tagId: 'estructura-modular-por-funcionalidad'
+  - name: 'Componente Contenedor'
+    tagId: 'componente-contenedor'
+  - name: 'Componentes Específicos de Funcionalidad'
+    tagId: 'componentes-específicos-de-funcionalidad'
+  - name: 'Servicios y Adaptadores'
+    tagId: 'servicios-y-adaptadores'
+  - name: 'Conclusión de la Implementación'
+    tagId: 'conclusión-de-la-implementación'
+  - name: '¿Qué es el Patrón Contenedor?'
+    tagId: 'qué-es-el-patrón-contenedor'
+  - name: 'Estructura del Patrón Contenedor'
+    tagId: 'estructura-del-patrón-contenedor'
+  - name: 'Funcionamiento del Patrón Contenedor'
+    tagId: 'funcionamiento-del-patrón-contenedor'
+  - name: 'Beneficios del Patrón Contenedor'
+    tagId: 'beneficios-del-patrón-contenedor'
+  - name: 'Ejemplo con todo lo aprendido'
+    tagId: 'ejemplo-con-todo-lo-aprendido'
+  - name: 'Ejemplo de Estructura de Carpeta para una Aplicación de Comercio Electrónico'
+    tagId: 'ejemplo-de-estructura-de-carpeta-para-una-aplicación-de-comercio-electrónico'
+  - name: 'Detalle de Implementación'
+    tagId: 'detalle-de-implementación'
+  - name: 'Beneficios de esta Estructura'
+    tagId: 'beneficios-de-esta-estructura'
+---
+
+# Aplicación de Clean Architecture en el Front End
+
+¡Buenas, gente! Hoy vamos a charlar sobre cómo llevar la Clean Architecture al
+front end, pero con un giro especial. Vamos a ver cómo podemos hacerlo de una
+manera más orgánica y flexible, sin estructuras de carpetas demasiado rígidas, y
+cómo la regla del alcance juega un papel fundamental en todo esto. ¡Acompáñenme
+en este recorrido por un enfoque más natural y adaptable!
+
+## Conceptos Clave de Clean Architecture
+
+La idea detrás de la Clean Architecture es desacoplar el software de las
+tecnologías de UI, bases de datos, y cualquier otro elemento externo,
+concentrándonos en la lógica de negocio pura. Esto se logra mediante capas que
+separan responsabilidades claramente:
+
+- Dominio: Aquí definimos nuestras entidades y reglas de negocio que son
+  completamente independientes de la interfaz de usuario y tecnologías externas.
+  Son los conceptos fundamentales sobre los que se construye la aplicación.
+
+- Casos de Uso: Se encargan de implementar la lógica de negocio necesaria
+  para cumplir con los requisitos funcionales del sistema. Operan sobre el
+  modelo de dominio y utilizan adaptadores para comunicarse con la capa de
+  infraestructura.
+
+- Adaptadores: Conectan los casos de uso con el mundo externo, ya sea
+  presentando datos al usuario o comunicándose con una base de datos.
+
+- Frameworks y Drivers: Esta es la capa más externa, donde interactuamos
+  directamente con frameworks específicos y bibliotecas.
+
+### Ejemplo
+
+Para el ejemplo de una aplicación bancaria donde el requerimiento de negocio es
+que solo se pueden registrar personas mayores de 18 años, vamos a diseñar una
+estructura siguiendo los principios de la Clean Architecture. Esta estructura
+asegurará que las reglas de negocio, como la restricción de edad, estén
+claramente definidas y desacopladas de la interfaz de usuario y otros
+componentes externos.
+
+### Estructura Propuesta para la Aplicación Bancaria
+
+Imaginemos cómo podríamos organizar nuestro proyecto en las capas sugeridas por
+la Clean Architecture:
+
+#### Dominio (Entities Models y Business Rules)
+
+Aquí se define el modelo de `User` que incluye atributos como nombre, fecha de
+nacimiento, dirección, etc. Además, en esta capa residirán las reglas de
+negocio, como la verificación de la mayoría de edad.
+
+- User.js
+
+  ```javascript
+  class User {
+    constructor(name, dateOfBirth) {
+      this.name = name;
+      this.dateOfBirth = dateOfBirth;
+    }
+
+    isAdult() {
+      const today = new Date();
+      const age = today.getFullYear() - this.dateOfBirth.getFullYear();
+      return age >= 18;
+    }
+  }
+  ```
+
+- UserBusinessRules.js
+
+  ```javascript
+  function validateUser(user) {
+    return user.isAdult();
+  }
+  ```
+
+#### Casos de Uso (Use Cases)
+
+Esta capa contiene la lógica específica que implementa los requisitos
+funcionales, utilizando las entidades del dominio. En nuestro caso, un caso de
+uso sería "Registrar Usuario".
+
+- RegisterUser.js
+
+  ```javascript
+  class RegisterUser {
+    constructor(userRepository, user) {
+      this.userRepository = userRepository;
+      this.user = user;
+    }
+
+    execute() {
+      if (validateUser(this.user)) {
+        this.userRepository.add(this.user);
+        return true;
+      } else {
+        throw new Error("User must be at least 18 years old");
+      }
+    }
+  }
+  ```
+
+#### Adaptadores (Interface Adapters)
+
+Estos adaptadores incluirán controladores y presentadores que interactúan con la
+capa de dominio y transforman datos para la UI o para servicios externos.
+
+- UserAdapter.js
+
+  ```javascript
+  class UserAdapter {
+    static toDTO(user) {
+      return {
+        name: user.name,
+        dateOfBirth: user.dateOfBirth.toISOString().split("T")[0],
+      };
+    }
+  }
+  ```
+
+#### Frameworks y Drivers
+
+Aquí es donde se implementan detalles específicos de tecnología como componentes
+React para la UI, la configuración de rutas, y servicios que interactúan con
+bases de datos o APIs externas.
+
+- UserComponent.js (React Component)
+
+  ```javascript
+  import React, { useState } from "react";
+
+  function UserComponent({ onSubmit }) {
+    const [name, setName] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState("");
+
+    const handleSubmit = () => {
+      const user = new User(name, new Date(dateOfBirth));
+      onSubmit(user);
+    };
+
+    return (
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="date"
+          value={dateOfBirth}
+          onChange={(e) => setDateOfBirth(e.target.value)}
+        />
+        <button type="submit">Register</button>
+      </form>
+    );
+  }
+  ```
+
+- App.js (Setting up the application)
+
+  ```javascript
+  import React from "react";
+  import UserComponent from "./UserComponent";
+  import UserRepository from "./UserRepository";
+
+  function App() {
+    const userRepository = new UserRepository();
+
+    const handleUserSubmit = (user) => {
+      try {
+        const registerUser = new RegisterUser(userRepository, user);
+        registerUser.execute();
+        alert("User registered successfully!");
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+
+    return <UserComponent onSubmit={handleUserSubmit} />;
+  }
+  ```
+
+### Enfoque Orgánico de la Estructura de Carpetas
+
+A diferencia de los enfoques tradicionales que estructuran las carpetas de
+manera muy rígida desde el principio, prefiero un enfoque más orgánico. La idea
+es permitir que la estructura del proyecto evolucione naturalmente a medida que
+crece y cambian los requisitos. No me gusta sobreestructurar las carpetas porque
+creo que la estructura debería surgir de las necesidades del proyecto y del
+equipo, no al revés.
+
+## Introducción a la Regla del Alcance
+
+La regla del alcance es esencial en este enfoque orgánico. Define cómo
+organizamos y reutilizamos componentes basados en su visibilidad y uso dentro de
+la aplicación:
+
+- Componentes en Root: Estos son componentes y servicios que son accesibles
+  y reutilizables a través de toda la aplicación. Por ejemplo, componentes de UI
+  genéricos o servicios de autenticación que son necesarios en múltiples partes
+  del sistema.
+
+- Componentes en Funcionalidades Específicas: Localizados en contenedores o
+  módulos específicos, estos componentes solo se utilizan dentro de un contexto
+  o funcionalidad particular. Son perfectos para aplicar lazy loading, ya que
+  solo se cargan cuando se necesita la funcionalidad correspondiente.
+
+### Aplicando Clean Architecture con la Regla del Alcance
+
+Aquí está cómo podemos aplicar estos principios juntos para construir una
+aplicación de front end robusta y mantenible:
+
+1. Definir Claramente el Modelo de Dominio: Comenzamos definiendo nuestro
+   modelo de dominio de manera agnóstica, sin preocuparnos por la UI o la
+   infraestructura.
+
+2. Desarrollar Casos de Uso: Implementamos la lógica de negocio en forma de
+   casos de uso, que manipulan el modelo de dominio y se comunican con
+   adaptadores.
+
+3. Implementar Adaptadores de Forma Flexible: Utilizamos adaptadores para
+   conectar nuestros casos de uso con componentes específicos de la interfaz de
+   usuario y servicios externos. Aquí es donde aplicamos la regla del alcance
+   para decidir si un componente es global o específico de un módulo.
+
+4. Usar Lazy Loading para Mejorar el Rendimiento: Cargamos perezosamente
+   módulos o contenedores específicos de funcionalidades según sean necesitados,
+   lo cual es gestionado fácilmente mediante rutas en frameworks modernos como
+   React, Angular o Vue.
+
+Perfecto, vamos a expandir sobre cómo cada módulo o funcionalidad en el front
+end puede ser organizada para reflejar claramente su propósito y estructura
+interna, siguiendo la filosofía de la Clean Architecture y la regla del alcance
+que hemos discutido.
+
+### Estructura Modular por Funcionalidad
+
+En un enfoque de desarrollo front end basado en la Clean Architecture, cada
+característica o funcionalidad de la aplicación se organiza en su propia
+carpeta, nombrada exactamente igual que la característica que representa. Esta
+estructura no solo facilita la navegación a través del código y mejora la
+comprensión del mismo, sino que también encapsula la funcionalidad de manera
+efectiva.
+
+#### Componente Contenedor
+
+Dentro de cada carpeta de funcionalidad, se crea un componente principal que
+lleva el mismo nombre que la carpeta. Este componente actúa como un "contenedor"
+y tiene dos responsabilidades principales:
+
+1. Estructura de la Presentación: Define cómo se estructuran y visualizan
+   los componentes en la pantalla. Este contenedor determina el layout y la
+   composición visual de los componentes hijos que forman la interfaz de la
+   funcionalidad específica.
+
+2. Lógica de Negocios y Obtención de Datos: Integra la lógica de negocios
+   que es relevante para el layout, gestionando el estado necesario y realizando
+   las operaciones necesarias para obtener los datos de las entidades del
+   dominio. Esto incluye interactuar con los servicios para recuperar o enviar
+   datos a fuentes externas.
+
+#### Componentes Específicos de Funcionalidad
+
+Cada componente dentro de la carpeta de funcionalidad maneja su propia
+funcionalidad específica. Estos componentes están diseñados para ser lo más
+autónomos posible, interactuando con las entidades del dominio y aplicando las
+reglas de negocio pertinentes. Su diseño modular y bien definido facilita su
+reutilización y mantenimiento.
+
+#### Servicios y Adaptadores
+
+Los servicios son utilizados por los componentes para comunicarse con entidades
+externas, como backends o APIs. Estos servicios residen generalmente en su
+propia subcarpeta dentro del módulo de funcionalidad y son responsables de
+enviar y recibir datos desde y hacia el exterior.
+
+Los adaptadores, por otro lado, se encuentran también en una carpeta propia
+llamada `adapters` dentro del módulo. Su función es mapear los datos entre la
+forma esperada por los servicios externos y la forma utilizada por las entidades
+del dominio. Este mapeo bidireccional asegura que los datos se puedan
+intercambiar de manera fluida y coherente, respetando las abstracciones
+impuestas por la arquitectura.
+
+### Conclusión de la Implementación
+
+La organización de cada funcionalidad en su propio módulo, con un componente
+contenedor que gestiona la presentación y la lógica asociada, junto con
+componentes específicos que se encargan de detalles más granulares, crea un
+sistema altamente modular y escalable. Esta estructura no solo mejora la
+legibilidad y el mantenimiento del código, sino que también optimiza el
+rendimiento mediante técnicas como el lazy loading, cargando solo los módulos
+necesarios cuando son requeridos por el usuario.
+
+Implementar la Clean Architecture en el front end con este enfoque detallado y
+organizado prepara el terreno para aplicaciones robustas, mantenibles y
+adaptables, capaces de evolucionar y expandirse con las necesidades del negocio
+y del mercado.
+
+### ¿Qué es el Patrón Contenedor?
+
+El patrón contenedor, también conocido en algunos círculos como "Container
+Pattern", es una técnica de arquitectura de software que consiste en encapsular
+o agrupar varios elementos que están relacionados entre sí dentro de un mismo
+módulo o contenedor. Este contenedor actúa como un límite lógico que define la
+autonomía y la responsabilidad sobre una porción específica de la funcionalidad
+de la aplicación.
+
+### Estructura del Patrón Contenedor
+
+Imaginemos que estamos trabajando en una aplicación web. En un enfoque
+tradicional, podrías tener todos tus componentes, lógica de negocio, y llamadas
+a servicios dispersos por todo el proyecto. En cambio, con el patrón contenedor,
+organizas estos elementos en grupos lógicos que reflejan sus funciones dentro de
+la aplicación.
+
+Por ejemplo, si tenemos una sección de la aplicación dedicada a la gestión de
+usuarios, podríamos tener una estructura de carpetas como esta bajo un
+directorio `UserManagement`:
+
+```bash
+UserManagement/
+├── components/
+│   ├── UserProfile.js
+│   ├── UserList.js
+├── hooks/
+│   ├── useUserSearch.js
+│   ├── useUserProfile.js
+├── models/
+│   ├── UserModel.js
+├── services/
+│   ├── UserService.js
+└── UserContainer.js  // Este es el contenedor principal
+```
+
+### Funcionamiento del Patrón Contenedor
+
+1. Encapsulación: Cada contenedor maneja su propio estado y dependencias.
+Esto significa que el contenedor de gestión de usuarios maneja todo lo que es
+específico para esa función, desde la lógica de negocio hasta la interacción con
+la API correspondiente.
+
+2. Independencia: Los contenedores son independientes entre sí, lo que
+facilita el desarrollo, testing, y mantenimiento. Si necesitas trabajar en la
+gestión de usuarios, todo lo que necesitas está en un solo lugar, sin tener que
+tocar otras partes de la aplicación.
+
+3. Reusabilidad: Al encapsular la lógica y los componentes de manera
+coherente, puedes reutilizar estos contenedores en diferentes partes de la
+aplicación o incluso en diferentes proyectos, siempre que la funcionalidad sea
+requerida.
+
+4. Integración con Lazy Loading: Cuando utilizamos frameworks modernos como
+React, Angular o Vue, podemos cargar estos contenedores de forma perezosa (lazy
+loading). Esto significa que el código relacionado con la gestión de usuarios
+solo se carga cuando el usuario accede a esa parte específica de la aplicación,
+mejorando el rendimiento y la velocidad de carga inicial de la app.
+
+### Beneficios del Patrón Contenedor
+
+- Mejor Organización: Al tener un límite claro de qué código hace qué, se
+  mejora la legibilidad y se simplifica la estructura del proyecto.
+- Desacoplamiento: Reduce las dependencias cruzadas entre diferentes partes
+  de la aplicación, lo que disminuye el riesgo de efectos secundarios indeseados
+  durante las actualizaciones o cambios.
+- Escalabilidad: Facilita la gestión del crecimiento de la aplicación. A
+  medida que la aplicación crece, puedes seguir agregando contenedores sin
+  afectar significativamente a los existentes.
+- Mantenimiento Facilitado: Actualizar, testear o arreglar bugs se vuelve
+  más fácil porque todo lo que afecta a un área funcional está contenido dentro
+  de su propio módulo.
+
+Implementar el patrón contenedor es como organizar un conjunto de herramientas
+en cajas específicas en tu taller; cada herramienta tiene su lugar y sabes
+exactamente dónde encontrar lo que necesitas para cada trabajo. Esto no solo
+hace tu vida más fácil, sino que también hace que el trabajo sea más eficiente y
+menos propenso a errores. En el desarrollo de software, especialmente en
+aplicaciones complejas, adoptar este patrón puede marcar la diferencia entre un
+proyecto manejable y uno que es un dolor de cabeza constante.
+
+¡Así que dale, probalo y mirá cómo se transforma tu flujo de trabajo!
+
+Adoptar la Clean Architecture en nuestros proyectos no solo mejora la calidad
+del código sino que también nos prepara para crecer y adaptarnos con facilidad a
+nuevas demandas y tecnologías. Implementar técnicas como el lazy loading y el
+patrón contenedor nos asegura una aplicación robusta, mantenible y eficiente.
+
+## Ejemplo con todo lo aprendido
+
+¡Claro! Vamos a profundizar en cómo podríamos estructurar un ejemplo práctico
+usando la Clean Architecture en el front end, aplicando el concepto de módulos y
+contenedores que discutimos. Supongamos que estamos construyendo una aplicación
+de comercio electrónico que incluye funcionalidades como listar productos,
+añadir productos al carrito, y realizar pagos.
+
+### Ejemplo de Estructura de Carpeta para una Aplicación de Comercio Electrónico
+
+La siguiente estructura de carpetas refleja cómo podríamos organizar el código
+de la aplicación:
+
+```bash
+src/
+└── products/
+    ├── ProductsContainer.js     // Contenedor para la lista de productos
+    ├── components/
+    │   ├── ProductList.js       // Muestra la lista de productos
+    │   └── ProductItem.js       // Muestra un producto individual
+    ├── services/
+    │   ├── ProductService.js    // Comunica con la API para obtener productos
+    └── adapters/
+        └── ProductAdapter.js    // Adapta los datos de productos para la vista
+└── cart/
+    ├── CartContainer.js         // Contenedor para el carrito de compras
+    ├── components/
+    │   ├── CartView.js          // Vista principal del carrito
+    │   └── CartItem.js          // Componente para un ítem individual en el carrito
+    ├── services/
+    │   ├── CartService.js       // Maneja la lógica de agregar/eliminar ítems del carrito
+    └── adapters/
+        └── CartAdapter.js       // Adapta los datos del carrito para la vista
+└── checkout/
+    ├── CheckoutContainer.js     // Contenedor para el proceso de checkout
+    ├── components/
+    │   ├── PaymentForm.js       // Formulario para detalles de pago
+    │   └── OrderSummary.js      // Resumen de la orden antes de la compra
+    ├── services/
+    │   ├── PaymentService.js    // Procesa los pagos
+    └── adapters/
+        └── PaymentAdapter.js    // Adapta los datos de pago para ser enviados a la API
+```
+
+### Detalle de Implementación
+
+#### Contenedores:
+
+- ProductsContainer.js: Este archivo sería responsable de cargar los
+  productos desde el servicio, manejar cualquier estado relacionado con la
+  visualización de los productos y pasar los datos necesarios a los componentes
+  para su visualización.
+- CartContainer.js: Gestiona el estado del carrito de compras, incluyendo
+  productos añadidos, cantidades seleccionadas y comunicación con servicios para
+  actualizar el carrito.
+- CheckoutContainer.js: Controla el flujo del proceso de checkout,
+  incluyendo la recolección de información de pago y finalización de la compra.
+
+#### Componentes:
+
+- Cada componente como `ProductList.js`, `CartItem.js`, y `PaymentForm.js` se
+  encarga de la lógica de aplicación y de los casos de uso, acercando a las
+  entidades con las reglas de negocio.
+
+#### Servicios y Adaptadores:
+
+- ProductService.js, CartService.js, y PaymentService.js interactúan
+  con APIs externas para enviar y recibir datos.
+- Los adaptadores como ProductAdapter.js y PaymentAdapter.js transforman
+  los datos recibidos de la API al formato que los componentes pueden utilizar
+  más eficientemente y viceversa.
+
+### Beneficios de esta Estructura
+
+- Modularidad: Cada funcionalidad de la aplicación es autocontenida con su
+  propio conjunto de lógica y presentación, facilitando la mantenibilidad y
+  escalabilidad.
+- Reusabilidad: Los componentes dentro de cada módulo pueden ser
+  reutilizados en diferentes partes de la aplicación si es necesario.
+- Mantenimiento: Actualizar o arreglar bugs en una parte específica de la
+  aplicación es más sencillo porque el código afectado está aislado.
+- Rendimiento: Con técnicas como el lazy loading, solo se cargan los
+  recursos necesarios cuando son realmente necesarios, lo cual puede mejorar
+  significativamente el tiempo de carga de la aplicación.
