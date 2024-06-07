@@ -1,0 +1,501 @@
+---
+id: 'applying-clean-architecture-in-the-front-end'
+order: 8
+name: 'Applying Clean Architecture in the Front End'
+titleList:
+  - name: 'Key Concepts of Clean Architecture'
+    tagId: 'key-concepts-of-clean-architecture'
+  - name: 'Example'
+    tagId: 'example'
+  - name: 'Proposed Structure for the Banking Application'
+    tagId: 'proposed-structure-for-the-banking-application'
+  - name: 'Domain (Entities/Models and Business Rules)'
+    tagId: 'domain-entities-models-and-business-rules'
+  - name: 'Use Cases'
+    tagId: 'use-cases'
+  - name: 'Interface Adapters'
+    tagId: 'interface-adapters'
+  - name: 'Frameworks and Drivers'
+    tagId: 'frameworks-and-drivers'
+  - name: 'Organic Approach to Folder Structure'
+    tagId: 'organic-approach-to-folder-structure'
+  - name: 'Introduction to the Scope Rule'
+    tagId: 'introduction-to-the-scope-rule'
+  - name: 'Applying Clean Architecture with the Scope Rule'
+    tagId: 'applying-clean-architecture-with-the-scope-rule'
+  - name: 'Modular Structure by Functionality'
+    tagId: 'modular-structure-by-functionality'
+  - name: 'Container Component'
+    tagId: 'container-component'
+  - name: 'Specific Functionality Components'
+    tagId: 'specific-functionality-components'
+  - name: 'Services and Adapters'
+    tagId: 'services-and-adapters'
+  - name: 'Implementation Conclusion'
+    tagId: 'implementation-conclusion'
+  - name: 'What is the Container Pattern?'
+    tagId: 'what-is-the-container-pattern'
+  - name: 'Container Pattern Structure'
+    tagId: 'container-pattern-structure'
+  - name: 'How the Container Pattern Works'
+    tagId: 'how-the-container-pattern-works'
+  - name: 'Benefits of the Container Pattern'
+    tagId: 'benefits-of-the-container-pattern'
+  - name: 'Example with Everything Learned'
+    tagId: 'example-with-everything-learned'
+  - name: 'Example Folder Structure for an E-commerce Application'
+    tagId: 'example-folder-structure-for-an-e-commerce-application'
+  - name: 'Implementation Details'
+    tagId: 'implementation-details'
+  - name: 'Benefits of this Structure'
+    tagId: 'benefits-of-this-structure'
+---
+
+# Applying Clean Architecture in the Front End
+
+Hey folks! Today we are going to talk about how to bring Clean Architecture to
+the front end, but with a special twist. We will see how we can do it in a more
+organic and flexible way, without overly rigid folder structures, and how the
+scope rule plays a fundamental role in all of this. Join me on this journey
+through a more natural and adaptable approach!
+
+## Key Concepts of Clean Architecture
+
+The idea behind Clean Architecture is to decouple software from UI technologies,
+databases, and any other external elements, focusing on pure business logic.
+This is achieved through layers that clearly separate responsibilities:
+
+- **Domain:** Here we define our entities and business rules that are completely
+  independent of the user interface and external technologies. These are the
+  fundamental concepts on which the application is built.
+
+- **Use Cases:** Responsible for implementing the business logic necessary to
+  meet the functional requirements of the system. They operate on the domain
+  model and use adapters to communicate with the infrastructure layer.
+
+- **Adapters:** Connect use cases with the outside world, either by presenting
+  data to the user or communicating with a database.
+
+- **Frameworks and Drivers:** This is the outermost layer, where we interact
+  directly with specific frameworks and libraries.
+
+### Example
+
+For the example of a banking application where the business requirement is that
+only people over 18 years old can register, we will design a structure following
+the principles of Clean Architecture. This structure will ensure that business
+rules, such as the age restriction, are clearly defined and decoupled from the
+user interface and other external components.
+
+### Proposed Structure for the Banking Application
+
+Let's imagine how we could organize our project into the layers suggested by
+Clean Architecture:
+
+#### Domain, Entities Models and Business Rules
+
+Here we define the `User` model, which includes attributes such as name, date of
+birth, address, etc. Additionally, this layer will contain business rules, such
+as verifying the age of majority.
+
+- User.js
+
+  ```javascript
+  class User {
+    constructor(name, dateOfBirth) {
+      this.name = name;
+      this.dateOfBirth = dateOfBirth;
+    }
+
+    isAdult() {
+      const today = new Date();
+      const age = today.getFullYear() - this.dateOfBirth.getFullYear();
+      return age >= 18;
+    }
+  }
+  ```
+
+- UserBusinessRules.js
+
+  ```javascript
+  function validateUser(user) {
+    return user.isAdult();
+  }
+  ```
+
+#### Use Cases
+
+This layer contains the specific logic that implements the functional
+requirements, using the domain entities. In our case, a use case would be
+"Register User".
+
+- RegisterUser.js
+
+  ```javascript
+  class RegisterUser {
+    constructor(userRepository, user) {
+      this.userRepository = userRepository;
+      this.user = user;
+    }
+
+    execute() {
+      if (validateUser(this.user)) {
+        this.userRepository.add(this.user);
+        return true;
+      } else {
+        throw new Error("User must be at least 18 years old");
+      }
+    }
+  }
+  ```
+
+#### Interface Adapters
+
+These adapters will include controllers and presenters that interact with the
+domain layer and transform data for the UI or external services.
+
+- UserAdapter.js
+
+  ```javascript
+  class UserAdapter {
+    static toDTO(user) {
+      return {
+        name: user.name,
+        dateOfBirth: user.dateOfBirth.toISOString().split("T")[0],
+      };
+    }
+  }
+  ```
+
+#### Frameworks and Drivers
+
+Here is where specific technology details such as React components for the UI,
+route configuration, and services that interact with databases or external APIs
+are implemented.
+
+- UserComponent.js (React Component)
+
+  ```javascript
+  import React, { useState } from "react";
+
+  function UserComponent({ onSubmit }) {
+    const [name, setName] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState("");
+
+    const handleSubmit = () => {
+      const user = new User(name, new Date(dateOfBirth));
+      onSubmit(user);
+    };
+
+    return (
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="date"
+          value={dateOfBirth}
+          onChange={(e) => setDateOfBirth(e.target.value)}
+        />
+        <button type="submit">Register</button>
+      </form>
+    );
+  }
+  ```
+
+- App.js (Setting up the application)
+
+  ```javascript
+  import React from "react";
+  import UserComponent from "./UserComponent";
+  import UserRepository from "./UserRepository";
+
+  function App() {
+    const userRepository = new UserRepository();
+
+    const handleUserSubmit = (user) => {
+      try {
+        const registerUser = new RegisterUser(userRepository, user);
+        registerUser.execute();
+        alert("User registered successfully!");
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+
+    return <UserComponent onSubmit={handleUserSubmit} />;
+  }
+  ```
+
+### Organic Approach to Folder Structure
+
+Unlike traditional approaches that structure folders very rigidly from the
+start, I prefer a more organic approach. The idea is to allow the project
+structure to evolve naturally as requirements grow and change. I don't like
+over-structuring folders because I believe the structure should emerge from the
+needs of the project and the team, not the other way around.
+
+## Introduction to the Scope Rule
+
+The scope rule is essential in this organic approach. It defines how we organize
+and reuse components based on their visibility and use within the application:
+
+- **Components in Root:** These are components and services that are accessible
+  and reusable throughout the entire application. For example, generic UI
+  components or authentication services that are needed in multiple parts of the
+  system.
+
+- **Components in Specific Functionalities:** Located in specific containers or
+  modules, these components are only used within a particular context or
+  functionality. They are perfect for applying lazy loading, as they are only
+  loaded when the corresponding functionality is needed.
+
+### Applying Clean Architecture with the Scope Rule
+
+Here's how we can apply these principles together to build a robust and
+maintainable front-end application:
+
+1. **Clearly Define the Domain Model:** We start by defining our domain model in
+   an agnostic way, without worrying about the UI or infrastructure.
+
+2. **Develop Use Cases:** We implement the business logic in the form of use
+   cases, which manipulate the domain model and communicate with adapters.
+
+3. **Implement Adapters Flexibly:** We use adapters to connect our use cases
+   with specific user interface components and external services. This is where
+   we apply the scope rule to decide whether a component is global or
+   module-specific.
+
+4. **Use Lazy Loading to Improve Performance:** We lazily load specific
+   functionality modules or containers as needed, which is easily managed
+   through routing in modern frameworks like React, Angular, or Vue.
+
+Let's expand on how each module or functionality in the front end can be
+organized to clearly reflect its purpose and internal structure, following the
+
+philosophy of Clean Architecture and the scope rule we discussed.
+
+### Modular Structure by Functionality
+
+In a front-end development approach based on Clean Architecture, each feature or
+functionality of the application is organized into its own folder, named exactly
+after the feature it represents. This structure not only facilitates code
+navigation and understanding but also effectively encapsulates functionality.
+
+#### Container Component
+
+Within each functionality folder, a main component is created that carries the
+same name as the folder. This component acts as a "container" and has two main
+responsibilities:
+
+1. **Presentation Structure:** Defines how components are structured and
+   displayed on the screen. This container determines the layout and visual
+   composition of child components that form the specific functionality's
+   interface.
+
+2. **Business Logic and Data Retrieval:** Integrates the business logic relevant
+   to the layout, managing the necessary state, and performing operations to
+   obtain data from the domain entities. This includes interacting with services
+   to retrieve or send data to external sources.
+
+#### Specific Functionality Components
+
+Each component within the functionality folder handles its specific
+functionality. These components are designed to be as autonomous as possible,
+interacting with the domain entities and applying the relevant business rules.
+Their modular and well-defined design facilitates reuse and maintenance.
+
+#### Services and Adapters
+
+Services are used by components to communicate with external entities, such as
+backends or APIs. These services generally reside in their own subfolder within
+the functionality module and are responsible for sending and receiving data to
+and from the outside.
+
+Adapters, on the other hand, are also found in a folder called `adapters` within
+the module. Their function is to map data between the format expected by
+external services and the format used by domain entities. This bidirectional
+mapping ensures that data can be exchanged smoothly and coherently, respecting
+the abstractions imposed by the architecture.
+
+### Implementation Conclusion
+
+Organizing each functionality into its own module, with a container component
+managing presentation and associated logic, along with specific components
+handling more granular details, creates a highly modular and scalable system.
+This structure not only improves code readability and maintainability but also
+optimizes performance through techniques like lazy loading, loading only the
+necessary modules when required by the user.
+
+Implementing Clean Architecture in the front end with this detailed and
+organized approach prepares the ground for robust, maintainable, and adaptable
+applications, capable of evolving and expanding with business and market needs.
+
+### What is the Container Pattern?
+
+The container pattern, also known in some circles as the "Container Pattern," is
+a software architecture technique that involves encapsulating or grouping
+several related elements within the same module or container. This container
+acts as a logical boundary that defines the autonomy and responsibility over a
+specific portion of the application's functionality.
+
+### Container Pattern Structure
+
+Let's imagine we are working on a web application. In a traditional approach,
+you might have all your components, business logic, and service calls scattered
+throughout the project. In contrast, with the container pattern, you organize
+these elements into logical groups that reflect their functions within the
+application.
+
+For example, if we have a section of the application dedicated to user
+management, we might have a folder structure like this under a `UserManagement`
+directory:
+
+```bash
+UserManagement/
+├── components/
+│   ├── UserProfile.js
+│   ├── UserList.js
+├── hooks/
+│   ├── useUserSearch.js
+│   ├── useUserProfile.js
+├── models/
+│   ├── UserModel.js
+├── services/
+│   ├── UserService.js
+└── UserContainer.js  // This is the main container
+```
+
+### How the Container Pattern Works
+
+1. **Encapsulation:** Each container handles its own state and dependencies.
+   This means that the user management container handles everything specific to
+   that function, from business logic to interacting with the corresponding API.
+
+2. **Independence:** Containers are independent of each other, making
+   development, testing, and maintenance easier. If you need to work on user
+   management, everything you need is in one place, without having to touch
+   other parts of the application.
+
+3. **Reusability:** By encapsulating logic and components coherently, you can
+   reuse these containers in different parts of the application or even in
+   different projects, as long as the functionality is required.
+
+4. **Integration with Lazy Loading:** When using modern frameworks like React,
+   Angular, or Vue, we can lazily load these containers. This means that the
+   code related to user management is only loaded when the user accesses that
+   specific part of the application, improving performance and initial load
+   speed.
+
+### Benefits of the Container Pattern
+
+- **Better Organization:** By having a clear boundary of what code does what,
+  readability is improved, and the project structure is simplified.
+- **Decoupling:** Reduces cross-dependencies between different parts of the
+  application, minimizing the risk of unwanted side effects during updates or
+  changes.
+- **Scalability:** Facilitates managing the growth of the application. As the
+  application grows, you can keep adding containers without significantly
+  affecting existing ones.
+- **Easier Maintenance:** Updating, testing, or fixing bugs becomes easier
+  because everything affecting a functional area is contained within its own
+  module.
+
+Implementing the container pattern is like organizing a set of tools into
+specific boxes in your workshop; each tool has its place, and you know exactly
+where to find what you need for each job. This not only makes your life easier
+but also makes the work more efficient and less prone to errors. In software
+development, especially in complex applications, adopting this pattern can make
+the difference between a manageable project and a constant headache.
+
+So go ahead, try it out and see how it transforms your workflow!
+
+Adopting Clean Architecture in our projects not only improves code quality but
+also prepares us to grow and adapt easily to new demands and technologies.
+Implementing techniques like lazy loading and the container pattern ensures a
+robust, maintainable, and efficient application.
+
+## Example with Everything Learned
+
+Sure! Let's dive into how we could structure a practical example using Clean
+Architecture in the front end, applying the concept of modules and containers we
+discussed. Suppose we are building an e-commerce application that includes
+functionalities like listing products, adding products to the cart, and making
+payments.
+
+### Example Folder Structure for an E-commerce Application
+
+The following folder structure reflects how we might organize the application's
+code:
+
+```bash
+src/
+└── products/
+    ├── ProductsContainer.js     // Container for the product listing
+    ├── components/
+    │   ├── ProductList.js       // Displays the product list
+    │   └── ProductItem.js       // Displays an individual product
+    ├── services/
+    │   ├── ProductService.js    // Communicates with the API to fetch products
+    └── adapters/
+        └── ProductAdapter.js    // Adapts product data for the view
+└── cart/
+    ├── CartContainer.js         // Container for the shopping cart
+    ├── components/
+    │   ├── CartView.js          // Main view of the cart
+    │   └── CartItem.js          // Component for an individual item in the cart
+    ├── services/
+    │   ├── CartService.js       // Manages the logic for adding/removing items from the cart
+    └── adapters/
+        └── CartAdapter.js       // Adapts cart data for the view
+└── checkout/
+    ├── CheckoutContainer.js     // Container for the checkout process
+    ├── components/
+    │   ├── PaymentForm.js       // Form for payment details
+    │   └── OrderSummary.js      // Order summary before purchase
+    ├── services/
+    │   ├── PaymentService.js    // Processes payments
+    └── adapters/
+        └── PaymentAdapter.js    // Adapts payment data to be sent to the API
+```
+
+### Implementation Details
+
+#### Containers:
+
+- **ProductsContainer.js:** This file would be responsible for loading the
+  products from the service, managing any state related to displaying the
+  products, and passing the necessary data to the components for display.
+- **CartContainer.js:** Manages the shopping cart state, including added
+  products, selected quantities, and communication with services to update the
+  cart.
+- **CheckoutContainer.js:** Controls the checkout process flow, including
+  collecting payment information and completing the purchase.
+
+#### Components:
+
+- Each component, such as `ProductList.js`, `CartItem.js`, and `PaymentForm.js`,
+  handles the application logic and use cases, bridging the entities with the
+  business rules.
+
+#### Services and Adapters:
+
+- **ProductService.js, CartService.js, and PaymentService.js** interact with
+  external APIs to send and receive data.
+- Adapters like **ProductAdapter.js and PaymentAdapter.js** transform the data
+  received from the API into a format that the components can use more
+  efficiently and vice versa.
+
+### Benefits of this Structure
+
+- **Modularity:** Each application functionality is self-contained with its own
+  set of logic and presentation, facilitating maintainability and scalability.
+- **Reusability:** Components within each module can be reused in different
+  parts of the application if needed.
+- **Maintenance:** Updating or fixing bugs in a specific part of the application
+  is easier because the affected code is isolated.
+- **Performance:** With techniques like lazy loading, only the necessary
+  resources are loaded when they are actually needed, which can significantly
+  improve the application's load time.
