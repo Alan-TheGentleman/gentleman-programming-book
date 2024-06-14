@@ -1,0 +1,2936 @@
+---
+id: 'react'
+order: 9
+name: 'Dominando React, la joya sin marco'
+titleList:
+  - name: 'React en vez de un framework completo'
+    tagId: 'react-en-vez-de-un-framework-completo'
+  - name: 'Armando nuestro primer componente'
+    tagId: 'armando-nuestro-primer-componente'
+  - name: 'Uso de UseState en un Componente'
+    tagId: 'uso-de-usestate-en-un-componente'
+  - name: 'Componentes Funcionales: Como una Receta de Cocina'
+    tagId: 'componentes-funcionales-como-una-receta-de-cocina'
+  - name: 'Virtual DOM'
+    tagId: 'virtual-dom'
+  - name: 'Detección de Cambios: Comprendiendo el Flujo'
+    tagId: 'detección-de-cambios-comprendiendo-el-flujo'
+  - name: 'Dominando Custom Hooks'
+    tagId: 'dominando-custom-hooks'
+  - name: 'Uso Correcto de useEffect: Evitando Errores Comunes'
+    tagId: 'uso-correcto-de-useeffect-evitando-errores-comunes'
+  - name: 'Comunicación entre Componentes con children usando el Patrón Composition'
+    tagId: 'comunicación-entre-componentes-con-children-usando-el-patrón-composition'
+  - name: 'Comunicación entre Componentes: Composición vs Contexto vs Herencia'
+    tagId: 'comunicación-entre-componentes-composición-vs-contexto-vs-herencia'
+  - name: 'Uso de Context'
+    tagId: 'uso-de-context'
+  - name: 'Comprendiendo useRef, useMemo y useCallback'
+    tagId: 'comprendiendo-useref-usememo-y-usecallback'
+  - name: 'Peticiones a una API y Manejo de Lógica Asíncrona'
+    tagId: 'peticiones-a-una-api-y-manejo-de-lógica-asíncrona'
+  - name: 'Concepto de Portals'
+    tagId: 'concepto-de-portals'
+  - name: 'Cómo Agregar Estilos a Componentes'
+    tagId: 'cómo-agregar-estilos-a-componentes'
+  - name: 'Routing con react-router-dom'
+    tagId: 'routing-con-react-router-dom'
+  - name: 'Control de Errores con Error Boundaries'
+    tagId: 'control-de-errores-con-error-boundaries'
+  - name: 'Mejorando tus Habilidades con Axios Interceptor'
+    tagId: 'mejorando-tus-habilidades-con-axios-interceptor'
+---
+
+
+# Dominando React, la joya sin marco
+
+## React en vez de un framework completo
+
+Queridos lectores y futuros maestros del front-end, en este capítulo vamos a
+sumergirnos en el fascinante mundo de React, una librería que, aunque a veces la
+confundimos con un framework, es en realidad una herramienta esencial y flexible
+para la construcción de interfaces de usuario.
+
+React, desarrollado por Facebook (ahora Meta), se ha ganado un lugar
+privilegiado en el corazón de los desarrolladores gracias a su simplicidad y
+eficacia. Pero, ¿cuándo es adecuado usar React solo y no optar por un framework
+más robusto como Angular o incluso Vue?
+
+### Condiciones ideales para usar solo React
+
+1. **Proyectos de pequeña a mediana escala**: React es increíblemente eficiente
+   para proyectos que no requieren una gran cantidad de características backend
+   integradas o complejidades adicionales que un framework completo podría
+   manejar mejor.
+
+2. **Equipos con experiencia en JavaScript moderno**: Si tu equipo tiene sólidos
+   conocimientos de JavaScript moderno y no quiere lidiar con la curva de
+   aprendizaje de TypeScript (aunque React también se lleva de maravillas con
+   TS), React ofrece una base excelente y flexible para construir sin mucha
+   estructura predefinida.
+
+3. **Aplicaciones con necesidad de alta personalización**: Sin un framework
+   dictando la estructura, React permite una personalización y flexibilidad
+   extremas. Esto es ideal para aplicaciones que necesitan una arquitectura
+   única o específica que un framework podría no soportar tan fácilmente.
+
+4. **Uso intensivo de componentes reutilizables**: React se centra en la
+   composición de componentes, lo que facilita la reutilización de los mismos.
+   Si tu proyecto se beneficia de un alto grado de reutilización de componentes,
+   React podría ser tu mejor opción.
+
+5. Es posible que no necesites un framework: Si tu proyecto no requiere de SEO
+   ya que es privado, optar por React Vanilla pude ser muy beneficioso ya que
+   podemos elegir de forma exclusiva qué tecnologías y herramientas utilizar.
+   Por ejemplo, si tu aplicación es privada y no se beneficiará de las bondades
+   de Server Side Rendering, entonces NextJs podría ser mucho más que lo que
+   realmente necesitas.
+
+6. Un referente en el equipo con experiencia: Siguiendo lo que hablamos antes,
+   la increible flexibilidad de React también es un arma de doble filo. Ante un
+   problema hay MUCHAS soluciones, por lo que hay que tener a alguien con
+   experiencia para saber cúal opción es la mejor de acuerdo al contexto en el
+   que se encuentra el equipo y el proyecto.
+
+### Integrando React en tu equipo de desarrollo
+
+Integrar React en un equipo de desarrollo requiere considerar tanto las
+habilidades técnicas como la cultura del equipo. Aquí algunos tips para que la
+adopción sea un éxito rotundo:
+
+1. **Capacitación continua**: Asegúrate de que tu equipo entienda las bases de
+   React y sus patrones de diseño más comunes. Como Gentleman Programming, te
+   recomiendo realizar sesiones de pair programming y code reviews centradas en
+   las mejores prácticas de React.
+
+2. **Establece estándares de código**: React es muy flexible, pero esa
+   flexibilidad puede llevar a inconsistencias en el código si no se establecen
+   normas claras. Define guías de estilo y arquitectura desde el principio.
+
+3. **Aprovecha la comunidad**: La comunidad de React es vasta y siempre
+   dispuesta a ayudar. Fomenta la participación de tu equipo en foros,
+   seminarios web y conferencias para mantenerse actualizado con las últimas
+   tendencias y mejores prácticas.
+
+4. **Prioriza la calidad sobre la velocidad**: Aunque React puede permitir un
+   desarrollo rápido, es esencial que no se sacrifique la calidad del código.
+   Implementa pruebas unitarias y de integración desde el principio para
+   asegurar que las aplicaciones sean robustas y mantenibles.
+
+### Conclusión
+
+Usar React sin un framework adicional es perfectamente viable y, en muchas
+situaciones, la mejor decisión que podrías tomar. Alienta a tu equipo a
+experimentar con esta librería, adaptándola a las necesidades del proyecto,
+siempre con un ojo crítico hacia la calidad y la sostenibilidad del código.
+
+## Armando nuestro primer componente 
+
+### Entendiendo JSX
+
+Antes de meter mano en nuestros componentes, es clave que entendamos qué es JSX.
+JSX es una extensión de sintaxis para JavaScript que nos permite escribir
+elementos de React de una manera que se parece mucho al HTML, pero con el poder
+de JavaScript. Esto hace que la escritura de nuestras interfaces sea intuitiva y
+eficiente.
+
+Por ejemplo, si queremos mostrar un simple "Hola, mundo!", lo haríamos
+así:
+
+```jsx
+function Saludo() {
+  return <h1>Hola, mundo!</h1>;
+}
+```
+
+Aunque parece HTML, en realidad JSX es convertido por Babel (un compilador de
+JavaScript) en llamadas a funciones de React, como `React.createElement`. Así
+que el ejemplo anterior es en esencia lo mismo que hacer:
+
+```javascript
+function Saludo() {
+  return React.createElement("h1", null, "Hola, mundo!");
+}
+```
+
+### Estructura de un Componente como Función
+
+Un componente funcional es simplemente una función de JavaScript que
+retorna un elemento de React, que puede ser una simple descripción de la UI o
+puede incluir más lógica y otros componentes. Es la forma más directa y moderna
+de definir componentes, especialmente desde la introducción de Hooks,
+que permiten usar estado y otros features de React sin escribir una clase.
+
+Veamos la estructura básica de un componente funcional:
+
+```jsx
+// Definimos un componente funcional que acepta props
+function Bienvenida(props) {
+  // Podemos acceder a las propiedades enviadas al componente a través de `props`
+  return <h1>Bienvenido, {props.nombre}</h1>;
+}
+
+// Uso del componente con una prop 'nombre'
+<Bienvenida nombre="Gentleman" />;
+```
+
+En este ejemplo, `Bienvenida` es un componente que recibe `props`, un objeto que
+contiene todas las propiedades que pasamos al componente. Usamos `{}` dentro del
+JSX para insertar valores de JavaScript, en este caso para mostrar dinámicamente
+el nombre que recibimos.
+
+### Componentes Stateful vs Stateless
+
+Volvamos a la distinción entre componentes con estado (stateful) y sin estado
+(stateless):
+
+- **Stateful Components**: Manejan algún tipo de estado interno o datos
+  cambiantes. Aunque aún no hablaremos de Hooks, es importante saber que estos
+  componentes en el futuro podrán usar cosas como `useState` para gestionar su
+  estado interno.
+
+- **Stateless Components**: Simplemente aceptan datos a través de `props` y
+  muestran algo en la pantalla. No mantienen ningún estado interno y son
+  típicamente usados para mostrar UI:
+
+  ```jsx
+  function Mensaje({ texto }) {
+    return <p>{texto}</p>;
+  }
+  ```
+
+## UseState
+
+En React, manejar el estado de nuestros componentes es crucial para controlar su
+comportamiento y datos en tiempo real. La función `useState` es una herramienta
+esencial en este proceso, similar a cómo gestionamos las decisiones diarias en
+nuestras vidas.
+
+### ¿Qué es `useState`?
+
+Imagina `useState` como una caja fuerte en tu casa, donde guardas un objeto
+valioso que puede cambiar con el tiempo, como el dinero que decides gastar o
+ahorrar. Esta caja fuerte tiene una forma especial de mostrarte cuánto dinero
+hay dentro (`get`) y una manera de actualizar esta cantidad (`set`).
+
+**Estructura de `useState` como una Clase:**
+
+Si pensamos en `useState` como si fuera una clase, podría verse de la siguiente
+manera:
+
+```javascript
+class State {
+  constructor(initialValue) {
+    this.value = initialValue; // El valor inicial se almacena aquí
+  }
+
+  getValue() {
+    return this.value; // Método para obtener el valor actual
+  }
+
+  setValue(newValue) {
+    this.value = newValue; // Método para actualizar el valor
+  }
+}
+```
+
+En esta estructura, `value` representa el estado actual, y tenemos métodos
+`getValue()` y `setValue(newValue)` para interactuar con este estado.
+
+### Uso de useState en un Componente
+
+Para entenderlo mejor, vamos a compararlo con algo cotidiano: ajustar la
+temperatura de un aire acondicionado en tu casa.
+
+Supongamos que quieres mantener una temperatura agradable mientras estás en
+casa. Usarías un control (como el `useState`) para ajustar esta temperatura.
+Aquí te muestro cómo:
+
+```javascript
+import React, { useState } from "react";
+
+function AirConditioner() {
+  const [temperature, setTemperature] = useState(24); // 24 grados es la temperatura inicial
+
+  const increaseTemperature = () => setTemperature(temperature + 1);
+  const decreaseTemperature = () => setTemperature(temperature - 1);
+
+  return (
+    <div>
+      <h1>Temperatura Actual: {temperature}°C</h1>
+      <button onClick={increaseTemperature}>Subir Temperatura</button>
+      <button onClick={decreaseTemperature}>Bajar Temperatura</button>
+    </div>
+  );
+}
+```
+
+En este ejemplo, `temperature` es el estado que estamos manejando. Iniciamos con
+una temperatura de 24 grados. Los métodos `increaseTemperature` y
+`decreaseTemperature` actúan como los botones de subir o bajar la temperatura en
+el control del aire acondicionado.
+
+
+## Componentes Funcionales: Como una Receta de Cocina
+
+Imagina que un componente funcional en React es como seguir una receta de
+cocina. Cada vez que decides cocinar algo, sigues los pasos para preparar tu
+plato. De forma similar, un componente funcional "sigue los pasos" cada vez que
+React decide que necesita actualizar lo que se muestra en pantalla.
+
+### Preparación de Ingredientes (Props)
+
+Cuando cocinas, primero recoges todos los ingredientes que necesitas. En un
+componente funcional, estos ingredientes son las `props`. Las `props` son datos
+o información que pasas al componente para que haga su trabajo, como los
+ingredientes en tu receta que determinan cómo sale el plato.
+
+```javascript
+function Sandwich({ relleno, pan }) {
+  return (
+    <div>
+      Un sandwich de {relleno} en pan de {pan}.
+    </div>
+  );
+}
+```
+
+En este ejemplo, `relleno` y `pan` son las props, los ingredientes que necesitas
+para hacer tu sandwich.
+
+### Ejecución de la Receta (Función del Componente)
+
+Cada vez que haces la receta, sigues los pasos para combinar los ingredientes y
+cocinarlos. Cada ejecución puede variar ligeramente, por ejemplo, puedes decidir
+poner más especias o menos sal. En un componente funcional, la "ejecución" es
+cuando React llama a la función del componente para que genere el JSX basado en
+las props actuales.
+
+Cada vez que las props cambian, es como si decidieras ajustar la receta. React
+"cocina" de nuevo el componente, es decir, ejecuta la función del componente
+para ver cómo debe verse ahora con los nuevos "ingredientes".
+
+### Presentación del Plato (Renderizado)
+
+La presentación final es cuando pones el plato cocinado en la mesa. En React,
+esto es lo que ves en la pantalla después de que el componente se ejecuta. El
+JSX que retorna la función del componente determina cómo se "presenta" el
+componente en la interfaz de usuario.
+
+### Ejemplo de Uso
+
+Usar el componente es como servir tu plato cocinado a alguien para que lo
+disfrute.
+
+```javascript
+<Sandwich relleno="jamón y queso" pan="integral" />
+```
+
+Cada vez que los detalles del sandwich cambian (digamos, cambias `relleno` a
+"pollo y tomate"), React realiza el proceso nuevamente para asegurarse de que la
+presentación en pantalla coincida con los ingredientes dados.
+
+Este enfoque te ayuda a ver cada componente como una receta individual, donde
+las props son tus ingredientes y la función del componente es la guía de cómo
+combinarlos para obtener el resultado final en la pantalla, siempre fresco y
+actualizado según los ingredientes que proporcionas.
+
+## Virtual DOM
+
+Imaginá que el DOM (Document Object Model) es un escenario donde cada elemento
+HTML es un actor. Cada vez que algo cambia en tu página web (por ejemplo, un
+usuario interactúa con ella o los datos recibidos de un servidor alteran el
+estado de la página), podrías tener que reorganizar a los actores en este
+escenario para reflejar esos cambios. Sin embargo, reorganizar estos actores
+(elementos del DOM) directamente y con frecuencia es muy costoso en términos de
+rendimiento.
+
+Aquí es donde entra en juego el Virtual DOM. React mantiene una copia ligera de
+este escenario en memoria, una especie de boceto o script de cómo está
+organizado el escenario en un momento dado. Este boceto es lo que llamamos
+Virtual DOM.
+
+### Funcionamiento del Virtual DOM
+
+1. **Actualización del estado o las props**: Cada vez que hay un cambio en el
+   estado o las props de tu aplicación, React actualiza este Virtual DOM. No hay
+   cambios en el escenario real todavía, solo en el boceto.
+
+2. **Comparación con el DOM real**: React compara este Virtual DOM actualizado
+   con una versión anterior del Virtual DOM (la última vez que el estado o las
+   props fueron actualizados).
+
+3. **Detección de diferencias**: Este proceso de comparación se conoce como
+   "reconciliación". React identifica qué partes del Virtual DOM han cambiado
+   (por ejemplo, un actor necesita moverse de un lado del escenario al otro).
+
+4. **Actualización eficiente del DOM real**: Una vez que React sabe qué cambios
+   son necesarios, actualiza el DOM real de la manera más eficiente posible.
+   Esto es como dar instrucciones específicas a los actores sobre cómo
+   reubicarse en el escenario sin tener que reconstruir toda la escena desde
+   cero.
+
+### Ventajas del Virtual DOM
+
+- **Eficiencia**: Al trabajar con el Virtual DOM, React puede minimizar el
+  número de manipulaciones costosas del DOM real. Solo hace los cambios
+  necesarios y los hace de manera que afecte lo menos posible el rendimiento de
+  la página.
+
+- **Rapidez**: Como las operaciones con el Virtual DOM son mucho más rápidas que
+  las operaciones directas con el DOM real, React puede manejar cambios a alta
+  velocidad sin degradar la experiencia del usuario.
+
+- **Simplicidad en el desarrollo**: Como desarrolladores, no tenemos que
+  preocuparnos por cómo y cuándo actualizar el DOM. Nos centramos en el estado
+  de la aplicación, y React se encarga del resto.
+
+## Detección de Cambios: Comprendiendo el Flujo
+
+En el universo de React, la detección de cambios es como el radar en un partido
+de fútbol; está constantemente monitoreando y asegurándose de que todo lo que
+sucede en el campo de juego se maneja adecuadamente. Vamos a desglosar cómo
+funciona este proceso, enfocándonos en el concepto de triggers y cómo estos
+influyen en el renderizado de los componentes.
+
+### ¿Qué es un Trigger?
+
+Un trigger en React es cualquier evento que inicia el proceso de renderizado.
+Esto puede ser tan simple como un clic en un botón, un cambio en el estado del
+componente, o incluso una respuesta a una llamada API que llega de forma
+asíncrona.
+
+Imagínate que estás en una cocina: cada acción que realizas, desde encender la
+estufa hasta cortar verduras, puede ser vista como un trigger. En React, cada
+uno de estos triggers tiene el potencial de actualizar la interfaz de usuario,
+dependiendo de cómo esté configurada la lógica en tus componentes.
+
+### Tipos de Triggers
+
+Hay dos tipos fundamentales de triggers en React:
+
+1. **Inicial**: Es como el silbato inicial de un partido. Se da cuando el
+   componente se monta por primera vez en el DOM. En términos técnicos, esto se
+   refiere a cuando se crea la raíz de tu aplicación en React y se carga el
+   componente inicial.
+
+2. **Re-renders**: Estos ocurren después del montaje inicial. Cada vez que hay
+   una actualización en el estado o las props, React decide si necesita
+   re-renderizar el componente para reflejar esos cambios. Es como hacer ajustes
+   en tu estrategia de juego en tiempo real.
+
+### El Proceso de Renderizado
+
+Renderizar en React es como preparar y presentar un plato. Cuando se invoca un
+render, React prepara la UI basada en el estado actual y las props, y luego la
+sirve en la pantalla. Este proceso se repite cada vez que un trigger activa un
+cambio.
+
+El "render" no es más que la función que compone tu componente. Cada vez que
+esta función se ejecuta, React evalúa el JSX retornado y actualiza el DOM en
+consecuencia, siempre y cuando detecte diferencias entre el DOM actual y el
+output del render.
+
+### Commit: Actualizando el DOM
+
+Una vez que React ha preparado la nueva vista en memoria (a través del Virtual
+DOM), se realiza un "commit". Este es el proceso de aplicar cualquier cambio
+detectado al DOM real. Es como si, después de preparar el plato en la cocina,
+finalmente lo llevas a la mesa. React compara el nuevo Virtual DOM con el
+anterior y realiza las actualizaciones necesarias para que el DOM real refleje
+estos cambios.
+
+Este proceso asegura que solo se actualicen las partes del DOM que realmente
+necesitan cambios, optimizando el rendimiento y evitando renderizados
+innecesarios.
+
+### Recapitulando
+
+Cada componente en React actúa como un pequeño chef en la cocina de una gran
+restaurante, preparando su parte del plato. React, como el chef principal, se
+asegura de que cada componente haga su parte solo cuando es necesario, basándose
+en los triggers recibidos. Este enfoque asegura que la cocina (tu aplicación)
+funcione de manera eficiente y efectiva, respondiendo adecuadamente a las
+acciones del usuario y otros eventos.
+
+## Dominando Custom Hooks
+
+### Introducción a los Custom Hooks
+
+En el universo de React, los Custom Hooks son como recetas personalizadas en la
+cocina: nos permiten mezclar ingredientes comunes de maneras nuevas y
+emocionantes para crear platos (o componentes) únicos y reutilizables. A lo
+largo de este capítulo, exploraremos por qué los Custom Hooks son esenciales
+para simplificar la lógica y mejorar la reusabilidad en nuestras aplicaciones.
+
+### La Charla Técnica: Ciclos de Vida y Custom Hooks
+
+Para comprender mejor los Custom Hooks, pensemos en una cafetería. Al igual que
+un barista que prepara tu café favorito exactamente cuando lo pides, los Custom
+Hooks nos permiten "servir" lógica específica en el momento justo del ciclo de
+vida de un componente en React.
+
+Ahora, supongamos que quieres que algo suceda automáticamente en tu aplicación,
+como encender una luz cuando oscurece. Aquí te muestro cómo un Custom Hook puede
+manejar este "encendido automático":
+
+```javascript
+function useAutoLight() {
+  const [isDark, setDark] = useState(false);
+
+  useEffect(() => {
+    const handleDarkness = () => {
+      const hour = new Date().getHours();
+      setDark(hour > 18 || hour < 6);
+    };
+
+    window.addEventListener("timeChange", handleDarkness);
+    return () => window.removeEventListener("timeChange", handleDarkness);
+  }, []); // Se ejecuta una vez al montar y al desmontar
+
+  return isDark;
+}
+```
+
+Este Hook encapsula la lógica para detectar si está oscuro y actuar en
+consecuencia, similar a un sensor de luz automático en tu casa.
+
+### Aplicaciones Prácticas de Custom Hooks
+
+Explorando cómo los Custom Hooks se implementan en situaciones cotidianas,
+podemos pensar en ellos como atajos en un dispositivo móvil, permitiéndonos
+realizar tareas comunes con mayor rapidez y eficiencia.
+
+**Custom Hook para Manejo de Formularios:**
+
+Considera el proceso de llenar un diario personal. Quieres que sea fácil
+registrar tus pensamientos sin distracciones. Mira cómo este Custom Hook
+simplifica el manejo de un "diario digital":
+
+```javascript
+function useDiary(initialEntries) {
+  const [entries, setEntries] = useState(initialEntries);
+
+  const addEntry = (newEntry) => {
+    setEntries([...entries, newEntry]);
+  };
+
+  return {
+    entries,
+    addEntry,
+  };
+}
+```
+
+Este Hook actúa como un asistente personal para tu diario, ayudándote a añadir
+nuevos pensamientos de manera organizada y eficiente.
+
+## Uso Correcto de useEffect: Evitando Errores Comunes
+
+En este capítulo, vamos a adentrarnos en el uso correcto del hook `useEffect` en
+React, una herramienta fundamental para manejar los efectos secundarios en tus
+componentes. Aunque `useEffect` es muy potente, es crucial saber cuándo y cómo
+usarlo para evitar problemas de rendimiento y mantener el código limpio y
+manejable.
+
+## Introducción al `useEffect`
+
+El `useEffect` se usa para gestionar efectos secundarios en tus componentes de
+React. Pero, ¿qué es un efecto secundario? Imagina que `useEffect` es como un
+cronómetro en tu cocina que se activa cuando metes una pizza al horno. No
+importa lo que estés haciendo, cuando el cronómetro suena, sabes que la pizza
+está lista y necesitas sacarla del horno.
+
+**Estructura Básica de `useEffect`**
+
+El `useEffect` tiene una estructura sencilla pero poderosa:
+
+```javascript
+import React, { useEffect, useState } from "react";
+
+function App() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    console.log("El componente se ha montado o actualizado.");
+
+    return () => {
+      console.log("El componente se va a desmontar.");
+    };
+  }, []);
+
+  return <h1>Hola React!</h1>;
+}
+```
+
+En este ejemplo, `useEffect` se ejecuta después de que el componente se
+renderiza por primera vez, similar a poner un cronómetro cuando metes la pizza
+al horno. La función de limpieza (return) es como sacar la pizza y apagar el
+cronómetro cuando terminas.
+
+### Evitando el Uso Incorrecto de `useEffect`
+
+El `useEffect` no debe ser usado para todo. Utilizarlo incorrectamente puede
+llevar a problemas de rendimiento y lógica compleja innecesaria. Veamos algunos
+ejemplos comunes de errores y cómo evitarlos.
+
+#### 1. Evitar Bucles Infinitos
+
+Un error común es causar un bucle infinito al actualizar el estado dentro de
+`useEffect` sin manejar correctamente las dependencias:
+
+```javascript
+const [count, setCount] = useState(0);
+
+useEffect(() => {
+  setCount(count + 1);
+}, [count]);
+```
+
+En este ejemplo, cada vez que `count` cambia, `useEffect` se vuelve a ejecutar,
+actualizando `count` nuevamente, lo que causa un bucle infinito. Es como si cada
+vez que sacaras la pizza del horno, volvieras a meterla y reiniciar el
+cronómetro.
+
+**Solución**: Ajusta las dependencias correctamente y evita actualizar el estado
+dentro del mismo `useEffect` que depende de ese estado.
+
+```javascript
+const [count, setCount] = useState(0);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setCount((c) => c + 1);
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, []);
+```
+
+Aquí, `useEffect` solo se ejecuta una vez al montar el componente, y el estado
+se actualiza cada segundo sin causar un bucle infinito.
+
+#### 2. Evitar Ejecutar Lógica en Cambios de Estado con `useEffect`
+
+Un caso incorrecto de uso de `useEffect` es cuando se ejecuta una lógica al
+cambiar una variable del componente. Para esto, es mejor ejecutar la lógica en
+el momento de la acción, como un clic.
+
+Incorrecto:
+
+```javascript
+const [value, setValue] = useState("");
+
+useEffect(() => {
+  console.log("El valor ha cambiado:", value);
+}, [value]);
+```
+
+En lugar de usar `useEffect` para detectar cambios en `value`, es más eficiente
+y claro ejecutar la lógica directamente en el manejador del evento.
+
+Correcto:
+
+```javascript
+const handleChange = (newValue) => {
+  setValue(newValue);
+  console.log("El valor ha cambiado:", newValue);
+};
+```
+
+Esto es como si en lugar de usar un cronómetro para sacar la pizza del horno,
+simplemente prestaras atención al horno y sacaras la pizza cuando suena la
+alarma.
+
+### Casos Correctos para `useEffect`
+
+#### 1. Llamadas a APIs
+
+Un uso correcto de `useEffect` es para llamadas a APIs, donde necesitas realizar
+una acción asíncrona cuando se monta el componente:
+
+```javascript
+useEffect(() => {
+  const fetchData = async () => {
+    const response = await fetch("https://api.example.com/data");
+    const result = await response.json();
+    setData(result);
+  };
+
+  fetchData();
+}, []);
+```
+
+Aquí, `useEffect` actúa como tu recordatorio de sacar la pizza justo cuando el
+temporizador suena, asegurando que los datos se obtienen correctamente al montar
+el componente.
+
+#### 2. Suscripciones y Limpieza
+
+`useEffect` es útil para suscribirse a servicios externos y limpiar esas
+suscripciones cuando el componente se desmonta:
+
+```javascript
+useEffect(() => {
+  const subscription = someService.subscribe((data) => {
+    setData(data);
+  });
+
+  return () => {
+    subscription.unsubscribe();
+  };
+}, []);
+```
+
+Es como suscribirse a un boletín y cancelar la suscripción cuando ya no te
+interesa.
+
+#### 3. Sincronización de Datos
+
+Otra aplicación útil de `useEffect` es la sincronización de datos entre
+componentes o con servicios externos. Por ejemplo, sincronizar el estado local
+con el almacenamiento local del navegador:
+
+```javascript
+useEffect(() => {
+  const savedData = localStorage.getItem("data");
+  if (savedData) {
+    setData(JSON.parse(savedData));
+  }
+}, []);
+
+useEffect(() => {
+  localStorage.setItem("data", JSON.stringify(data));
+}, [data]);
+```
+
+Aquí, el primer `useEffect` actúa como un asistente que verifica si hay pizza en
+la nevera al abrir la puerta, y el segundo asegura que cualquier cambio en los
+ingredientes se guarda automáticamente.
+
+## Comunicación entre Componentes con children usando el Patrón Composition
+
+En este capítulo, vamos a explorar cómo manejar la comunicación entre
+componentes en React utilizando el patrón de composición y los children. Estos
+conceptos permiten crear componentes flexibles y reutilizables, facilitando la
+transferencia de datos y la gestión del estado entre componentes padres e hijos.
+
+### Introducción a la Composición de Componentes
+
+El patrón de composición en React nos permite construir componentes complejos a
+partir de componentes más pequeños y específicos. Es como construir un automóvil
+a partir de diversas piezas: motor, ruedas, chasis, etc. Cada una de estas
+piezas tiene una función específica, pero juntas forman un automóvil funcional.
+
+### Entendiendo los `children` en React
+
+Podemos utilizar las `props.children` para pasar contenido de un componente
+padre a un componente hijo de manera dinámica.
+
+**Ejemplo Básico de `props.children`**
+
+```javascript
+const Container = ({ children }) => {
+  return <div className="container">{children}</div>;
+};
+
+const App = () => {
+  return (
+    <Container>
+      <h1>Hola, Mundo!</h1>
+      <p>Este es un párrafo dentro del contenedor.</p>
+    </Container>
+  );
+};
+```
+
+En este ejemplo, `Container` es un componente que envuelve a sus hijos, que son
+pasados dinámicamente desde el componente `App`.
+
+### Patrón de Composición
+
+El patrón de composición se basa en la idea de componer componentes más pequeños
+para crear interfaces de usuario complejas. Imagina que estás construyendo una
+página web como si fuera un lego. Cada bloque es un componente que puedes
+combinar para crear algo más grande y funcional.
+
+**Ejemplo de Composición con Múltiples `slots`**
+
+```javascript
+const Layout = ({ header, main, footer }) => {
+  return (
+    <div className="layout">
+      <header className="layout-header">{header}</header>
+      <main className="layout-main">{main}</main>
+      <footer className="layout-footer">{footer}</footer>
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Layout
+      header={<h1>Bienvenido</h1>}
+      main={<p>Este es el contenido principal.</p>}
+      footer={<small>© 2024 Mi Sitio Web</small>}
+    />
+  );
+};
+```
+
+En este ejemplo, el componente `Layout` actúa como un contenedor que organiza
+sus hijos en diferentes secciones (`header`, `main`, `footer`). Cada sección es
+pasada como una prop específica.
+
+### Comunicación entre Componentes Padres e Hijos
+
+La comunicación entre componentes en React se maneja principalmente a través de
+props. Los componentes padres pueden pasar datos y funciones a los componentes
+hijos, permitiéndoles controlar el comportamiento y el estado de los hijos desde
+el padre.
+
+**Ejemplo de Comunicación entre Componentes**
+
+```javascript
+const Button = ({ onClick, children }) => {
+  return <button onClick={onClick}>{children}</button>;
+};
+
+const App = () => {
+  const handleClick = () => {
+    alert("¡Botón clickeado!");
+  };
+
+  return (
+    <div>
+      <Button onClick={handleClick}>Click Me</Button>
+    </div>
+  );
+};
+```
+
+En este ejemplo, el componente `Button` recibe una función `onClick` como prop
+desde el componente padre `App`. Cuando el botón se clickea, se ejecuta la
+función `handleClick` definida en el padre.
+
+### Ejemplo Completo con Patrón de Composición y Slots
+
+Para ilustrar todo lo que hemos aprendido, veamos un ejemplo más completo que
+utiliza el patrón de composición y maneja la comunicación entre componentes
+padres e hijos de manera efectiva.
+
+**Ejemplo Completo**
+
+```javascript
+const Panel = ({ title, content, actions }) => {
+  return (
+    <div className="panel">
+      <div className="panel-header">
+        <h2>{title}</h2>
+      </div>
+      <div className="panel-content">{content}</div>
+      <div className="panel-actions">{actions}</div>
+    </div>
+  );
+};
+
+const App = () => {
+  const handleSave = () => {
+    alert("¡Guardado!");
+  };
+
+  const handleCancel = () => {
+    alert("Cancelado");
+  };
+
+  return (
+    <Panel
+      title="Configuración"
+      content={<p>Aquí puedes configurar tus preferencias.</p>}
+      actions={
+        <div>
+          <button onClick={handleSave}>Guardar</button>
+          <button onClick={handleCancel}>Cancelar</button>
+        </div>
+      }
+    />
+  );
+};
+```
+
+En este ejemplo, el componente `Panel` se compone de tres secciones (`title`,
+`content`, `actions`) que son pasadas desde el componente `App`. Esto permite
+una gran flexibilidad y reutilización de componentes.
+
+### Casos Prácticos y Beneficios
+
+1. **Flexibilidad**: Puedes diseñar componentes altamente configurables y
+   reutilizables.
+2. **Separación de Concerns**: Mantiene la lógica de cada componente separada,
+   facilitando el mantenimiento.
+3. **Reusabilidad**: Componentes bien diseñados pueden ser reutilizados en
+   múltiples lugares de la aplicación.
+
+### Comparación con la Vida Cotidiana
+
+Imagina que estás organizando una fiesta y decides delegar tareas a diferentes
+personas (componentes). Tienes a alguien encargado de las bebidas, otro de la
+música y otro de la comida. Cada uno trabaja de manera independiente, pero al
+final, todos se coordinan para que la fiesta sea un éxito. Este es el poder del
+patrón de composición en React.
+
+## Comunicación entre Componentes: Composición vs Contexto vs Herencia
+
+Cuando trabajamos con React, uno de los desafíos más comunes es compartir
+información entre componentes que no tienen una relación directa. En este
+capítulo, vamos a explorar tres enfoques principales para resolver este
+problema: Prop Drilling, Context y Composición. Cada enfoque tiene sus ventajas
+y desventajas, y es importante comprender cuándo y cómo usarlos para crear
+aplicaciones eficientes y mantenibles.
+
+### Estructura Básica de Componentes
+
+Primero, visualicemos una estructura básica de componentes para entender mejor
+los ejemplos:
+
+```jsx
+<Father>
+  <Child1 />
+</Father>
+
+**Child1:**
+<Child1>
+  <Child2 />
+</Child1>
+```
+
+## Compartiendo Información Entre Componentes Sin Relación Directa
+
+### Prop Drilling
+
+Prop Drilling es el método más directo para pasar información desde un
+componente padre a un componente hijo, y luego a un nieto. Sin embargo, puede
+volverse problemático a medida que la aplicación crece.
+
+**Ejemplo de Prop Drilling:**
+
+```jsx
+const Father = () => {
+  const sharedProp = "Información Compartida";
+  return <Child1 sharedProp={sharedProp} />;
+};
+
+const Child1 = ({ sharedProp }) => {
+  return <Child2 sharedProp={sharedProp} />;
+};
+
+const Child2 = ({ sharedProp }) => {
+  return <div>{sharedProp}</div>;
+};
+```
+
+**Problemas de Prop Drilling:**
+
+- **Acoplamiento Alto:** Los componentes están fuertemente acoplados, lo que
+  dificulta su reutilización.
+- **Mantenimiento Difícil:** A medida que la cantidad de componentes aumenta, se
+  vuelve complicado mantener el código.
+- **Entendimiento Complicado:** Es difícil seguir la trayectoria de los props a
+  través de muchos niveles de componentes.
+
+### Gestión del Estado con Context
+
+El Context API de React proporciona una forma más limpia y escalable de
+compartir información entre componentes que no tienen una relación directa.
+Utiliza un proveedor (provider) que mantiene el estado compartido, y
+consumidores (consumers) que pueden acceder a ese estado.
+
+**Ejemplo de Context API:**
+
+```jsx
+const MyContext = React.createContext();
+
+const Father = () => {
+  const [sharedState, setSharedState] = React.useState("Estado Compartido");
+
+  return (
+    <MyContext.Provider value={sharedState}>
+      <Child1 />
+    </MyContext.Provider>
+  );
+};
+
+const Child1 = () => {
+  return <Child2 />;
+};
+
+const Child2 = () => {
+  const sharedState = React.useContext(MyContext);
+  return <div>{sharedState}</div>;
+};
+```
+
+**Ventajas del Context API:**
+
+- **Entendible:** Es fácil seguir el flujo de datos.
+- **Escalable:** Puede manejar aplicaciones de cualquier tamaño.
+- **Directo:** Los componentes pueden acceder directamente al estado compartido
+  sin pasar props innecesarios.
+
+**Desventajas del Context API:**
+
+- **Dependencia de la Ubicación del Proveedor:** Los componentes solo pueden
+  acceder al contexto si están dentro del proveedor.
+
+```jsx
+<MyContext.Provider>
+  <Father>
+    <Child1 />
+  </Father>
+</MyContext.Provider>
+
+<FatherOutsideContextProvider>
+  <Child2 />  // No puede acceder al estado del contexto
+</FatherOutsideContextProvider>
+```
+
+### Composición para la Victoria
+
+La composición en React permite construir componentes más complejos a partir de
+componentes más simples. En lugar de pasar props a través de muchos niveles,
+podemos utilizar la propiedad `children` para pasar elementos directamente.
+
+**Ejemplo de Composición:**
+
+```jsx
+const Father = () => {
+  const sharedProp = "Información Compartida";
+
+  return (
+    <Child1>
+      <Child2 sharedProp={sharedProp} />
+    </Child1>
+  );
+};
+
+const Child1 = ({ children }) => {
+  return <div>{children}</div>;
+};
+
+const Child2 = ({ sharedProp }) => {
+  return <div>{sharedProp}</div>;
+};
+```
+
+#### Ventajas de la Composición
+
+- **Sencillo:** Menos código repetitivo y más claro.
+- **Escalable:** Fácil de escalar a medida que la aplicación crece.
+- **Sin Dependencias:** No depende de la ubicación del proveedor como en el
+  Context API.
+- **Código Reutilizable:** Los componentes pueden ser reutilizados fácilmente en
+  diferentes partes de la aplicación.
+- **Lógica Individual:** Cada componente maneja su propia lógica de manera
+  independiente.
+
+## Uso de Context
+
+En el desarrollo de aplicaciones con React, a menudo necesitamos compartir
+información entre componentes sin una relación directa entre ellos. El Context
+API de React proporciona una forma más robusta y escalable para manejar este
+tipo de situaciones.
+
+### ¿Qué es el Context?
+
+El Context API de React permite compartir valores entre componentes sin tener
+que pasar explícitamente props por cada nivel del árbol de componentes. Es
+particularmente útil para temas, configuraciones de idioma, o cualquier otro
+tipo de dato que deba ser accesible en muchas partes de la aplicación.
+
+### Creando un Context
+
+Primero, necesitamos crear un contexto. Esto se hace con la función
+`createContext` de React:
+
+```jsx
+import { createContext, useContext, useState } from "react";
+
+export const GentlemanContext = createContext();
+```
+
+El `GentlemanContext` ahora puede ser utilizado para proveer y consumir valores
+en nuestra aplicación.
+
+### Proveedor del Contexto
+
+El proveedor (`Provider`) del contexto es el componente que envuelve a aquellos
+componentes que necesitan acceder al contexto. Define el valor del contexto que
+será compartido.
+
+```jsx
+export const GentlemanProvider = ({ children }) => {
+  const [gentlemanContextValue, setGentlemanContextValue] = useState("");
+  return (
+    <GentlemanContext.Provider
+      value={{ gentlemanContextValue, setGentlemanContextValue }}
+    >
+      {children}
+    </GentlemanContext.Provider>
+  );
+};
+```
+
+En este ejemplo, `GentlemanProvider` utiliza el hook `useState` para mantener y
+actualizar el valor del contexto. Este valor puede ser cualquier tipo de dato,
+como un string, un número, un objeto o una función.
+
+### Consumiendo el Contexto
+
+Para acceder al valor del contexto en un componente hijo, utilizamos el hook
+`useContext`:
+
+```jsx
+export const useGentlemanContext = () => {
+  const context = useContext(GentlemanContext);
+  if (context === undefined) {
+    throw new Error("GentlemanContext must be used within a GentlemanProvider");
+  }
+  return context;
+};
+```
+
+El hook `useGentlemanContext` encapsula el uso de `useContext` y se asegura de
+que el contexto sea utilizado correctamente dentro de un `GentlemanProvider`.
+
+### Ejemplo Completo
+
+Veamos un ejemplo completo de cómo utilizar este contexto en una aplicación:
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { GentlemanProvider, useGentlemanContext } from "./GentlemanContext";
+
+const Father = () => {
+  const { gentlemanContextValue, setGentlemanContextValue } =
+    useGentlemanContext();
+
+  return (
+    <div>
+      <h1>Father Component</h1>
+      <button onClick={() => setGentlemanContextValue("Valor compartido")}>
+        Set Context Value
+      </button>
+      <Child1 />
+    </div>
+  );
+};
+
+const Child1 = () => {
+  return (
+    <div>
+      <h2>Child1 Component</h2>
+      <Child2 />
+    </div>
+  );
+};
+
+const Child2 = () => {
+  const { gentlemanContextValue } = useGentlemanContext();
+
+  return (
+    <div>
+      <h3>Child2 Component</h3>
+      <p>Context Value: {gentlemanContextValue}</p>
+    </div>
+  );
+};
+
+const App = () => (
+  <GentlemanProvider>
+    <Father />
+  </GentlemanProvider>
+);
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+### Ventajas del Context API
+
+**1. Entendible:** El flujo de datos es claro y fácil de seguir. Los componentes
+pueden acceder directamente al contexto sin la necesidad de pasar props
+innecesarias.
+
+**2. Escalable:** El Context API puede manejar aplicaciones de cualquier tamaño
+sin los problemas de mantenimiento asociados al Prop Drilling.
+
+**3. Centralizado:** El estado compartido está centralizado, lo que facilita su
+gestión y actualización.
+
+### Desventajas del Context API
+
+**1. Ubicación del Proveedor:** Los componentes solo pueden acceder al contexto
+si están dentro del proveedor. Si el proveedor está mal colocado, puede que
+algunos componentes no tengan acceso al contexto.
+
+```jsx
+<MyContext.Provider>
+  <Father>
+    <Child1 />
+  </Father>
+</MyContext.Provider>
+
+<FatherOutsideContextProvider>
+  <Child2 />  // No puede acceder al estado del contexto
+</FatherOutsideContextProvider>
+```
+
+## Comprendiendo useRef, useMemo y useCallback
+
+En este capítulo, vamos a desmitificar el uso de algunos de los hooks más
+potentes y a menudo mal entendidos en React: `useRef`, `useMemo` y
+`useCallback`. Veremos cómo y cuándo utilizarlos correctamente, y los
+compararemos con el conocido `useState` para entender sus diferencias y
+similitudes.
+
+### `useRef`: La Referencia Constante
+
+El hook `useRef` nos permite crear una referencia mutable que puede persistir a
+lo largo del ciclo de vida completo del componente sin causar re-renderizados.
+
+**Ejemplo práctico con `useRef`**:
+
+Supongamos que tenemos un componente con un botón que, al ser clicado, activa
+automáticamente otro botón:
+
+```jsx
+import { useRef } from "react";
+
+const Clicker = () => {
+  const buttonRef = useRef(null);
+
+  const handleClick = () => {
+    buttonRef.current.click();
+  };
+
+  return (
+    <div>
+      <button ref={buttonRef} onClick={() => alert("Button clicked!")}>
+        Hidden Button
+      </button>
+      <button onClick={handleClick}>Click to trigger Hidden Button</button>
+    </div>
+  );
+};
+
+export default Clicker;
+```
+
+En este ejemplo, `useRef` se utiliza para acceder directamente al botón oculto y
+simular un clic programáticamente. `useRef` no causa re-renderizados del
+componente cuando su valor cambia, lo que lo hace ideal para almacenar
+referencias a elementos DOM o a cualquier valor que necesite persistir sin
+causar renders adicionales.
+
+### `useMemo`: Memorización de Cálculos
+
+`useMemo` se utiliza para memorizar valores calculados costosos y solo
+recalcularlos cuando una de las dependencias ha cambiado. Esto es especialmente
+útil para mejorar el rendimiento de componentes que realizan cálculos
+intensivos.
+
+**Ejemplo práctico con `useMemo`**:
+
+```jsx
+import { useMemo, useState } from "react";
+
+const ExpensiveCalculationComponent = ({ number }) => {
+  const expensiveCalculation = (num) => {
+    console.log("Calculating...");
+    return num * 2; // Simula una operación costosa
+  };
+
+  const memoizedValue = useMemo(() => expensiveCalculation(number), [number]);
+
+  return (
+    <div>
+      <h2>Resultado: {memoizedValue}</h2>
+    </div>
+  );
+};
+
+const ParentComponent = () => {
+  const [number, setNumber] = useState(1);
+
+  return (
+    <div>
+      <ExpensiveCalculationComponent number={number} />
+      <button onClick={() => setNumber(number + 1)}>Incrementar</button>
+    </div>
+  );
+};
+
+export default ParentComponent;
+```
+
+En este ejemplo, `useMemo` memoriza el resultado de `expensiveCalculation` y
+solo recalcula el valor cuando `number` cambia, evitando ejecuciones
+innecesarias de una función costosa.
+
+### `useCallback`: Memorización de Funciones
+
+`useCallback` es similar a `useMemo`, pero en lugar de memorizar el resultado de
+una función, memoriza la propia función. Esto es útil para evitar re-creaciones
+innecesarias de funciones, especialmente cuando se pasan como props a
+componentes hijos que podrían causar re-renderizados adicionales.
+
+**Ejemplo práctico con `useCallback`**:
+
+```jsx
+import { useCallback, useState } from "react";
+
+const ChildComponent = ({ handleClick }) => {
+  console.log("Child rendered");
+  return <button onClick={handleClick}>Click me</button>;
+};
+
+const ParentComponent = () => {
+  const [count, setCount] = useState(0);
+
+  const handleClick = useCallback(() => {
+    setCount((prevCount) => prevCount + 1);
+  }, []);
+
+  return (
+    <div>
+      <h2>Count: {count}</h2>
+      <ChildComponent handleClick={handleClick} />
+    </div>
+  );
+};
+
+export default ParentComponent;
+```
+
+En este ejemplo, `useCallback` asegura que `handleClick` mantenga la misma
+referencia entre renderizados, evitando re-renderizados innecesarios del
+`ChildComponent`.
+
+### Comparación entre `useState`, `useRef`, `useMemo` y `useCallback`
+
+**useState**:
+
+- **Propósito**: Manejo del estado interno del componente.
+- **Re-render**: Causa re-render del componente cuando el estado cambia.
+- **Ejemplo**: Contadores, toggles.
+
+**useRef**:
+
+- **Propósito**: Crear referencias mutables que persisten a través del ciclo de
+  vida del componente.
+- **Re-render**: No causa re-render cuando el valor cambia.
+- **Ejemplo**: Referencias a elementos DOM, almacenar valores persistentes.
+
+**useMemo**:
+
+- **Propósito**: Memorizar valores calculados costosos para evitar
+  recalculaciones innecesarias.
+- **Re-render**: No causa re-render, memoriza el resultado del cálculo.
+- **Ejemplo**: Calcular valores derivados de estados complejos.
+
+**useCallback**:
+
+- **Propósito**: Memorizar funciones para evitar re-creaciones innecesarias.
+- **Re-render**: No causa re-render, memoriza la referencia de la función.
+- **Ejemplo**: Pasar callbacks a componentes hijos que dependen de funciones
+  memoizadas.
+
+## Peticiones a una API y Manejo de Lógica Asíncrona
+
+En este capítulo, vamos a explorar cómo realizar peticiones a una API de manera
+correcta en React, manejar la lógica asíncrona, y cómo cachear resultados en el
+Local Storage para mejorar el rendimiento de nuestra aplicación.
+
+### Realizando Peticiones a una API
+
+Vamos a desglosar cómo realizar peticiones a una API utilizando `fetch`,
+explicar las partes que lo componen y entender por qué utilizamos funciones
+asincrónicas (`async`) en lugar de hacer las peticiones directamente dentro de
+`useEffect`.
+
+#### La Función Fetch
+
+`fetch` es una función nativa de JavaScript utilizada para realizar peticiones
+HTTP a una API. Su uso básico es el siguiente:
+
+```javascript
+fetch("https://api.example.com/data")
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+```
+
+En este ejemplo, `fetch` realiza una petición a la URL especificada. La
+respuesta (`response`) es convertida a JSON utilizando el método `.json()`, y
+luego los datos (`data`) son manipulados en el siguiente `.then`. Si ocurre un
+error durante la petición, es capturado y manejado en el bloque `.catch`.
+
+#### Partes de `fetch`
+
+1. **URL**: La dirección a la que se realiza la petición.
+2. **Método HTTP**: Por defecto, `fetch` usa el método GET. Podemos especificar
+   otros métodos (POST, PUT, DELETE, etc.) pasando un objeto de configuración
+   como segundo argumento.
+3. **Encabezados (Headers)**: Información adicional que se envía con la
+   petición, como tipo de contenido (Content-Type) o tokens de autenticación.
+4. **Cuerpo (Body)**: Datos que se envían con la petición, especialmente en
+   métodos POST o PUT.
+
+Ejemplo con configuración adicional:
+
+```javascript
+fetch("https://api.example.com/data", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ key: "value" }),
+})
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+```
+
+#### Funciones Asincrónicas (`async`/`await`)
+
+Las funciones `async`/`await` son una forma moderna y más legible de trabajar
+con promesas. Un ejemplo básico de una función asincrónica es:
+
+```javascript
+const fetchData = async () => {
+  try {
+    const response = await fetch("https://api.example.com/data");
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+```
+
+En este ejemplo, `await` pausa la ejecución de la función `fetchData` hasta que
+la promesa de `fetch` se resuelve. Si la promesa se rechaza, el error es
+capturado en el bloque `catch`.
+
+#### Uso de `async` en `useEffect`
+
+No podemos declarar directamente una función `async` en el argumento de
+`useEffect` debido a que `useEffect` espera que el retorno sea una función de
+limpieza o `undefined`. Las funciones `async` devuelven implícitamente una
+promesa, lo cual no es compatible con `useEffect`. Para resolver esto,
+encapsulamos la función `async` dentro de `useEffect`.
+
+Ejemplo de `fetchApi` en `useEffect`:
+
+```javascript
+import React, { useState, useEffect } from "react";
+
+const fetchApi = async (setData, setLoading, setError) => {
+  try {
+    const response = await fetch("https://api.example.com/data");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    localStorage.setItem("apiData", JSON.stringify(data));
+    setData(data);
+    setLoading(false);
+  } catch (error) {
+    setError(error);
+    setLoading(false);
+  }
+};
+
+const ApiComponent = () => {
+  const [data, setData] = useState(() => {
+    const cachedData = localStorage.getItem("apiData");
+    return cachedData ? JSON.parse(cachedData) : null;
+  });
+  const [loading, setLoading] = useState(!data);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      if (!data) {
+        await fetchApi(setData, setLoading, setError);
+      }
+    };
+    getData();
+  }, [data]);
+
+  const clearCache = () => {
+    localStorage.removeItem("apiData");
+    setData(null);
+    setLoading(true);
+    setError(null);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div>
+        Error: {error.message}
+        <button onClick={clearCache}>Retry</button>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h1>Data from API:</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <button onClick={clearCache}>Clear Cache and Retry</button>
+    </div>
+  );
+};
+
+export default ApiComponent;
+```
+
+### Creando un Custom Hook para Manejar el Cache
+
+Para mejorar la reutilización de código y la organización, podemos crear un
+custom hook que se encargue de almacenar el estado en un contexto, utilizando el
+cache del Local Storage si está disponible. Para separar mejor el contexto,
+vamos a crear un archivo `DataProvider.js`.
+
+#### DataProvider.js
+
+```javascript
+import React, { createContext, useContext, useState, useEffect } from "react";
+
+const DataContext = createContext();
+
+const DataProvider = ({ children }) => {
+  const [data, setData] = useState(() => {
+    const cachedData = localStorage.getItem("apiData");
+    return cachedData ? JSON.parse(cachedData) : null;
+  });
+  const [loading, setLoading] = useState(!data);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      if (!data) {
+        await fetchApi(setData, setLoading, setError);
+      }
+    };
+    getData();
+  }, [data]);
+
+  return (
+    <DataContext.Provider value={{ data, loading, error, setData }}>
+      {children}
+    </DataContext.Provider>
+  );
+};
+
+const useData = () => {
+  const context = useContext(DataContext);
+  if (context === undefined) {
+    throw new Error("useData must be used within a DataProvider");
+  }
+  return context;
+};
+
+const fetchApi = async (setData, setLoading, setError) => {
+  try {
+    const response = await fetch("https://api.example.com/data");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    localStorage.setItem("apiData", JSON.stringify(data));
+    setData(data);
+    setLoading(false);
+  } catch (error) {
+    setError(error);
+    setLoading(false);
+  }
+};
+
+export { DataProvider, useData };
+```
+
+#### Utilizando el Custom Hook en un Componente
+
+Ahora podemos utilizar el custom hook `useData` dentro de nuestros componentes
+para acceder a los datos de la API de manera eficiente.
+
+```javascript
+import React from "react";
+import { DataProvider, useData } from "./DataProvider";
+
+const ApiComponent = () => {
+  const { data, loading, error } = useData();
+
+  const clearCache = () => {
+    localStorage.removeItem("apiData");
+    window.location.reload();
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div>
+        Error: {error.message}
+        <button onClick={clearCache}>Retry</button>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h1>Data from API:</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <button onClick={clearCache}>Clear Cache and Retry</button>
+    </div>
+  );
+};
+
+const App = () => (
+  <DataProvider>
+    <ApiComponent />
+  </DataProvider>
+);
+
+export default App;
+```
+
+### Importancia de la Seguridad en el Local Storage
+
+Es fundamental recalcar que el Local Storage no es un lugar seguro para
+almacenar información sensible, como tokens de autenticación, contraseñas o
+cualquier dato personal. El Local Storage es accesible por cualquier script que
+se ejecute en la misma página, lo que lo hace vulnerable a ataques XSS
+(Cross-Site Scripting).
+
+Por lo tanto, se recomienda almacenar en el Local Storage solo datos que no sean
+críticos para la seguridad de la aplicación y del usuario.
+
+## Concepto de Portals
+
+	En este capítulo, vamos a explorar el concepto de Portals en React, entender qué
+son, cómo utilizarlos y algunos ejemplos prácticos para ilustrar su uso.
+
+### ¿Qué es un Portal?
+
+Un Portal en React es una forma de renderizar un componente hijo en un nodo del
+DOM diferente al de su componente padre. En lugar de seguir la estructura
+habitual del DOM donde los componentes hijos se renderizan dentro de sus padres,
+los Portals permiten montar un componente en un nodo completamente separado del
+árbol del DOM.
+
+#### ¿Por qué usar Portals?
+
+Los Portals son útiles en situaciones donde necesitamos que un componente se
+renderice fuera del flujo normal del DOM, como en los siguientes casos:
+
+1. **Modales y Diálogos**: Aseguran que el modal se superponga correctamente
+   sobre otros contenidos.
+2. **Tooltips y Popovers**: Facilitan la gestión de superposiciones y
+   posicionamientos dinámicos.
+3. **Menús Contextuales**: Evitan problemas de z-index y de overflow de los
+   padres.
+
+### Cómo Utilizar un Portal
+
+Para crear un Portal, utilizamos la función `createPortal` del módulo
+`react-dom`. Esta función toma dos argumentos:
+
+1. El contenido que queremos renderizar.
+2. El nodo del DOM donde queremos que se monte el contenido.
+
+Ejemplo básico:
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+
+const portalRoot = document.getElementById("portal-root");
+
+const Modal = ({ children }) => {
+  return ReactDOM.createPortal(
+    <div className="modal">{children}</div>,
+    portalRoot,
+  );
+};
+
+const App = () => {
+  const [showModal, setShowModal] = React.useState(false);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  return (
+    <div>
+      <button onClick={toggleModal}>Toggle Modal</button>
+      {showModal && (
+        <Modal>
+          <h1>Modal Content</h1>
+          <button onClick={toggleModal}>Close</button>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+export default App;
+```
+
+En este ejemplo, el componente `Modal` se renderiza dentro del nodo
+`portal-root`, que está fuera del nodo del componente `App`.
+
+#### Crear un Nodo de Portal en el DOM
+
+Para que el ejemplo anterior funcione, debemos asegurarnos de tener un nodo en
+nuestro HTML donde el Portal se monte. Generalmente, se agrega en el archivo
+`index.html`.
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>React App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="portal-root"></div>
+    <script src="bundle.js"></script>
+  </body>
+</html>
+```
+
+### Ejemplos Prácticos
+
+#### Ejemplo 1: Modal Básico
+
+Vamos a crear un modal básico utilizando Portals. Este modal contendrá contenido
+sencillo y un botón para cerrarlo.
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import "./Modal.css";
+
+const portalRoot = document.getElementById("portal-root");
+
+const Modal = ({ children, onClose }) => {
+  return ReactDOM.createPortal(
+    <div className="modal-overlay">
+      <div className="modal-content">
+        {children}
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>,
+    portalRoot,
+  );
+};
+
+const App = () => {
+  const [showModal, setShowModal] = React.useState(false);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  return (
+    <div>
+      <button onClick={toggleModal}>Open Modal</button>
+      {showModal && (
+        <Modal onClose={toggleModal}>
+          <h1>This is a modal</h1>
+          <p>Content inside the modal goes here.</p>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+export default App;
+```
+
+#### Ejemplo 2: Tooltip
+
+Vamos a crear un tooltip que se muestra al pasar el cursor sobre un botón. El
+tooltip se renderiza utilizando Portals para asegurar su correcta posición y
+visibilidad.
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import "./Tooltip.css";
+
+const portalRoot = document.getElementById("portal-root");
+
+const Tooltip = ({ children, position }) => {
+  return ReactDOM.createPortal(
+    <div className="tooltip" style={{ top: position.top, left: position.left }}>
+      {children}
+    </div>,
+    portalRoot,
+  );
+};
+
+const App = () => {
+  const [tooltip, setTooltip] = React.useState({
+    visible: false,
+    position: { top: 0, left: 0 },
+    content: "",
+  });
+
+  const showTooltip = (event) => {
+    const { top, left } = event.target.getBoundingClientRect();
+    setTooltip({
+      visible: true,
+      position: { top: top + window.scrollY, left: left + window.scrollX },
+      content: "This is a tooltip",
+    });
+  };
+
+  const hideTooltip = () => {
+    setTooltip({ visible: false, position: { top: 0, left: 0 }, content: "" });
+  };
+
+  return (
+    <div>
+      <button onMouseEnter={showTooltip} onMouseLeave={hideTooltip}>
+        Hover me
+      </button>
+      {tooltip.visible && (
+        <Tooltip position={tooltip.position}>{tooltip.content}</Tooltip>
+      )}
+    </div>
+  );
+};
+
+export default App;
+```
+
+#### Ejemplo 3: Menú Contextual
+
+Crearemos un menú contextual que aparece al hacer clic derecho en un área
+específica de la pantalla.
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import "./ContextMenu.css";
+
+const portalRoot = document.getElementById("portal-root");
+
+const ContextMenu = ({ position, onClose }) => {
+  return ReactDOM.createPortal(
+    <div
+      className="context-menu"
+      style={{ top: position.top, left: position.left }}
+    >
+      <ul>
+        <li onClick={onClose}>Option 1</li>
+        <li onClick={onClose}>Option 2</li>
+        <li onClick={onClose}>Option 3</li>
+      </ul>
+    </div>,
+    portalRoot,
+  );
+};
+
+const App = () => {
+  const [contextMenu, setContextMenu] = React.useState({
+    visible: false,
+    position: { top: 0, left: 0 },
+  });
+
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+    const { top, left } = event.target.getBoundingClientRect();
+    setContextMenu({
+      visible: true,
+      position: { top: top + window.scrollY, left: left + window.scrollX },
+    });
+  };
+
+  const closeContextMenu = () => {
+    setContextMenu({ visible: false, position: { top: 0, left: 0 } });
+  };
+
+  return (
+    <div
+      onContextMenu={handleContextMenu}
+      style={{ width: "100vw", height: "100vh" }}
+    >
+      Right-click anywhere in this area.
+      {contextMenu.visible && (
+        <ContextMenu
+          position={contextMenu.position}
+          onClose={closeContextMenu}
+        />
+      )}
+    </div>
+  );
+};
+
+export default App;
+```
+
+## Cómo Agregar Estilos a Componentes
+
+En este capítulo, exploraremos cómo agregar estilos a los componentes de React
+utilizando varias técnicas, incluyendo CSS tradicional, CSS-in-JS, y SCSS
+modules. Cada enfoque tiene sus propias ventajas y desventajas, y elegir el
+adecuado dependerá de las necesidades específicas de tu proyecto.
+
+### Estilos CSS Tradicionales
+
+#### Paso 1: Creación del Objeto `styles`
+
+En lugar de utilizar archivos CSS externos, vamos a definir nuestros estilos
+directamente dentro del componente usando un objeto `styles`. Este enfoque es
+útil para estilos locales y se integra fácilmente con JSX.
+
+```javascript
+// Button.js
+import React from "react";
+
+const styles = {
+  button: {
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "4px",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease",
+  },
+  buttonHover: {
+    backgroundColor: "#0056b3",
+  },
+};
+
+const Button = ({ children, onClick }) => {
+  return (
+    <button
+      style={styles.button}
+      onMouseOver={(e) =>
+        (e.currentTarget.style.backgroundColor =
+          styles.buttonHover.backgroundColor)
+      }
+      onMouseOut={(e) =>
+        (e.currentTarget.style.backgroundColor = styles.button.backgroundColor)
+      }
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+};
+
+export default Button;
+```
+
+#### Ventajas y Desventajas
+
+- **Ventajas**: Fácil de entender y utilizar, excelente para proyectos pequeños.
+- **Desventajas**: Puede volverse difícil de mantener en proyectos grandes
+  debido a la falta de encapsulación y posibilidad de conflictos de nombres.
+
+### CSS-in-JS con Styled Components
+
+#### Paso 1: Instalación de Styled Components
+
+Primero, instalamos la librería `styled-components`.
+
+```bash
+npm install styled-components
+```
+
+#### Paso 2: Crear Componentes Estilizados
+
+Creamos nuestros componentes con estilos integrados utilizando
+`styled-components`.
+
+```javascript
+// Button.js
+import React from "react";
+import styled from "styled-components";
+
+const StyledButton = styled.button`
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const Button = ({ children, onClick }) => {
+  return <StyledButton onClick={onClick}>{children}</StyledButton>;
+};
+
+export default Button;
+```
+
+#### Ventajas y Desventajas
+
+- **Ventajas**: Estilos encapsulados, soporte para temas, excelente para
+  componentes reutilizables.
+- **Desventajas**: Puede aumentar el tamaño del paquete, la sintaxis puede ser
+  menos familiar para algunos desarrolladores, y se realiza en tiempo de
+  ejecución (runtime), lo que puede afectar el rendimiento.
+
+##### Soluciones Alternativas
+
+Aunque `styled-components` realiza el procesamiento en tiempo de ejecución,
+existen otras soluciones como `panda css` que realizan el procesamiento en
+tiempo de build, eliminando este problema de rendimiento.
+
+### SCSS Modules
+
+#### Paso 1: Instalación de SASS
+
+Instalamos `sass` para permitir el uso de SCSS en nuestro proyecto.
+
+```bash
+npm install sass
+```
+
+#### Paso 2: Creación del Archivo SCSS Module
+
+Creamos un archivo SCSS para nuestro componente. Utilizando SCSS modules,
+podemos asegurarnos de que los estilos son locales al componente.
+
+```scss
+/* Button.module.scss */
+.button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+```
+
+#### Paso 3: Importar el SCSS Module en el Componente
+
+Importamos el SCSS module en nuestro componente y aplicamos los estilos.
+
+```javascript
+// Button.js
+import React from "react";
+import styles from "./Button.module.scss";
+
+const Button = ({ children, onClick }) => {
+  return (
+    <button className={styles.button} onClick={onClick}>
+      {children}
+    </button>
+  );
+};
+
+export default Button;
+```
+
+#### Ventajas y Desventajas
+
+- **Ventajas**: Estilos locales y encapsulados, soporte completo para SCSS.
+- **Desventajas**: Configuración adicional, puede ser complejo para proyectos
+  muy grandes.
+
+### Comparación de Enfoques
+
+#### CSS Tradicional
+
+- **Uso**: Ideal para proyectos pequeños y rápidos.
+- **Simplicidad**: Alta.
+- **Mantenimiento**: Puede ser difícil en proyectos grandes debido a la falta de
+  encapsulación.
+
+#### CSS-in-JS (Styled Components)
+
+- **Uso**: Ideal para componentes altamente reutilizables y proyectos que
+  utilizan mucho JavaScript.
+- **Simplicidad**: Media, la sintaxis puede ser un obstáculo para algunos.
+- **Mantenimiento**: Alto, gracias a la encapsulación y la capacidad de usar
+  temas.
+- **Rendimiento**: Puede ser menos eficiente debido a que se procesa en tiempo
+  de ejecución. Alternativas como `panda css` pueden mitigar este problema al
+  realizar el procesamiento en tiempo de build.
+
+#### SCSS Modules
+
+- **Uso**: Ideal para proyectos que requieren un fuerte uso de SCSS y
+  encapsulación de estilos.
+- **Simplicidad**: Media-Alta, familiaridad con SCSS es un plus.
+- **Mantenimiento**: Alto, estilos locales y potentes características de SCSS.
+
+## Routing con react-router-dom
+
+### Introducción a React Router
+
+En este capítulo, vamos a explorar cómo manejar el routing en una aplicación de
+React utilizando `react-router-dom`. El enrutamiento (routing) es el proceso de
+definir y manejar las distintas rutas dentro de una aplicación web. Esto permite
+que los usuarios puedan navegar entre diferentes vistas o páginas sin necesidad
+de recargar toda la aplicación.
+
+`react-router-dom` es una librería popular en el ecosistema de React para
+implementar routing. Facilita la creación de rutas, la navegación entre ellas y
+la protección de rutas basadas en la autenticación y otros factores.
+
+### Conceptos Básicos de React Router
+
+Antes de adentrarnos en los ejemplos, repasemos algunos conceptos clave que
+necesitamos conocer sobre `react-router-dom`:
+
+1. **Router**: Es el contenedor que envuelve la aplicación y maneja la historia
+   de navegación. Utilizamos `BrowserRouter` para una aplicación web estándar.
+2. **Routes**: Son definiciones de rutas que especifican qué componente se debe
+   renderizar para una URL particular.
+3. **Route**: Es un componente que se usa para definir una ruta. Cada `Route` se
+   asocia a una URL y a un componente específico.
+4. **Navigate**: Es un componente utilizado para redirigir programáticamente al
+   usuario a una nueva ruta.
+5. **Private Routes**: Rutas que solo pueden ser accedidas si se cumplen ciertas
+   condiciones, como estar autenticado.
+
+### Instalación de react-router-dom
+
+Antes de empezar, necesitamos instalar `react-router-dom` en nuestra aplicación.
+Podemos hacerlo utilizando npm o yarn:
+
+```bash
+npm install react-router-dom
+```
+
+o
+
+```bash
+yarn add react-router-dom
+```
+
+### Configuración Básica del Router
+
+Para configurar el router en nuestra aplicación, primero envolvemos nuestra
+aplicación en un `BrowserRouter` y definimos las rutas utilizando el componente
+`Routes` y `Route`.
+
+```javascript
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
+```
+
+En este ejemplo, hemos definido tres rutas:
+
+- `/login` para el componente `Login`.
+- `/dashboard` para el componente `Dashboard`.
+- `*` para redirigir cualquier ruta no definida a `/login`.
+
+### Rutas Privadas
+
+Las rutas privadas son rutas que solo pueden ser accedidas si el usuario está
+autenticado. Para manejar esto, podemos crear un componente `PrivateRoute` que
+verifique si el usuario está autenticado antes de permitirle el acceso a la
+ruta.
+
+```javascript
+// PrivateRoute.js
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useUserContext } from "../UserContext";
+
+const PrivateRoute = ({ children }) => {
+  const { user } = useUserContext();
+  return user.id ? children : <Navigate to="/login" replace />;
+};
+
+export default PrivateRoute;
+```
+
+Utilizamos el contexto `UserContext` para verificar si el usuario está
+autenticado. Si no lo está, redirigimos al usuario a la página de login.
+
+### Uso del Contexto para Manejar la Autenticación
+
+En lugar de Redux, utilizaremos el Context API de React para manejar el estado
+de la autenticación del usuario.
+
+```javascript
+// UserContext.js
+import { createContext, useContext, useState, useEffect } from "react";
+
+export const UserContext = createContext();
+
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser
+      ? JSON.parse(storedUser)
+      : { id: null, name: "", email: "", role: "user" };
+  });
+
+  const login = (userData) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
+
+  const logout = () => {
+    setUser({ id: null, name: "", email: "", role: "user" });
+    localStorage.removeItem("user");
+  };
+
+  return (
+    <UserContext.Provider value={{ user, login, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export const useUserContext = () => {
+  const context = useContext(UserContext);
+  if (context === undefined) {
+    throw new Error("useUserContext must be used within a UserProvider");
+  }
+  return context;
+};
+```
+
+### Implementación Completa del Ejemplo
+
+Finalmente, vamos a integrar todos estos componentes en nuestra aplicación
+principal y a manejar la autenticación y las rutas protegidas utilizando
+`react-router-dom` y el Context API.
+
+```javascript
+// App.js
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { UserProvider, useUserContext } from "./UserContext";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import PrivateRoute from "./components/PrivateRoute";
+import RoleRoute from "./components/RoleRoute";
+
+const App = () => {
+  return (
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <RoleRoute requiredRole="admin">
+                <AdminPage />
+              </RoleRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </Router>
+    </UserProvider>
+  );
+};
+
+export default App;
+```
+
+### Routing Anidado y Lazy Loading
+
+#### Ventajas de las Rutas Anidadas
+
+Las rutas anidadas permiten organizar mejor las secciones de la aplicación,
+facilitando el mantenimiento y la escalabilidad. Con rutas anidadas, podemos
+definir rutas dentro de otras rutas, permitiendo que una sección de la
+aplicación tenga su propio conjunto de rutas.
+
+#### Configuración Básica de Rutas Anidadas
+
+Supongamos que tenemos una aplicación con un dashboard que tiene múltiples
+secciones como Home, Profile y Settings. Vamos a definir estas rutas anidadas en
+nuestro componente principal.
+
+```javascript
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import PrivateRoute from "./components/PrivateRoute";
+import RoleRoute from "./components/RoleRoute";
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        >
+          <Route path="home" element={<Home />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
+```
+
+En este ejemplo, hemos definido rutas anidadas dentro de `/dashboard`. Las rutas
+`home`, `profile`, y `settings` son accesibles solo cuando el usuario está en
+`/dashboard`.
+
+#### Utilizando Lazy Loading
+
+Lazy loading es una técnica para cargar componentes solo cuando son necesarios,
+en lugar de cargarlos todos al inicio. Esto mejora el rendimiento de la
+aplicación, especialmente si tiene muchas rutas o componentes pesados.
+
+Para implementar lazy loading, usamos la función `React.lazy()` y el componente
+`Suspense` de React.
+
+```javascript
+import React, { Suspense, lazy } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./pages/Login";
+import PrivateRoute from "./components/PrivateRoute";
+
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Home = lazy(() => import("./pages/Home"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Settings = lazy(() => import("./pages/Settings"));
+
+const App = () => {
+  return (
+    <Router>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          >
+            <Route path="home" element={<Home />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </Suspense>
+    </Router>
+  );
+};
+
+export default App;
+```
+
+Aquí hemos envuelto nuestras rutas con el componente `Suspense` y especificado
+un componente `fallback` que se muestra mientras los componentes anidados se
+cargan.
+
+#### Alcance Lógico de los Elementos
+
+La estructura de rutas anidadas nos permite definir el alcance lógico de los
+elementos de forma clara. Cada sección de la aplicación puede tener su propio
+conjunto de rutas, lo que facilita la comprensión y el mantenimiento del código.
+
+- **Rutas Principales**: Las rutas principales como `/login` y `/dashboard` se
+  definen en el nivel superior.
+- **Rutas Secundarias**: Dentro del `Dashboard`, definimos rutas secundarias
+  como `home`, `profile` y `settings`.
+
+Esta organización jerárquica ayuda a mantener un código limpio y modular. Cada
+sección de la aplicación está encapsulada dentro de su propio ámbito lógico, lo
+que hace más fácil entender cómo se estructuran y cargan los componentes.
+
+#### Ejemplo Completo
+
+Vamos a mostrar un ejemplo completo que combina rutas anidadas, lazy loading y
+el manejo de autenticación utilizando Context API.
+
+```javascript
+// App.js
+import React, { Suspense, lazy } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { UserProvider } from "./UserContext";
+import Login from "./pages/Login";
+import PrivateRoute from "./components/PrivateRoute";
+
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Home = lazy(() => import("./pages/Home"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Settings = lazy(() => import("./pages/Settings"));
+
+const App = () => {
+  return (
+    <UserProvider>
+      <Router>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            >
+              <Route path="home" element={<Home />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        </Suspense>
+      </Router>
+    </UserProvider>
+  );
+};
+
+export default App;
+```
+
+En este ejemplo:
+
+- Utilizamos `React.lazy()` para cargar los componentes de manera perezosa.
+- `Suspense` envuelve nuestras rutas para mostrar un fallback mientras los
+  componentes se cargan.
+- `PrivateRoute` asegura que solo los usuarios autenticados puedan acceder a las
+  rutas anidadas bajo `/dashboard`.
+
+Esta estructura permite una carga eficiente y una organización clara del código,
+facilitando la navegación y la experiencia del usuario en la aplicación.
+
+## Control de Errores con Error Boundaries
+
+### Introducción
+
+En este capítulo, aprenderemos a manejar errores de manera eficiente en nuestras
+aplicaciones React utilizando Error Boundaries. Esta técnica nos permitirá
+capturar errores en componentes específicos sin afectar el resto de la
+aplicación. Vamos a explorar cómo implementar Error Boundaries y cómo podemos
+manejarlos para asegurar que nuestra aplicación continúe funcionando de manera
+estable, incluso cuando ocurren errores.
+
+### ¿Qué es un Error Boundary?
+
+Un Error Boundary es un componente de React que detecta errores en cualquier
+componente hijo durante el ciclo de renderizado. Similar a cómo un Provider
+engloba otros componentes para proporcionarles un contexto, un Error Boundary
+engloba otros componentes para manejar los errores que puedan surgir.
+
+La idea es que si un componente dentro del Error Boundary falla, solo esa parte
+específica de la aplicación se verá afectada. El Error Boundary puede mostrar un
+mensaje de error o una UI de respaldo, sin detener el funcionamiento del resto
+de la aplicación.
+
+### Implementación Básica de un Error Boundary
+
+Para empezar, vamos a implementar un Error Boundary básico. Usaremos clases, ya
+que actualmente, los Error Boundaries solo pueden ser implementados en
+componentes de clase.
+
+```javascript
+import React, { Component } from "react";
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.log(error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Oops! Algo salió mal.</h1>;
+    }
+
+    return this.props.children;
+  }
+}
+
+export default ErrorBoundary;
+```
+
+En este código:
+
+- `getDerivedStateFromError`: Este método se llama cuando un error es lanzado en
+  un componente hijo. Actualiza el estado para indicar que ha ocurrido un error.
+- `componentDidCatch`: Este método se usa para registrar errores o realizar
+  tareas adicionales.
+- `render`: Si hay un error, se muestra un mensaje de error; de lo contrario, se
+  renderizan los componentes hijos normalmente.
+
+### Usando el Error Boundary
+
+Para usar el Error Boundary, simplemente envolvemos los componentes que queremos
+monitorear con nuestro Error Boundary.
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import ErrorBoundary from "./ErrorBoundary";
+
+ReactDOM.render(
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>,
+  document.getElementById("root"),
+);
+```
+
+De esta forma, cualquier error que ocurra dentro de `App` será capturado por
+`ErrorBoundary`, y en lugar de romper toda la aplicación, solo mostrará el
+mensaje de error.
+
+### Manejo de Errores en Fetch Requests
+
+Los Error Boundaries no capturan errores asíncronos, como los que ocurren en
+solicitudes fetch. Para manejar estos errores, necesitamos usar un enfoque
+diferente.
+
+```javascript
+import React, { useState, useEffect } from "react";
+
+const DataFetcher = () => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch("https://rickandmortyapi.com/api/character")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => setData(data))
+      .catch((error) => setError(error));
+  }, []);
+
+  if (error) {
+    return <div>Oops! Algo salió mal: {error.message}</div>;
+  }
+
+  return (
+    <div>
+      {data ? (
+        data.results.map((character) => (
+          <div key={character.id}>{character.name}</div>
+        ))
+      ) : (
+        <div>Loading...</div>
+      )}
+    </div>
+  );
+};
+
+export default DataFetcher;
+```
+
+En este componente:
+
+- `useEffect` se usa para hacer la solicitud fetch.
+- Si ocurre un error durante la solicitud, se establece el estado de error y se
+  muestra un mensaje de error.
+
+### Integración de Error Boundaries con Fetch Requests
+
+Podemos combinar los Error Boundaries con el manejo de errores de fetch para una
+solución más robusta.
+
+```javascript
+import React, { Component } from "react";
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.log(error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Oops! Algo salió mal.</h1>;
+    }
+
+    return this.props.children;
+  }
+}
+
+const DataFetcher = () => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch("https://rickandmortyapi.com/api/character")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => setData(data))
+      .catch((error) => setError(error));
+  }, []);
+
+  if (error) {
+    throw error;
+  }
+
+  return (
+    <div>
+      {data ? (
+        data.results.map((character) => (
+          <div key={character.id}>{character.name}</div>
+        ))
+      ) : (
+        <div>Loading...</div>
+      )}
+    </div>
+  );
+};
+
+const App = () => (
+  <ErrorBoundary>
+    <DataFetcher />
+  </ErrorBoundary>
+);
+
+export default App;
+```
+
+En este ejemplo, cualquier error durante el fetch lanzará una excepción que será
+capturada por el Error Boundary, asegurando que la UI de respaldo se muestre
+cuando sea necesario.
+
+### Beneficios del Lazy Loading
+
+El lazy loading, o carga perezosa, nos permite cargar componentes solo cuando se
+necesitan. Esto puede mejorar el rendimiento de nuestra aplicación al reducir el
+tiempo de carga inicial y el uso de memoria.
+
+```javascript
+import React, { Suspense, lazy } from "react";
+
+const LazyComponent = lazy(() => import("./LazyComponent"));
+
+const App = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <LazyComponent />
+  </Suspense>
+);
+
+export default App;
+```
+
+En este ejemplo, `LazyComponent` solo se cargará cuando se necesite, y mientras
+tanto, se mostrará el mensaje de "Loading...".
+
+### Integrando Lazy Loading y Error Boundaries
+
+Combinar lazy loading con Error Boundaries puede ofrecer una solución muy
+eficiente y robusta.
+
+```javascript
+import React, { Suspense, lazy } from "react";
+import ErrorBoundary from "./ErrorBoundary";
+
+const LazyComponent = lazy(() => import("./LazyComponent"));
+
+const App = () => (
+  <ErrorBoundary>
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </Suspense>
+  </ErrorBoundary>
+);
+
+export default App;
+```
+
+De esta manera, manejamos tanto errores como la carga perezosa de componentes,
+asegurando una experiencia de usuario fluida y sin interrupciones.
+
+## Mejorando tus Habilidades con Axios Interceptor
+
+### Introducción
+
+En este capítulo, vamos a adentrarnos en el mundo de los interceptores de Axios
+en React. Aprenderemos cómo utilizarlos para manejar de manera eficiente las
+peticiones HTTP y las respuestas, dándonos la flexibilidad y el control que
+necesitamos para construir aplicaciones robustas y seguras. Vamos a crear un
+proyecto desde cero, configurar Axios e implementar interceptores para manejar
+autenticaciones, errores y más.
+
+### ¿Qué es Axios y por qué usarlo?
+
+Axios es una popular librería para hacer peticiones HTTP en JavaScript. Facilita
+la comunicación con APIs, ofreciendo una sintaxis limpia y numerosas
+funcionalidades adicionales que Fetch, la API nativa de JavaScript, no
+proporciona de manera tan directa. Una de estas funcionalidades clave es el uso
+de interceptores, que nos permiten interceptar y modificar peticiones y
+respuestas antes de que lleguen al servidor o al cliente.
+
+### Creando un Proyecto con Vite
+
+Vamos a comenzar creando un nuevo proyecto de React utilizando Vite, un bundler
+rápido y ligero.
+
+1. **Crear el Proyecto**:
+
+   ```bash
+   npm create vite@latest
+   ```
+
+   Elige un nombre para tu proyecto y selecciona "React" y "TypeScript" como las
+   opciones deseadas.
+
+2. **Instalar Axios**:
+
+   ```bash
+   npm install axios
+   ```
+
+### Configurando Axios Interceptor
+
+Ahora que tenemos nuestro proyecto configurado, vamos a crear un interceptor
+para manejar nuestras peticiones y respuestas.
+
+1. **Crear el Interceptor**: Crea un archivo `axios.interceptor.ts` en una
+   carpeta `services`.
+
+   ```javascript
+   import axios from "axios";
+
+   const axiosInstance = axios.create();
+
+   axiosInstance.interceptors.request.use(
+     (config) => {
+       // Modificar la petición antes de enviarla
+       const token = localStorage.getItem("token");
+       if (token) {
+         config.headers["Authorization"] = `Bearer ${token}`;
+       }
+       return config;
+     },
+     (error) => {
+       return Promise.reject(error);
+     },
+   );
+
+   axiosInstance.interceptors.response.use(
+     (response) => {
+       // Modificar la respuesta antes de enviarla al cliente
+       return response;
+     },
+     (error) => {
+       if (error.response.status === 401) {
+         // Manejar errores de autenticación
+         console.log("No autorizado, redirigiendo al login...");
+       }
+       return Promise.reject(error);
+     },
+   );
+
+   export default axiosInstance;
+   ```
+
+   En este código, interceptamos todas las peticiones para añadir un token de
+   autenticación si está disponible, y manejamos errores de respuesta
+   específicos, como una autenticación fallida.
+
+2. **Utilizar el Interceptor**: En tu componente principal (`App.tsx`), importa
+   y utiliza el interceptor para realizar una petición.
+
+   ```javascript
+   import React, { useEffect, useState } from "react";
+   import axiosInstance from "./services/axios.interceptor";
+
+   const App = () => {
+     const [data, setData] = useState(null);
+     const [error, setError] = useState(null);
+
+     useEffect(() => {
+       const fetchData = async () => {
+         try {
+           const response = await axiosInstance.get(
+             "https://rickandmortyapi.com/api/character/1",
+           );
+           setData(response.data);
+         } catch (error) {
+           setError(error);
+         }
+       };
+
+       fetchData();
+     }, []);
+
+     if (error) return <div>Error: {error.message}</div>;
+     if (!data) return <div>Loading...</div>;
+
+     return (
+       <div>
+         <h1>{data.name}</h1>
+         <p>Status: {data.status}</p>
+       </div>
+     );
+   };
+
+   export default App;
+   ```
+
+### Ventajas de Usar Interceptores
+
+- **Autenticación Centralizada**: Los interceptores nos permiten añadir headers
+  de autenticación a todas las peticiones desde un único lugar.
+- **Manejo de Errores**: Podemos capturar y manejar errores de manera global,
+  mostrando mensajes personalizados o redirigiendo al usuario según sea
+  necesario.
+- **Logging y Depuración**: Podemos registrar las peticiones y respuestas para
+  monitorear la actividad de la red y depurar problemas.
+
+### Manejo Avanzado de Errores
+
+Vamos a mejorar nuestro interceptor para manejar diferentes tipos de errores y
+refrescar el token de autenticación cuando sea necesario.
+
+```javascript
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    if (error.response.status === 401) {
+      // Intentar refrescar el token
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        const response = await axios.post("/auth/refresh-token", {
+          token: refreshToken,
+        });
+        localStorage.setItem("token", response.data.token);
+        error.config.headers["Authorization"] = `Bearer ${response.data.token}`;
+        return axiosInstance(error.config);
+      } catch (e) {
+        // Redirigir al login si el refresco del token falla
+        console.log("Redirigiendo al login...");
+      }
+    }
+    return Promise.reject(error);
+  },
+);
+```
+
+Con esta configuración, si una petición recibe un error 401 (No autorizado),
+intentamos refrescar el token. Si el refresco falla, redirigimos al usuario a la
+página de login.
+
