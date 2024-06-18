@@ -37,6 +37,8 @@ titleList:
     tagId: 'entendiendo-typeof-en-typescript'
   - name: 'Explorando `as const` en TypeScript'
     tagId: 'explorando-as-const-en-typescript'
+  - name: 'Return Type'
+    tagId: 'return-type'
   - name: 'Aventura en TypeScript: Type Assertion y Casteo de Tipos'
     tagId: 'aventura-en-typescript-type-assertion-y-casteo-de-tipos'
   - name: 'Functional Overloading en TypeScript: ¡Pura Magia!'
@@ -1169,6 +1171,84 @@ const config = obtenerConfiguracion();
 Aquí, la función `obtenerConfiguracion` devuelve un objeto cuyo tipo es
 inmutable gracias a `as const`. Esto asegura que los valores devueltos tengan
 los tipos más específicos posibles.
+
+## Return Type
+
+El tipo utilitario `ReturnType` en TypeScript es una herramienta poderosa que
+nos permite inferir el tipo de retorno de una función. Esto es especialmente
+útil cuando trabajamos con funciones complejas y queremos asegurarnos de que el
+tipo de retorno se maneje de manera coherente en todo nuestro código.
+
+### Uso de ReturnType
+
+`ReturnType` toma un tipo de función y devuelve el tipo del valor que esa
+función retorna. Veamos un ejemplo de cómo se puede usar esto en un contexto de
+la vida cotidiana.
+
+Supongamos que estamos trabajando en una aplicación de gestión de tareas.
+Tenemos una función que crea una nueva tarea y queremos reutilizar el tipo de
+retorno de esta función en otras partes de nuestro código.
+
+```typescript
+// Definición de la función que crea una nueva tarea
+function crearTarea(titulo: string, descripcion: string) {
+  return {
+    id: Math.random().toString(36).substr(2, 9),
+    titulo,
+    descripcion,
+    completada: false,
+  };
+}
+
+// Usamos ReturnType para inferir el tipo de retorno de crearTarea
+type Tarea = ReturnType<typeof crearTarea>;
+
+// Ahora podemos usar el tipo Tarea en otras partes de nuestro código
+const nuevaTarea: Tarea = crearTarea(
+  "Comprar leche",
+  "Ir al supermercado y comprar leche",
+);
+
+console.log(nuevaTarea);
+
+// Implementación de una función que marca una tarea como completada
+function completarTarea(tarea: Tarea): Tarea {
+  return { ...tarea, completada: true };
+}
+
+const tareaCompletada = completarTarea(nuevaTarea);
+
+console.log(tareaCompletada);
+```
+
+En este ejemplo:
+
+1. Definimos una función `crearTarea` que devuelve un objeto representando una
+   nueva tarea.
+2. Usamos `ReturnType` para crear un tipo `Tarea` que representa el tipo del
+   valor retornado por `crearTarea`.
+3. Utilizamos el tipo `Tarea` para declarar variables y tipos de retorno en
+   otras funciones.
+
+Esto nos asegura que si la estructura del objeto retornado por `crearTarea`
+cambia, TypeScript actualizará automáticamente el tipo `Tarea`, manteniendo
+nuestro código consistente y evitando errores.
+
+### Ventajas de Usar ReturnType
+
+- **Consistencia:** Asegura que el tipo de retorno de una función se maneje de
+  manera coherente en todo el código.
+- **Mantenimiento:** Facilita el mantenimiento del código, ya que cualquier
+  cambio en la función original se reflejará automáticamente en el tipo
+  inferido.
+- **Evita errores:** Ayuda a evitar errores de tipo que pueden surgir al copiar
+  manualmente tipos de retorno complejos.
+
+ReturnType es una herramienta extremadamente útil en TypeScript para manejar
+tipos de retorno complejos y mantener nuestro código limpio y seguro. Utilízalo
+siempre que necesites reutilizar el tipo de retorno de una función en varias
+partes de tu código.
+
 
 ## Aventura en TypeScript: Type Assertion y Casteo de Tipos
 

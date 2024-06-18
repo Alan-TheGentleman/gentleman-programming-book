@@ -37,6 +37,8 @@ titleList:
     tagId: 'understanding-typeof-in-typescript'
   - name: 'Exploring `as const` in TypeScript'
     tagId: 'exploring-as-const-in-typescript'
+  - name: 'Return Type'
+    tagId: 'return-type'
   - name: 'Adventure in TypeScript: Type Assertion and Type Casting'
     tagId: 'adventure-in-typescript-type-assertion-and-type-casting'
   - name: 'Functional Overloading in TypeScript: Pure Magic'
@@ -918,6 +920,64 @@ const config = getConfig
 ```
 
 Here, the `getConfig` function returns an object whose type is immutable thanks to `as const`. This ensures that the returned values have the most specific types possible.
+
+## Return Type
+
+The `ReturnType` utility type in TypeScript is a powerful tool that allows us to infer the return type of a function. This is especially useful when working with complex functions and we want to ensure that the return type is handled consistently throughout our code.
+
+### Using ReturnType
+
+`ReturnType` takes a function type and returns the type of the value that the function returns. Let's see an example of how this can be used in a real-world context.
+
+Suppose we are working on a task management application. We have a function that creates a new task, and we want to reuse the return type of this function in other parts of our code.
+
+```typescript
+// Definition of the function that creates a new task
+function createTask(title: string, description: string) {
+  return {
+    id: Math.random().toString(36).substr(2, 9),
+    title,
+    description,
+    completed: false,
+  };
+}
+
+// Using ReturnType to infer the return type of createTask
+type Task = ReturnType<typeof createTask>;
+
+// Now we can use the Task type in other parts of our code
+const newTask: Task = createTask(
+  "Buy milk",
+  "Go to the supermarket and buy milk",
+);
+
+console.log(newTask);
+
+// Implementation of a function that marks a task as completed
+function completeTask(task: Task): Task {
+  return { ...task, completed: true };
+}
+
+const completedTask = completeTask(newTask);
+
+console.log(completedTask);
+```
+
+In this example:
+
+1. We define a function `createTask` that returns an object representing a new task.
+2. We use `ReturnType` to create a `Task` type that represents the type of the value returned by `createTask`.
+3. We use the `Task` type to declare variables and return types in other functions.
+
+This ensures that if the structure of the object returned by `createTask` changes, TypeScript will automatically update the `Task` type, keeping our code consistent and preventing errors.
+
+### Advantages of Using ReturnType
+
+- **Consistency:** Ensures that the return type of a function is handled consistently throughout the code.
+- **Maintenance:** Makes code maintenance easier, as any changes to the original function will automatically be reflected in the inferred type.
+- **Error prevention:** Helps prevent type errors that can arise from manually copying complex return types.
+
+`ReturnType` is an extremely useful tool in TypeScript for handling complex return types and keeping our code clean and safe. Use it whenever you need to reuse the return type of a function in various parts of your code.
 
 ## Adventure in TypeScript: Type Assertion and Type Casting
 
