@@ -70,8 +70,13 @@ export default function Home({
 
 	React.useEffect(() => {
 		if (router.locale === 'es')
-			setPdfLink('/gentleman-programming-book-es.pdf');
-		else setPdfLink('/gentleman-programming-book.pdf');
+			setPdfLink(
+				'https://github.com/AppleLAN/gentleman-programming-book/raw/main/public/es/gentleman-programming-book-es.pdf?download=',
+			);
+		else
+			setPdfLink(
+				'https://github.com/AppleLAN/gentleman-programming-book/raw/main/public/gentleman-programming-book.pdf?download=',
+			);
 	}, [router.locale]);
 
 	return (
