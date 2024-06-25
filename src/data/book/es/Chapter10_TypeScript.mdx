@@ -1,58 +1,60 @@
 ---
-id: 'typescript'
+id: typescript
 order: 10
-name: 'Typescript Con De Tuti'
+name: Typescript Con De Tuti
 titleList:
-  - name: 'Introducción'
-    tagId: 'introducción'
-  - name: '¿Por Qué TypeScript?'
-    tagId: 'por-qué-typescript'
-  - name: 'Conceptos Fundamentales de TypeScript'
-    tagId: 'conceptos-fundamentales-de-typescript'
-  - name: 'TypeScript en la Práctica'
-    tagId: 'typescript-en-la-práctica'
-  - name: 'Mejores Prácticas y Patrones'
-    tagId: 'mejores-prácticas-y-patrones'
-  - name: '¿Qué es Transpilar?'
-    tagId: 'qué-es-transpilar'
-  - name: 'Entendiendo el Tipado en JavaScript y TypeScript'
-    tagId: 'entendiendo-el-tipado-en-javascript-y-typescript'
+  - name: Introducción
+    tagId: introducción
+  - name: ¿Por Qué TypeScript?
+    tagId: por-qué-typescript
+  - name: Conceptos Fundamentales de TypeScript
+    tagId: conceptos-fundamentales-de-typescript
+  - name: TypeScript en la Práctica
+    tagId: typescript-en-la-práctica
+  - name: Mejores Prácticas y Patrones
+    tagId: mejores-prácticas-y-patrones
+  - name: ¿Qué es Transpilar?
+    tagId: qué-es-transpilar
+  - name: Entendiendo el Tipado en JavaScript y TypeScript
+    tagId: entendiendo-el-tipado-en-javascript-y-typescript
   - name: 'TypeScript: El Superhéroe del Desarrollo'
-    tagId: 'typescript-el-superhéroe-del-desarrollo'
-  - name: 'Ejemplo Práctico en TypeScript: El Uso de `any` y la Importancia del Tipado'
-    tagId: 'ejemplo-práctico-en-typescript-el-uso-de-any-y-la-importancia-del-tipado'
-  - name: 'Tipos Primitivos en TypeScript'
-    tagId: 'tipos-primitivos-en-typescript'
-  - name: 'Inferencia de Tipos en TypeScript'
-    tagId: 'inferencia-de-tipos-en-typescript'
-  - name: 'Clases, Interfaces, Enums y Const: ¿Cómo se Utilizan para Tipar en TypeScript?'
-    tagId: 'clases-interfaces-enums-y-const-cómo-se-utilizan-para-tipar-en-typescript'
+    tagId: typescript-el-superhéroe-del-desarrollo
+  - name: >-
+      Ejemplo Práctico en TypeScript: El Uso de `any` y la Importancia del
+      Tipado
+    tagId: ejemplo-práctico-en-typescript-el-uso-de-any-y-la-importancia-del-tipado
+  - name: Tipos Primitivos en TypeScript
+    tagId: tipos-primitivos-en-typescript
+  - name: Inferencia de Tipos en TypeScript
+    tagId: inferencia-de-tipos-en-typescript
+  - name: >-
+      Clases, Interfaces, Enums y Const: ¿Cómo se Utilizan para Tipar en
+      TypeScript?
+    tagId: clases-interfaces-enums-y-const-cómo-se-utilizan-para-tipar-en-typescript
   - name: 'Type vs Interface en TypeScript: Cuándo y Cómo Usarlos'
-    tagId: 'type-vs-interface-en-typescript-cuándo-y-cómo-usarlos'
-  - name: 'El Concepto de Shape en TypeScript'
-    tagId: 'el-concepto-de-shape-en-typescript'
-  - name: 'Entendiendo union e intersección en TypeScript'
-    tagId: 'entendiendo-union-e-intersección-en-typescript'
-  - name: 'Entendiendo `typeof` en TypeScript'
-    tagId: 'entendiendo-typeof-en-typescript'
-  - name: 'Explorando `as const` en TypeScript'
-    tagId: 'explorando-as-const-en-typescript'
-  - name: 'Return Type'
-    tagId: 'return-type'
+    tagId: type-vs-interface-en-typescript-cuándo-y-cómo-usarlos
+  - name: El Concepto de Shape en TypeScript
+    tagId: el-concepto-de-shape-en-typescript
+  - name: Entendiendo union e intersección en TypeScript
+    tagId: entendiendo-union-e-intersección-en-typescript
+  - name: Entendiendo `typeof` en TypeScript
+    tagId: entendiendo-typeof-en-typescript
+  - name: Explorando `as const` en TypeScript
+    tagId: explorando-as-const-en-typescript
+  - name: Return Type
+    tagId: return-type
   - name: 'Aventura en TypeScript: Type Assertion y Casteo de Tipos'
-    tagId: 'aventura-en-typescript-type-assertion-y-casteo-de-tipos'
+    tagId: aventura-en-typescript-type-assertion-y-casteo-de-tipos
   - name: 'Functional Overloading en TypeScript: ¡Pura Magia!'
-    tagId: 'functional-overloading-en-typescript-pura-magia'
+    tagId: functional-overloading-en-typescript-pura-magia
   - name: 'Utilitarios de TypeScript: Helpers Esenciales'
-    tagId: 'utilitarios-de-typescript-helpers-esenciales'
-  - name: 'Generics en TypeScript'
-    tagId: 'generics-en-typescript'
-  - name: 'La Magia de los Enums'
-    tagId: 'la-magia-de-los-enums'
+    tagId: utilitarios-de-typescript-helpers-esenciales
+  - name: Generics en TypeScript
+    tagId: generics-en-typescript
+  - name: La Magia de los Enums
+    tagId: la-magia-de-los-enums
 ---
-
 # Typescript Con De Tuti
-
 
 ## Introducción
 
@@ -76,7 +78,7 @@ JavaScript es bueno, TypeScript es JavaScript con esteroides.
 
 ```typescript
 // Ejemplo básico de TypeScript
-let mensaje: string = "¡Hola, TypeScript!";
+let mensaje: string = '¡Hola, TypeScript!';
 console.log(mensaje);
 ```
 
@@ -107,15 +109,12 @@ implementación de patrones de diseño avanzados y la organización del código.
 
 ```typescript
 interface Usuario {
-  nombre: string;
-  edad: number;
+ nombre: string;
+ edad: number;
 }
 
 class Empleado implements Usuario {
-  constructor(
-    public nombre: string,
-    public edad: number,
-  ) {}
+ constructor(public nombre: string, public edad: number) {}
 }
 ```
 
@@ -139,7 +138,7 @@ en métodos que parecen simples.
 
 ```typescript
 function suma(a: number, b: number): number {
-  return a + b;
+ return a + b;
 }
 ```
 
@@ -157,7 +156,6 @@ function suma(a: number, b: number): number {
 
 Hablaremos de herramientas que pueden integrarse con TypeScript para mejorar aún
 más el flujo de trabajo, como linters, formateadores de código, y más.
-
 
 ## ¿Qué es Transpilar?
 
@@ -180,7 +178,7 @@ archivo TypeScript `script.ts` con el siguiente código:
 
 ```typescript
 // script.ts
-let mensaje: string = "Hola, mundo";
+let mensaje: string = 'Hola, mundo';
 console.log(mensaje);
 ```
 
@@ -198,7 +196,7 @@ siguiente contenido:
 
 ```javascript
 // script.js
-var mensaje = "Hola, mundo";
+var mensaje = 'Hola, mundo';
 console.log(mensaje);
 ```
 
@@ -214,13 +212,13 @@ transpilar mediante un archivo `tsconfig.json`. Aquí te dejo un ejemplo básico
 ```json
 // tsconfig.json
 {
-  "compilerOptions": {
-    "target": "es6", // Indica a qué versión de JavaScript queremos transpilar
-    "outDir": "./dist", // Carpeta donde se guardarán los archivos transpilados
-    "strict": true // Activa todas las comprobaciones estrictas
-  },
-  "include": ["src/**/*.ts"], // Archivos a incluir en la transpilation
-  "exclude": ["node_modules"] // Archivos o carpetas a excluir
+ "compilerOptions": {
+  "target": "es6", // Indica a qué versión de JavaScript queremos transpilar
+  "outDir": "./dist", // Carpeta donde se guardarán los archivos transpilados
+  "strict": true // Activa todas las comprobaciones estrictas
+ },
+ "include": ["src/**/*.ts"], // Archivos a incluir en la transpilation
+ "exclude": ["node_modules"] // Archivos o carpetas a excluir
 }
 ```
 
@@ -246,7 +244,6 @@ Así que la próxima vez que escuches "transpilar", ya sabés que no es más que
 proceso de traducción, asegurando que nuestras genialidades en TypeScript
 lleguen intactas y claras a cualquier entorno JavaScript.
 
-
 ## Entendiendo el Tipado en JavaScript y TypeScript
 
 ### JavaScript: Un Lenguaje con Tipado Dinámico
@@ -266,7 +263,7 @@ basado en el valor asignado. Esta información se guarda en un buffer de memoria
 
 ```javascript
 // Ejemplo de tipado dinámico en JavaScript
-let valor = "Hola"; // Inicialmente es una cadena
+let valor = 'Hola'; // Inicialmente es una cadena
 valor = 100; // Ahora es un número
 ```
 
@@ -280,7 +277,7 @@ rendimiento.
 
 ```javascript
 let a = 1; // 'a' es un número
-a = "uno"; // 'a' ahora es un string
+a = 'uno'; // 'a' ahora es un string
 ```
 
 El motor V8 detecta el cambio de tipo y ajusta la memoria y las referencias
@@ -336,10 +333,10 @@ trabajando en una aplicación súper cool:
 ```typescript
 // TypeScript
 function saludar(nombre: string): string {
-  return `Hola, ${nombre}`;
+ return `Hola, ${nombre}`;
 }
 
-const saludo = saludar("Gentleman");
+const saludo = saludar('Gentleman');
 console.log(saludo);
 ```
 
@@ -351,10 +348,10 @@ navegador:
 ```javascript
 // JavaScript transpilado
 function saludar(nombre) {
-  return "Hola, " + nombre;
+ return 'Hola, ' + nombre;
 }
 
-var saludo = saludar("Gentleman");
+var saludo = saludar('Gentleman');
 console.log(saludo);
 ```
 
@@ -368,9 +365,9 @@ dice que siempre debemos usar comillas simples. Así se ve el archivo
 
 ```json
 {
-  "rules": {
-    "quotes": ["error", "single"]
-  }
+ "rules": {
+  "quotes": ["error", "single"]
+ }
 }
 ```
 
@@ -380,7 +377,7 @@ va a tirar de las orejas y nos va a recordar seguir las reglas:
 ```typescript
 // Código incorrecto según ESLint
 function saludar(nombre: string): string {
-  return "Hola, " + nombre; // ESLint nos va a avisar de este error
+ return 'Hola, ' + nombre; // ESLint nos va a avisar de este error
 }
 ```
 
@@ -397,7 +394,6 @@ mantenemos nuestro código en la línea.
 Así que, la próxima vez que alguien te diga que TypeScript "solo sirve durante
 el desarrollo", sabrás que, aunque es cierto, es precisamente ahí donde marca la
 diferencia.
-
 
 ## Ejemplo Práctico en TypeScript: El Uso de `any` y la Importancia del Tipado
 
@@ -421,7 +417,7 @@ TypeScript nos mostrará un error. Esto es genial porque previene errores en
 tiempo de compilación. Vamos a ver:
 
 ```typescript
-numero = "esto debería fallar"; // Error: Type 'string' is not assignable to type 'number'.
+numero = 'esto debería fallar'; // Error: Type 'string' is not assignable to type 'number'.
 ```
 
 **Paso 2: Uso del tipo `any`**
@@ -431,7 +427,7 @@ variable, similar a lo que ocurre por defecto en JavaScript. Veamos:
 
 ```typescript
 let variableFlexible: any = 5;
-variableFlexible = "puedo ser un string también";
+variableFlexible = 'puedo ser un string también';
 variableFlexible = true; // ¡Y ahora un booleano!
 ```
 
@@ -455,7 +451,6 @@ temporal o cuando trabajamos con bibliotecas de terceros para las cuales no
 tenemos tipos, deberíamos evitarlo en nuestro código principal. En TypeScript,
 la meta es aprovechar el sistema de tipos para escribir código más seguro y
 mantenible.
-
 
 ## Tipos Primitivos en TypeScript
 
@@ -482,21 +477,21 @@ variables. Aquí están los principales tipos primitivos:
 3. **String**: Cadenas de texto.
 
    ```typescript
-   let nombre: string = "Gentleman";
+   let nombre: string = 'Gentleman';
    ```
 
 4. **Array**: Arreglos que pueden ser tipados.
 
    ```typescript
    let listaDeNumeros: number[] = [1, 2, 3];
-   let listaDeStrings: Array<string> = ["uno", "dos", "tres"];
+   let listaDeStrings: Array<string> = ['uno', 'dos', 'tres'];
    ```
 
 5. **Tuple**: Permiten expresar un arreglo con número fijo y tipos de elementos
    conocidos, pero no necesariamente del mismo tipo.
 
    ```typescript
-   let tupla: [string, number] = ["hola", 10];
+   let tupla: [string, number] = ['hola', 10];
    ```
 
 6. **Enum**: Un medio para dar nombres más amigables a conjuntos de valores
@@ -504,9 +499,9 @@ variables. Aquí están los principales tipos primitivos:
 
    ```typescript
    enum Color {
-     Rojo,
-     Verde,
-     Azul,
+    Rojo,
+    Verde,
+    Azul,
    }
    let c: Color = Color.Verde;
    ```
@@ -516,7 +511,7 @@ variables. Aquí están los principales tipos primitivos:
 
    ```typescript
    let noEstoySeguro: any = 4;
-   noEstoySeguro = "quizás sea una cadena";
+   noEstoySeguro = 'quizás sea una cadena';
    noEstoySeguro = false; // ahora es un booleano
    ```
 
@@ -525,7 +520,7 @@ variables. Aquí están los principales tipos primitivos:
 
    ```typescript
    function advertirUsuario(): void {
-     console.log("Este es un aviso!");
+    console.log('Este es un aviso!');
    }
    ```
 
@@ -543,7 +538,7 @@ basándose en la información disponible, como el valor inicial de las variables
 Sin embargo, esta inferencia puede ser complicada.
 
 ```typescript
-let mensaje = "Hola, mundo";
+let mensaje = 'Hola, mundo';
 // `mensaje` es automáticamente inferido como `string`
 ```
 
@@ -560,24 +555,24 @@ Consideremos el siguiente código TypeScript:
 
 ```typescript
 const arregloDeValores = [
-  {
-    numero: 1,
-    label: "label1",
-  },
-  {
-    numero: 2,
-  },
+ {
+  numero: 1,
+  label: 'label1',
+ },
+ {
+  numero: 2,
+ },
 ];
 
 const metodo = (param: typeof arregloDeValores) => {
-  const indexArray = [1, 2];
+ const indexArray = [1, 2];
 
-  indexArray.forEach((index) => {
-    if (param[index].label) {
-      // param[index].label => string | undefined
-      console.log(param[index].label); // param[index].label => string | undefined
-    }
-  });
+ indexArray.forEach(index => {
+  if (param[index].label) {
+   // param[index].label => string | undefined
+   console.log(param[index].label); // param[index].label => string | undefined
+  }
+ });
 };
 ```
 
@@ -615,11 +610,11 @@ prácticas:
    temporal dentro del bloque puede ayudar.
 
    ```typescript
-   indexArray.forEach((index) => {
-     const label = param[index].label;
-     if (label) {
-       console.log(label); // TypeScript entiende que label es string aquí
-     }
+   indexArray.forEach(index => {
+    const label = param[index].label;
+    if (label) {
+     console.log(label); // TypeScript entiende que label es string aquí
+    }
    });
    ```
 
@@ -627,10 +622,10 @@ prácticas:
    refinar los tipos dentro de los bloques iterativos o condicionales.
 
    ```typescript
-   indexArray.forEach((index) => {
-     if (typeof param[index].label === "string") {
-       console.log(param[index].label); // Ahora es seguro que es un string
-     }
+   indexArray.forEach(index => {
+    if (typeof param[index].label === 'string') {
+     console.log(param[index].label); // Ahora es seguro que es un string
+    }
    });
    ```
 
@@ -647,13 +642,10 @@ también pueden ser utilizadas como tipos.
 
 ```typescript
 class Automovil {
-  constructor(
-    public marca: string,
-    public modelo: string,
-  ) {}
+ constructor(public marca: string, public modelo: string) {}
 }
 
-let miAuto: Automovil = new Automovil("Toyota", "Corolla");
+let miAuto: Automovil = new Automovil('Toyota', 'Corolla');
 ```
 
 En el ejemplo, `Automovil` no solo define una clase sino también un tipo. Cuando
@@ -670,18 +662,15 @@ programación orientada a objetos y en la integración con bibliotecas.
 
 ```typescript
 interface Vehiculo {
-  marca: string;
-  arrancar(): void;
+ marca: string;
+ arrancar(): void;
 }
 
 class Camion implements Vehiculo {
-  constructor(
-    public marca: string,
-    public capacidadCarga: number,
-  ) {}
-  arrancar() {
-    console.log("El camión está arrancando...");
-  }
+ constructor(public marca: string, public capacidadCarga: number) {}
+ arrancar() {
+  console.log('El camión está arrancando...');
+ }
 }
 ```
 
@@ -691,22 +680,76 @@ y reutilizable.
 
 ### 3. **Enums**
 
-Los enums o enumeraciones permiten definir un conjunto de constantes nombradas.
-Son útiles para manejar un conjunto de valores relacionados, proporcionando una
-forma de agruparlos bajo un mismo tipo.
+¡Ok, gente! Hoy vamos a hablar de algo que está re piola en TypeScript: ¡los **enums**!
+Estos muchachitos te permiten definir un conjunto de constantes con nombre, haciendo tu código más legible y mantenible.
+Vamos a ver dos tipos: los **enums numéricos** y los **enums de strings**. ¡Aguantá que se viene lo bueno!
+
+## Enums Numéricos
+
+Los enums numéricos son como una escalera: cada peldaño sube de a uno. Si no les decís nada, arrancan desde cero y van sumando de a uno. Mirá esto:
+
+### Ejemplo
 
 ```typescript
-enum Color {
-  Rojo,
-  Verde,
-  Azul,
+enum Direction {
+ Up, // 0
+ Down, // 1
+ Left, // 2
+ Right, // 3
 }
 
-let colorFavorito: Color = Color.Verde;
+console.log(Direction.Up); // Salida: 0
+console.log(Direction.Left); // Salida: 2
 ```
 
-Utilizar enums mejora la legibilidad del código y reduce la posibilidad de
-errores al restringir los valores que una variable puede tomar.
+Pero, ¿qué pasa si querés empezar desde otro número? No hay drama, mirá:
+
+```typescript
+enum Direction {
+ Up = 1,
+ Down, // 2
+ Left, // 3
+ Right, // 4
+}
+
+console.log(Direction.Up); // Salida: 1
+console.log(Direction.Right); // Salida: 4
+```
+
+## Enums de Strings
+
+Ahora, si te pinta usar strings, TypeScript también te banca. Con los enums de strings, le ponés el valor que quieras a cada miembro. Son más verbosos, pero re claros.
+
+### Ejemplo
+
+```typescript
+enum Direction {
+ Up = 'UP',
+ Down = 'DOWN',
+ Left = 'LEFT',
+ Right = 'RIGHT',
+}
+
+console.log(Direction.Up); // Salida: "UP"
+console.log(Direction.Left); // Salida: "LEFT"
+```
+
+### Uso Combinado
+
+Ojo al piojo, podés combinar números y strings en un enum, pero ojo, no es muy recomendable porque puede quedar un choclo.
+Si te manda un código así, es probable que tengas ganas de tirarte de los pelos. Pero bueno, para los curiosos, acá va:
+
+### Ejemplo
+
+```typescript
+enum Mixed {
+ No = 0,
+ Yes = 'YES',
+}
+
+console.log(Mixed.No); // Salida: 0
+console.log(Mixed.Yes); // Salida: "YES"
+```
 
 ### 4. **Const Assertions**
 
@@ -717,8 +760,8 @@ de manera más específica y literal.
 
 ```typescript
 let config = {
-  nombre: "Aplicación",
-  version: 1,
+ nombre: 'Aplicación',
+ version: 1,
 } as const;
 
 // config.nombre = "Otra App"; // Error, porque nombre es una constante.
@@ -741,12 +784,12 @@ código así como también contratos con código externo al tuyo.
 
 ```typescript
 interface Usuario {
-  nombre: string;
-  edad?: number;
+ nombre: string;
+ edad?: number;
 }
 
 function saludar(usuario: Usuario) {
-  console.log(`Hola, ${usuario.nombre}`);
+ console.log(`Hola, ${usuario.nombre}`);
 }
 ```
 
@@ -754,7 +797,7 @@ Las interfaces son ideales para la programación orientada a objetos en
 TypeScript, donde puedes usarlas para asegurar que ciertas clases implementen
 métodos y propiedades específicos.
 
-### Ventajas de usar `interface`:
+### Ventajas de usar `interface`
 
 1. **Extensibilidad**: Las interfaces son extendibles y pueden ser extendidas
    por otras interfaces. Usando `extends`, una interfaz puede heredar de otra,
@@ -771,14 +814,14 @@ más versátiles que las interfaces en ciertos aspectos.
 
 ```typescript
 type Punto = {
-  x: number;
-  y: number;
+ x: number;
+ y: number;
 };
 
 type D3Punto = Punto & { z: number };
 ```
 
-### Ventajas de usar `type`:
+### Ventajas de usar `type`
 
 1. **Tipos Unión e Intersección**: Con `type`, puedes fácilmente utilizar tipos
    unión e intersección para combinar tipos existentes de formas complejas y
@@ -803,7 +846,6 @@ type D3Punto = Punto & { z: number };
    - Prefieres trabajar con tipos más flexibles y no necesitas extender o
      implementarlos desde clases.
 
-
 ## El Concepto de Shape en TypeScript
 
 Ahora vamos a hablar de un concepto fundamental en TypeScript que nos ayuda a
@@ -820,13 +862,13 @@ objeto de ese tipo debe seguir.
 
 ```typescript
 interface Usuario {
-  nombre: string;
-  edad: number;
+ nombre: string;
+ edad: number;
 }
 
 let usuario: Usuario = {
-  nombre: "Juan",
-  edad: 25,
+ nombre: 'Juan',
+ edad: 25,
 };
 ```
 
@@ -842,8 +884,8 @@ de los objetos.
 
 ```typescript
 let otroUsuario = {
-  nombre: "Ana",
-  edad: 30,
+ nombre: 'Ana',
+ edad: 30,
 };
 ```
 
@@ -859,23 +901,23 @@ Vamos a volver a ver un ejemplo de cómo esto puede ser problemático:
 
 ```typescript
 const arregloDeValores = [
-  {
-    numero: 1,
-    label: "label1",
-  },
-  {
-    numero: 2,
-  },
+ {
+  numero: 1,
+  label: 'label1',
+ },
+ {
+  numero: 2,
+ },
 ];
 
 const metodo = (param: typeof arregloDeValores) => {
-  const indexArray = [1, 2];
+ const indexArray = [1, 2];
 
-  indexArray.forEach((index) => {
-    if (param[index].label) {
-      console.log(param[index].label);
-    }
-  });
+ indexArray.forEach(index => {
+  if (param[index].label) {
+   console.log(param[index].label);
+  }
+ });
 };
 ```
 
@@ -893,20 +935,19 @@ sobre el shape:
 
 ```typescript
 const metodo = (param: typeof arregloDeValores) => {
-  const indexArray = [1, 2];
+ const indexArray = [1, 2];
 
-  indexArray.forEach((index) => {
-    const item = param[index];
-    if (item.label) {
-      console.log(item.label);
-    }
-  });
+ indexArray.forEach(index => {
+  const item = param[index];
+  if (item.label) {
+   console.log(item.label);
+  }
+ });
 };
 ```
 
 Ahora, TypeScript entiende que `item.label` dentro del `if` es un `string` y no
 `undefined`.
-
 
 ## Entendiendo union e intersección en TypeScript
 
@@ -922,13 +963,13 @@ valor pueda ser de uno de esos tipos. Es decir, si tenemos `TipoA | TipoB`,
 estamos diciendo que una variable puede ser de tipo `TipoA` o de tipo `TipoB`.
 
 ```typescript
-type Resultado = "éxito" | "error";
+type Resultado = 'éxito' | 'error';
 
 let estado: Resultado;
 
-estado = "éxito"; // válido
-estado = "error"; // válido
-estado = "otro"; // inválido, TypeScript marcará un error
+estado = 'éxito'; // válido
+estado = 'error'; // válido
+estado = 'otro'; // inválido, TypeScript marcará un error
 ```
 
 En este ejemplo, `estado` puede ser `"éxito"` o `"error"`, pero no puede ser
@@ -942,28 +983,28 @@ todos los tipos incluidos. Veamos un ejemplo para entender mejor este concepto:
 
 ```typescript
 interface Perro {
-  tipo: "perro";
-  ladra: boolean;
+ tipo: 'perro';
+ ladra: boolean;
 }
 
 interface Gato {
-  tipo: "gato";
-  maulla: boolean;
+ tipo: 'gato';
+ maulla: boolean;
 }
 
 type Animal = Perro | Gato;
 
 function procesarAnimal(animal: Animal) {
-  // Solo podemos acceder a la propiedad 'tipo' común a ambos tipos
-  console.log(animal.tipo);
+ // Solo podemos acceder a la propiedad 'tipo' común a ambos tipos
+ console.log(animal.tipo);
 
-  // Esto generaría un error, ya que 'ladra' o 'maulla' dependen del tipo específico
-  // console.log(animal.ladra); // Error: 'ladra' no existe en el tipo 'Animal'.
-  // console.log(animal.maulla); // Error: 'maulla' no existe en el tipo 'Animal'.
+ // Esto generaría un error, ya que 'ladra' o 'maulla' dependen del tipo específico
+ // console.log(animal.ladra); // Error: 'ladra' no existe en el tipo 'Animal'.
+ // console.log(animal.maulla); // Error: 'maulla' no existe en el tipo 'Animal'.
 }
 
-let miPerro: Perro = { tipo: "perro", ladra: true };
-let miGato: Gato = { tipo: "gato", maulla: true };
+let miPerro: Perro = { tipo: 'perro', ladra: true };
+let miGato: Gato = { tipo: 'gato', maulla: true };
 
 procesarAnimal(miPerro); // Salida esperada: "perro"
 procesarAnimal(miGato); // Salida esperada: "gato"
@@ -983,18 +1024,18 @@ todas las propiedades de `TipoB`.
 
 ```typescript
 interface Persona {
-  nombre: string;
+ nombre: string;
 }
 
 interface Empleado {
-  salario: number;
+ salario: number;
 }
 
 type EmpleadoConNombre = Persona & Empleado;
 
 let empleado: EmpleadoConNombre = {
-  nombre: "Juan",
-  salario: 3000,
+ nombre: 'Juan',
+ salario: 3000,
 };
 ```
 
@@ -1007,11 +1048,11 @@ Podemos combinar `|` y `&` para crear tipos aún más complejos y específicos
 según nuestras necesidades:
 
 ```typescript
-type Opciones = { modo: "modoA" | "modoB" } & { tamaño: "pequeño" | "grande" };
+type Opciones = { modo: 'modoA' | 'modoB' } & { tamaño: 'pequeño' | 'grande' };
 
 let configuracion: Opciones = {
-  modo: "modoA",
-  tamaño: "pequeño",
+ modo: 'modoA',
+ tamaño: 'pequeño',
 };
 ```
 
@@ -1024,7 +1065,6 @@ En este ejemplo, `configuracion` debe tener tanto `modo` (que puede ser
   cualquiera de esos tipos.
 - **`&` (Intersección)**: Se usa para combinar tipos donde un valor debe tener
   todas las propiedades de esos tipos.
-
 
 ## Entendiendo `typeof` en TypeScript
 
@@ -1056,20 +1096,20 @@ utilizar `typeof` para capturar esos tipos de manera eficiente.
 
 ```typescript
 interface Persona {
-  nombre: string;
-  edad: number;
+ nombre: string;
+ edad: number;
 }
 
 type Empleado = {
-  id: number;
-  puesto: string;
+ id: number;
+ puesto: string;
 } & typeof miPersona; // Captura el tipo de 'miPersona'
 
-const miPersona = { nombre: "Juan", edad: 30 };
+const miPersona = { nombre: 'Juan', edad: 30 };
 
 let empleado: Empleado;
 
-empleado = { id: 1, puesto: "Desarrollador", nombre: "Juan", edad: 30 };
+empleado = { id: 1, puesto: 'Desarrollador', nombre: 'Juan', edad: 30 };
 ```
 
 En este ejemplo, `typeof miPersona` captura el tipo de `miPersona`, que es
@@ -1109,7 +1149,7 @@ en el futuro.
 Comencemos con un ejemplo simple para ver cómo funciona `as const`:
 
 ```typescript
-let colores = ["rojo", "verde", "azul"] as const;
+let colores = ['rojo', 'verde', 'azul'] as const;
 ```
 
 Sin `as const`, `colores` sería del tipo `string[]`, lo que permite cualquier
@@ -1125,11 +1165,11 @@ datos que no deberían cambiar.
 
 ```typescript
 const configuracion = {
-  modo: "producción",
-  version: 1.2,
-  opciones: {
-    depuracion: false,
-  },
+ modo: 'producción',
+ version: 1.2,
+ opciones: {
+  depuracion: false,
+ },
 } as const;
 ```
 
@@ -1153,13 +1193,13 @@ Veamos cómo `as const` puede mejorar la precisión en el contexto de funciones:
 
 ```typescript
 function obtenerConfiguracion() {
-  return {
-    modo: "producción",
-    version: 1.2,
-    opciones: {
-      depuracion: false,
-    },
-  } as const;
+ return {
+  modo: 'producción',
+  version: 1.2,
+  opciones: {
+   depuracion: false,
+  },
+ } as const;
 }
 
 const config = obtenerConfiguracion();
@@ -1192,12 +1232,12 @@ retorno de esta función en otras partes de nuestro código.
 ```typescript
 // Definición de la función que crea una nueva tarea
 function crearTarea(titulo: string, descripcion: string) {
-  return {
-    id: Math.random().toString(36).substr(2, 9),
-    titulo,
-    descripcion,
-    completada: false,
-  };
+ return {
+  id: Math.random().toString(36).substr(2, 9),
+  titulo,
+  descripcion,
+  completada: false,
+ };
 }
 
 // Usamos ReturnType para inferir el tipo de retorno de crearTarea
@@ -1205,15 +1245,15 @@ type Tarea = ReturnType<typeof crearTarea>;
 
 // Ahora podemos usar el tipo Tarea en otras partes de nuestro código
 const nuevaTarea: Tarea = crearTarea(
-  "Comprar leche",
-  "Ir al supermercado y comprar leche",
+ 'Comprar leche',
+ 'Ir al supermercado y comprar leche',
 );
 
 console.log(nuevaTarea);
 
 // Implementación de una función que marca una tarea como completada
 function completarTarea(tarea: Tarea): Tarea {
-  return { ...tarea, completada: true };
+ return { ...tarea, completada: true };
 }
 
 const tareaCompletada = completarTarea(nuevaTarea);
@@ -1249,7 +1289,6 @@ tipos de retorno complejos y mantener nuestro código limpio y seguro. Utilízal
 siempre que necesites reutilizar el tipo de retorno de una función en varias
 partes de tu código.
 
-
 ## Aventura en TypeScript: Type Assertion y Casteo de Tipos
 
 Vamos a explorar cómo utilizarlos correctamente, los cuidados que debemos tener,
@@ -1268,14 +1307,14 @@ Hay dos sintaxis principales para Type Assertion en TypeScript:
 1. **Usando el operador `as`:**
 
    ```typescript
-   let valor: any = "Este es un string";
+   let valor: any = 'Este es un string';
    let longitud: number = (valor as string).length;
    ```
 
 2. **Usando el operador `<type>`:**
 
    ```typescript
-   let valor: any = "Este es un string";
+   let valor: any = 'Este es un string';
    let longitud: number = (<string>valor).length;
    ```
 
@@ -1291,7 +1330,7 @@ incorrectamente. Aquí hay algunas cosas a tener en cuenta:
    equivocas, puedes introducir errores difíciles de detectar.
 
    ```typescript
-   let valor: any = "Este es un string";
+   let valor: any = 'Este es un string';
    let numero: number = valor as number; // ¡Error en tiempo de ejecución!
    ```
 
@@ -1299,7 +1338,7 @@ incorrectamente. Aquí hay algunas cosas a tener en cuenta:
    puede inferir el tipo correctamente.
 
    ```typescript
-   let valor = "Este es un string"; // TypeScript infiere que 'valor' es un string
+   let valor = 'Este es un string'; // TypeScript infiere que 'valor' es un string
    let longitud: number = valor.length; // No se necesita Type Assertion
    ```
 
@@ -1313,7 +1352,7 @@ funciones de conversión.
 Ejemplo:
 
 ```typescript
-let valor: any = "123";
+let valor: any = '123';
 let numero: number = Number(valor); // Casteo de string a number
 ```
 
@@ -1334,7 +1373,7 @@ seguridad.
    - Debe usarse con moderación.
 
    ```typescript
-   let valor: any = "Este es un string";
+   let valor: any = 'Este es un string';
    valor = 42; // No hay error, pero puede causar problemas en tiempo de ejecución
    valor.metodoInexistente(); // No hay error en tiempo de compilación, pero fallará en tiempo de ejecución
    ```
@@ -1346,10 +1385,10 @@ seguridad.
      o métodos, haciendo el código más seguro.
 
    ```typescript
-   let valor: unknown = "Este es un string";
+   let valor: unknown = 'Este es un string';
 
-   if (typeof valor === "string") {
-     console.log(valor.length); // Safe, TypeScript sabe que es un string
+   if (typeof valor === 'string') {
+    console.log(valor.length); // Safe, TypeScript sabe que es un string
    }
 
    // valor.metodoInexistente(); // Error en tiempo de compilación
@@ -1361,18 +1400,18 @@ Veamos un ejemplo que combine Type Assertion, `any`, y `unknown`:
 
 ```typescript
 function procesarValor(valor: unknown) {
-  if (typeof valor === "string") {
-    let longitud = (valor as string).length;
-    console.log(`La longitud del string es ${longitud}`);
-  } else if (typeof valor === "number") {
-    let doble = (valor as number) * 2;
-    console.log(`El doble del número es ${doble}`);
-  } else {
-    console.log("El valor no es ni un string ni un número");
-  }
+ if (typeof valor === 'string') {
+  let longitud = (valor as string).length;
+  console.log(`La longitud del string es ${longitud}`);
+ } else if (typeof valor === 'number') {
+  let doble = (valor as number) * 2;
+  console.log(`El doble del número es ${doble}`);
+ } else {
+  console.log('El valor no es ni un string ni un número');
+ }
 }
 
-let valorAny: any = "Texto";
+let valorAny: any = 'Texto';
 procesarValor(valorAny);
 
 valorAny = 100;
@@ -1387,7 +1426,7 @@ verificamos su tipo antes de realizar operaciones específicas. También mostram
 cómo `any` puede ser flexible, pero debe manejarse con cuidado para evitar
 errores.
 
-## Functional Overloading en TypeScript: ¡Pura Magia!
+## Functional Overloading en TypeScript: ¡Pura Magia
 
 Vamos a explorar cómo podemos definir múltiples
 firmas para una función y cómo utilizar tipos para que nuestras funciones
@@ -1415,19 +1454,19 @@ function miFuncion(param: boolean): boolean;
 
 // Implementación que cubre todas las sobrecargas
 function miFuncion(
-  param: string | number | boolean,
+ param: string | number | boolean,
 ): string | number | boolean {
-  if (typeof param === "string") {
-    return `String recibido: ${param}`;
-  } else if (typeof param === "number") {
-    return param * 2;
-  } else {
-    return !param;
-  }
+ if (typeof param === 'string') {
+  return `String recibido: ${param}`;
+ } else if (typeof param === 'number') {
+  return param * 2;
+ } else {
+  return !param;
+ }
 }
 
 // Uso de la función sobrecargada
-console.log(miFuncion("Hola")); // String recibido: Hola
+console.log(miFuncion('Hola')); // String recibido: Hola
 console.log(miFuncion(42)); // 84
 console.log(miFuncion(true)); // false
 ```
@@ -1443,16 +1482,16 @@ En este ejemplo, `miFuncion` puede aceptar un `string`, un `number` o un
    function manipular(data: string): string[];
    function manipular(data: string[]): string;
    function manipular(data: string | string[]): string | string[] {
-     if (typeof data === "string") {
-       return data.split("");
-     } else {
-       return data.join("");
-     }
+    if (typeof data === 'string') {
+     return data.split('');
+    } else {
+     return data.join('');
+    }
    }
 
    // Uso de la función sobrecargada
-   console.log(manipular("Hola")); // ['H', 'o', 'l', 'a']
-   console.log(manipular(["H", "o", "l", "a"])); // "Hola"
+   console.log(manipular('Hola')); // ['H', 'o', 'l', 'a']
+   console.log(manipular(['H', 'o', 'l', 'a'])); // "Hola"
    ```
 
 2. **Función para manejar diferentes tipos de entradas y producir diferentes
@@ -1462,16 +1501,16 @@ En este ejemplo, `miFuncion` puede aceptar un `string`, un `number` o un
    function calcular(input: number): number;
    function calcular(input: string): string;
    function calcular(input: number | string): number | string {
-     if (typeof input === "number") {
-       return input * input;
-     } else {
-       return input.toUpperCase();
-     }
+    if (typeof input === 'number') {
+     return input * input;
+    } else {
+     return input.toUpperCase();
+    }
    }
 
    // Uso de la función sobrecargada
    console.log(calcular(5)); // 25
-   console.log(calcular("hola")); // "HOLA"
+   console.log(calcular('hola')); // "HOLA"
    ```
 
 ### Consideraciones Importantes
@@ -1494,18 +1533,18 @@ Primero, definimos nuestras interfaces para los tipos complejos `Gato` y
 
 ```typescript
 interface Animal {
-  tipo: string;
-  sonido(): void;
+ tipo: string;
+ sonido(): void;
 }
 
 interface Gato extends Animal {
-  tipo: "gato";
-  raza: string;
+ tipo: 'gato';
+ raza: string;
 }
 
 interface Perro extends Animal {
-  tipo: "perro";
-  color: string;
+ tipo: 'perro';
+ color: string;
 }
 ```
 
@@ -1523,17 +1562,17 @@ sobrecarga de funciones. Dependiendo de si el parámetro es un `Gato` o un
 
 ```typescript
 function procesarAnimal(animal: Gato | Perro): string | number {
-  if ("raza" in animal) {
-    // El objeto es un gato
-    console.log(`Es un gato de raza ${animal.raza}`);
-    animal.sonido();
-    return animal.raza;
-  } else {
-    // El objeto es un perro
-    console.log(`Es un perro de color ${animal.color}`);
-    animal.sonido();
-    return animal.color.length;
-  }
+ if ('raza' in animal) {
+  // El objeto es un gato
+  console.log(`Es un gato de raza ${animal.raza}`);
+  animal.sonido();
+  return animal.raza;
+ } else {
+  // El objeto es un perro
+  console.log(`Es un perro de color ${animal.color}`);
+  animal.sonido();
+  return animal.color.length;
+ }
 }
 ```
 
@@ -1545,14 +1584,14 @@ devolverá un `string` o un `number`.
 
 ```typescript
 const miGato: Gato = {
-  tipo: "gato",
-  raza: "Siamés",
-  sonido: () => console.log("Miau"),
+ tipo: 'gato',
+ raza: 'Siamés',
+ sonido: () => console.log('Miau'),
 };
 const miPerro: Perro = {
-  tipo: "perro",
-  color: "Negro",
-  sonido: () => console.log("Guau"),
+ tipo: 'perro',
+ color: 'Negro',
+ sonido: () => console.log('Guau'),
 };
 
 const resultadoGato = procesarAnimal(miGato); // Output: Es un gato de raza Siamés \n Miau
@@ -1573,46 +1612,46 @@ de propiedades con el operador `in`.
 
 ```typescript
 interface Vehiculo {
-  tipo: string;
-  velocidadMaxima(): void;
+ tipo: string;
+ velocidadMaxima(): void;
 }
 
 interface Coche extends Vehiculo {
-  tipo: "coche";
-  marca: string;
+ tipo: 'coche';
+ marca: string;
 }
 
 interface Bicicleta extends Vehiculo {
-  tipo: "bicicleta";
-  tipoDeFreno: string;
+ tipo: 'bicicleta';
+ tipoDeFreno: string;
 }
 
 function describirVehiculo(vehiculo: Coche): string;
 function describirVehiculo(vehiculo: Bicicleta): boolean;
 
 function describirVehiculo(vehiculo: Coche | Bicicleta): string | boolean {
-  if ("marca" in vehiculo) {
-    // El objeto es un coche
-    console.log(`Es un coche de marca ${vehiculo.marca}`);
-    vehiculo.velocidadMaxima();
-    return vehiculo.marca;
-  } else {
-    // El objeto es una bicicleta
-    console.log(`Es una bicicleta con freno de tipo ${vehiculo.tipoDeFreno}`);
-    vehiculo.velocidadMaxima();
-    return vehiculo.tipoDeFreno.length > 5;
-  }
+ if ('marca' in vehiculo) {
+  // El objeto es un coche
+  console.log(`Es un coche de marca ${vehiculo.marca}`);
+  vehiculo.velocidadMaxima();
+  return vehiculo.marca;
+ } else {
+  // El objeto es una bicicleta
+  console.log(`Es una bicicleta con freno de tipo ${vehiculo.tipoDeFreno}`);
+  vehiculo.velocidadMaxima();
+  return vehiculo.tipoDeFreno.length > 5;
+ }
 }
 
 const miCoche: Coche = {
-  tipo: "coche",
-  marca: "Toyota",
-  velocidadMaxima: () => console.log("200 km/h"),
+ tipo: 'coche',
+ marca: 'Toyota',
+ velocidadMaxima: () => console.log('200 km/h'),
 };
 const miBicicleta: Bicicleta = {
-  tipo: "bicicleta",
-  tipoDeFreno: "disco",
-  velocidadMaxima: () => console.log("30 km/h"),
+ tipo: 'bicicleta',
+ tipoDeFreno: 'disco',
+ velocidadMaxima: () => console.log('30 km/h'),
 };
 
 const resultadoCoche = describirVehiculo(miCoche); // Output: Es un coche de marca Toyota \n 200 km/h
@@ -1642,13 +1681,13 @@ desarrollo diario.
 
 ```typescript
 interface Usuario {
-  nombre: string;
-  edad: number;
-  email: string;
+ nombre: string;
+ edad: number;
+ email: string;
 }
 
 const usuarioParcial: Partial<Usuario> = {
-  nombre: "Juan",
+ nombre: 'Juan',
 };
 ```
 
@@ -1659,13 +1698,13 @@ el opuesto de `Partial`.
 
 ```typescript
 interface Configuracion {
-  modoOscuro?: boolean;
-  notificaciones?: boolean;
+ modoOscuro?: boolean;
+ notificaciones?: boolean;
 }
 
 const configuracionCompleta: Required<Configuracion> = {
-  modoOscuro: true,
-  notificaciones: true,
+ modoOscuro: true,
+ notificaciones: true,
 };
 ```
 
@@ -1676,13 +1715,13 @@ solo lectura.
 
 ```typescript
 interface Libro {
-  titulo: string;
-  autor: string;
+ titulo: string;
+ autor: string;
 }
 
 const libro: Readonly<Libro> = {
-  titulo: "1984",
-  autor: "George Orwell",
+ titulo: '1984',
+ autor: 'George Orwell',
 };
 
 // libro.titulo = 'Rebelión en la granja'; // Error: no se puede asignar a 'titulo' porque es una propiedad de solo lectura.
@@ -1694,12 +1733,12 @@ const libro: Readonly<Libro> = {
 `K` y valores del tipo `T`.
 
 ```typescript
-type Rol = "admin" | "usuario" | "invitado";
+type Rol = 'admin' | 'usuario' | 'invitado';
 
 const permisos: Record<Rol, string[]> = {
-  admin: ["leer", "escribir", "borrar"],
-  usuario: ["leer", "escribir"],
-  invitado: ["leer"],
+ admin: ['leer', 'escribir', 'borrar'],
+ usuario: ['leer', 'escribir'],
+ invitado: ['leer'],
 };
 ```
 
@@ -1710,14 +1749,14 @@ un tipo `T`.
 
 ```typescript
 interface Persona {
-  nombre: string;
-  edad: number;
-  direccion: string;
+ nombre: string;
+ edad: number;
+ direccion: string;
 }
 
-const personaNombreEdad: Pick<Persona, "nombre" | "edad"> = {
-  nombre: "María",
-  edad: 30,
+const personaNombreEdad: Pick<Persona, 'nombre' | 'edad'> = {
+ nombre: 'María',
+ edad: 30,
 };
 ```
 
@@ -1728,14 +1767,14 @@ tipo `T`.
 
 ```typescript
 interface Producto {
-  id: number;
-  nombre: string;
-  precio: number;
+ id: number;
+ nombre: string;
+ precio: number;
 }
 
-const productoSinId: Omit<Producto, "id"> = {
-  nombre: "Laptop",
-  precio: 1500,
+const productoSinId: Omit<Producto, 'id'> = {
+ nombre: 'Laptop',
+ precio: 1500,
 };
 ```
 
@@ -1775,7 +1814,7 @@ type SinNulos = NonNullable<PosiblementeNulo>; // string | number
 
 ```typescript
 function obtenerUsuario(id: number) {
-  return { id, nombre: "Juan" };
+ return { id, nombre: 'Juan' };
 }
 
 type Usuario = ReturnType<typeof obtenerUsuario>; // { id: number, nombre: string }
@@ -1787,10 +1826,10 @@ Vamos a ver un ejemplo práctico utilizando varios de estos helpers juntos:
 
 ```typescript
 interface Usuario {
-  id: number;
-  nombre: string;
-  email?: string;
-  direccion?: string;
+ id: number;
+ nombre: string;
+ email?: string;
+ direccion?: string;
 }
 
 // Convertir todas las propiedades a opcionales
@@ -1803,17 +1842,17 @@ type UsuarioRequerido = Required<Usuario>;
 type UsuarioSoloLectura = Readonly<Usuario>;
 
 // Seleccionar solo algunas propiedades
-type UsuarioBasico = Pick<Usuario, "id" | "nombre">;
+type UsuarioBasico = Pick<Usuario, 'id' | 'nombre'>;
 
 // Omitir algunas propiedades
-type UsuarioSinId = Omit<Usuario, "id">;
+type UsuarioSinId = Omit<Usuario, 'id'>;
 
 // Crear un registro de roles a permisos
-type Rol = "admin" | "editor" | "lector";
+type Rol = 'admin' | 'editor' | 'lector';
 const permisos: Record<Rol, string[]> = {
-  admin: ["crear", "leer", "actualizar", "eliminar"],
-  editor: ["crear", "leer", "actualizar"],
-  lector: ["leer"],
+ admin: ['crear', 'leer', 'actualizar', 'eliminar'],
+ editor: ['crear', 'leer', 'actualizar'],
+ lector: ['leer'],
 };
 
 // Excluir tipos
@@ -1851,11 +1890,11 @@ sacrificar la tipificación.
 
 ```typescript
 function identidad<T>(valor: T): T {
-  return valor;
+ return valor;
 }
 
 const numero = identidad<number>(42); // 42
-const texto = identidad<string>("Hola Mundo"); // 'Hola Mundo'
+const texto = identidad<string>('Hola Mundo'); // 'Hola Mundo'
 ```
 
 #### Clases Genéricas
@@ -1865,21 +1904,21 @@ cualquier tipo.
 
 ```typescript
 class Caja<T> {
-  contenido: T;
+ contenido: T;
 
-  constructor(contenido: T) {
-    this.contenido = contenido;
-  }
+ constructor(contenido: T) {
+  this.contenido = contenido;
+ }
 
-  obtenerContenido(): T {
-    return this.contenido;
-  }
+ obtenerContenido(): T {
+  return this.contenido;
+ }
 }
 
 const cajaDeNumero = new Caja<number>(123);
 console.log(cajaDeNumero.obtenerContenido()); // 123
 
-const cajaDeTexto = new Caja<string>("Texto");
+const cajaDeTexto = new Caja<string>('Texto');
 console.log(cajaDeTexto.obtenerContenido()); // 'Texto'
 ```
 
@@ -1890,12 +1929,12 @@ diferentes tipos.
 
 ```typescript
 interface Par<K, V> {
-  clave: K;
-  valor: V;
+ clave: K;
+ valor: V;
 }
 
-const parNumeroTexto: Par<number, string> = { clave: 1, valor: "Uno" };
-const parTextoBooleano: Par<string, boolean> = { clave: "activo", valor: true };
+const parNumeroTexto: Par<number, string> = { clave: 1, valor: 'Uno' };
+const parTextoBooleano: Par<string, boolean> = { clave: 'activo', valor: true };
 ```
 
 ## Uso Avanzado de Genéricos
@@ -1906,14 +1945,14 @@ Podemos restringir los tipos que un genérico puede aceptar usando `extends`.
 
 ```typescript
 interface ConNombre {
-  nombre: string;
+ nombre: string;
 }
 
 function saludar<T extends ConNombre>(obj: T): void {
-  console.log(`Hola, ${obj.nombre}`);
+ console.log(`Hola, ${obj.nombre}`);
 }
 
-saludar({ nombre: "Juan" }); // Hola, Juan
+saludar({ nombre: 'Juan' }); // Hola, Juan
 // saludar({ apellido: 'Perez' }); // Error: el objeto no tiene la propiedad 'nombre'
 ```
 
@@ -1923,10 +1962,10 @@ Podemos utilizar genéricos en funciones que aceptan y retornan otras funciones.
 
 ```typescript
 function procesar<T>(elementos: T[], callback: (elemento: T) => void): void {
-  elementos.forEach(callback);
+ elementos.forEach(callback);
 }
 
-procesar<number>([1, 2, 3], (numero) => console.log(numero * 2)); // 2, 4, 6
+procesar<number>([1, 2, 3], numero => console.log(numero * 2)); // 2, 4, 6
 ```
 
 ## Ejemplo Completo con Tipos Complejos y `in`
@@ -1936,39 +1975,39 @@ comprobación avanzada de tipos utilizando la palabra clave `in`.
 
 ```typescript
 interface Animal {
-  tipo: string;
-  sonido(): void;
+ tipo: string;
+ sonido(): void;
 }
 
 interface Gato extends Animal {
-  tipo: "gato";
-  raza: string;
+ tipo: 'gato';
+ raza: string;
 }
 
 interface Perro extends Animal {
-  tipo: "perro";
-  color: string;
+ tipo: 'perro';
+ color: string;
 }
 
 function procesarAnimal<T extends Animal>(animal: T): string {
-  if ("raza" in animal) {
-    return `Es un gato de raza ${animal.raza}`;
-  } else if ("color" in animal) {
-    return `Es un perro de color ${animal.color}`;
-  } else {
-    return `Es un animal de tipo desconocido`;
-  }
+ if ('raza' in animal) {
+  return `Es un gato de raza ${animal.raza}`;
+ } else if ('color' in animal) {
+  return `Es un perro de color ${animal.color}`;
+ } else {
+  return `Es un animal de tipo desconocido`;
+ }
 }
 
 const miGato: Gato = {
-  tipo: "gato",
-  raza: "Siamés",
-  sonido: () => console.log("Miau"),
+ tipo: 'gato',
+ raza: 'Siamés',
+ sonido: () => console.log('Miau'),
 };
 const miPerro: Perro = {
-  tipo: "perro",
-  color: "Negro",
-  sonido: () => console.log("Guau"),
+ tipo: 'perro',
+ color: 'Negro',
+ sonido: () => console.log('Guau'),
 };
 
 console.log(procesarAnimal(miGato)); // Output: Es un gato de raza Siamés
@@ -1988,12 +2027,12 @@ tengamos que andar adivinando qué significa cada valor.
 
 ```typescript
 enum Numbers1 {
-  "NUMBER1" = "number1",
-  "NUMBER2" = "number2",
+ 'NUMBER1' = 'number1',
+ 'NUMBER2' = 'number2',
 }
 
 enum Numbers2 {
-  "NUMBER3" = "number3",
+ 'NUMBER3' = 'number3',
 }
 ```
 
@@ -2040,7 +2079,7 @@ cualquier tipo (`any`), porque a veces la vida es así de flexible.
 
 ```typescript
 type Enums = {
-  [key in MixNumbers]: any;
+ [key in MixNumbers]: any;
 };
 ```
 
@@ -2050,12 +2089,12 @@ Vamos a ver el código completo en acción:
 
 ```typescript
 enum Numbers1 {
-  "NUMBER1" = "number1",
-  "NUMBER2" = "number2",
+ 'NUMBER1' = 'number1',
+ 'NUMBER2' = 'number2',
 }
 
 enum Numbers2 {
-  "NUMBER3" = "number3",
+ 'NUMBER3' = 'number3',
 }
 
 const myNumbers = { ...Numbers1, ...Numbers2 } as const;
@@ -2064,14 +2103,14 @@ const mixValues = Object.values(myNumbers);
 type MixNumbers = (typeof mixValues)[number];
 
 type Enums = {
-  [key in MixNumbers]: any;
+ [key in MixNumbers]: any;
 };
 
 // Ejemplo de uso
 const example: Enums = {
-  number1: "Este es el número 1",
-  number2: 42,
-  number3: { detalle: "Número 3 como objeto" },
+ number1: 'Este es el número 1',
+ number2: 42,
+ number3: { detalle: 'Número 3 como objeto' },
 };
 
 console.log(example);
@@ -2087,3 +2126,4 @@ console.log(example);
    un tipo que representa los valores combinados.
 4. **Definición del Tipo Enums**: Usamos un índice mapeado para definir
    propiedades basadas en `MixNumbers`.
+
