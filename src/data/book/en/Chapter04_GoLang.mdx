@@ -273,7 +273,7 @@ func MyFunction(element ElementType) {
 
 MyFunction(exampleElement)
 ```
-```markdown
+
 Here you might think that we are working on the element "exampleElement", but it's quite the opposite. By default, Go will create a copy of the element itself to work with it, so the usage of "element" inside the function "MyFunction" is different from "exampleElement"... it's a copy.
 
 So if we want to work with the same element passed as a parameter to the function, a pointer must be used. Normally when we create a variable, we mistakenly say that we create a property that holds a value inside it, when in reality what we are doing is creating a memory space, containing a value inside it, and then creating a reference (pointer) to that memory space which is represented by the name we give to our property:
