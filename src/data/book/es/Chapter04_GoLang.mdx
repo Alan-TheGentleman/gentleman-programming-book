@@ -274,7 +274,7 @@ func MiFuncion(elemento TipoElemento) {
 
 MiFuncion(ejemploElemento)
 ```
-```markdown
+
 Aquí podrías pensar que estamos trabajando en el elemento "ejemploElemento", pero es todo lo contrario. Por defecto, Go creará una copia del elemento mismo para trabajar con él, por lo que el uso de "elemento" dentro de la función "MiFuncion" es diferente de "ejemploElemento"... es una copia.
 
 Entonces, si queremos trabajar con el mismo elemento pasado como parámetro a la función, se debe usar un puntero. Normalmente, cuando creamos una variable, erróneamente decimos que creamos una propiedad que contiene un valor dentro de ella, cuando en realidad lo que estamos haciendo es crear un espacio de memoria que contiene un valor dentro de él, y luego creamos una referencia (puntero) a ese espacio de memoria que está representado por el nombre que damos a nuestra propiedad:
