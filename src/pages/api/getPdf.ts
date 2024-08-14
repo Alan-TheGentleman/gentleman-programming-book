@@ -26,6 +26,7 @@ export default async function handler(
 		'http://localhost:3000/book/Chapter08_Clean_Architecture_Front_End',
 		'http://localhost:3000/book/Chapter09_React',
 		'http://localhost:3000/book/Chapter10_TypeScript',
+		'http://localhost:3000/book/Chapter11_FrontEndRadar',
 	];
 
 	const pageListSpanish = [
@@ -40,6 +41,7 @@ export default async function handler(
 		'http://localhost:3000/es/book/Chapter08_Clean_Architecture_Front_End',
 		'http://localhost:3000/es/book/Chapter09_React',
 		'http://localhost:3000/es/book/Chapter10_TypeScript',
+		'http://localhost:3000/book/Chapter11_FrontEndRadar',
 	];
 
 	const browser = await P.chromium.launch({ headless: true });
