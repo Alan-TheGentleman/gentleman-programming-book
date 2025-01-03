@@ -19,6 +19,8 @@ titleList:
     tagId: 'interceptors-in-angular-and-server-side-rendering'
   - name: 'Testing in Angular'
     tagId: 'testing-in-angular'
+  - name: 'Final Chapter: All the New Features of Angular 19'
+    tagId: 'final-chapter-all-the-new-features-of-angular-19'
 ---
 
 # Angular: Mastering the Framework
@@ -2192,3 +2194,263 @@ test('Should show a spinner during loading', async ({ page }) => {
  await page.waitForSelector('.spinner', { state: 'hidden' }); // Wait for it to disappear
 });
 ```
+
+## Final Chapter: All the New Features of Angular 19
+
+Angular 19 arrives loaded with significant improvements focused on developer experience,
+performance, and reactivity.
+This chapter explores these new features in detail, with practical examples illustrating
+how to make the most of them.
+
+### Incremental Hydration
+
+Angular now supports a developer preview version of **incremental hydration**,
+a feature that improves the performance of server-rendered applications by
+hydrating components in a deferred manner, based on user interaction.
+
+#### Example
+
+```typescript
+import {
+ provideClientHydration,
+ withIncrementalHydration,
+} from '@angular/platform-browser';
+
+bootstrapApplication(AppComponent, {
+ providers: [provideClientHydration(withIncrementalHydration())],
+});
+```
+
+In the template:
+
+```html
+@defer (hydrate on viewport) {
+<shopping-cart></shopping-cart>
+}
+```
+
+In this example, the `<shopping-cart>` component will not
+hydrate until it enters the viewport.
+
+### Default Event Replay
+
+**Event Replay** ensures that user events captured before the code is
+downloaded and hydrated are executed correctly once the code is ready.
+
+#### Configuration Default Event Replay
+
+```typescript
+bootstrapApplication(AppComponent, {
+ providers: [provideClientHydration(withEventReplay())],
+});
+```
+
+This significantly improves the user experience in server-rendered applications.
+
+### Route-Based Rendering Modes
+
+You can now define which routes should be prerendered, server-rendered, or
+client-rendered.
+
+#### Example Rendering Modes
+
+```typescript
+import { ServerRoute, RenderMode } from '@angular/platform-server';
+
+export const serverRouteConfig: ServerRoute[] = [
+ { path: '/login', mode: RenderMode.Server },
+ { path: '/dashboard', mode: RenderMode.Client },
+ { path: '/**', mode: RenderMode.Prerender },
+];
+```
+
+This allows optimizing the behavior of your application
+according to the needs of each route.
+
+### Enhanced Reactivity
+
+#### Inputs, Outputs, and Queries
+
+Angular 19 stabilizes these APIs and provides schematics to migrate to the
+new versions:
+
+```bash
+ng generate @angular/core:signal-input-migration
+ng generate @angular/core:signal-queries-migration
+ng generate @angular/core:output-migration
+```
+
+#### `linkedSignal`
+
+This new API simplifies the handling of mutable states dependent on other
+states.
+
+```typescript
+const options = signal(['apple', 'banana']);
+const choice = linkedSignal(() => options()[0]);
+
+choice.set('banana');
+options.set(['pear', 'kiwi']);
+console.log(choice()); // 'pear'
+```
+
+#### `resource`
+
+Introduces reactive handling for asynchronous operations.
+
+```typescript
+@Component({...})
+export class UserProfile {
+  userId = input<number>();
+  userService = inject(UserService);
+
+  user = resource({
+    request: this.userId,
+    loader: async ({ request: id }) => await this.userService.getUser(id),
+  });
+}
+```
+
+This API is experimental but opens the door to more efficient handling of
+asynchronous data.
+
+### Improvements in Angular Material and CDK
+
+1. **Time Picker Component:**
+
+   - A new component for time selection, accessible and highly requested.
+
+2. **Bidirectional Drag & Drop:**
+
+   - You can now drag elements in two dimensions using the CDK.
+
+   ```html
+   <div cdkDropList cdkDropListOrientation="mixed">
+    @for (item of items) {
+    <div cdkDrag>{{ item }}</div>
+    }
+   </div>
+   ```
+
+3. **Themes with Improved API:**
+
+   - Simplifies the creation of custom themes with `mat.theme`.
+
+   ```scss
+   @use '@angular/material' as mat;
+
+   html {
+    @include mat.theme(
+     (
+      color: (
+       primary: mat.$violet-palette,
+       secondary: mat.$orange-palette,
+      ),
+     )
+    );
+   }
+   ```
+
+### Hot Module Replacement (HMR)
+
+Angular 19 introduces HMR for styles and experimental support for templates.
+
+```bash
+NG_HMR_TEMPLATES=1 ng serve
+```
+
+This allows you to see changes in styles or templates without reloading the
+page or losing the application state.
+
+### Usage Examples
+
+#### Hydration
+
+##### `hydrate.component.html`
+
+```html
+<p>hydrate works!</p>
+@for (character of characters; track character.id) {
+<app-character [character]="character"></app-character>
+}
+```
+
+##### `hydrate.component.ts`
+
+```typescript
+import { isPlatformBrowser } from '@angular/common';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
+
+@Component({
+ selector: 'app-hydrate',
+ standalone: true,
+ imports: [],
+ templateUrl: './hydrate.component.html',
+ styleUrl: './hydrate.component.scss',
+})
+export class HydrateComponent {
+ isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+ constructor() {
+  if (this.isBrowser) localStorage.setItem('key', 'test');
+ }
+}
+```
+
+##### `app.component.html`
+
+```html
+@defer (on idle; hydrate on interaction) {
+<app-hydrate />
+} @let greeting = "Hello "+greeting
+<p>{{ greeting}}</p>
+
+@let user = user$ | async;
+<p>User: {{ user.name }}</p>
+```
+
+##### `app.component.ts`
+
+```typescript
+import {
+ Component,
+ inject,
+ input,
+ linkedSignal,
+ resource,
+ signal,
+} from '@angular/core';
+import { HydrateComponent } from './hydrate/hydrate.component';
+
+@Component({
+ selector: 'app-root',
+ imports: [HydrateComponent],
+ templateUrl: './app.component.html',
+ styleUrl: './app.component.scss',
+})
+export class AppComponent {
+ title = 'angular-19';
+ options = signal(['apple', 'banana', 'strawberry']);
+ userId = input<number>();
+ usersService = inject(UsersService);
+ choice = linkedSignal(() => this.options()[0]);
+ greetings = 'hi';
+
+ user = resource({
+  request: () => this.userId,
+  loader: async ({ request: id }) => await this.usersService.getUser(id),
+ });
+
+ constructor() {
+  this.choice.set('strawberry');
+  console.log(this.choice()); // "strawberry"
+  this.options.set(['kiwi', 'pineapple']);
+  console.log(this.choice()); // "kiwi"
+ }
+}
+```
+
+Angular 19 marks a significant advancement in developer experience and
+application performance. From enhanced reactivity to incremental hydration,
+these tools allow building faster and more efficient applications. Take
+advantage of these new features to take your projects to the next level.
