@@ -1,0 +1,2194 @@
+---
+id: 'angular'
+order: 12
+name: 'Angular: Mastering the Framework'
+titleList:
+  - name: 'Introduction'
+    tagId: 'introduction'
+  - name: 'Why Angular'
+    tagId: 'why-angular'
+  - name: 'TypeScript and How to Use It in Angular'
+    tagId: 'typescript-and-how-to-use-it-in-angular'
+  - name: 'Fundamental Elements of Angular'
+    tagId: 'fundamental-elements-of-angular'
+  - name: 'Control Flow and Syntax'
+    tagId: 'control-flow-and-syntax'
+  - name: 'Forms in Angular: Traditional Approach vs Custom Solution'
+    tagId: 'forms-in-angular-traditional-approach-vs-custom-solution'
+  - name: 'Interceptors in Angular and Server-Side Rendering'
+    tagId: 'interceptors-in-angular-and-server-side-rendering'
+  - name: 'Testing in Angular'
+    tagId: 'testing-in-angular'
+---
+
+# Angular: Mastering the Framework
+
+## Introduction
+
+### Welcome
+
+Angular is not just a framework; it's a powerful tool that can transform the way
+you develop web applications. In this course, we will explore every corner of
+Angular, from the basics to advanced techniques that will make you a front-end
+master.
+
+### Who am I?
+
+I am Alan, known as Gentleman, Google Developer Expert in Angular and Microsoft
+MVP. I have over 15 years of software development experience and I'm here to
+share what I know. This course is designed to be clear, comprehensive, and most
+importantly, practical.
+
+### What will we cover?
+
+1. **Why Angular**: What makes it unique and when to choose it?
+2. **TypeScript in Angular**: How to use it to write solid and maintainable
+   code.
+3. **Angular Elements**: Components, directives, and services.
+4. **Control Flow and Syntax**: Understanding Angular's key structures.
+5. **Angular 19 Updates**: Discover the latest improvements.
+6. **Services and Architectures**: Design scalable and modular applications.
+7. **Forms in Angular**: Work with reactive and validated forms.
+8. **Interceptors**: Handle HTTP communication like a pro.
+9. **Testing**: With Jest, Playwright, and Testing Library.
+
+## Why Angular
+
+### The Journey of Angular
+
+Angular has a fascinating history that sets it apart from other frameworks. It
+started as AngularJS in 2010, implementing the MVC (Model-View-Controller)
+pattern and popularizing SPAs (Single Page Applications). However, this initial
+approach had limitations in large projects, such as performance and code
+maintainability.
+
+Frameworks like Backbone laid the groundwork for SPAs, but AngularJS took the
+concept further with directives that extended the DOM and a clear data flow
+between Model, View, and Controller. Later, the MVC model was challenged by MVVM
+(Model-View-ViewModel), and frameworks like React changed the game with simpler
+and more efficient approaches.
+
+Angular and React combine features of MVC and MVVM, leveraging the best of both
+paradigms. AngularJS evolved to Angular 2 in 2016, with a component-based
+approach and dropping compatibility with AngularJS.
+
+### Directives and Components
+
+Directives in AngularJS were essential for extending DOM functionality. In
+modern Angular, they evolved into reusable and powerful components, marking a
+significant change in how web applications are developed.
+
+### Change Detection: From Zone.js to Signals
+
+Angular initially introduced Zone.js to manage change detection, monitoring
+events throughout the DOM. While effective, this approach caused performance
+issues in large applications due to unnecessary event bubbling.
+
+The **ChangeDetectionStrategy.OnPush** strategy improved this process by
+limiting change detection to explicit inputs, asynchronous streams, and user
+events. This reduced performance impact but still relied on Zone.js.
+
+The introduction of **Signals** removed this dependency. Signals allow managing
+changes directly and efficiently, affecting only the components that need to be
+updated. Inspired by modern frameworks like QwikJS, Signals represent a step
+forward towards optimized performance.
+
+### Reactive Programming and Signals
+
+Reactive programming allows handling data flows asynchronously and declaratively.
+In Angular, this is implemented with RxJS, which introduces concepts like:
+
+- **Observables**: Unidirectional channels where a single emitter sends events.
+- **Subject**: Bidirectional channels where multiple emitters and receivers
+  interact.
+- **BehaviorSubject**: Similar to a Subject but retains the last emitted event.
+
+Signals complement this paradigm by providing a simpler and more efficient
+alternative. They act as a channel where changes only impact the components that
+directly depend on them.
+
+### Why Did Angular Change?
+
+The shift from AngularJS to Angular 2 and later versions was not just technical;
+it responded to community criticisms and challenges:
+
+1. **High Learning Curve**: AngularJS had an innovative approach, but its initial
+   complexity was overwhelming.
+2. **Inconsistent Documentation**: Developers often faced incomplete or confusing
+   documentation.
+3. **Community Fragmentation**: The transition from AngularJS to Angular 2 split
+   the community, with many developers migrating to React.
+
+As I mentioned in my interview to become a GDE: "Learning Angular is horrible,
+the documentation is a mess, and the learning curve is too high." Despite this,
+Angular remains a solid choice due to its comprehensive ecosystem and focus on
+scalability.
+
+### Angular in Real Life vs. Angular at Work
+
+In work environments, Angular often deals with the legacy of older versions that
+depend on complex modules and configurations. Before Angular 16, each feature
+required an associated module, complicating the architecture.
+
+With the introduction of **Standalone Components**, Angular removed this
+dependency, allowing components to be autonomous and easier to manage.
+
+### Angular and the Modern Ecosystem
+
+1. **Partial Hydration**: Angular optimizes initial load by sending static HTML
+   to the client and hydrating only the necessary parts. This improves speed and
+   reduces resource consumption.
+2. **Advanced Reactivity**: `Signals` offer more efficient control over change
+   detection, replacing Zone.js.
+3. **Frequent Updates**: Angular follows a six-month release cycle, ensuring
+   compatibility with the latest practices.
+4. **Enterprise Support**: Angular is ideal for large projects due to its
+   modularity and robustness.
+
+### RxJS: The Backbone of Reactivity
+
+RxJS is fundamental in Angular for handling data flows and asynchronous events.
+By facilitating communication between components and state management, RxJS
+becomes an indispensable tool in scalable projects.
+
+### Angular Universal and SSR
+
+Previously a separate tool, Angular Universal is now integrated into the core of
+the framework. This functionality allows implementing SSR (Server-Side
+Rendering) and SSG (Static Site Generation), improving SEO and initial load
+times.
+
+## TypeScript and How to Use It in Angular
+
+### Introduction to TypeScript
+
+TypeScript is the core of modern development in Angular. This JavaScript
+superset, created by Microsoft, introduces static typing and decorators,
+promoting scalable and predictable development. Let's analyze how TypeScript
+powers Angular and how learning its fundamentals allows us to leverage it fully.
+
+### TypeScript Fundamentals
+
+#### Static Typing and Classes
+
+TypeScript provides tools like interfaces and classes to define clear structures
+and avoid common errors. Consider the following example:
+
+```typescript
+interface User {
+ name: string;
+ getName: () => string;
+ setName: (name: string) => void;
+}
+
+class UserClass {
+ private name: string;
+
+ constructor(name: string) {
+  this.name = name;
+ }
+
+ getName() {
+  return this.name;
+ }
+
+ setName(name: string) {
+  this.name = name;
+ }
+}
+
+const user: User = {
+ name: 'El_Blaki',
+ getName: () => 'Pepe',
+ setName: (name: string) => {},
+};
+
+const userClass: UserClass = new UserClass('Pepe');
+```
+
+Here we define a `User` interface to ensure that any object implementing it
+meets its contract, while the `UserClass` class organizes data handling and
+logic.
+
+#### Combining Types
+
+Often, we need to combine types to represent more complex entities. This is
+achieved with `type`:
+
+```typescript
+interface Student {
+ id: string;
+}
+
+type UserType = User & Student;
+```
+
+This allows building reusable and precise models for our applications.
+
+### Decorators in TypeScript and Angular
+
+Decorators are a key feature of TypeScript, and Angular uses them extensively.
+Let's break down their main uses.
+
+#### Class Decorator
+
+A class decorator can modify or extend functionalities:
+
+```typescript
+function gentlemanApproves<T extends { new (...args: any[]): {} }>(
+ constructor: T,
+): T {
+ return class extends constructor {
+  gentleman = 'Yes';
+ };
+}
+
+@gentlemanApproves
+class MyClass {}
+
+const instance = new MyClass();
+console.log((instance as any).gentleman); // "Yes"
+```
+
+This decorator adds the `gentleman` property to any class that uses it.
+
+#### Component Decorator (Angular Inspiration)
+
+Angular uses decorators like `@Component` to define components:
+
+```typescript
+function Component(config: { selector: string; template: string }) {
+ return function (target: any) {
+  target.prototype.selector = config.selector;
+  target.prototype.template = config.template;
+ };
+}
+
+@Component({
+ selector: 'app-component',
+ template: '<h1>{{ title }}</h1>',
+})
+class MyComponent {
+ title: string = 'I am a component made by the Gentleman';
+}
+```
+
+This demonstrates how decorators facilitate declarative configuration.
+
+#### Method Decorator
+
+We can intercept method calls to extend their behavior:
+
+```typescript
+function logMethod(method: Function, context: ClassMethodDecoratorContext) {
+ return function (...args: any[]) {
+  console.log(
+   `Method ${String(context.name)} called with arguments: ${args}`,
+  );
+  const result = method.apply(this, args);
+  console.log(`Method ${String(context.name)} returned: ${result}`);
+  return result;
+ };
+}
+
+class Calculator {
+ @logMethod
+ sum(a: number, b: number) {
+  return a + b;
+ }
+}
+
+const calc = new Calculator();
+calc.sum(1, 2);
+```
+
+#### Property Decorator
+
+Property decorators can modify how a property is accessed and defined:
+
+```typescript
+function uppercase(_target: any, context: ClassAccessorDecoratorContext) {
+ return {
+  get(this: any) {
+   return this[`_${String(context.name)}`].toUpperCase();
+  },
+  set(this: any, value: string) {
+   this[`_${String(context.name)}`] = value.toUpperCase();
+  },
+ };
+}
+
+class Person {
+ @uppercase
+ accessor name: string;
+
+ constructor(name: string) {
+  this.name = name;
+ }
+}
+```
+
+This decorator automatically converts any assigned value to uppercase.
+
+### TypeScript in Angular
+
+#### Decorators in Angular
+
+Angular uses decorators to simplify the configuration of its component and
+service structure. The most common ones are:
+
+1. **@Component**: Defines components.
+2. **@Injectable**: Configures services.
+3. **@Directive**: Extends the DOM.
+
+#### Interfaces and Models
+
+Interfaces are key to defining clear data structures in Angular:
+
+```typescript
+export interface User {
+ id: number;
+ name: string;
+}
+```
+
+#### Generics in Services
+
+Generics are essential for building reusable services:
+
+```typescript
+export class DataService<T> {
+ private data: T[] = [];
+
+ add(item: T): void {
+  this.data.push(item);
+ }
+
+ get(): T[] {
+  return this.data;
+ }
+}
+```
+
+This allows handling data of different types without duplicating code.
+
+### Best Practices
+
+1. **Enable Strict Mode**: Configure `tsconfig.json` to detect errors during
+   development:
+
+```json
+{
+ "compilerOptions": {
+  "strict": true,
+  "noImplicitAny": true
+ }
+}
+```
+
+2. **Avoid `any`**: Use explicit types or `unknown`.
+3. **Specify Return Types**: Improves clarity and avoids errors.
+4. **Leverage Decorators**: Use them to simplify complex configurations.
+
+## Fundamental Elements of Angular
+
+### Angular Introduction
+
+Angular is a structural platform designed to build robust, modular, and reusable
+applications. Its main elements include components, directives, and services.
+These form the core of any Angular application.
+
+It is worth noting that the recommendations here are personal perspectives based
+on practical experience and do not necessarily follow Angular's official
+guidelines.
+
+### Components
+
+#### What is a Component?
+
+A component in Angular is the smallest logical unit that handles a single task
+or part of the user interface (UI). It consists of a **selector**, a **template**,
+optional **styles**, and a **class** that contains the related logic and data.
+
+#### Types of Components
+
+1. **Presentational Components**: Handle displaying data and managing the UI,
+   without business logic.
+2. **Container Components**: Handle business logic and communicate with any
+   external entity, such as APIs, services, or databases.
+
+**Example of Container/Presentational Pattern:**
+
+```typescript
+@Component({
+ standalone: true,
+ selector: 'app-user',
+ template: `<app-user-container [userName]="userNameSignal()" />`,
+ imports: [UserProfileComponent],
+})
+export class UserComponent {
+ userService = inject(UserService);
+ userNameSignal = this.userService.userNameSignal;
+}
+```
+
+```typescript
+@Component({
+ standalone: true,
+ selector: 'app-user-profile',
+ template: `<div [style]="{ color: red }">{{ userName }}</div>`,
+ imports: [ReactiveFormsModule],
+})
+export class UserProfileComponent {
+ userName: string = 'Gentleman';
+}
+```
+
+#### Standalone Components
+
+Since Angular 16, modules are no longer essential for defining components.
+However, they have not completely disappeared. Now, each component behaves as
+its own autonomous "module," containing everything it needs to exist
+independently. This simplifies the architecture and improves performance.
+
+**Benefits of Standalone Components:**
+
+- Reduces overhead by eliminating unnecessary modules.
+- Greater clarity in project structure.
+- Facilitates code migration and maintenance.
+
+### Directives
+
+#### What are Directives?
+
+Directives are Angular tools that allow manipulating the DOM to add or alter
+functionalities of existing HTML elements.
+
+#### Types of Directives
+
+1. **Structural**: Modify the DOM structure. Examples: `*ngIf`, `*ngFor`.
+2. **Attribute**: Change the appearance or behavior of an element. Examples:
+   `ngClass`, `ngStyle`.
+3. **Custom Directives**: Developed according to the specific needs of the
+   project.
+
+#### Example of Structural Directive
+
+```html
+<div *ngIf="isVisible">Visible Content</div>
+<div *ngFor="let item of items">{{ item }}</div>
+```
+
+#### Example of Attribute Directive
+
+```html
+<div [ngClass]="{ 'active': isActive }">Styled Content</div>
+```
+
+#### Example of Custom Directive
+
+A directive that shows content based on screen size - Structural Directive:
+
+```typescript
+@Directive({
+ standalone: true,
+ selector: '[appShowOnScreenSize]',
+})
+export class ShowOnScreenSizeDirective {
+ @Input() appShowOnScreenSize!: 'small' | 'medium' | 'large';
+
+ constructor(
+  private templateRef: TemplateRef<any>,
+  private viewContainer: ViewContainerRef,
+ ) {}
+
+ ngOnInit() {
+  this.updateView();
+  window.addEventListener('resize', this.updateView.bind(this));
+ }
+
+ private updateView() {
+  const width = window.innerWidth;
+  this.viewContainer.clear();
+
+  if (this.shouldShowContent(width)) {
+   this.viewContainer.createEmbeddedView(this.templateRef);
+  }
+ }
+
+ private shouldShowContent(width: number): boolean {
+  if (this.appShowOnScreenSize === 'small' && width < 600) {
+   return true;
+  }
+  if (this.appShowOnScreenSize === 'medium' && width >= 600 && width < 1024) {
+   return true;
+  }
+  if (this.appShowOnScreenSize === 'large' && width >= 1024) {
+   return true;
+  }
+  return false;
+ }
+}
+```
+
+#### Attribute Directive Example
+
+Adds a yellow highlight when hovering over an element
+
+```typescript
+@Directive({
+ standalone: true,
+ selector: '[appHighLight]',
+})
+export class HighLightDirective {
+ constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+ @HostListener('mouseenter') onMouseEnter() {
+  this.renderer.setStyle(this.el.nativeElement, 'background-color', 'yellow');
+ }
+
+ @HostListener('mouseleave') onMouseLeave() {
+  this.renderer.removeStyle(this.el.nativeElement, 'background-color');
+ }
+}
+```
+
+```html
+<p appHighLight>Hover over this text to highlight it</p>
+```
+
+## Control Flow and Syntax
+
+### What is Control Flow in Angular?
+
+Control flow in Angular allows managing conditional logic and iteration within
+templates. With new directives and decorators introduced in Angular 16, the
+syntax has been significantly simplified, removing the need to learn elements
+like `ng-container` and `ng-template`.
+
+### New Features in Angular 16+ for Control Flow
+
+These new tools not only improve code readability but also reduce the learning
+curve, allowing developers to focus on business logic without worrying about
+unnecessary technical details.
+
+### Decorators
+
+#### **`@if` and `@else`**
+
+The `@if` decorator replaces `*ngIf` providing a more natural and compact
+syntax. It allows handling conditional content in templates without needing
+`ng-template`.
+
+**Example with the new syntax:**
+
+```html
+@if (isVisible) {
+<div>Visible Content</div>
+} @else {
+<span>Hidden Content</span>
+}
+```
+
+**How it was before:**
+
+```html
+<div *ngIf="isVisible; else hiddenContent">Visible Content</div>
+<ng-template #hiddenContent>
+ <span>Hidden Content</span>
+</ng-template>
+```
+
+**Component Code:**
+
+```typescript
+@Component({
+ selector: 'app-if',
+ standalone: true,
+ templateUrl: './if.component.html',
+ styleUrls: ['./if.component.scss'],
+})
+export class IfComponent {
+ protected isVisible = true;
+}
+```
+
+#### **`@for`**
+
+The `@for` decorator is a significant improvement for iteration. Now, using
+`track` is mandatory, allowing Angular to optimize rendering by identifying
+individual changes in large lists and improving performance.
+
+**Example with the new syntax:**
+
+```html
+<ul>
+ @for (name of names; track name) {
+ <li>{{ name }}</li>
+ } @empty {
+ <li>No Names</li>
+ }
+</ul>
+```
+
+**How it was before:**
+
+```html
+<ul>
+ <li *ngFor="let name of names">{{ name }}</li>
+</ul>
+```
+
+**Component Code:**
+
+```typescript
+@Component({
+ selector: 'app-for',
+ standalone: true,
+ templateUrl: './for.component.html',
+ styleUrls: ['./for.component.scss'],
+})
+export class ForComponent {
+ names: string[] = ['Maximiliano', 'Gabriel', 'Rhood', 'Acronimax', 'PNZITOO'];
+}
+```
+
+#### **`@switch`**
+
+The `@switch` decorator organizes multiple conditions intuitively, eliminating
+the complexity of using `*ngSwitch` and `*ngSwitchCase`.
+
+**Example with the new syntax:**
+
+```html
+@switch (selectedValue) { @case ("option 1") {
+<p>Option 1 selected</p>
+} @case ("option 2") {
+<p>Option 2 selected</p>
+} @case ("option 3") {
+<p>Option 3 selected</p>
+} }
+```
+
+**How it was before:**
+
+```html
+<div [ngSwitch]="selectedValue">
+ <p *ngSwitchCase="'option 1'">Option 1 selected</p>
+ <p *ngSwitchCase="'option 2'">Option 2 selected</p>
+ <p *ngSwitchCase="'option 3'">Option 3 selected</p>
+</div>
+```
+
+**Component Code:**
+
+```typescript
+@Component({
+ selector: 'app-switch',
+ standalone: true,
+ templateUrl: './switch.component.html',
+ styleUrls: ['./switch.component.scss'],
+})
+export class SwitchComponent {
+ protected selectedValue = 'option 1';
+}
+```
+
+#### **`@defer`**
+
+The `@defer` decorator allows loading deferred content based on specific
+conditions, optimizing application performance.
+
+**Example with the new syntax:**
+
+```html
+@defer (when isImageVisible) {
+<img src="image-url" alt="Deferred Image" />
+} @if (!isImageVisible) {
+<button (click)="showImage()">See Image</button>
+}
+```
+
+**How it was before:**
+
+Handling deferred loads required custom solutions.
+
+**Component Code:**
+
+```typescript
+@Component({
+ selector: 'app-defer',
+ standalone: true,
+ templateUrl: './defer.component.html',
+ styleUrls: ['./defer.component.scss'],
+})
+export class DeferComponent {
+ isImageVisible = false;
+
+ showImage() {
+  this.isImageVisible = true;
+ }
+}
+```
+
+#### **`@loading`**
+
+The `@loading` decorator offers a simple way to show temporary markers while
+deferred content is loading.
+
+**Example with the new syntax:**
+
+```html
+@defer (when isImageVisible) {
+<img src="image-url" alt="Deferred Image" />
+} @placeholder {
+<p>Loading...</p>
+} @if (!isImageVisible) {
+<button (click)="showImage()">See Image</button>
+}
+```
+
+**How it was before:**
+
+Handling loading content depended on additional logic.
+
+**Component Code:**
+
+```typescript
+@Component({
+ selector: 'app-placeholder',
+ standalone: true,
+ templateUrl: './placeholder.component.html',
+ styleUrls: ['./placeholder.component.scss'],
+})
+export class PlaceholderComponent {
+ isImageVisible = false;
+
+ showImage() {
+  setTimeout(() => {
+   this.isImageVisible = true;
+  }, 4000);
+ }
+}
+```
+
+#### **`@error`**
+
+The `@error` decorator allows handling errors in loading deferred content,
+improving user experience.
+
+**Example with the new syntax:**
+
+```html
+@defer (when isContentReady) {
+<p>Content Loaded</p>
+} @loading {
+<p>Loading...</p>
+} @placeholder {
+<p>Setting up...</p>
+} @error {
+<p>Error loading content</p>
+}
+```
+
+**How it was before:**
+
+Errors were handled at the component logic level, making the code more complex.
+
+**Component Code:**
+
+```typescript
+@Component({
+ selector: 'app-error',
+ standalone: true,
+ templateUrl: './error.component.html',
+ styleUrls: ['./error.component.scss'],
+})
+export class ErrorComponent {
+ isContentReady = false;
+
+ ngOnInit() {
+  setTimeout(() => {
+   this.isContentReady = true;
+  }, 5000);
+ }
+}
+```
+
+### The Power of the `@defer` Decorator
+
+The `@defer` decorator in Angular marks a turning point in managing deferred
+content loading in applications. This feature optimizes user experience and
+performance, especially in complex applications where initial load can be a
+challenge. Now, handling content that previously required `ng-template` and
+`ng-container` has been simplified, making the learning curve and implementation
+much more accessible.
+
+#### Why `@defer` is Relevant?
+
+1. **Deferred Loading with Precise Control**:
+
+   - You can specify exactly when and how content will load.
+   - Provides an adaptive experience for the user.
+
+2. **Performance Improvement**:
+
+   - Avoids loading unnecessary resources during the initial phase.
+   - Increases the time until visible content is interactive.
+
+3. **Development Simplification**:
+
+   - No need to master concepts like `ng-container` and `ng-template`.
+   - Reduces code complexity, making it more readable.
+
+4. **Incredible Flexibility**:
+   - Compatible with different triggers to adapt to multiple use cases.
+
+#### Use Cases and Available Triggers
+
+##### **1. `@defer (when)`**
+
+Loads content based on a specific boolean condition.
+
+**Ideal Use**:
+
+- Load data only when available in memory or after a successful query.
+
+```html
+@defer (when dataReady) {
+<p>Data has been loaded</p>
+} @placeholder {
+<p>Waiting for data...</p>
+}
+```
+
+##### **2. `@defer (on idle)`**
+
+Renders content when the browser is idle.
+
+**Ideal Use**:
+
+- Load non-essential content like statistics or decorative elements.
+
+```html
+@defer (on idle) {
+<p>Content loaded while the browser was idle</p>
+} @placeholder {
+<p>Placeholder for deferred content</p>
+}
+```
+
+##### **3. `@defer (on viewport)`**
+
+Loads content when an element enters the browser's visible area.
+
+**Ideal Use**:
+
+- Lazy-loading images or components that appear on scroll.
+
+```html
+<div #triggerElement>Hello!</div>
+
+@defer (on viewport(triggerElement)) {
+<p>Content loaded when in viewport</p>
+}
+```
+
+##### **4. `@defer (on interaction)`**
+
+Renders content after interacting with an element.
+
+**Ideal Use**:
+
+- Secondary forms, dropdown menus, or click-based content.
+
+```html
+<div #interactionElement>Click here!</div>
+
+@defer (on interaction(interactionElement)) {
+<p>Content loaded after interaction</p>
+}
+```
+
+##### **5. `@defer (on hover)`**
+
+Loads content when hovering over an element.
+
+**Ideal Use**:
+
+- Show tooltips or previews.
+
+```html
+<div #specificElement>Hover here</div>
+
+@defer (on hover(specificElement)) {
+<p>Content loaded after hover</p>
+} @placeholder {
+<p>Placeholder for hover</p>
+}
+```
+
+##### **6. `@defer (on timer)`**
+
+Renders content after a defined time.
+
+**Ideal Use**:
+
+- Show promotional banners or animations after the initial load.
+
+```html
+@defer (on timer(5000ms)) {
+<p>Content loaded after 5 seconds</p>
+} @placeholder {
+<p>Waiting...</p>
+}
+```
+
+##### **7. `@defer` with Prefetch**
+
+Combines triggers with the ability to preload resources.
+
+**Ideal Use**:
+
+- Anticipate loading critical content based on interaction patterns.
+
+```html
+@defer (on interaction; prefetch on idle) {
+<p>Content preloaded or loaded after interaction</p>
+} @placeholder {
+<p>Interact with me</p>
+}
+```
+
+#### Relationship Between `@defer` and `@placeholder`
+
+The combined use of `@defer` and `@placeholder` efficiently manages the user
+experience:
+
+- **`@defer`** controls when content should load.
+- **`@placeholder`** ensures the user has visual feedback while waiting.
+
+**Example**:
+
+```html
+@defer (on timer(3000ms)) {
+<p>Content loaded after 3 seconds</p>
+} @placeholder {
+<p>Loading content...</p>
+}
+```
+
+#### Best Practices new Control Flow
+
+1. **Use `@defer` for Non-Critical Load**:
+
+   - Secondary menus, heavy images, or graphics.
+
+2. **Provide Clear Feedback with `@placeholder`**:
+
+   - Don't leave the user in uncertainty.
+
+3. **Combine Prefetch to Anticipate Needs**:
+
+   - Improve experience by preloading resources.
+
+4. **Leverage Triggers Smartly**:
+   - Use `viewport` for lazy-loading or `hover` for tooltips.
+
+#### Impact for Developers
+
+- **Reduction of Manual Work**:
+  - No need to write custom logic to handle events.
+- **Cleaner Code**:
+  - Improves code readability and maintenance.
+- **Optimal Performance**:
+  - Avoids unnecessary resource loading, optimizing the application.
+
+With `@defer`, Angular takes a step forward in managing deferred content,
+simplifying the developer's life and improving the end-user experience.
+
+## Forms in Angular: Traditional Approach vs Custom Solution
+
+In this chapter, we explore how to handle complex forms in Angular, where each
+control is another form. This is often a challenge in the traditional approach,
+but my proposal significantly simplifies the process.
+
+### 1. Traditional Approach: Nested Forms
+
+When each section of a general form is a separate form, validating the entire
+form can become complicated. The traditional approach uses observables to track
+changes in each form and requires additional logic to consolidate states and
+values.
+
+#### File: `traditional-form.component.ts`
+
+```typescript
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+
+@Component({
+ selector: 'app-traditional-form',
+ templateUrl: './traditional-form.component.html',
+})
+export class TraditionalFormComponent {
+ form: FormGroup;
+
+ constructor(private fb: FormBuilder) {
+  this.form = this.fb.group({
+   sections: this.fb.array([]),
+  });
+
+  this.addSection();
+ }
+
+ get sections() {
+  return this.form.controls['sections'] as FormArray;
+ }
+
+ addSection() {
+  const id = this.sections.length + 1;
+  const sectionForm = this.fb.group({
+   title: ['', Validators.required],
+   controls: this.fb.array([
+    this.fb.group({
+     id: [id],
+     name: ['', Validators.required],
+     value: ['', Validators.required],
+    }),
+   ]),
+  });
+
+  this.sections.push(sectionForm);
+ }
+
+ validateForm() {
+  this.sections.controls.forEach(section => {
+   (section.get('controls') as FormArray).controls.forEach(control => {
+    control.markAsTouched();
+   });
+  });
+ }
+
+ submit() {
+  if (this.form.valid) {
+   console.log('Form data:', this.form.value);
+  } else {
+   this.validateForm();
+   console.log('Form is invalid');
+  }
+ }
+}
+```
+
+**Disadvantages**:
+
+- Consolidating states and values requires additional logic.
+- Complexity in handling dynamic forms.
+- Difficult to maintain performance with extensive forms.
+
+### 2. My Solution: Simplifying Forms with `signals`
+
+My proposal uses `signals` to manage dynamic forms and calculate values
+reactively. It also simplifies validation and allows efficient lazy loading to
+optimize performance.
+
+#### File: `app.component.ts`
+
+```typescript
+import { Component, computed, inject } from '@angular/core';
+import {
+ FormArray,
+ FormControl,
+ FormGroup,
+ NonNullableFormBuilder,
+ Validators,
+} from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+export interface SectionForm {
+ id: FormControl<number>;
+ name: FormControl<string>;
+ value: FormControl<number>;
+}
+
+export type CustomFormGroup = FormGroup<SectionForm>;
+
+export class AppComponent {
+ fb = inject(NonNullableFormBuilder);
+
+ form = this.fb.group({
+  sections: this.fb.array<CustomFormGroup>([]),
+ });
+
+ get sections() {
+  return this.form.controls.sections;
+ }
+
+ sectionChanges = toSignal(this.form.valueChanges);
+
+ totalValue = computed(() => {
+  const value = this.sectionChanges()?.sections?.reduce(
+   (total, item) => total + (Number(item?.value) || 0),
+   0,
+  );
+  console.log('computing total value: ', value);
+  return value;
+ });
+
+ addSection() {
+  const id = this.sections.length + 1;
+  const sectionForm = this.fb.group<SectionForm>({
+   id: this.fb.control(id),
+   name: this.fb.control('', { validators: [Validators.required] }),
+   value: this.fb.control(0, { validators: [Validators.required] }),
+  });
+
+  this.form.controls.sections.push(sectionForm);
+ }
+}
+```
+
+**Advantages**:
+
+- `signals` eliminate the need for manual subscriptions.
+- `computed` simplifies derived calculations like the total.
+- Excellent support for lazy loading, loading only visible inputs.
+
+#### File: `form-child.component.ts`
+
+```typescript
+import { Component, input } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SectionForm } from '../app.component';
+import { CustomInputComponent } from '../custom-input/custom-input.component';
+
+@Component({
+ selector: 'app-form-child',
+ imports: [ReactiveFormsModule, CustomInputComponent],
+ templateUrl: './form-child.component.html',
+ styleUrl: './form-child.component.scss',
+})
+export class FormChildComponent {
+ formGroup = input.required<FormGroup<SectionForm>>();
+}
+```
+
+### Comparison
+
+| Feature              | Traditional        | Custom Solution           |
+| -------------------- | ------------------ | ------------------------- |
+| Validation           | Manual and tedious | Simplified with `signals` |
+| Derived calculations | Complex            | Automatic with `computed` |
+| Lazy loading         | Difficult          | Easily integrated         |
+| Maintenance          | Complex            | Simple and declarative    |
+
+My approach demonstrates how to handle nested forms in Angular more efficiently,
+making development more agile and less error-prone.
+
+#### How to Use My Method in HTML
+
+My method leverages modern Angular features like `@let` and `@for` to make
+handling dynamic forms much clearer and more efficient. Here's how it works in
+HTML:
+
+##### **Simplified HTML Using My Approach**
+
+```html
+<div>
+ <!-- Assign form array controls to 'items' -->
+ @let items = form.controls.items.controls;
+
+ <!-- Button to add a new form item -->
+ <button (click)="addItem()">Add Item</button>
+
+ <!-- Iterate over form items with 'track' for performance optimization -->
+ @for (formGroup of items; track formGroup.controls.id.value) {
+ <!-- Each child form is managed by a separate component -->
+ <app-form-child [formGroup]="formGroup" />
+ }
+
+ <!-- Calculate and display the total value in real-time -->
+ <h3>Total value: {{ totalValue() }}</h3>
+</div>
+```
+
+#### Explanation by Parts
+
+1. **`@let items = form.controls.items.controls;`**:
+
+   - Dynamically assign form array controls to the `items` variable.
+   - This eliminates the need for additional logic in the `.ts` file to get the
+     controls.
+
+2. **"Add Item" Button**:
+
+   - Allows adding new forms dynamically to the form array.
+
+3. **`@for (formGroup of items; track formGroup.controls.id.value)`**:
+
+   - Iterate over the forms in the array.
+   - `track` ensures Angular can identify specific changes, optimizing
+     performance.
+   - Simplifies logic compared to the traditional approach of using `*ngFor` and
+     manually handling keys.
+
+4. **`<app-form-child [formGroup]="formGroup" />`**:
+
+   - Delegates the management of each child form to a separate component
+     (`form-child.component`), promoting modularity.
+
+5. **`<h3>Total value: {{ totalValue() }}</h3>`**:
+   - Uses a computed `signal` to calculate the total value in real-time,
+     avoiding the need for additional logic or explicit subscriptions.
+
+## Interceptors in Angular and Server-Side Rendering
+
+In this chapter, we will explore how interceptors and the use of `PLATFORM_ID`
+in Angular can improve the way we handle HTTP requests, especially in
+applications with **Server-Side Rendering (SSR)**. Additionally, we will analyze
+how my custom approach optimizes this functionality.
+
+### **Interceptors and Their Role in Angular**
+
+Interceptors in Angular allow modifying HTTP requests before they leave the
+client and processing the responses when they return. This mechanism is useful
+for adding headers, handling global errors, or, as in this case, managing
+authentication tokens.
+
+#### **Example: Authentication with Interceptor**
+
+##### **File: `auth.interceptor.ts`**
+
+```typescript
+import { isPlatformServer } from '@angular/common';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { catchError, switchMap, throwError } from 'rxjs';
+import { AuthService } from '../services/auth.service';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+ const platformId = inject(PLATFORM_ID);
+ const authService = inject(AuthService);
+
+ // If we are on the server, do not make modifications
+ if (isPlatformServer(platformId)) {
+  return next(req);
+ }
+
+ const token = localStorage.getItem('token');
+
+ let headers = req.headers.set('Content-Type', 'application/json');
+
+ if (token) {
+  headers = headers.set('Authorization', `Bearer ${token}`);
+ }
+
+ const authReq = req.clone({ headers });
+
+ // Global error handling
+ return next(authReq).pipe(
+  catchError((error: HttpErrorResponse) => {
+   if (error.status === 401 || error.status === 403) {
+    return authService.refreshToken().pipe(
+     switchMap(newToken => {
+      localStorage.setItem('token', newToken);
+      const updatedHeaders = req.headers.set(
+       'Authorization',
+       `Bearer ${newToken}`,
+      );
+      const newRequest = req.clone({ headers: updatedHeaders });
+      return next(newRequest);
+     }),
+    );
+   }
+   return throwError(() => error);
+  }),
+ );
+};
+```
+
+In this interceptor, we check if we are on the server with `isPlatformServer`.
+If we are, we pass the request without modifications. If we are in the browser,
+we add an authentication token to the headers and handle authentication errors
+globally.
+
+### **The Role of `PLATFORM_ID` in SSR**
+
+In SSR applications, it is crucial to distinguish between the server and the
+browser to avoid errors related to browser APIs, such as `localStorage`,
+`document`, or `window`. This is where `PLATFORM_ID` comes in, allowing us to
+determine the execution environment.
+
+#### **Usage in Interceptors**
+
+```typescript
+import { isPlatformServer } from '@angular/common';
+import { PLATFORM_ID } from '@angular/core';
+
+const platformId = inject(PLATFORM_ID);
+if (isPlatformServer(platformId)) {
+ // Logic for the server
+} else {
+ // Logic for the browser
+}
+```
+
+This pattern allows adapting behavior according to the environment, ensuring
+that browser APIs are not attempted to be used on the server.
+
+### **Token Management with the Authentication Service**
+
+#### **File: `auth.service.ts`**
+
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
+
+@Injectable({
+ providedIn: 'root',
+})
+export class AuthService {
+ baseURL = 'http://localhost:4000';
+ router = inject(Router);
+ http = inject(HttpClient);
+
+ refreshToken(): Observable<string> {
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  if (!refreshToken) {
+   this.logOut();
+   return throwError(() => new Error('No refresh token found'));
+  }
+
+  return this.http
+   .post<{ refreshToken: string }>(`${this.baseURL}/token`, { refreshToken })
+   .pipe(
+    map(response => response.refreshToken),
+    tap(newAccessToken => {
+     localStorage.setItem('token', newAccessToken);
+    }),
+    catchError(error => {
+     this.logOut();
+     return throwError(() => error);
+    }),
+   );
+ }
+
+ logOut() {
+  localStorage.clear();
+  this.router.navigate(['/login']);
+ }
+}
+```
+
+This service manages authentication, including token renewal and logout.
+
+### **Application Configuration**
+
+#### **File: `app.config.ts`**
+
+```typescript
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+import {
+ provideHttpClient,
+ withFetch,
+ withInterceptors,
+} from '@angular/common/http';
+import { authInterceptor } from './interceptors/auth.interceptor';
+
+export const appConfig: ApplicationConfig = {
+ providers: [
+  provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+  provideZoneChangeDetection({ eventCoalescing: true }),
+  provideRouter(routes),
+ ],
+};
+```
+
+This configuration registers the interceptor and other necessary services for
+the application.
+
+### **Reflection: Advantages of the Approach**
+
+1. **Efficiency in SSR**:
+
+   - Avoids errors on the server by distinguishing the environment with
+     `PLATFORM_ID`.
+
+2. **Global Error Management**:
+
+   - Centralizes token handling and renewals.
+
+3. **Scalability**:
+
+   - Facilitates integration with multiple services without duplicating logic.
+
+4. **Improved Performance**:
+   - Reduces failed requests by automatically handling authentication.
+
+## Testing in Angular
+
+Today we reach a crucial moment: the end of the Angular course. This chapter not
+only marks the end of this journey but also introduces a topic that can be a
+turning point in your development as a programmer: **testing**.
+
+Testing is not just a technical tool; it is a philosophy that, when adopted,
+transforms the way we build software. In this final class, we will explore three
+fundamental types: **unit testing**, **functional testing**, and **end-to-end
+testing**. Each of them fulfills a specific role, and understanding how they fit
+together is key to ensuring robust and maintainable applications.
+
+### Introduction to Testing Tools
+
+Before delving into the examples, let's review how to configure and install the
+main tools we will use:
+
+#### Jest
+
+Jest is a testing framework that allows writing tests easily and efficiently. It
+is ideal for **unit testing** and integrates well with Angular.
+
+##### Installation
+
+```bash
+npm install --save-dev jest @types/jest jest-preset-angular
+```
+
+##### Configuration
+
+Create a `jest.config.js` file:
+
+```javascript
+module.exports = {
+ preset: 'jest-preset-angular',
+ setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
+ testPathIgnorePatterns: [
+  '<rootDir>/node_modules/',
+  '.*\\.e2e\\.spec\\.ts$',
+  '.*\\.functional\\.spec\\.ts$',
+ ],
+ globalSetup: 'jest-preset-angular/global-setup',
+};
+```
+
+#### Testing Library
+
+Testing Library makes it easy to write tests focused on user interaction.
+
+##### Installation Testing Library
+
+```bash
+npm install --save-dev @testing-library/angular @testing-library/jest-dom
+```
+
+#### Playwright
+
+Playwright is a powerful tool for **functional testing** and **end-to-end
+testing**.
+
+##### Installation Playwright
+
+```bash
+npm install --save-dev @playwright/test
+```
+
+##### Configuration Playwright
+
+Create a `playwright.config.ts` file:
+
+```typescript
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+ testDir: './',
+ testMatch: ['e2e/**/*.spec.ts', 'functional/**/*.spec.ts'],
+ fullyParallel: true,
+ reporter: 'html',
+ use: {
+  baseURL: process.env['PLAYWRIGHT_TEST_BASE_URL'] ?? 'http://localhost:4200',
+  trace: 'on-first-retry',
+ },
+ projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+});
+```
+
+#### Necessary changes in package.json
+
+Add the following scripts in the `package.json` file:
+
+```bash
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "serve:ssr:angular-testing-boilerplate": "node dist/angular-testing-boilerplate/server/server.mjs",
+    "e2e": "ng e2e"
+  },
+```
+
+#### Necessary changes in `angular.json`
+
+To integrate these tools, adjustments were also made to the project's
+`angular.json` file. These changes allow proper configuration of tests and
+optimize the project.
+
+##### **Addition of the Playwright builder**
+
+Include a new builder to run end-to-end tests with Playwright:
+
+```json
+{
+ "projects": {
+  "architect": {
+   "e2e": {
+    "builder": "playwright-ng-schematics:playwright",
+    "options": {
+     "devServerTarget": "angular-testing-boilerplate:serve"
+    },
+    "configurations": {
+     "production": {
+      "devServerTarget": "angular-testing-boilerplate:serve:production"
+     }
+    }
+   }
+  }
+ }
+}
+```
+
+### Unit Testing: The Foundation
+
+Unit testing focuses on verifying individual parts of our code. In Angular, this
+means testing components, services, or pipes in isolation.
+
+#### Unit Testing Example
+
+```typescript
+import { TestBed } from '@angular/core/testing';
+import { AuthService } from './auth.service';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+ HttpTestingController,
+ provideHttpClientTesting,
+} from '@angular/common/http/testing';
+import { firstValueFrom } from 'rxjs';
+
+describe('AuthService', () => {
+ let service: AuthService;
+ let httpTesting: HttpTestingController;
+
+ beforeEach(() => {
+  TestBed.configureTestingModule({
+   providers: [
+    provideHttpClient(withFetch()),
+    provideHttpClientTesting(),
+    AuthService,
+   ],
+  });
+
+  service = TestBed.inject(AuthService);
+  httpTesting = TestBed.inject(HttpTestingController);
+ });
+
+ afterEach(() => {
+  httpTesting.verify();
+ });
+
+ it('should log in correctly', async () => {
+  const mockResponse = { token: 'fake-jwt-token' };
+  const login$ = service.login('user@example.com', 'password123');
+  const loginPromise = firstValueFrom(login$);
+
+  const req = httpTesting.expectOne('/api/login');
+  expect(req.request.method).toBe('POST');
+  req.flush(mockResponse);
+
+  expect(await loginPromise).toEqual(mockResponse);
+ });
+});
+```
+
+### Functional Testing: Testing the Flow
+
+Functional testing verifies that different parts of our application interact
+correctly.
+
+#### Functional Testing Example
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('should redirect to dashboard on successful login', async ({ page }) => {
+ await page.route('**/api/login', async route => {
+  await route.fulfill({ status: 200 });
+ });
+
+ await page.goto('http://localhost:4200');
+ await page.fill('input[name="email"]', 'user@example.com');
+ await page.fill('input[name="password"]', 'password1234');
+ await page.click('button[type="submit"]');
+
+ await expect(page).toHaveURL('http://localhost:4200/dashboard');
+});
+```
+
+### End-to-End Testing: From Start to Finish
+
+These tests simulate the end-user experience.
+
+#### End-to-End Testing Example
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('complete successful login flow', async ({ page }) => {
+ await page.route('**/api/login', async route => {
+  const requestBody = await route.request().postDataJSON();
+  if (
+   requestBody.email === 'user@example.com' &&
+   requestBody.password === 'password1234'
+  ) {
+   route.fulfill({
+    status: 200,
+    body: JSON.stringify({ success: true }),
+   });
+  } else {
+   route.fulfill({
+    status: 401,
+    body: JSON.stringify({ message: 'Invalid email or password' }),
+   });
+  }
+ });
+
+ await page.goto('http://localhost:4200');
+ await page.fill('input[name="email"]', 'user@example.com');
+ await page.fill('input[name="password"]', 'password1234');
+ await page.click('button[type="submit"]');
+
+ await expect(page).toHaveURL('http://localhost:4200/dashboard');
+});
+```
+
+## Detailed Jest and Playwright
+
+In this chapter, we will explore **Jest** and **Playwright** in depth, explaining
+how to use them in detail to write robust and effective tests. Let's break down
+each tool and the key features they offer.
+
+### What is Jest?
+
+Jest is a testing framework designed to be simple and powerful. Its main purpose
+is to facilitate the development of unit tests and ensure that the code works as
+expected.
+
+#### Basic Concepts of Jest
+
+1. **Describe and it:**
+
+   - Jest organizes tests using `describe` and `it` blocks.
+   - `describe` groups related tests.
+   - `it` defines a specific test case.
+
+   ```typescript
+   describe('Math operations', () => {
+    it('should add two numbers correctly', () => {
+     const result = 2 + 2;
+     expect(result).toBe(4);
+    });
+   });
+   ```
+
+   - Here, the `describe` block groups math operation tests, and the `it` test
+     case verifies that the addition works.
+
+2. **Matchers:**
+
+   - Matchers like `toBe`, `toEqual`, `toContain` allow verifying expected
+     results.
+
+   ```typescript
+   expect([1, 2, 3]).toContain(2);
+   // Verifies that the array contains the value 2.
+   expect('hello').toMatch(/ell/);
+   // Verifies that the string contains "ell".
+   ```
+
+3. **Mocking:**
+
+   - Jest allows simulating functions or modules with `jest.fn` and `jest.mock`.
+
+   ```typescript
+   const mockFn = jest.fn();
+   mockFn('hello');
+   expect(mockFn).toHaveBeenCalledWith('hello');
+   ```
+
+#### Detailed Example
+
+```typescript
+// auth.service.ts
+export class AuthService {
+ login(username: string, password: string): boolean {
+  return username === 'admin' && password === '1234';
+ }
+}
+
+// auth.service.spec.ts
+describe('AuthService', () => {
+ let service: AuthService;
+
+ beforeEach(() => {
+  service = new AuthService();
+ });
+
+ it('should return true for correct credentials', () => {
+  const result = service.login('admin', '1234');
+  expect(result).toBe(true);
+ });
+
+ it('should return false for incorrect credentials', () => {
+  const result = service.login('user', 'wrongpassword');
+  expect(result).toBe(false);
+ });
+});
+```
+
+- **Explanation:**
+  1. `beforeEach` initializes the service before each test.
+  2. The first test verifies correct credentials.
+  3. The second test ensures that incorrect credentials return `false`.
+
+### What is Playwright?
+
+Playwright is a tool for graphical user interface (UI) testing. It allows
+automating browsers to simulate real user interactions.
+
+#### Basic Concepts of Playwright
+
+1. **Page:**
+
+   - Represents a browser tab where actions occur.
+
+   ```typescript
+   const page = await browser.newPage();
+   await page.goto('http://example.com');
+   ```
+
+2. **Selectors:**
+
+   - Identify elements on the page to interact with them.
+
+   ```typescript
+   await page.click('button#submit');
+   await page.fill('input[name="username"]', 'user123');
+   ```
+
+3. **Asserts:**
+
+   - Verify that the page has the expected state.
+
+   ```typescript
+   await expect(page).toHaveURL('http://example.com/dashboard');
+   await expect(page.locator('h1')).toHaveText('Welcome');
+   ```
+
+#### Detailed Playwright Example
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('Login functionality', async ({ page }) => {
+ await page.goto('http://example.com/login');
+
+ await page.fill('input[name="username"]', 'admin');
+ await page.fill('input[name="password"]', '1234');
+ await page.click('button[type="submit"]');
+
+ await expect(page).toHaveURL('http://example.com/dashboard');
+ await expect(page.locator('h1')).toHaveText('Dashboard');
+});
+```
+
+- **Explanation:**
+  1. The test opens the login page.
+  2. Fills in the username and password fields.
+  3. Clicks the login button.
+  4. Verifies the redirection and that the header is as expected.
+
+### Common Best Practices
+
+#### In Jest
+
+1. **Keep tests small and focused:**
+
+   - Each test should verify a specific behavior.
+
+2. **Use mocks for external dependencies:**
+
+   - Simulate external APIs or services to avoid dependencies in unit tests.
+
+3. **Group related tests:**
+   - Use `describe` blocks to organize similar cases.
+
+#### In Playwright
+
+1. **Reuse configurations:**
+
+   - Set up routes or users in a common `beforeEach`.
+
+2. **Avoid hardcoding data:**
+
+   - Use reusable variables or test data.
+
+3. **Leverage accessible selectors:**
+   - Use attributes like `aria-label` or `name` for robust selectors.
+
+## Best practices with `await`, mocking, and environment simulation
+
+In this chapter, we will explore advanced concepts and best practices for
+working with `await`, mocking services, and simulating global elements like
+`window`. This will allow you to write more robust and realistic tests.
+
+### Understanding `await` and async in tests
+
+Using `await` in tests is crucial for handling async operations like API calls
+or UI interactions. It's important to understand how to use it correctly:
+
+#### Best practices with `await`
+
+1. **Always await async operations:**
+
+   - Tests should wait for operations to complete to avoid false positives.
+
+   ```typescript
+   it('should wait correctly', async () => {
+    const result = await asyncFunction();
+    expect(result).toBe(true);
+   });
+   ```
+
+2. **Avoid mixing `await` with `then`:**
+
+   - Use one or the other, but not both in the same line.
+
+   ```typescript
+   // Not recommended
+   asyncFunction().then(result => {
+    expect(result).toBe(true);
+   });
+
+   // Recommended
+   const result = await asyncFunction();
+   expect(result).toBe(true);
+   ```
+
+3. **Use `await` with async matchers:**
+
+   - For async verifications, Jest offers matchers like `resolves` or `rejects`.
+
+   ```typescript
+   await expect(asyncFunction()).resolves.toBe(true);
+   await expect(asyncFunction()).rejects.toThrow('Error');
+   ```
+
+### Mocking services in Jest
+
+Mocking is essential for simulating external dependencies like APIs or services.
+Jest facilitates this process with utilities like `jest.fn` and `jest.mock`.
+
+#### Example of service mocking
+
+Suppose you have a service that makes an HTTP call:
+
+```typescript
+// user.service.ts
+export class UserService {
+ fetchUser(userId: string): Promise<{ id: string; name: string }> {
+  return fetch(`/api/users/${userId}`).then(response => response.json());
+ }
+}
+```
+
+##### Mocking the service in Jest
+
+```typescript
+// user.service.spec.ts
+describe('UserService', () => {
+ let userService: UserService;
+
+ beforeEach(() => {
+  userService = new UserService();
+  global.fetch = jest.fn();
+ });
+
+ it('should return a user', async () => {
+  const mockResponse = { id: '1', name: 'John Doe' };
+  (global.fetch as jest.Mock).mockResolvedValueOnce({
+   json: jest.fn().mockResolvedValueOnce(mockResponse),
+  });
+
+  const user = await userService.fetchUser('1');
+  expect(user).toEqual(mockResponse);
+  expect(global.fetch).toHaveBeenCalledWith('/api/users/1');
+ });
+});
+```
+
+- **Explanation:**
+  1. `global.fetch` is mocked using `jest.fn`.
+  2. The `fetch` response is simulated with `mockResolvedValueOnce`.
+  3. We verify that the service calls the correct URL and returns the expected
+     data.
+
+### Mocking global elements like `window`
+
+In some tests, it's necessary to simulate global elements like `window` or
+`localStorage`.
+
+#### Example of mocking `window` and `localStorage`
+
+```typescript
+// localStorage.mock.ts
+export const localStorageMock = (() => {
+ let store: Record<string, string> = {};
+
+ return {
+  getItem: (key: string) => store[key] || null,
+  setItem: (key: string, value: string) => {
+   store[key] = value;
+  },
+  clear: () => {
+   store = {};
+  },
+  removeItem: (key: string) => {
+   delete store[key];
+  },
+ };
+})();
+
+global.localStorage = localStorageMock;
+```
+
+##### Using the mock in tests
+
+```typescript
+// window.spec.ts
+describe('localStorage', () => {
+ it('should save and retrieve a value', () => {
+  localStorage.setItem('key', 'value');
+  const result = localStorage.getItem('key');
+  expect(result).toBe('value');
+ });
+
+ it('should remove a value', () => {
+  localStorage.setItem('key', 'value');
+  localStorage.removeItem('key');
+  const result = localStorage.getItem('key');
+  expect(result).toBeNull();
+ });
+});
+```
+
+### Simulating timers and time functions
+
+Jest includes functions to control timers like `setTimeout` and `setInterval`.
+
+#### Example with timers
+
+```typescript
+// timer.spec.ts
+describe('Timers', () => {
+ jest.useFakeTimers();
+
+ it('should call the function after 1 second', () => {
+  const callback = jest.fn();
+  setTimeout(callback, 1000);
+
+  jest.runAllTimers();
+
+  expect(callback).toHaveBeenCalledTimes(1);
+ });
+});
+```
+
+- **Explanation:**
+  1. `jest.useFakeTimers` enables fake timers.
+  2. `jest.runAllTimers` advances time and executes scheduled callbacks.
+
+### Conclusion
+
+Effective handling of `await`, mocking, and global elements like `window` or
+`localStorage` allows writing more comprehensive and reliable tests. These
+techniques are essential for handling complex scenarios and ensuring your code
+behaves as expected under any circumstances.
+
+## Best practices with Playwright for mocking and async handling
+
+Playwright is a powerful tool for performing UI tests and complex simulations.
+In this chapter, we will explore how to handle async operations effectively and
+mock services and global elements.
+
+### Handling async with Playwright
+
+Using `await` is essential in Playwright, as many of its functions are async.
+Here are some best practices:
+
+#### Best practices with `await` Playwright
+
+1. **Use `await` for all interactions:**
+
+   - Each action in Playwright should wait for completion before proceeding.
+
+   ```typescript
+   await page.click('button#submit'); // Waits for the button to be clicked.
+   ```
+
+2. **Combine `await` with assertions:**
+
+   - Verify the page state immediately after an action.
+
+   ```typescript
+   await page.fill('input#username', 'user123');
+   await expect(page.locator('input#username')).toHaveValue('user123');
+   ```
+
+3. **Avoid hardcoding times with `waitForTimeout`:**
+
+   - Use selectors and conditions instead of waiting for fixed times.
+
+   ```typescript
+   await page.waitForSelector('div#loaded'); // Better than waiting a fixed time.
+   ```
+
+### Mocking network requests
+
+Playwright allows intercepting and simulating network requests, useful for
+testing scenarios like server errors or slow responses.
+
+#### Example of mocking an API
+
+Suppose we want to simulate an API that returns user information:
+
+```typescript
+test('Should display user information', async ({ page }) => {
+ // Intercept the request
+ await page.route('**/api/user', route => {
+  route.fulfill({
+   status: 200,
+   contentType: 'application/json',
+   body: JSON.stringify({ id: '1', name: 'John Doe' }),
+  });
+ });
+
+ // Navigate to the page
+ await page.goto('http://localhost:4200/profile');
+
+ // Verify the information is displayed correctly
+ await expect(page.locator('h1')).toHaveText('John Doe');
+});
+```
+
+- **Explanation:**
+  1. `page.route` intercepts the request.
+  2. `route.fulfill` responds with simulated data.
+  3. The page displays the simulated data, and we verify the result.
+
+#### Simulating network errors
+
+```typescript
+test('Should display an error message if the API fails', async ({ page }) => {
+ await page.route('**/api/user', route => {
+  route.fulfill({
+   status: 500,
+   contentType: 'application/json',
+   body: JSON.stringify({ message: 'Server error' }),
+  });
+ });
+
+ await page.goto('http://localhost:4200/profile');
+
+ const errorMessage = page.locator('div.error');
+ await expect(errorMessage).toHaveText('Error loading information');
+});
+```
+
+- **Explanation:**
+  1. We simulate a server error.
+  2. We verify that the page displays an error message.
+
+### Mocking global elements
+
+Playwright also allows simulating global elements like `localStorage` or
+`window`.
+
+#### Mocking `localStorage`
+
+```typescript
+test('Should load the theme from localStorage', async ({ page }) => {
+ await page.addInitScript(() => {
+  localStorage.setItem('theme', 'dark');
+ });
+
+ await page.goto('http://localhost:4200');
+
+ const themeClass = page.locator('body');
+ await expect(themeClass).toHaveClass(/dark-theme/);
+});
+```
+
+- **Explanation:**
+  1. We use `addInitScript` to set up `localStorage` before loading the page.
+  2. We verify that the page applies the correct theme.
+
+#### Mocking global `window` functions
+
+```typescript
+test('Should show an alert when submitting a form', async ({ page }) => {
+ await page.goto('http://localhost:4200/contact');
+
+ // Simulate window.alert
+ page.on('dialog', dialog => {
+  expect(dialog.message()).toBe('Form submitted');
+  dialog.dismiss();
+ });
+
+ await page.click('button#submit');
+});
+```
+
+- **Explanation:**
+  1. We listen for dialog events with `page.on('dialog')`.
+  2. We verify the alert message and close it.
+
+### Simulating delays and times
+
+Playwright can simulate delays in responses or executions:
+
+#### Example with simulated delays
+
+```typescript
+test('Should show a spinner during loading', async ({ page }) => {
+ await page.route('**/api/data', async route => {
+  await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate delay
+  route.fulfill({
+   status: 200,
+   contentType: 'application/json',
+   body: JSON.stringify({ items: [] }),
+  });
+ });
+
+ await page.goto('http://localhost:4200');
+
+ const spinner = page.locator('.spinner');
+ await expect(spinner).toBeVisible();
+
+ await page.waitForSelector('.spinner', { state: 'hidden' }); // Wait for it to disappear
+});
+```

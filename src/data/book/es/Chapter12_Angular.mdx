@@ -1,0 +1,2227 @@
+---
+id: 'angular'
+order: 12
+name: 'Angular: Mastering the Framework'
+titleList:
+  - name: 'Introducción'
+    tagId: 'introducción'
+  - name: 'Por qué Angular'
+    tagId: 'por-qué-angular'
+  - name: 'TypeScript y Cómo se Usa en Angular'
+    tagId: 'typescript-y-cómo-se-usa-en-angular'
+  - name: 'Elementos Fundamentales de Angular'
+    tagId: 'elementos-fundamentales-de-angular'
+  - name: 'Control Flow y Syntax'
+    tagId: 'control-flow-y-syntax'
+  - name: 'Formularios en Angular: Enfoque Tradicional vs Solución Personalizada'
+    tagId: 'formularios-en-angular-enfoque-tradicional-vs-solución-personalizada'
+  - name: 'Interceptores en Angular y Server-Side Rendering'
+    tagId: 'interceptores-en-angular-y-server-side-rendering'
+  - name: 'Testing en Angular'
+    tagId: 'testing-en-angular'
+---
+
+# Angular: Dominando el Framework
+
+## Introducción
+
+### Bienvenidos
+
+Angular no es solo un framework, es una herramienta poderosa que puede
+transformar la manera en que desarrollás aplicaciones web. En este curso, vamos
+a explorar cada rincón de Angular, desde los fundamentos hasta las técnicas
+avanzadas que van a convertirte en un maestro del front-end.
+
+### ¿Quién soy yo?
+
+Soy Alan, conocido como Gentleman, Google Developer Expert en Angular y
+Microsoft MVP. Llevo más de 15 años en el desarrollo de software y estoy acá
+para compartir lo que sé. Este curso está pensado para ser claro, completo y,
+sobre todo, práctico.
+
+### ¿Qué vamos a cubrir?
+
+1. **Por qué Angular**: ¿Qué lo hace único y cuándo elegirlo?
+2. **TypeScript en Angular**: Cómo utilizarlo para escribir código sólido y
+   mantenible.
+3. **Elementos de Angular**: Componentes, directivas y servicios.
+4. **Control Flow y Syntax**: Entender las estructuras clave de Angular.
+5. **Angular 19 Novedades**: Descubrí las últimas mejoras.
+6. **Servicios y Arquitecturas**: Diseña aplicaciones escalables y modulares.
+7. **Formularios en Angular**: Trabajá con formularios reactivos y validados.
+8. **Interceptores**: Manejá la comunicación HTTP como un profesional.
+9. **Testing**: Con Jest, Playwright y Testing Library.
+
+## Por qué Angular
+
+### El Viaje de Angular
+
+Angular tiene una historia fascinante que lo distingue de otros frameworks.
+Comenzó como AngularJS en 2010, implementando el patrón MVC (Modelo-Vista-
+Controlador) y popularizando las SPAs (Single Page Applications). Sin embargo,
+este enfoque inicial presentaba limitaciones en proyectos grandes, como el
+rendimiento y la mantenibilidad del código.
+
+Frameworks como Backbone establecieron las bases para las SPAs, pero AngularJS
+llevó el concepto más allá con directivas que extendían el DOM y un flujo de
+datos claro entre Modelo, Vista y Controlador. Más tarde, el modelo MVC fue
+desafiado por MVVM (Model-View-ViewModel), y frameworks como React cambiaron las
+reglas del juego con enfoques más simples y eficientes.
+
+Angular y React combinan características de MVC y MVVM, aprovechando lo mejor de
+ambos paradigmas. AngularJS evolucionó a Angular 2 en 2016, con un enfoque
+basado en componentes y abandonando la compatibilidad con AngularJS.
+
+### Directivas y Componentes
+
+Las directivas en AngularJS eran esenciales para extender la funcionalidad del
+DOM. En Angular moderno, evolucionaron hacia componentes reutilizables y
+potentes, marcando un cambio significativo en cómo se desarrollan aplicaciones
+web.
+
+### Detección de Cambios: De Zone.js a Signals
+
+Angular introdujo inicialmente Zone.js para gestionar la detección de cambios,
+monitoreando eventos en todo el DOM. Aunque efectivo, este enfoque causaba
+problemas de rendimiento en aplicaciones grandes debido al burbujeo innecesario
+de eventos.
+
+La estrategia **ChangeDetectionStrategy.OnPush** mejoró este proceso, limitando
+la detección de cambios a entradas explícitas, streams asíncronos y eventos del
+usuario. Esto redujo el impacto en el rendimiento, pero aún dependía de Zone.js.
+
+La introducción de **Signals** eliminó esta dependencia. Signals permite
+gestionar cambios de manera directa y eficiente, afectando solo los componentes
+que realmente necesitan actualizarse. Inspirado en frameworks modernos como
+QwikJS, Signals representa un paso adelante hacia un rendimiento más optimizado.
+
+### Programación Reactiva y Signals
+
+La programación reactiva permite manejar flujos de datos de forma asíncrona y
+declarativa. En Angular, esto se implementa con RxJS, que introduce conceptos
+como:
+
+- **Observables**: Canales unidireccionales donde un único emisor manda eventos.
+- **Subject**: Canales bidireccionales donde múltiples emisores y receptores
+  interactúan.
+- **BehaviorSubject**: Similar a un Subject, pero guarda el último evento
+  emitido.
+
+Signals complementa este paradigma al proporcionar una alternativa más simple y
+eficiente. Actúa como un canal donde los cambios solo impactan a los componentes
+que dependen directamente de ellos.
+
+### ¿Por Qué Cambió Angular?
+
+El cambio de AngularJS a Angular 2 y versiones posteriores no fue solo técnico;
+respondió a críticas y desafíos de la comunidad:
+
+1. **Curva de Aprendizaje Alta**: AngularJS tenía un enfoque innovador, pero su
+   complejidad inicial era abrumadora.
+2. **Documentación Inconsistente**: A menudo, los desarrolladores enfrentaban
+   documentación incompleta o confusa.
+3. **Fragmentación de la Comunidad**: La transición de AngularJS a Angular 2
+   dividió a la comunidad, con muchos desarrolladores migrando a React.
+
+Como mencioné en mi entrevista para convertirme en GDE: "El aprendizaje en
+Angular es horrible, la documentación es un desastre, y la curva de aprendizaje
+es demasiado alta". Pese a esto, Angular sigue siendo una opción sólida gracias
+a su ecosistema completo y enfoque en la escalabilidad.
+
+### Angular en la Vida Real vs Angular en el Trabajo
+
+En entornos laborales, Angular a menudo enfrenta el legado de versiones antiguas
+que dependen de módulos y configuraciones complejas. Antes de Angular 16, cada
+funcionalidad requería un módulo asociado, lo que complicaba la arquitectura.
+
+Con la introducción de los **Standalone Components**, Angular eliminó esta
+dependencia, permitiendo que los componentes sean autónomos y más fáciles de
+gestionar.
+
+### Angular y el Ecosistema Moderno
+
+1. **Partial Hydration**: Angular optimiza la carga inicial enviando HTML
+   estático al cliente y solo hidratando las partes necesarias. Esto mejora
+   velocidad y reduce consumo de recursos.
+2. **Reactividad Avanzada**: Los `Signals` ofrecen un control más eficiente
+   sobre la detección de cambios, reemplazando a Zone.js.
+3. **Actualizaciones Frecuentes**: Angular sigue un ciclo de lanzamientos cada
+   seis meses, asegurando compatibilidad con las últimas prácticas.
+4. **Soporte Empresarial**: Angular es ideal para proyectos grandes gracias a su
+   modularidad y robustez.
+
+### RxJS: La Columna Vertebral de la Reactividad
+
+RxJS es fundamental en Angular para manejar flujos de datos y eventos
+asíncronos. Al facilitar la comunicación entre componentes y la gestión de
+estado, RxJS se convierte en una herramienta imprescindible en proyectos
+escalables.
+
+### Angular Universal y SSR
+
+Anteriormente una herramienta separada, Angular Universal ahora está integrado
+en el núcleo del framework. Esta funcionalidad permite implementar SSR
+(Renderizado del Lado del Servidor) y SSG (Generación de Sitios Estáticos),
+mejorando el SEO y los tiempos de carga inicial.
+
+## TypeScript y Cómo se Usa en Angular
+
+### Introducción a TypeScript
+
+TypeScript es el núcleo del desarrollo moderno en Angular. Este superconjunto de
+JavaScript, creado por Microsoft, introduce tipado estático y decoradores,
+promoviendo el desarrollo escalable y predecible. Vamos a analizar cómo
+TypeScript potencia a Angular y cómo aprender sus fundamentos nos permite
+aprovecharlo al máximo.
+
+### Fundamentos de TypeScript
+
+#### Tipado Estático y Clases
+
+TypeScript proporciona herramientas como interfaces y clases para definir
+estructuras claras y evitar errores comunes. Consideremos el siguiente ejemplo:
+
+```typescript
+interface User {
+ name: string;
+ getName: () => string;
+ setName: (name: string) => void;
+}
+
+class UserClass {
+ private name: string;
+
+ constructor(name: string) {
+  this.name = name;
+ }
+
+ getName() {
+  return this.name;
+ }
+
+ setName(name: string) {
+  this.name = name;
+ }
+}
+
+const user: User = {
+ name: 'El_Blaki',
+ getName: () => 'Pepe',
+ setName: (name: string) => {},
+};
+
+const userClass: UserClass = new UserClass('Pepe');
+```
+
+Aquí definimos una interfaz `User` para garantizar que cualquier objeto que la
+implemente cumpla con su contrato, mientras que la clase `UserClass` organiza el
+manejo de datos y lógica.
+
+#### Combinar Tipos
+
+A menudo, necesitamos combinar tipos para representar entidades más complejas.
+Esto se logra con `type`:
+
+```typescript
+interface Alumno {
+ legajo: string;
+}
+
+type UserType = User & Alumno;
+```
+
+Esto permite construir modelos reutilizables y precisos para nuestras
+aplicaciones.
+
+### Decoradores en TypeScript y Angular
+
+Los decoradores son una característica clave de TypeScript, y Angular los
+utiliza ampliamente. Vamos a desglosar sus usos principales.
+
+#### Decorador de Clase
+
+Un decorador de clase puede modificar o extender funcionalidades:
+
+```typescript
+function gentlemanApproves<T extends { new (...args: any[]): {} }>(
+ constructor: T,
+): T {
+ return class extends constructor {
+  gentleman = 'Yes';
+ };
+}
+
+@gentlemanApproves
+class MyClass {}
+
+const instance = new MyClass();
+console.log((instance as any).gentleman); // "Yes"
+```
+
+Este decorador agrega la propiedad `gentleman` a cualquier clase que lo utilice.
+
+#### Decorador de Componente (Inspiración Angular)
+
+Angular utiliza decoradores como `@Component` para definir componentes:
+
+```typescript
+function Component(config: { selector: string; template: string }) {
+ return function (target: any) {
+  target.prototype.selector = config.selector;
+  target.prototype.template = config.template;
+ };
+}
+
+@Component({
+ selector: 'app-component',
+ template: '<h1>{{ titulo }}</h1>',
+})
+class MyComponent {
+ titulo: string = 'Soy un componente hecho por el Gentleman';
+}
+```
+
+Esto demuestra cómo los decoradores facilitan la configuración declarativa.
+
+#### Decorador de Método
+
+Podemos interceptar llamadas a métodos para extender su comportamiento:
+
+```typescript
+function logMethod(method: Function, context: ClassMethodDecoratorContext) {
+ return function (...args: any[]) {
+  console.log(
+   `Method ${String(context.name)} called with arguments: ${args}`,
+  );
+  const result = method.apply(this, args);
+  console.log(`Method ${String(context.name)} returned: ${result}`);
+  return result;
+ };
+}
+
+class Calculadora {
+ @logMethod
+ sum(a: number, b: number) {
+  return a + b;
+ }
+}
+
+const calc = new Calculadora();
+calc.sum(1, 2);
+```
+
+#### Decorador de Propiedad
+
+Los decoradores de propiedad pueden modificar cómo se accede y define una
+propiedad:
+
+```typescript
+function mayus(_target: any, context: ClassAccessorDecoratorContext) {
+ return {
+  get(this: any) {
+   return this[`_${String(context.name)}`].toUpperCase();
+  },
+  set(this: any, value: string) {
+   this[`_${String(context.name)}`] = value.toUpperCase();
+  },
+ };
+}
+
+class Person {
+ @mayus
+ accessor name: string;
+
+ constructor(name: string) {
+  this.name = name;
+ }
+}
+```
+
+Este decorador convierte automáticamente cualquier valor asignado a mayúsculas.
+
+### TypeScript en Angular
+
+#### Decoradores en Angular
+
+Angular utiliza decoradores para simplificar la configuración de su estructura
+de componentes y servicios. Los más comunes son:
+
+1. **@Component**: Define componentes.
+2. **@Injectable**: Configura servicios.
+3. **@Directive**: Extiende el DOM.
+
+#### Interfaces y Modelos
+
+Las interfaces son clave para definir estructuras claras de datos en Angular:
+
+```typescript
+export interface Usuario {
+ id: number;
+ nombre: string;
+}
+```
+
+#### Generics en Servicios
+
+Los generics son esenciales para construir servicios reutilizables:
+
+```typescript
+export class DataService<T> {
+ private data: T[] = [];
+
+ agregar(item: T): void {
+  this.data.push(item);
+ }
+
+ obtener(): T[] {
+  return this.data;
+ }
+}
+```
+
+Esto permite manejar datos de diferentes tipos sin duplicar código.
+
+### Mejores Prácticas
+
+1. **Habilitar el Modo Estricto**: Configurá `tsconfig.json` para detectar
+   errores en tiempo de desarrollo:
+
+```json
+{
+ "compilerOptions": {
+  "strict": true,
+  "noImplicitAny": true
+ }
+}
+```
+
+2. **Evitar `any`**: Usá tipos explícitos o `unknown`.
+3. **Especificar Tipos de Retorno**: Mejora la claridad y evita errores.
+4. **Aprovechar Decoradores**: Úsalos para simplificar configuraciones
+   complejas.
+
+## Elementos Fundamentales de Angular
+
+### Introducción Angular
+
+Angular es una plataforma estructural diseñada para construir aplicaciones
+robustas, modulables y reutilizables. Entre sus principales elementos, se
+destacan los componentes, directivas y servicios. Estos conforman el corazón de
+cualquier aplicación desarrollada con Angular.
+
+Cabe destacar que las recomendaciones aquí planteadas son perspectivas
+personales basadas en experiencia práctica, y no necesariamente siguen las
+directrices oficiales de Angular.
+
+### Componentes
+
+#### ¿Qué es un Componente?
+
+Un componente en Angular es la unidad lógica mínima que maneja una sola tarea o
+parte de la interfaz de usuario (UI). Está compuesto por un **selector**, un
+**template**, opcionales **estilos**, y una **clase** que contiene la lógica y
+datos relacionados.
+
+#### Tipos de Componentes
+
+1. **Presentational Components**: Se encargan de mostrar datos y manejar la UI,
+   sin lógica de negocio.
+2. **Container Components**: Manejan la lógica de negocio y se comunican con
+   cualquier entidad externa, como APIs, servicios o bases de datos.
+
+**Ejemplo de Patrón Contenedor/Presentacional:**
+
+```typescript
+@Component({
+ standalone: true,
+ selector: 'app-user',
+ template: `<app-user-container [userName]="userNameSignal()" />`,
+ imports: [UserProfileComponent],
+})
+export class UserComponent {
+ userService = inject(UserService);
+ userNameSignal = this.userService.userNameSignal;
+}
+```
+
+```typescript
+@Component({
+ standalone: true,
+ selector: 'app-user-profile',
+ template: `<div [style]="{ color: red }">{{ userName }}</div>`,
+ imports: [ReactiveFormsModule],
+})
+export class UserProfileComponent {
+ userName: string = 'Gentleman';
+}
+```
+
+#### Standalone Components
+
+Desde Angular 16, los módulos dejaron de ser esenciales para definir
+componentes. Sin embargo, no han desaparecido por completo. Ahora, cada
+componente se comporta como su propio "módulo" autónomo, conteniendo todo lo que
+necesita para existir de manera independiente. Esto simplifica la arquitectura y
+mejora el rendimiento.
+
+**Beneficios de los Standalone Components:**
+
+- Reducción del overhead al eliminar módulos innecesarios.
+- Mayor claridad en la estructura del proyecto.
+- Facilita la migración y el mantenimiento del código.
+
+### Directivas
+
+#### ¿Qué son las Directivas?
+
+Son herramientas de Angular que permiten manipular el DOM para añadir o alterar
+funcionalidades de los elementos HTML existentes.
+
+#### Tipos de Directivas
+
+1. **Estructurales**: Modifican la estructura del DOM. Ejemplos: `*ngIf`,
+   `*ngFor`.
+2. **Atributivas**: Cambian la apariencia o el comportamiento de un elemento.
+   Ejemplos: `ngClass`, `ngStyle`.
+3. **Directivas Personalizadas**: Desarrolladas según las necesidades
+   específicas del proyecto.
+
+#### Ejemplo de Directiva Estructural
+
+```html
+<div *ngIf="isVisible">Contenido Visible</div>
+<div *ngFor="let item of items">{{ item }}</div>
+```
+
+#### Ejemplo de Directiva Atributiva
+
+```html
+<div [ngClass]="{ 'active': isActive }">Contenido Estilizado</div>
+```
+
+#### Ejemplo de Directiva Personalizada
+
+Una directiva que muestra contenido según el tamaño de pantalla - Directiva
+Estructural:
+
+```typescript
+@Directive({
+ standalone: true,
+ selector: '[appShowOnScreenSize]',
+})
+export class ShowOnScreenSizeDirective {
+ @Input() appShowOnScreenSize!: 'small' | 'medium' | 'large';
+
+ constructor(
+  private templateRef: TemplateRef<any>,
+  private viewContainer: ViewContainerRef,
+ ) {}
+
+ ngOnInit() {
+  this.updateView();
+  window.addEventListener('resize', this.updateView.bind(this));
+ }
+
+ private updateView() {
+  const width = window.innerWidth;
+  this.viewContainer.clear();
+
+  if (this.shouldShowContent(width)) {
+   this.viewContainer.createEmbeddedView(this.templateRef);
+  }
+ }
+
+ private shouldShowContent(width: number): boolean {
+  if (this.appShowOnScreenSize === 'small' && width < 600) {
+   return true;
+  }
+  if (this.appShowOnScreenSize === 'medium' && width >= 600 && width < 1024) {
+   return true;
+  }
+  if (this.appShowOnScreenSize === 'large' && width >= 1024) {
+   return true;
+  }
+  return false;
+ }
+}
+```
+
+#### Ejemplo de Directiva de Atributo
+
+Agrega un highlight amarillo al pasar el mouse sobre un elemento
+
+```typescript
+@Directive({
+ standalone: true,
+ selector: '[appHighLight]',
+})
+export class HighLightDirective {
+ constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+ @HostListener('mouseenter') onMouseEnter() {
+  this.renderer.setStyle(this.el.nativeElement, 'background-color', 'yellow');
+ }
+
+ @HostListener('mouseleave') onMouseLeave() {
+  this.renderer.removeStyle(this.el.nativeElement, 'background-color');
+ }
+}
+```
+
+```html
+<p appHighLight>Pasa el mouse sobre este texto para resaltar su contenido</p>
+```
+
+## Control Flow y Syntax
+
+### ¿Qué es el Control de Flujo en Angular?
+
+El control de flujo en Angular permite manejar de forma clara y eficiente la
+lógica condicional y la iteración dentro de las plantillas. Con las nuevas
+directivas y decoradores introducidos a partir de Angular 16, se ha simplificado
+notablemente la sintaxis, eliminando la necesidad de aprender elementos como
+`ng-container` y `ng-template`.
+
+### Nuevas Características de Angular 16+ para Control de Flujo
+
+Estas nuevas herramientas no solo mejoran la legibilidad del código, sino que
+también reducen la curva de aprendizaje, haciendo que los desarrolladores puedan
+centrarse en la lógica de negocio sin preocuparse por detalles técnicos
+innecesarios.
+
+### Decoradores
+
+#### **`@if` y `@else`**
+
+El decorador `@if` reemplaza a `*ngIf` proporcionando una sintaxis más natural y
+compacta. Permite manejar contenido condicional en las plantillas sin necesidad
+de usar `ng-template`.
+
+**Ejemplo con la nueva sintaxis:**
+
+```html
+@if (isVisible) {
+<div>Se ve locura</div>
+} @else {
+<span>Contenido Oculto</span>
+}
+```
+
+**Cómo era antes:**
+
+```html
+<div *ngIf="isVisible; else hiddenContent">Se ve locura</div>
+<ng-template #hiddenContent>
+ <span>Contenido Oculto</span>
+</ng-template>
+```
+
+**Código del Componente:**
+
+```typescript
+@Component({
+ selector: 'app-if',
+ standalone: true,
+ templateUrl: './if.component.html',
+ styleUrls: ['./if.component.scss'],
+})
+export class IfComponent {
+ protected isVisible = true;
+}
+```
+
+#### **`@for`**
+
+El decorador `@for` es una mejora significativa para la iteración. Ahora, el uso
+de `track` es obligatorio, lo que permite a Angular optimizar el renderizado,
+identificando cambios individuales en listas grandes y mejorando la performance.
+
+**Ejemplo con la nueva sintaxis:**
+
+```html
+<ul>
+ @for (name of names; track name) {
+ <li>{{ name }}</li>
+ } @empty {
+ <li>No Names</li>
+ }
+</ul>
+```
+
+**Cómo era antes:**
+
+```html
+<ul>
+ <li *ngFor="let name of names">{{ name }}</li>
+</ul>
+```
+
+**Código del Componente:**
+
+```typescript
+@Component({
+ selector: 'app-for',
+ standalone: true,
+ templateUrl: './for.component.html',
+ styleUrls: ['./for.component.scss'],
+})
+export class ForComponent {
+ names: string[] = ['Maximiliano', 'Gabriel', 'Rhood', 'Acronimax', 'PNZITOO'];
+}
+```
+
+#### **`@switch`**
+
+El decorador `@switch` organiza múltiples condiciones de manera intuitiva,
+eliminando la complejidad de usar `*ngSwitch` y `*ngSwitchCase`.
+
+**Ejemplo con la nueva sintaxis:**
+
+```html
+@switch (selectedValue) { @case ("option 1") {
+<p>Option 1 selected</p>
+} @case ("option 2") {
+<p>Option 2 selected</p>
+} @case ("option 3") {
+<p>Option 3 selected</p>
+} }
+```
+
+**Cómo era antes:**
+
+```html
+<div [ngSwitch]="selectedValue">
+ <p *ngSwitchCase="'option 1'">Option 1 selected</p>
+ <p *ngSwitchCase="'option 2'">Option 2 selected</p>
+ <p *ngSwitchCase="'option 3'">Option 3 selected</p>
+</div>
+```
+
+**Código del Componente:**
+
+```typescript
+@Component({
+ selector: 'app-switch',
+ standalone: true,
+ templateUrl: './switch.component.html',
+ styleUrls: ['./switch.component.scss'],
+})
+export class SwitchComponent {
+ protected selectedValue = 'option 1';
+}
+```
+
+#### **`@defer`**
+
+El decorador `@defer` permite cargar contenido diferido basado en condiciones
+específicas, optimizando el rendimiento de las aplicaciones.
+
+**Ejemplo con la nueva sintaxis:**
+
+```html
+@defer (when isImageVisible) {
+<img src="image-url" alt="Deferred Image" />
+} @if (!isImageVisible) {
+<button (click)="showImage()">See Image</button>
+}
+```
+
+**Cómo era antes:**
+
+El manejo de cargas diferidas requería soluciones personalizadas.
+
+**Código del Componente:**
+
+```typescript
+@Component({
+ selector: 'app-defer',
+ standalone: true,
+ templateUrl: './defer.component.html',
+ styleUrls: ['./defer.component.scss'],
+})
+export class DeferComponent {
+ isImageVisible = false;
+
+ showImage() {
+  this.isImageVisible = true;
+ }
+}
+```
+
+#### **`@loading`**
+
+El decorador `@loading` ofrece una manera sencilla de mostrar marcadores
+temporales mientras el contenido diferido está cargando.
+
+**Ejemplo con la nueva sintaxis:**
+
+```html
+@defer (when isImageVisible) {
+<img src="image-url" alt="Deferred Image" />
+} @placeholder {
+<p>Loading...</p>
+} @if (!isImageVisible) {
+<button (click)="showImage()">See Image</button>
+}
+```
+
+**Cómo era antes:**
+
+El manejo de contenido de carga dependía de lógica adicional.
+
+**Código del Componente:**
+
+```typescript
+@Component({
+ selector: 'app-placeholder',
+ standalone: true,
+ templateUrl: './placeholder.component.html',
+ styleUrls: ['./placeholder.component.scss'],
+})
+export class PlaceholderComponent {
+ isImageVisible = false;
+
+ showImage() {
+  setTimeout(() => {
+   this.isImageVisible = true;
+  }, 4000);
+ }
+}
+```
+
+#### **`@error`**
+
+El decorador `@error` permite manejar errores en la carga de contenido diferido,
+mejorando la experiencia del usuario.
+
+**Ejemplo con la nueva sintaxis:**
+
+```html
+@defer (when isContentReady) {
+<p>Content Loaded</p>
+} @loading {
+<p>Loading...</p>
+} @placeholder {
+<p>Setting up...</p>
+} @error {
+<p>Error loading content</p>
+}
+```
+
+**Cómo era antes:**
+
+Los errores se manejaban a nivel de lógica de componente, haciendo el código más
+complejo.
+
+**Código del Componente:**
+
+```typescript
+@Component({
+ selector: 'app-error',
+ standalone: true,
+ templateUrl: './error.component.html',
+ styleUrls: ['./error.component.scss'],
+})
+export class ErrorComponent {
+ isContentReady = false;
+
+ ngOnInit() {
+  setTimeout(() => {
+   this.isContentReady = true;
+  }, 5000);
+ }
+}
+```
+
+### El Poder del Decorador `@defer`
+
+El decorador `@defer` en Angular marca un antes y un después en la manera de
+gestionar la carga diferida de contenido en aplicaciones. Esta característica
+permite optimizar la experiencia del usuario y el rendimiento, especialmente en
+aplicaciones complejas donde la carga inicial puede ser un desafío. Ahora, el
+manejo de contenido que antes requería `ng-template` y `ng-container` se ha
+simplificado, haciendo que la curva de aprendizaje y la implementación sean
+mucho más accesibles.
+
+#### ¿Por Qué `@defer` es Relevante?
+
+1. **Carga Diferida con Control Preciso**:
+
+   - Puedes especificar exactamente cuándo y cómo se cargará el contenido.
+   - Proporciona una experiencia adaptativa para el usuario.
+
+2. **Mejora de Rendimiento**:
+
+   - Evita cargar recursos innecesarios durante la fase inicial.
+   - Incrementa el tiempo hasta que el contenido visible esté interactivo.
+
+3. **Simplificación del Desarrollo**:
+
+   - No es necesario dominar conceptos como `ng-container` y `ng-template`.
+   - Reduce la complejidad del código, haciéndolo más legible.
+
+4. **Flexibilidad Increíble**:
+   - Compatible con diferentes triggers para adaptarse a múltiples casos de uso.
+
+#### Casos de Uso y Triggers Disponibles
+
+##### **1. `@defer (when)`**
+
+Carga contenido basado en una condición booleana específica.
+
+**Uso Ideal**:
+
+- Cargar datos solo cuando estén disponibles en memoria o después de una
+  consulta exitosa.
+
+```html
+@defer (when dataReady) {
+<p>Los datos han sido cargados</p>
+} @placeholder {
+<p>Esperando datos...</p>
+}
+```
+
+##### **2. `@defer (on idle)`**
+
+Renderiza contenido cuando el navegador está inactivo.
+
+**Uso Ideal**:
+
+- Cargar contenido no esencial como estadísticas o elementos decorativos.
+
+```html
+@defer (on idle) {
+<p>Contenido cargado mientras el navegador estaba inactivo</p>
+} @placeholder {
+<p>Placeholder para contenido diferido</p>
+}
+```
+
+##### **3. `@defer (on viewport)`**
+
+Carga contenido cuando un elemento entra en el área visible del navegador.
+
+**Uso Ideal**:
+
+- Lazy-loading de imágenes o componentes que aparecen al hacer scroll.
+
+```html
+<div #triggerElement>Hola!</div>
+
+@defer (on viewport(triggerElement)) {
+<p>Contenido cargado al aparecer en el viewport</p>
+}
+```
+
+##### **4. `@defer (on interaction)`**
+
+Renderiza contenido tras interactuar con un elemento.
+
+**Uso Ideal**:
+
+- Formularios secundarios, menús desplegables o contenido basado en clics.
+
+```html
+<div #interactionElement>¡Haz clic aquí!</div>
+
+@defer (on interaction(interactionElement)) {
+<p>Contenido cargado tras la interacción</p>
+}
+```
+
+##### **5. `@defer (on hover)`**
+
+Carga contenido al pasar el mouse sobre un elemento.
+
+**Uso Ideal**:
+
+- Mostrar tooltips o vistas previas.
+
+```html
+<div #specificElement>Pasa el mouse aquí</div>
+
+@defer (on hover(specificElement)) {
+<p>Contenido cargado tras pasar el mouse</p>
+} @placeholder {
+<p>Placeholder para hover</p>
+}
+```
+
+##### **6. `@defer (on timer)`**
+
+Renderiza contenido tras un tiempo definido.
+
+**Uso Ideal**:
+
+- Mostrar banners promocionales o animaciones posteriores a la carga inicial.
+
+```html
+@defer (on timer(5000ms)) {
+<p>Contenido cargado tras 5 segundos</p>
+} @placeholder {
+<p>Esperando...</p>
+}
+```
+
+##### **7. `@defer` con Prefetch**
+
+Combina triggers con la capacidad de precargar recursos.
+
+**Uso Ideal**:
+
+- Anticipar la carga de contenido crítico basado en patrones de interacción.
+
+```html
+@defer (on interaction; prefetch on idle) {
+<p>Contenido precargado o cargado tras interacción</p>
+} @placeholder {
+<p>Interactúa conmigo</p>
+}
+```
+
+#### Relación Entre `@defer` y `@placeholder`
+
+El uso combinado de `@defer` y `@placeholder` permite gestionar eficientemente
+la experiencia del usuario:
+
+- **`@defer`** controla cuándo se debe cargar el contenido.
+- **`@placeholder`** asegura que el usuario tenga feedback visual mientras
+  espera.
+
+**Ejemplo**:
+
+```html
+@defer (on timer(3000ms)) {
+<p>Contenido cargado después de 3 segundos</p>
+} @placeholder {
+<p>Cargando contenido...</p>
+}
+```
+
+#### Mejores Prácticas nuevo Control Flow
+
+1. **Usa `@defer` para Diferir Carga No Crítica**:
+
+   - Menús secundarios, imágenes pesadas o gráficos.
+
+2. **Proporciona Feedback Claro con `@placeholder`**:
+
+   - No dejes al usuario en la incertidumbre.
+
+3. **Combina Prefetch para Anticipar Necesidades**:
+
+   - Mejora la experiencia al precargar recursos.
+
+4. **Aprovecha los Triggers Inteligentemente**:
+   - Usa `viewport` para lazy-loading o `hover` para tooltips.
+
+#### Impacto para Desarrolladores
+
+- **Reducción del Trabajo Manual**:
+  - No necesitas escribir lógica personalizada para manejar eventos.
+- **Código Más Limpio**:
+  - Mejora la legibilidad y mantenimiento del código.
+- **Rendimiento Óptimo**:
+  - Evita la carga innecesaria de recursos, optimizando la aplicación.
+
+Con `@defer`, Angular da un paso adelante en la gestión de contenido diferido,
+simplificando la vida del desarrollador y mejorando la experiencia del usuario
+final.
+
+## Formularios en Angular: Enfoque Tradicional vs Solución Personalizada
+
+en este capítulo, exploramos cómo manejar formularios complejos en angular,
+donde cada control es otro formulario. esto suele ser un desafío en el enfoque
+tradicional, pero mi propuesta simplifica significativamente el proceso.
+
+### 1. enfoque tradicional: formularios anidados
+
+cuando cada sección de un formulario general es un formulario separado, la
+validación del formulario completo puede volverse complicada. el enfoque
+tradicional usa observables para rastrear cambios en cada formulario y requiere
+lógica adicional para consolidar estados y valores.
+
+#### archivo: `traditional-form.component.ts`
+
+```typescript
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+
+@Component({
+ selector: 'app-traditional-form',
+ templateUrl: './traditional-form.component.html',
+})
+export class TraditionalFormComponent {
+ form: FormGroup;
+
+ constructor(private fb: FormBuilder) {
+  this.form = this.fb.group({
+   sections: this.fb.array([]),
+  });
+
+  this.addSection();
+ }
+
+ get sections() {
+  return this.form.controls['sections'] as FormArray;
+ }
+
+ addSection() {
+  const id = this.sections.length + 1;
+  const sectionForm = this.fb.group({
+   title: ['', Validators.required],
+   controls: this.fb.array([
+    this.fb.group({
+     id: [id],
+     name: ['', Validators.required],
+     value: ['', Validators.required],
+    }),
+   ]),
+  });
+
+  this.sections.push(sectionForm);
+ }
+
+ validateForm() {
+  this.sections.controls.forEach(section => {
+   (section.get('controls') as FormArray).controls.forEach(control => {
+    control.markAsTouched();
+   });
+  });
+ }
+
+ submit() {
+  if (this.form.valid) {
+   console.log('Form data:', this.form.value);
+  } else {
+   this.validateForm();
+   console.log('Form is invalid');
+  }
+ }
+}
+```
+
+**desventajas**:
+
+- consolidar estados y valores requiere lógica adicional.
+- complejidad para manejar formularios dinámicos.
+- difícil mantener la performance con formularios extensos.
+
+### 2. mi solución: simplificando formularios con `signals`
+
+mi propuesta utiliza `signals` para gestionar formularios dinámicos y calcular
+valores de forma reactiva. además, simplifica la validación y permite un lazy
+loading eficiente para optimizar la performance.
+
+#### archivo: `app.component.ts`
+
+```typescript
+import { Component, computed, inject } from '@angular/core';
+import {
+ FormArray,
+ FormControl,
+ FormGroup,
+ NonNullableFormBuilder,
+ Validators,
+} from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+export interface SectionForm {
+ id: FormControl<number>;
+ name: FormControl<string>;
+ value: FormControl<number>;
+}
+
+export type CustomFormGroup = FormGroup<SectionForm>;
+
+export class AppComponent {
+ fb = inject(NonNullableFormBuilder);
+
+ form = this.fb.group({
+  sections: this.fb.array<CustomFormGroup>([]),
+ });
+
+ get sections() {
+  return this.form.controls.sections;
+ }
+
+ sectionChanges = toSignal(this.form.valueChanges);
+
+ totalValue = computed(() => {
+  const value = this.sectionChanges()?.sections?.reduce(
+   (total, item) => total + (Number(item?.value) || 0),
+   0,
+  );
+  console.log('computing total value: ', value);
+  return value;
+ });
+
+ addSection() {
+  const id = this.sections.length + 1;
+  const sectionForm = this.fb.group<SectionForm>({
+   id: this.fb.control(id),
+   name: this.fb.control('', { validators: [Validators.required] }),
+   value: this.fb.control(0, { validators: [Validators.required] }),
+  });
+
+  this.form.controls.sections.push(sectionForm);
+ }
+}
+```
+
+**ventajas**:
+
+- `signals` eliminan la necesidad de suscripciones manuales.
+- `computed` simplifica cálculos derivados como el total.
+- excelente soporte para lazy loading, cargando solo inputs visibles.
+
+#### archivo form-child.component.ts
+
+```typescript
+import { Component, input } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SectionForm } from '../app.component';
+import { CustomInputComponent } from '../custom-input/custom-input.component';
+
+@Component({
+ selector: 'app-form-child',
+ imports: [ReactiveFormsModule, CustomInputComponent],
+ templateUrl: './form-child.component.html',
+ styleUrl: './form-child.component.scss',
+})
+export class FormChildComponent {
+ formGroup = input.required<FormGroup<SectionForm>>();
+}
+```
+
+### comparación
+
+| característica     | tradicional      | solución personalizada     |
+| ------------------ | ---------------- | -------------------------- |
+| validación         | manual y tediosa | simplificada con `signals` |
+| cálculos derivados | complejos        | automáticos con `computed` |
+| lazy loading       | difícil          | integrado fácilmente       |
+| mantenimiento      | complejo         | sencillo y declarativo     |
+
+mi enfoque demuestra cómo manejar formularios anidados con angular de manera más
+eficiente, haciendo que el desarrollo sea más ágil y menos propenso a errores.
+
+#### cómo se usa mi método en el html
+
+Mi método aprovecha las características modernas de angular, como `@let` y
+`@for`, para hacer que el manejo de formularios dinámicos sea mucho más claro y
+eficiente. aquí está cómo funciona en el html:
+
+##### **html simplificado usando mi enfoque**
+
+```html
+<div>
+ <!-- Asignamos los controles del array de formularios a 'items' -->
+ @let items = form.controls.items.controls;
+
+ <!-- Botón para agregar un nuevo elemento al formulario -->
+ <button (click)="addItem()">Add Item</button>
+
+ <!-- Iteramos sobre los elementos del formulario con 'track'  -->
+ @for (formGroup of items; track formGroup.controls.id.value) {
+ <!-- Cada formulario hijo se gestiona con un componente separado -->
+ <app-form-child [formGroup]="formGroup" />
+ }
+
+ <!-- Calculamos y mostramos el valor total en tiempo real -->
+ <h3>Total value: {{ totalValue() }}</h3>
+</div>
+```
+
+#### explicación por partes
+
+1. **`@let items = form.controls.items.controls;`**:
+
+   - asignamos dinámicamente los controles del array de formularios a la
+     variable `items`.
+   - esto elimina la necesidad de lógica adicional en el archivo `.ts` para
+     obtener los controles.
+
+2. **botón "add item"**:
+
+   - permite agregar nuevos formularios dinámicamente al array de formularios.
+
+3. **`@for (formGroup of items; track formGroup.controls.id.value)`**:
+
+   - iteramos sobre los formularios en el array.
+   - `track` asegura que angular pueda identificar cambios específicos,
+     optimizando la performance.
+   - simplifica la lógica en comparación con el enfoque tradicional de usar
+     `*ngFor` y manejar claves manualmente.
+
+4. **`<app-form-child [formGroup]="formGroup" />`**:
+
+   - delega la gestión de cada formulario hijo a un componente separado
+     (`form-child.component`), promoviendo la modularidad.
+
+5. **`<h3>Total value: {{ totalValue() }}</h3>`**:
+   - utiliza un `signal` computado para calcular el valor total en tiempo real,
+     evitando la necesidad de lógica adicional o suscripciones explícitas.
+
+## Interceptores en Angular y Server-Side Rendering
+
+En este capítulo, exploraremos cómo los interceptores y el uso de `PLATFORM_ID`
+en Angular pueden mejorar la forma en que gestionamos solicitudes HTTP,
+especialmente en aplicaciones con **Server-Side Rendering (SSR)**. Además,
+analizaremos cómo mi enfoque personalizado optimiza esta funcionalidad.
+
+### **Interceptores y Su Rol en Angular**
+
+Los interceptores en Angular permiten modificar las solicitudes HTTP antes de
+que salgan del cliente y procesar las respuestas cuando regresan. Este mecanismo
+es útil para agregar encabezados, manejar errores globales, o, como en este
+caso, gestionar tokens de autenticación.
+
+#### **Ejemplo: Autenticación con Interceptor**
+
+##### **Archivo: `auth.interceptor.ts`**
+
+```typescript
+import { isPlatformServer } from '@angular/common';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { catchError, switchMap, throwError } from 'rxjs';
+import { AuthService } from '../services/auth.service';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+ const platformId = inject(PLATFORM_ID);
+ const authService = inject(AuthService);
+
+ // Si estamos en el servidor, no realizar modificaciones
+ if (isPlatformServer(platformId)) {
+  return next(req);
+ }
+
+ const token = localStorage.getItem('token');
+
+ let headers = req.headers.set('Content-Type', 'application/json');
+
+ if (token) {
+  headers = headers.set('Authorization', `Bearer ${token}`);
+ }
+
+ const authReq = req.clone({ headers });
+
+ // Manejo de errores global
+ return next(authReq).pipe(
+  catchError((error: HttpErrorResponse) => {
+   if (error.status === 401 || error.status === 403) {
+    return authService.refreshToken().pipe(
+     switchMap(newToken => {
+      localStorage.setItem('token', newToken);
+      const updatedHeaders = req.headers.set(
+       'Authorization',
+       `Bearer ${newToken}`,
+      );
+      const newRequest = req.clone({ headers: updatedHeaders });
+      return next(newRequest);
+     }),
+    );
+   }
+   return throwError(() => error);
+  }),
+ );
+};
+```
+
+En este interceptor, verificamos si estamos en el servidor con
+`isPlatformServer`. Si lo estamos, pasamos la solicitud sin modificaciones. Si
+estamos en el navegador, añadimos un token de autenticación a las cabeceras y
+gestionamos errores de autenticación globalmente.
+
+### **El Rol de `PLATFORM_ID` en SSR**
+
+En aplicaciones con SSR, es crucial distinguir entre el servidor y el navegador
+para evitar errores relacionados con APIs del navegador, como `localStorage`,
+`document` o `window`. Aquí es donde entra `PLATFORM_ID`, que nos permite
+determinar el entorno de ejecución.
+
+#### **Uso en Interceptores**
+
+```typescript
+import { isPlatformServer } from '@angular/common';
+import { PLATFORM_ID } from '@angular/core';
+
+const platformId = inject(PLATFORM_ID);
+if (isPlatformServer(platformId)) {
+ // Lógica para el servidor
+} else {
+ // Lógica para el navegador
+}
+```
+
+Este patrón permite adaptar el comportamiento según el entorno, asegurando que
+no se intenten usar APIs del navegador en el servidor.
+
+### **Gestión de Tokens con el Servicio de Autenticación**
+
+#### **Archivo: `auth.service.ts`**
+
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
+
+@Injectable({
+ providedIn: 'root',
+})
+export class AuthService {
+ baseURL = 'http://localhost:4000';
+ router = inject(Router);
+ http = inject(HttpClient);
+
+ refreshToken(): Observable<string> {
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  if (!refreshToken) {
+   this.logOut();
+   return throwError(() => new Error('No refresh token found'));
+  }
+
+  return this.http
+   .post<{ refreshToken: string }>(`${this.baseURL}/token`, { refreshToken })
+   .pipe(
+    map(response => response.refreshToken),
+    tap(newAccessToken => {
+     localStorage.setItem('token', newAccessToken);
+    }),
+    catchError(error => {
+     this.logOut();
+     return throwError(() => error);
+    }),
+   );
+ }
+
+ logOut() {
+  localStorage.clear();
+  this.router.navigate(['/login']);
+ }
+}
+```
+
+Este servicio gestiona la autenticación, incluyendo la renovación de tokens y el
+cierre de sesión.
+
+### **Configuración de la Aplicación**
+
+#### **Archivo: `app.config.ts`**
+
+```typescript
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+import {
+ provideHttpClient,
+ withFetch,
+ withInterceptors,
+} from '@angular/common/http';
+import { authInterceptor } from './interceptors/auth.interceptor';
+
+export const appConfig: ApplicationConfig = {
+ providers: [
+  provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+  provideZoneChangeDetection({ eventCoalescing: true }),
+  provideRouter(routes),
+ ],
+};
+```
+
+Esta configuración registra el interceptor y otros servicios necesarios para la
+aplicación.
+
+### **Reflexión: Ventajas del Enfoque**
+
+1. **Eficiencia en SSR**:
+
+   - Evita errores en el servidor al distinguir el entorno con `PLATFORM_ID`.
+
+2. **Gestión Global de Errores**:
+
+   - Centraliza el manejo de tokens y renovaciones.
+
+3. **Escalabilidad**:
+
+   - Facilita la integración con múltiples servicios sin duplicar lógica.
+
+4. **Rendimiento Mejorado**:
+   - Reduce solicitudes fallidas al manejar automáticamente la autenticación.
+
+## Testing en Angular
+
+Hoy llegamos a un momento crucial: el cierre del curso de Angular. Este capítulo
+no solo marca el final de este viaje, sino que también introduce un tema que
+puede ser un antes y un después en tu desarrollo como programador: el
+**testing**.
+
+El testing no es solo una herramienta técnica; es una filosofía que, cuando se
+adopta, transforma la manera en la que construimos software. En esta última
+clase, vamos a explorar tres tipos fundamentales: **unit testing**, **functional
+testing** y **end-to-end testing**. Cada uno de ellos cumple un rol específico,
+y entender cómo encajan juntos es clave para garantizar aplicaciones robustas y
+mantenibles.
+
+### Introducción a las herramientas de Testing
+
+Antes de profundizar en los ejemplos, repasemos cómo configurar e instalar las
+herramientas principales que utilizaremos:
+
+#### Jest
+
+Jest es un framework de testing que permite escribir tests de manera sencilla y
+eficiente. Es ideal para **unit testing** y se integra bien con Angular.
+
+##### Instalación
+
+```bash
+npm install --save-dev jest @types/jest jest-preset-angular
+```
+
+##### Configuración
+
+Crea un archivo `jest.config.js`:
+
+```javascript
+module.exports = {
+ preset: 'jest-preset-angular',
+ setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
+ testPathIgnorePatterns: [
+  '<rootDir>/node_modules/',
+  '.*\\.e2e\\.spec\\.ts$',
+  '.*\\.functional\\.spec\\.ts$',
+ ],
+ globalSetup: 'jest-preset-angular/global-setup',
+};
+```
+
+#### Testing Library
+
+Testing Library facilita la escritura de pruebas enfocadas en la interacción del
+usuario.
+
+##### Instalación Testing Library
+
+```bash
+npm install --save-dev @testing-library/angular @testing-library/jest-dom
+```
+
+#### Playwright
+
+Playwright es una herramienta poderosa para realizar **functional testing** y
+**end-to-end testing**.
+
+##### Instalación Playwright
+
+```bash
+npm install --save-dev @playwright/test
+```
+
+##### Configuración Playwright
+
+Crea un archivo `playwright.config.ts`:
+
+```typescript
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+ testDir: './',
+ testMatch: ['e2e/**/*.spec.ts', 'functional/**/*.spec.ts'],
+ fullyParallel: true,
+ reporter: 'html',
+ use: {
+  baseURL: process.env['PLAYWRIGHT_TEST_BASE_URL'] ?? 'http://localhost:4200',
+  trace: 'on-first-retry',
+ },
+ projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+});
+```
+
+#### Cambios necesarios en package.json
+
+Agregar los siguientes scripts en el archivo `package.json`:
+
+```bash
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "serve:ssr:angular-testing-boilerplate": "node dist/angular-testing-boilerplate/server/server.mjs",
+    "e2e": "ng e2e"
+  },
+```
+
+#### Cambios necesarios en `angular.json`
+
+Para integrar estas herramientas, también se realizaron ajustes en el archivo
+`angular.json` del proyecto. Estos cambios permiten configurar adecuadamente las
+pruebas y optimizar el proyecto.
+
+##### **Adición del builder de Playwright**
+
+Incluir un nuevo builder para ejecutar pruebas end-to-end con Playwright:
+
+```json
+{
+ "projects": {
+  "architect": {
+   "e2e": {
+    "builder": "playwright-ng-schematics:playwright",
+    "options": {
+     "devServerTarget": "angular-testing-boilerplate:serve"
+    },
+    "configurations": {
+     "production": {
+      "devServerTarget": "angular-testing-boilerplate:serve:production"
+     }
+    }
+   }
+  }
+ }
+}
+```
+
+### Unit Testing: La base de todo
+
+El unit testing se centra en verificar partes individuales de nuestro código. En
+Angular, esto significa probar componentes, servicios o pipes de manera aislada.
+
+#### Ejemplo de Unit Testing
+
+```typescript
+import { TestBed } from '@angular/core/testing';
+import { AuthService } from './auth.service';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+ HttpTestingController,
+ provideHttpClientTesting,
+} from '@angular/common/http/testing';
+import { firstValueFrom } from 'rxjs';
+
+describe('AuthService', () => {
+ let service: AuthService;
+ let httpTesting: HttpTestingController;
+
+ beforeEach(() => {
+  TestBed.configureTestingModule({
+   providers: [
+    provideHttpClient(withFetch()),
+    provideHttpClientTesting(),
+    AuthService,
+   ],
+  });
+
+  service = TestBed.inject(AuthService);
+  httpTesting = TestBed.inject(HttpTestingController);
+ });
+
+ afterEach(() => {
+  httpTesting.verify();
+ });
+
+ it('debería hacer login correctamente', async () => {
+  const mockResponse = { token: 'fake-jwt-token' };
+  const login$ = service.login('user@example.com', 'password123');
+  const loginPromise = firstValueFrom(login$);
+
+  const req = httpTesting.expectOne('/api/login');
+  expect(req.request.method).toBe('POST');
+  req.flush(mockResponse);
+
+  expect(await loginPromise).toEqual(mockResponse);
+ });
+});
+```
+
+### Functional Testing: Probando el flujo
+
+El functional testing verifica que diferentes partes de nuestra aplicación
+interactúen correctamente.
+
+#### Ejemplo de Functional Testing
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('debería redirigir al dashboard en login exitoso', async ({ page }) => {
+ await page.route('**/api/login', async route => {
+  await route.fulfill({ status: 200 });
+ });
+
+ await page.goto('http://localhost:4200');
+ await page.fill('input[name="email"]', 'user@example.com');
+ await page.fill('input[name="password"]', 'password1234');
+ await page.click('button[type="submit"]');
+
+ await expect(page).toHaveURL('http://localhost:4200/dashboard');
+});
+```
+
+### End-to-End Testing: Desde el principio hasta el final
+
+Estas pruebas simulan la experiencia del usuario final.
+
+#### Ejemplo de End-to-End Testing
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('flujo completo de login exitoso', async ({ page }) => {
+ await page.route('**/api/login', async route => {
+  const requestBody = await route.request().postDataJSON();
+  if (
+   requestBody.email === 'user@example.com' &&
+   requestBody.password === 'password1234'
+  ) {
+   route.fulfill({
+    status: 200,
+    body: JSON.stringify({ success: true }),
+   });
+  } else {
+   route.fulfill({
+    status: 401,
+    body: JSON.stringify({ message: 'Invalid email or password' }),
+   });
+  }
+ });
+
+ await page.goto('http://localhost:4200');
+ await page.fill('input[name="email"]', 'user@example.com');
+ await page.fill('input[name="password"]', 'password1234');
+ await page.click('button[type="submit"]');
+
+ await expect(page).toHaveURL('http://localhost:4200/dashboard');
+});
+```
+
+## Detallado de Jest y Playwright
+
+En este capítulo, exploraremos a fondo **Jest** y **Playwright**, explicando
+cómo utilizarlos con detalle para escribir pruebas robustas y efectivas. Vamos a
+desglosar cada herramienta y las funcionalidades clave que ofrecen.
+
+### ¿Qué es Jest?
+
+Jest es un framework de testing diseñado para ser simple y poderoso. Su
+principal propósito es facilitar el desarrollo de pruebas unitarias y asegurar
+que el código funcione como se espera.
+
+#### Conceptos básicos de Jest
+
+1. **Describe y it:**
+
+   - Jest organiza los tests utilizando bloques `describe` e `it`.
+   - `describe` agrupa pruebas relacionadas.
+   - `it` define un caso de prueba específico.
+
+   ```typescript
+   describe('Math operations', () => {
+    it('should add two numbers correctly', () => {
+     const result = 2 + 2;
+     expect(result).toBe(4);
+    });
+   });
+   ```
+
+   - Aquí, el bloque `describe` agrupa pruebas de operaciones matemáticas, y el
+     caso de prueba `it` verifica que la suma funcione.
+
+2. **Matchers:**
+
+   - Los matchers como `toBe`, `toEqual`, `toContain` permiten verificar
+     resultados esperados.
+
+   ```typescript
+   expect([1, 2, 3]).toContain(2); // Verifica que el array contiene el valor 2.
+   expect('hello').toMatch(/ell/); // Verifica que la cadena contiene "ell".
+   ```
+
+3. **Mocking:**
+
+   - Jest permite simular funciones o módulos con `jest.fn` y `jest.mock`.
+
+   ```typescript
+   const mockFn = jest.fn();
+   mockFn('hello');
+   expect(mockFn).toHaveBeenCalledWith('hello');
+   ```
+
+#### Ejemplo detallado
+
+```typescript
+// auth.service.ts
+export class AuthService {
+ login(username: string, password: string): boolean {
+  return username === 'admin' && password === '1234';
+ }
+}
+
+// auth.service.spec.ts
+describe('AuthService', () => {
+ let service: AuthService;
+
+ beforeEach(() => {
+  service = new AuthService();
+ });
+
+ it('should return true for correct credentials', () => {
+  const result = service.login('admin', '1234');
+  expect(result).toBe(true);
+ });
+
+ it('should return false for incorrect credentials', () => {
+  const result = service.login('user', 'wrongpassword');
+  expect(result).toBe(false);
+ });
+});
+```
+
+- **Explicación:**
+  1. `beforeEach` inicializa el servicio antes de cada prueba.
+  2. La primera prueba verifica credenciales correctas.
+  3. La segunda prueba asegura que credenciales incorrectas devuelvan `false`.
+
+### ¿Qué es Playwright?
+
+Playwright es una herramienta para pruebas de interfaz gráfica (UI). Permite
+automatizar navegadores para simular interacciones reales de los usuarios.
+
+#### Conceptos básicos de Playwright
+
+1. **Página (Page):**
+
+   - Representa una pestaña del navegador donde ocurren las acciones.
+
+   ```typescript
+   const page = await browser.newPage();
+   await page.goto('http://example.com');
+   ```
+
+2. **Selectores:**
+
+   - Identifican elementos en la página para interactuar con ellos.
+
+   ```typescript
+   await page.click('button#submit');
+   await page.fill('input[name="username"]', 'user123');
+   ```
+
+3. **Asserts:**
+
+   - Verifican que la página tenga el estado esperado.
+
+   ```typescript
+   await expect(page).toHaveURL('http://example.com/dashboard');
+   await expect(page.locator('h1')).toHaveText('Welcome');
+   ```
+
+#### Ejemplo detallado Playwright
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('Login functionality', async ({ page }) => {
+ await page.goto('http://example.com/login');
+
+ await page.fill('input[name="username"]', 'admin');
+ await page.fill('input[name="password"]', '1234');
+ await page.click('button[type="submit"]');
+
+ await expect(page).toHaveURL('http://example.com/dashboard');
+ await expect(page.locator('h1')).toHaveText('Dashboard');
+});
+```
+
+- **Explicación:**
+  1. La prueba abre la página de login.
+  2. Llena los campos de usuario y contraseña.
+  3. Hace clic en el botón de login.
+  4. Verifica la redirección y que el encabezado sea el esperado.
+
+### Buenas prácticas comunes
+
+#### En Jest
+
+1. **Mantén pruebas pequeñas y enfocadas:**
+
+   - Cada prueba debe verificar un comportamiento específico.
+
+2. **Usa mocks para dependencias externas:**
+
+   - Simula API externas o servicios para evitar dependencias en pruebas
+     unitarias.
+
+3. **Agrupa pruebas relacionadas:**
+   - Usa bloques `describe` para organizar casos similares.
+
+#### En Playwright
+
+1. **Reutiliza configuraciones:**
+
+   - Configura rutas o usuarios en un `beforeEach` común.
+
+2. **Evita hardcodear datos:**
+
+   - Usa variables o datos de prueba reutilizables.
+
+3. **Aprovecha los selectores accesibles:**
+   - Usa atributos como `aria-label` o `name` para selectores más robustos.
+
+## Buenas prácticas con `await`, mocking y simulación de entornos
+
+En este capítulo, exploraremos conceptos avanzados y buenas prácticas para
+trabajar con `await`, realizar mocking de servicios y simular elementos globales
+como `window`. Esto te permitirá escribir pruebas más robustas y realistas.
+
+### Entendiendo `await` y asincronía en pruebas
+
+El uso de `await` en pruebas es crucial para manejar operaciones asincrónicas
+como llamadas a APIs o interacciones con la interfaz de usuario. Es importante
+entender cómo usarlo correctamente:
+
+#### Buenas prácticas con `await`
+
+1. **Siempre espera operaciones asincrónicas:**
+
+   - Las pruebas deben esperar a que las operaciones concluyan para evitar
+     falsos positivos.
+
+   ```typescript
+   it('debería esperar correctamente', async () => {
+    const result = await asyncFunction();
+    expect(result).toBe(true);
+   });
+   ```
+
+2. **Evita combinar `await` con `then`:**
+
+   - Usa uno u otro, pero no ambos en la misma línea.
+
+   ```typescript
+   // No recomendado
+   asyncFunction().then(result => {
+    expect(result).toBe(true);
+   });
+
+   // Recomendado
+   const result = await asyncFunction();
+   expect(result).toBe(true);
+   ```
+
+3. **Usa `await` con matchers asincrónicos:**
+
+   - Para verificaciones asincrónicas, Jest ofrece matchers como `resolves` o
+     `rejects`.
+
+   ```typescript
+   await expect(asyncFunction()).resolves.toBe(true);
+   await expect(asyncFunction()).rejects.toThrow('Error');
+   ```
+
+### Mocking de servicios en Jest
+
+El mocking es esencial para simular dependencias externas como APIs o servicios.
+Jest facilita este proceso con utilidades como `jest.fn` y `jest.mock`.
+
+#### Ejemplo de mocking de servicios
+
+Supongamos que tienes un servicio que realiza una llamada HTTP:
+
+```typescript
+// user.service.ts
+export class UserService {
+ fetchUser(userId: string): Promise<{ id: string; name: string }> {
+  return fetch(`/api/users/${userId}`).then(response => response.json());
+ }
+}
+```
+
+##### Mockeando el servicio en Jest
+
+```typescript
+// user.service.spec.ts
+describe('UserService', () => {
+ let userService: UserService;
+
+ beforeEach(() => {
+  userService = new UserService();
+  global.fetch = jest.fn();
+ });
+
+ it('debería retornar un usuario', async () => {
+  const mockResponse = { id: '1', name: 'John Doe' };
+  (global.fetch as jest.Mock).mockResolvedValueOnce({
+   json: jest.fn().mockResolvedValueOnce(mockResponse),
+  });
+
+  const user = await userService.fetchUser('1');
+  expect(user).toEqual(mockResponse);
+  expect(global.fetch).toHaveBeenCalledWith('/api/users/1');
+ });
+});
+```
+
+- **Explicación:**
+  1. `global.fetch` se mockea usando `jest.fn`.
+  2. La respuesta de `fetch` se simula con `mockResolvedValueOnce`.
+  3. Verificamos que el servicio llama a la URL correcta y devuelve los datos
+     esperados.
+
+### Mocking de elementos globales como `window`
+
+En algunas pruebas, es necesario simular elementos globales como `window` o
+`localStorage`.
+
+#### Ejemplo de mocking de `window` y `localStorage`
+
+```typescript
+// localStorage.mock.ts
+export const localStorageMock = (() => {
+ let store: Record<string, string> = {};
+
+ return {
+  getItem: (key: string) => store[key] || null,
+  setItem: (key: string, value: string) => {
+   store[key] = value;
+  },
+  clear: () => {
+   store = {};
+  },
+  removeItem: (key: string) => {
+   delete store[key];
+  },
+ };
+})();
+
+global.localStorage = localStorageMock;
+```
+
+##### Usando el mock en pruebas
+
+```typescript
+// window.spec.ts
+describe('localStorage', () => {
+ it('debería guardar y recuperar un valor', () => {
+  localStorage.setItem('key', 'value');
+  const result = localStorage.getItem('key');
+  expect(result).toBe('value');
+ });
+
+ it('debería eliminar un valor', () => {
+  localStorage.setItem('key', 'value');
+  localStorage.removeItem('key');
+  const result = localStorage.getItem('key');
+  expect(result).toBeNull();
+ });
+});
+```
+
+### Simulación de temporizadores y funciones de tiempo
+
+Jest incluye funciones para controlar temporizadores como `setTimeout` y
+`setInterval`.
+
+#### Ejemplo con temporizadores
+
+```typescript
+// timer.spec.ts
+describe('Temporizadores', () => {
+ jest.useFakeTimers();
+
+ it('debería llamar a la función después de 1 segundo', () => {
+  const callback = jest.fn();
+  setTimeout(callback, 1000);
+
+  jest.runAllTimers();
+
+  expect(callback).toHaveBeenCalledTimes(1);
+ });
+});
+```
+
+- **Explicación:**
+  1. `jest.useFakeTimers` habilita temporizadores simulados.
+  2. `jest.runAllTimers` avanza el tiempo y ejecuta los callbacks programados.
+
+### Conclusión
+
+El manejo efectivo de `await`, mocking y elementos globales como `window` o
+`localStorage` permite escribir pruebas más completas y fiables. Estas técnicas
+son esenciales para manejar escenarios complejos y garantizar que tu código se
+comporte como se espera bajo cualquier circunstancia.
+
+## Buenas prácticas con Playwright para mocking y manejo de asincronía
+
+Playwright es una herramienta poderosa para realizar pruebas de interfaz gráfica
+y simulaciones complejas. En este capítulo, exploraremos cómo manejar
+operaciones asincrónicas de manera efectiva y realizar mocking de servicios y
+elementos globales.
+
+### Manejo de asincronía con Playwright
+
+El uso de `await` es esencial en Playwright, ya que muchas de sus funciones son
+asincrónicas. A continuación, presentamos buenas prácticas:
+
+#### Buenas prácticas con `await` Playwright
+
+1. **Usa `await` para todas las interacciones:**
+
+   - Cada acción en Playwright debe esperar a que se complete antes de proceder.
+
+   ```typescript
+   await page.click('button#submit'); // Espera a que el botón se haga clic.
+   ```
+
+2. **Combina `await` con aserciones:**
+
+   - Verifica el estado de la página inmediatamente después de una acción.
+
+   ```typescript
+   await page.fill('input#username', 'user123');
+   await expect(page.locator('input#username')).toHaveValue('user123');
+   ```
+
+3. **Evita hardcodear tiempos con `waitForTimeout`:**
+
+   - Usa selectores y condiciones en lugar de esperar tiempos fijos.
+
+   ```typescript
+   await page.waitForSelector('div#loaded'); // Mejor que esperar un tiempo fijo.
+   ```
+
+### Mocking de solicitudes de red
+
+Playwright permite interceptar y simular solicitudes de red, lo que es útil para
+probar escenarios como errores del servidor o respuestas lentas.
+
+#### Ejemplo de mocking de una API
+
+Supongamos que queremos simular una API que devuelve información de un usuario:
+
+```typescript
+test('Debería mostrar la información del usuario', async ({ page }) => {
+ // Interceptar la solicitud
+ await page.route('**/api/user', route => {
+  route.fulfill({
+   status: 200,
+   contentType: 'application/json',
+   body: JSON.stringify({ id: '1', name: 'John Doe' }),
+  });
+ });
+
+ // Navegar a la página
+ await page.goto('http://localhost:4200/profile');
+
+ // Verificar que la información se muestra correctamente
+ await expect(page.locator('h1')).toHaveText('John Doe');
+});
+```
+
+- **Explicación:**
+  1. `page.route` intercepta la solicitud.
+  2. `route.fulfill` responde con datos simulados.
+  3. La página muestra los datos simulados, y verificamos el resultado.
+
+#### Simulación de errores de red
+
+```typescript
+test('Debería mostrar un mensaje de error si la API falla', async ({
+ page,
+}) => {
+ await page.route('**/api/user', route => {
+  route.fulfill({
+   status: 500,
+   contentType: 'application/json',
+   body: JSON.stringify({ message: 'Server error' }),
+  });
+ });
+
+ await page.goto('http://localhost:4200/profile');
+
+ const errorMessage = page.locator('div.error');
+ await expect(errorMessage).toHaveText('Error al cargar la información');
+});
+```
+
+- **Explicación:**
+  1. Simulamos un error del servidor.
+  2. Verificamos que la página muestra un mensaje de error.
+
+### Mocking de elementos globales
+
+Playwright también permite simular elementos globales como `localStorage` o
+`window`.
+
+#### Mocking de `localStorage`
+
+```typescript
+test('Debería cargar el tema desde localStorage', async ({ page }) => {
+ await page.addInitScript(() => {
+  localStorage.setItem('theme', 'dark');
+ });
+
+ await page.goto('http://localhost:4200');
+
+ const themeClass = page.locator('body');
+ await expect(themeClass).toHaveClass(/dark-theme/);
+});
+```
+
+- **Explicación:**
+  1. Usamos `addInitScript` para configurar `localStorage` antes de cargar la
+     página.
+  2. Verificamos que la página aplica el tema correcto.
+
+#### Mocking de funciones globales de `window`
+
+```typescript
+test('Debería mostrar una alerta al enviar un formulario', async ({ page }) => {
+ await page.goto('http://localhost:4200/contact');
+
+ // Simular window.alert
+ page.on('dialog', dialog => {
+  expect(dialog.message()).toBe('Formulario enviado');
+  dialog.dismiss();
+ });
+
+ await page.click('button#submit');
+});
+```
+
+- **Explicación:**
+  1. Escuchamos eventos de diálogo con `page.on('dialog')`.
+  2. Verificamos el mensaje de la alerta y la cerramos.
+
+### Simulación de retrasos y tiempos
+
+Playwright puede simular retrasos en respuestas o ejecuciones:
+
+#### Ejemplo con retrasos simulados
+
+```typescript
+test('Debería mostrar un spinner durante la carga', async ({ page }) => {
+ await page.route('**/api/data', async route => {
+  await new Promise(resolve => setTimeout(resolve, 2000)); // Simular retraso
+  route.fulfill({
+   status: 200,
+   contentType: 'application/json',
+   body: JSON.stringify({ items: [] }),
+  });
+ });
+
+ await page.goto('http://localhost:4200');
+
+ const spinner = page.locator('.spinner');
+ await expect(spinner).toBeVisible();
+
+ await page.waitForSelector('.spinner', { state: 'hidden' }); // Esperar a que desaparezca
+});
+```

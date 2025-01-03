@@ -1,9 +1,7 @@
 // @no-ts-checHexagonal_Architecture
 import fs from 'fs';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { merge } from 'merge-pdf-buffers';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { PDFDocument } from 'pdf-lib';
 import P from 'playwright';
 
 interface Data {
@@ -11,7 +9,7 @@ interface Data {
 }
 
 export default async function handler(
-	req: NextApiRequest,
+	_req: NextApiRequest,
 	res: NextApiResponse<Data>,
 ) {
 	const pageList = [
@@ -27,6 +25,7 @@ export default async function handler(
 		'http://localhost:3000/book/Chapter09_React',
 		'http://localhost:3000/book/Chapter10_TypeScript',
 		'http://localhost:3000/book/Chapter11_FrontEndRadar',
+		'http://localhost:3000/book/Chapter12_Angular',
 	];
 
 	const pageListSpanish = [
@@ -41,7 +40,8 @@ export default async function handler(
 		'http://localhost:3000/es/book/Chapter08_Clean_Architecture_Front_End',
 		'http://localhost:3000/es/book/Chapter09_React',
 		'http://localhost:3000/es/book/Chapter10_TypeScript',
-		'http://localhost:3000/book/Chapter11_FrontEndRadar',
+		'http://localhost:3000/es/book/Chapter11_FrontEndRadar',
+		'http://localhost:3000/es/book/Chapter12_Angular',
 	];
 
 	const browser = await P.chromium.launch({ headless: true });
@@ -125,13 +125,27 @@ export default async function handler(
 			}),
 		);
 
+	const mergePdfBuffers = async (
+		buffers: Uint8Array[],
+	): Promise<Uint8Array> => {
+		const mergedPdf = await PDFDocument.create();
+
+		for (const buffer of buffers) {
+			const pdf = await PDFDocument.load(buffer);
+			const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+			copiedPages.forEach(page => mergedPdf.addPage(page));
+		}
+
+		return await mergedPdf.save();
+	};
+
 	const pdfList = await processPdfList(pageList);
 	const pdfSpanishList = await processPdfList(pageListSpanish);
 
-	const merged = await merge(pdfList);
+	const merged = await mergePdfBuffers(pdfList);
 	fs.writeFileSync('public/gentleman-programming-book.pdf', merged);
 
-	const mergedSpanish = await merge(pdfSpanishList);
+	const mergedSpanish = await mergePdfBuffers(pdfSpanishList);
 	fs.writeFileSync(
 		'public/es/gentleman-programming-book-es.pdf',
 		mergedSpanish,
