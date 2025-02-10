@@ -26,6 +26,7 @@ export default async function handler(
 		'http://localhost:3000/book/Chapter10_TypeScript',
 		'http://localhost:3000/book/Chapter11_FrontEndRadar',
 		'http://localhost:3000/book/Chapter12_Angular',
+		'http://localhost:3000/book/Chapter13_Barrels',
 	];
 
 	const pageListSpanish = [
@@ -42,6 +43,7 @@ export default async function handler(
 		'http://localhost:3000/es/book/Chapter10_TypeScript',
 		'http://localhost:3000/es/book/Chapter11_FrontEndRadar',
 		'http://localhost:3000/es/book/Chapter12_Angular',
+		'http://localhost:3000/es/book/Chapter13_Barrels',
 	];
 
 	const browser = await P.chromium.launch({ headless: true });
