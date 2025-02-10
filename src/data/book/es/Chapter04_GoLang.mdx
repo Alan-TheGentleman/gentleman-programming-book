@@ -73,7 +73,8 @@ titleList:
 
 Un LENGUAJE ASOMBROSO creado por Google en colaboración con Rob Pike, Ken Thomson y Robert Griesemer.
 
-## Ventajas:
+## Ventajas
+
 - Rápido, compila directamente a código máquina sin necesidad de usar un intérprete.
 - Fácil de aprender, muy buena documentación y muchas cosas simplificadas.
 - Escala muy bien, soporta la programación concurrente a través de "GoRoutines".
@@ -85,19 +86,20 @@ Un LENGUAJE ASOMBROSO creado por Google en colaboración con Rob Pike, Ken Thoms
 - MUY rápido, en algunas pruebas de rendimiento es más rápido que las aplicaciones backend hechas en Java y Rust.
 - Sistema de plantillas incorporado, GENIAL para trabajar con HTMX.
 
-## Estructura Recomendada:
+## Estructura Recomendada
+
 - **ui** (contenido relacionado con el frontend en caso de renderización en el servidor)
-  - *html* (plantillas)
-  - *static* (contenido estático multimedia y de estilo)
-    - *assets*
-    - *css*
+  - _html_ (plantillas)
+  - _static_ (contenido estático multimedia y de estilo)
+    - _assets_
+    - _css_
 - **internal** (contenido relacionado con herramientas y entidades reutilizables en todo el proyecto)
-  - *models*
-  - *utils*
+  - _models_
+  - _utils_
 - **cmd**
-  - *web* (contiene la lógica de la aplicación)
-    - *domain* (lógica de negocio)
-    - *routes* (rutas disponibles)
+  - _web_ (contiene la lógica de la aplicación)
+    - _domain_ (lógica de negocio)
+    - _routes_ (rutas disponibles)
 
 ## ¿Cómo funciona GoLang?
 
@@ -166,8 +168,8 @@ Seguro que has notado algo, "numero" tiene un tipo "int" precediendo la asignaci
 - **string** = cadena de caracteres
 - **int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr** = valores numéricos enteros con sus límites, generalmente son 32 bits en sistemas de 32 bits y 64 para sistemas de 64 bits. Debería usarse entero a menos que haya una razón específica para usar un valor restringido.
 - **byte** === uint8
-- **rune** === int32 
-- **float32, float64** = representa valores numéricos reales 
+- **rune** === int32
+- **float32, float64** = representa valores numéricos reales
 - **complex64, complex128** = números complejos que tienen una parte real y una parte imaginaria.
 
 ## Structs
@@ -219,15 +221,13 @@ Un "slice" es una porción de un array existente o una representación de una co
 
 ```go
 var primos = [6]int{2 ,3 ,5, 7, 11, 13}
-var s []
+var s [] int = primos[1:4] - crea un slice usando "primos" como base desde la posición 1 hasta la 4
 
-int = primos[1:4] - crea un slice usando "primos" como base desde la posición 1 hasta la 4
-
-fmt.Println(s) - [3 5 7] 
+fmt.Println(s) - [3 5 7]
 
 s = append(s , 14)
 
-fmt.Println(s) - [3 5 7 14] 
+fmt.Println(s) - [3 5 7 14]
 
 fmt.Println(primos) - [2 3 5 7 14 13]
 ```
@@ -257,16 +257,16 @@ a := make([]int, 0, 5)  // len(a)=0 cap(a)=5
 
 Si vienes de Javascript...
 
- esto llevará un poco de tiempo, pero veamos juntos el siguiente ejemplo:
+esto llevará un poco de tiempo, pero veamos juntos el siguiente ejemplo:
 
 ```go
 type TipoElemento struct {
-    nombre string 
+    nombre string
 }
 
 var ejemploElemento = TipoElemento {
     nombre: "Caballero",
-} 
+}
 
 func MiFuncion(elemento TipoElemento) {
     ...
@@ -299,7 +299,7 @@ fmt.Println(*p) // 42
 fmt.Println(*p) // 21
 ```
 
-Donde esto cambia es si apuntamos a una "estructura", ya que sería un poco engorroso hacer (*p).Propiedad, se reduce a usarlo como si fuera la estructura misma:
+Donde esto cambia es si apuntamos a una "estructura", ya que sería un poco engorroso hacer (\*p).Propiedad, se reduce a usarlo como si fuera la estructura misma:
 
 ```go
 v := Persona{"Caballero"}
@@ -327,7 +327,7 @@ En Go, cuando declaras una variable sin asignar explícitamente un valor, toma u
 
 El bucle `range` es una construcción poderosa para iterar sobre secuencias como slices, arrays, maps y strings. Proporciona dos componentes: el índice (`i`) y el valor (`v`) de cada elemento. Aquí tienes tres variaciones comunes:
 
-* **Iteración Completa:**
+- **Iteración Completa:**
 
 ```go
 var arr = []int{5, 4, 3, 2, 1}
@@ -339,7 +339,7 @@ for i, v := range arr {
 
 Este enfoque itera sobre tanto el índice como el valor de cada elemento en `arr`.
 
-* **Ignorando Índice:**
+- **Ignorando Índice:**
 
 ```go
 for _, v := range arr {
@@ -349,7 +349,7 @@ for _, v := range arr {
 
 El guion bajo (`_`) descarta la información del índice, centrándose solo en los valores de los elementos.
 
-* **Ignorando Valor:**
+- **Ignorando Valor:**
 
 ```go
 for i, _ := range arr {
@@ -400,19 +400,19 @@ Los maps son colecciones desordenadas que asocian claves únicas (de cualquier t
 
 ## Mutando Maps
 
-* **Inserción:**
+- **Inserción:**
 
-   ```go
-   m[clave] = elemento
-   ```
+  ```go
+  m[clave] = elemento
+  ```
 
-   Agrega un nuevo par clave-valor al map `m`.
+  Agrega un nuevo par clave-valor al map `m`.
 
-* **Recuperación:**
+- **Recuperación:**
 
-   ```go
-   elemento = m[clave]
-   ```
+  ```go
+  elemento = m[clave]
+  ```
 
 ## Funciones
 
@@ -669,7 +669,7 @@ Al igual que un switch regular, pero usamos tipos en lugar de valores, y los úl
 
 ```go
 switch v := i.(type) {
-    case T: 
+    case T:
     // si v tiene tipo T
     case S:
     // si v tiene tipo S
@@ -753,29 +753,29 @@ type IPAddr [4]byte
 
 func (ip IPAddr) String() string {
   str := ""
-  
-	for i, ipValor := range ip {
+
+ for i, ipValor := range ip {
     str += fmt.Sprint(ipValor)
 
-		if i < len(ip)-1 {
-			str += "."
-		}	
+  if i < len(ip)-1 {
+   str += "."
   }
-	
-	return fmt.Sprintf("%s", str)
+  }
+
+ return fmt.Sprintf("%s", str)
 }
 
 // TODO: Agregar un método "String() string" a IPAddr.
 
 func main() {
-	hosts := map[string]IPAddr{
-		"loopback":  {127, 0, 0, 1},
-		"googleDNS": {8, 8, 8, 8},
-	}
+ hosts := map[string]IPAddr{
+  "loopback":  {127, 0, 0, 1},
+  "googleDNS": {8, 8, 8, 8},
+ }
 
-	for _, ip := range hosts {
-		fmt.Println(ip)
-	}
+ for _, ip := range hosts {
+  fmt.Println(ip)
+ }
 }
 ```
 
@@ -827,7 +827,7 @@ func main() {
 
   // copia los datos del lector a un buffer. io.Copy lee del lector y escribe en el escritor hasta que se alcanza EOF en el lector o ocurre un error
   n, err := io.Copy(&buffer, lector)
- 
+
   if err != nil {
     fmt.Println("Error:", err)
 
@@ -847,36 +847,36 @@ Ejemplo, ¡obtengamos una cadena cifrada y descifrémosla!
 package main
 
 import (
-	"io"
-	"os"
-	"strings"
+ "io"
+ "os"
+ "strings"
 )
 
 type rot13Reader struct {
-	r io.Reader
+ r io.Reader
 }
 
 func (rr *rot13Reader) Read(p []byte) (n int, err error) {
-	n, err = rr.r.Read(p)
-	for i := 0; i < n; i++ {
-		if (p[i] >= 'A' && p[i] <= 'Z') || (p[i] >= 'a' && p[i] <= 'z') {
-			if p[i] <= 'Z' {
+ n, err = rr.r.Read(p)
+ for i := 0; i < n; i++ {
+  if (p[i] >= 'A' && p[i] <= 'Z') || (p[i] >= 'a' && p[i] <= 'z') {
+   if p[i] <= 'Z' {
         // p[i] - 'A' calcula la posición del carácter actual en relación con 'A', luego agregamos 13 ya que el algoritmo ROT13 desplaza cada letra en el alfabeto 13 posiciones,
         // luego aplicamos '%26' para asegurarnos de que el resultado esté dentro del rango del alfabeto (26 letras)
         // y al final agregamos 'A' que convierte el resultado nuevamente al valor ASCII de una letra
-				p[i] = (p[i]-'A'+13)%26 + 'A'
-			} else {
-				p[i] = (p[i]-'a'+13)%26 + 'a'
-			}
-		}
-	}
-	return
+    p[i] = (p[i]-'A'+13)%26 + 'A'
+   } else {
+    p[i] = (p[i]-'a'+13)%26 + 'a'
+   }
+  }
+ }
+ return
 }
 
 func main() {
-	s := strings.NewReader("Lbh penpxrq gur pbqr!")
-	r := rot13Reader{s}
-	io.Copy(os.Stdout, &r)
+ s := strings.NewReader("Lbh penpxrq gur pbqr!")
+ r := rot13Reader{s}
+ io.Copy(os.Stdout, &r)
 }
 ```
 
@@ -900,40 +900,40 @@ Creemos una imagen pequeña y negra con un píxel rojo en el centro:
 package main
 
 import (
-	"image"
-	"image/color"
-	"image/png"
-	"os"
+ "image"
+ "image/color"
+ "image/png"
+ "os"
 )
 
 func main() {
-	// Crea una nueva imagen RGBA con dimensiones 100x100
-	img := image.NewRGBA(image.Rect(0, 0, 100, 100))
+ // Crea una nueva imagen RGBA con dimensiones 100x100
+ img := image.NewRGBA(image.Rect(0, 0, 100, 100))
 
-	// Establece todos los píxeles en negro
-	for x := 0; x < 100; x++ {
-		for y := 0; y < 100; y++ {
-			img.Set(x, y, color.Black)
-		}
-	}
+ // Establece todos los píxeles en negro
+ for x := 0; x < 100; x++ {
+  for y := 0; y < 100; y++ {
+   img.Set(x, y, color.Black)
+  }
+ }
 
-	// Establece el píxel en el centro en rojo
-	img.Set(50, 50, color.RGBA{255, 0, 0, 255})
+ // Establece el píxel en el centro en rojo
+ img.Set(50, 50, color.RGBA{255, 0, 0, 255})
 
-	// Crea un archivo PNG para guardar la imagen
-	archivo, err := os.Create("imagen_simple.png")
-	if err != nil {
-		panic(err)
-	}
-	defer archivo.Close()
+ // Crea un archivo PNG para guardar la imagen
+ archivo, err := os.Create("imagen_simple.png")
+ if err != nil {
+  panic(err)
+ }
+ defer archivo.Close()
 
-	// Codifica la imagen al formato PNG y guárdala en el archivo
-	err = png.Encode(archivo, img)
-	if err != nil {
-		panic(err)
-	}
+ // Codifica la imagen al formato PNG y guárdala en el archivo
+ err = png.Encode(archivo, img)
+ if err != nil {
+  panic(err)
+ }
 
-	println("¡Imagen simple generada exitosamente!")
+ println("¡Imagen simple generada exitosamente!")
 }
 ```
 
@@ -946,7 +946,7 @@ PERO es diferente a otros lenguajes, ya que es un hilo virtual que se ejecuta en
 Para ejecutar una función como GoRoutine, solo necesitas agregar la palabra clave `go` antes de la llamada a la función:
 
 ```go
-	go f(x, y, z)
+ go f(x, y, z)
 ```
 
 Esto ejecutará la función `f(x, y, z)` concurrentemente en una nueva GoRoutine. Los parámetros se evalúan en el momento de la llamada a la función, por lo que si cambian más tarde, la GoRoutine usará los valores actualizados.
@@ -1025,7 +1025,7 @@ func main() {
   ch := make(chan string)
 
   // Lanza una nueva goroutine para ejecutar la función say
-  go say("Hello", ch)  
+  go say("Hello", ch)
 
   // Espera infinitamente mensajes en el canal (asegura que se impriman todos los "Hello")
   for {
@@ -1053,14 +1053,14 @@ Si envías más de 100 valores al canal, el remitente se bloqueará hasta que el
 
 ```go
 func main() {
-	ch := make(chan int, 2)
-	ch <- 1
-	ch <- 2
-	ch <- 3 // error fatal: todas las goroutines están dormidas - ¡deadlock!
+ ch := make(chan int, 2)
+ ch <- 1
+ ch <- 2
+ ch <- 3 // error fatal: todas las goroutines están dormidas - ¡deadlock!
 
-	fmt.Println(<-ch)
-	fmt.Println(<-ch)
-	fmt.Println(<-ch)
+ fmt.Println(<-ch)
+ fmt.Println(<-ch)
+ fmt.Println(<-ch)
 }
 ```
 
@@ -1073,17 +1073,18 @@ v, ok := <-ch
 ok será false si no hay más valores para recibir y el canal está cerrado.
 ```
 
-Para recibir valores de un canal hasta que se cierre, puedes usar ```range```:
+Para recibir valores de un canal hasta que se cierre, puedes usar `range`:
 
 ```go
 for i:= range ch {
-	fmt.Println(i)
+ fmt.Println(i)
 }
 ```
 
-¿Necesitamos cerrarlos? No necesariamente, solo si el receptor necesita saber que no se enviarán más valores, o si el remitente necesita decirle al receptor que ha terminado de enviar valores, de esta manera terminaremos el bucle ```range```.
+¿Necesitamos cerrarlos? No necesariamente, solo si el receptor necesita saber que no se enviarán más valores, o si el remitente necesita decirle al receptor que ha terminado de enviar valores, de esta manera terminaremos el bucle `range`.
 
 Ejemplo:
+
 ```go
 func say(s string, ch chan string) {
   for i := 0; i < 3; i++ {
@@ -1098,7 +1099,7 @@ func main() {
   ch := make(chan string)
 
   // Lanza una nueva goroutine para ejecutar la función say
-  go say("Hello", ch)  
+  go say("Hello", ch)
 
   // Bucle para recibir e imprimir mensajes hasta que el canal se cierre
   for {
@@ -1115,7 +1116,7 @@ func main() {
 
 ## Selección de GoRoutines
 
-La declaración ```select``` permite que una goroutine espere en múltiples operaciones de comunicación. Se bloquea hasta que uno de sus casos pueda ejecutarse, luego ejecuta ese caso.
+La declaración `select` permite que una goroutine espere en múltiples operaciones de comunicación. Se bloquea hasta que uno de sus casos pueda ejecutarse, luego ejecuta ese caso.
 
 Es útil cuando deseas esperar en múltiples canales y realizar acciones diferentes según qué canal esté listo.
 
@@ -1153,7 +1154,7 @@ func main() {
 }
 ```
 
-También puedes usar un caso ```default``` en una declaración ```select```, esto se ejecutará si ningún otro caso está listo:
+También puedes usar un caso `default` en una declaración `select`, esto se ejecutará si ningún otro caso está listo:
 
 ```go
 func say(s string, ch chan string) {
@@ -1169,7 +1170,7 @@ func main() {
   ch := make(chan string)
 
   // Lanza una nueva goroutine para ejecutar la función say
-  go say("Hello", ch)  
+  go say("Hello", ch)
 
   // Usa select con un caso predeterminado
   for {
@@ -1196,47 +1197,47 @@ Ahora hagamos un ejercicio donde comprobaremos si dos árboles de nodos tienen l
 package main
 
 import (
-	"fmt"
+ "fmt"
 )
 
 type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
+ Val   int
+ Left  *TreeNode
+ Right *TreeNode
 }
 
 func isSameSequence(root1, root2 *TreeNode) bool {
-	seq1 := make(map[int]bool)
-	seq2 := make(map[int]bool)
+ seq1 := make(map[int]bool)
+ seq2 := make(map[int]bool)
 
-	traverse(root1, seq1)
-	traverse(root2, seq2)
+ traverse(root1, seq1)
+ traverse(root2, seq2)
 
-	return equal(seq1, seq2)
+ return equal(seq1, seq2)
 }
 
 func traverse(node *TreeNode, seq map[int]bool) {
-	if node == nil {
-		return
-	}
+ if node == nil {
+  return
+ }
 
-	seq[node.Val] = true
-	traverse(node.Left, seq)
-	traverse(node.Right, seq)
+ seq[node.Val] = true
+ traverse(node.Left, seq)
+ traverse(node.Right, seq)
 }
 
 func equal(seq1, seq2 map[int]bool) bool {
-	if len(seq1) != len(seq2) {
-		return false
-	}
+ if len(seq1) != len(seq2) {
+  return false
+ }
 
-	for val := range seq1 {
-		if !seq2[val] {
-			return false
-		}
-	}
+ for val := range seq1 {
+  if !seq2[val] {
+   return false
+  }
+ }
 
-	return true
+ return true
 }
 
 func main() {
@@ -1283,7 +1284,7 @@ func main() {
         },
         Right: &TreeNode{
                 Val: 13,
-				},
+    },
     }
 
     fmt.Println(isSameSequence(root1, root2)) // Salida: true
@@ -1294,7 +1295,7 @@ func main() {
 
 Algo de lo que debemos cuidarnos al trabajar con GoRoutines es el acceso a la memoria compartida, donde más de una GoRoutine puede acceder al mismo espacio de memoria al mismo tiempo, lo que puede provocar grandes conflictos.
 
-Este concepto se llama ```exclusión mutua```, y se resuelve mediante el uso de ```mutexes```, que se utilizan para sincronizar el acceso a la memoria compartida.
+Este concepto se llama `exclusión mutua`, y se resuelve mediante el uso de `mutexes`, que se utilizan para sincronizar el acceso a la memoria compartida.
 
 ```go
 import ("sync")
@@ -1302,128 +1303,128 @@ import ("sync")
 var mu sync.Mutex
 ```
 
-Tiene dos métodos, ```Lock``` y ```Unlock```, que se utilizan para proteger la memoria compartida:
+Tiene dos métodos, `Lock` y `Unlock`, que se utilizan para proteger la memoria compartida:
 
 ```go
 func safeIncrement() {
-	mu.Lock() // bloquea la memoria compartida
-	defer mu.Unlock() // desbloquea la memoria compartida cuando la función retorna
-	count++ // incrementa la memoria compartida
+ mu.Lock() // bloquea la memoria compartida
+ defer mu.Unlock() // desbloquea la memoria compartida cuando la función retorna
+ count++ // incrementa la memoria compartida
 }
 ```
 
-Aquí estamos utilizando la declaración ```defer``` para asegurar que el mutex se desbloquee cuando la función retorne, incluso si entra en pánico.
+Aquí estamos utilizando la declaración `defer` para asegurar que el mutex se desbloquee cuando la función retorne, incluso si entra en pánico.
 
 ```go
 package main
 
 import (
-	"fmt"
-	"sync"
+ "fmt"
+ "sync"
 )
 
 type TreeNode struct {
-	Left  *TreeNode
-	Right *TreeNode
-	Val   int
+ Left  *TreeNode
+ Right *TreeNode
+ Val   int
 }
 
 type SequenceCollector struct {
-	sequence map[int]bool
-	mutex    sync.Mutex
+ sequence map[int]bool
+ mutex    sync.Mutex
 }
 
 func isSameSequence(root1, root2 *TreeNode) bool {
-	seq1 := &SequenceCollector{sequence: make(map[int]bool)}
-	seq2 := &SequenceCollector{sequence: make(map[int]bool)}
+ seq1 := &SequenceCollector{sequence: make(map[int]bool)}
+ seq2 := &SequenceCollector{sequence: make(map[int]bool)}
 
-	var wg sync.WaitGroup
-	wg.Add(2)
+ var wg sync.WaitGroup
+ wg.Add(2)
 
-	go func() {
-		defer wg.Done()
-		traverse(root1, seq1)
-	}()
+ go func() {
+  defer wg.Done()
+  traverse(root1, seq1)
+ }()
 
-	go func() {
-		defer wg.Done()
-		traverse(root2, seq2)
-	}()
+ go func() {
+  defer wg.Done()
+  traverse(root2, seq2)
+ }()
 
-	return equal(seq1.sequence, seq2.sequence)
+ return equal(seq1.sequence, seq2.sequence)
 }
 
 func traverse(node *TreeNode, seq *SequenceCollector) {
-	if node == nil {
-		return
-	}
+ if node == nil {
+  return
+ }
 
-	seq.mutex.Lock()
-	seq.sequence[node.Val] = true
-	seq.mutex.Unlock()
+ seq.mutex.Lock()
+ seq.sequence[node.Val] = true
+ seq.mutex.Unlock()
 
-	traverse(node.Left, seq)
-	traverse(node.Right, seq)
+ traverse(node.Left, seq)
+ traverse(node.Right, seq)
 }
 
 func equal(seq1, seq2 map[int]bool) bool {
-	if len(seq1) != len(seq2) {
-		return false
-	}
+ if len(seq1) != len(seq2) {
+  return false
+ }
 
-	for val := range seq1 {
-		if !seq2[val] {
-			return false
-		}
-	}
+ for val := range seq1 {
+  if !seq2[val] {
+   return false
+  }
+ }
 
-	return true
+ return true
 }
 
 func main() {
-	root1 := &TreeNode{
-		Val: 3,
-		Left: &TreeNode{
-			Val: 1,
-			Left: &TreeNode{
-				Val: 1,
-			},
-			Right: &TreeNode{
-				Val: 2,
-			},
-		},
-		Right: &TreeNode{
-			Val: 8,
-			Left: &TreeNode{
-				Val: 5,
-			},
-			Right: &TreeNode{
-				Val: 13,
-			},
-		},
-	}
-	root2 := &TreeNode{
-		Val: 8,
-		Left: &TreeNode{
-			Val: 3,
-			Left: &TreeNode{
-				Val: 1,
-				Left: &TreeNode{
-					Val: 1,
-				},
-				Right: &TreeNode{
-					Val: 2,
-				},
-			},
-			Right: &TreeNode{
-				Val: 5,
-			},
-		},
-		Right: &TreeNode{
-			Val: 13,
-		},
-	}
+ root1 := &TreeNode{
+  Val: 3,
+  Left: &TreeNode{
+   Val: 1,
+   Left: &TreeNode{
+    Val: 1,
+   },
+   Right: &TreeNode{
+    Val: 2,
+   },
+  },
+  Right: &TreeNode{
+   Val: 8,
+   Left: &TreeNode{
+    Val: 5,
+   },
+   Right: &TreeNode{
+    Val: 13,
+   },
+  },
+ }
+ root2 := &TreeNode{
+  Val: 8,
+  Left: &TreeNode{
+   Val: 3,
+   Left: &TreeNode{
+    Val: 1,
+    Left: &TreeNode{
+     Val: 1,
+    },
+    Right: &TreeNode{
+     Val: 2,
+    },
+   },
+   Right: &TreeNode{
+    Val: 5,
+   },
+  },
+  Right: &TreeNode{
+   Val: 13,
+  },
+ }
 
-	fmt.Println(isSameSequence(root1, root2)) // true
+ fmt.Println(isSameSequence(root1, root2)) // true
 }
 ```
