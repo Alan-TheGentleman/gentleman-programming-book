@@ -26,8 +26,10 @@ globalStyle('html', {
 	fontSize: htmlFontSize,
 });
 
-globalStyle('html,*', {
-	scrollBehavior: `smooth !important` as 'smooth',
+globalStyle('a', {
+	color: themeVars.color.primary._500,
+	textDecoration: 'none',
+	transition: 'color 0.1s ease-in-out',
 });
 
 globalStyle('::-webkit-scrollbar-track', {
