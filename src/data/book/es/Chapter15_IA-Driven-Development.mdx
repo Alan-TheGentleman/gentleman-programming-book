@@ -1,0 +1,868 @@
+---
+id: 'desarrollo-guiado-por-ia-claude-code'
+order: 15
+name: 'Desarrollo Guiado por IA con Claude Code'
+titleList:
+  [
+    {
+      name: 'Filosofía del Desarrollo Asistido por IA',
+      tagId: 'filosofía-del-desarrollo-asistido-por-ia',
+    },
+    { name: 'Instalación y Configuración', tagId: 'instalación-y-configuración' },
+    { name: 'Arquitectura Scope Rule', tagId: 'arquitectura-scope-rule' },
+    { name: 'Sistema de Subagentes', tagId: 'sistema-de-subagentes' },
+    { name: 'Proyecto Práctico - TaskFlow', tagId: 'proyecto-práctico---taskflow' },
+    { name: 'Workflow Tony Stark', tagId: 'workflow-tony-stark' },
+    { name: 'Scripts y Automatización', tagId: 'scripts-y-automatización' },
+    { name: 'Comandos de Referencia', tagId: 'comandos-de-referencia' },
+  ]
+---
+
+# Desarrollo Guiado por IA con Claude Code
+
+**Desarrolla en Producción como Tony Stark con su J.A.R.V.I.S.**
+
+Este capítulo te enseña a usar Claude Code con subagentes especializados para desarrollo profesional. El concepto central:
+
+- **Vos sos Tony Stark**: El arquitecto, tomás las decisiones
+- **Claude Code es Jarvis**: Tu asistente que orquesta todo
+- **Los Subagentes son tu equipo**: Especialistas en diferentes áreas
+
+## Filosofía del Desarrollo Asistido por IA
+
+**NO es**: "La IA programa por mí"  
+**SÍ es**: "Yo programo CON la IA"
+
+El control siempre lo tenés vos. La IA sugiere, vos decidís.
+
+## Instalación y Configuración
+
+### Prerrequisitos
+
+- Node.js 18+
+- Git
+- Una API key de Anthropic
+
+### Paso 1: Configurar API Key
+
+```bash
+# Variable de entorno
+export ANTHROPIC_API_KEY="tu-api-key-aquí"
+
+# O agregar permanentemente
+echo 'export ANTHROPIC_API_KEY="tu-api-key-aquí"' >> ~/.zshrc
+```
+
+### Paso 2: Iniciar Claude Code
+
+```bash
+# Navegar a tu proyecto
+cd /path/to/your/project
+
+# Iniciar Claude Code
+claude
+```
+
+### Paso 3: Iniciar Proyecto con el Arquitecto
+
+```
+> Use scope-rule-architect to create TaskFlow app structure with:
+- React 19, TypeScript, Vitest, ESLint, Prettier, Tailwind CSS
+- Features: task-management, project-filtering, export-functionality
+- Shared: components (Button, Modal, Badge), hooks (useLocalStorage), utils (formatters)
+- No backend required, localStorage only
+```
+
+Esto creará automáticamente:
+
+- La estructura de carpetas siguiendo Scope Rule
+- El archivo CLAUDE.md con el workflow
+- Instalación de todas las dependencias
+- Configuración de ESLint y Prettier
+
+## Arquitectura Scope Rule
+
+### Principios Fundamentales
+
+#### 1. Scope Rule - La Regla Inquebrantable
+
+**"El alcance determina la estructura"**
+
+- **Código usado por 2+ features** → Va en directorios globales/shared
+- **Código usado por 1 feature** → Se queda local en ese feature
+- **Sin excepciones** - Esta regla es estricta
+
+#### 2. Screaming Architecture - La Estructura que GRITA
+
+Tu estructura debe comunicar INMEDIATAMENTE qué hace la aplicación.
+
+✅ **BIEN - Grita funcionalidad:**
+```
+src/
+  features/
+    shopping-cart/        # ¡Es un carrito!
+    user-authentication/  # ¡Autenticación!
+    task-management/      # ¡Gestión de tareas!
+```
+
+❌ **MAL - Agrupación técnica:**
+```
+src/
+  components/  # ¿Qué hace la app?
+  containers/  # No dice nada
+  hooks/       # Puramente técnico
+```
+
+#### 3. Container/Presentational Pattern
+
+- **Containers**: Lógica de negocio, estado, data fetching
+- **Presentational**: Solo UI con props, componentes puros
+- El container principal tiene el MISMO NOMBRE que el feature
+
+### Framework de Decisión
+
+1. **Identificar alcance**: ¿Cuántos features lo usan?
+2. **Aplicar regla**: 1 feature = local, 2+ = global
+3. **Validar**: ¿La estructura grita qué hace la app?
+
+### Estructura Ejemplo
+
+```
+src/
+  features/
+    task-management/
+      task-management.tsx     # Container principal
+      components/
+        TaskList.tsx          # Container secundario
+        TaskItem.tsx          # Presentational
+      services/
+        TaskService.ts
+      hooks/
+        useTasks.ts
+      models.ts
+
+  shared/                     # GLOBAL = 2+ features
+    components/
+      Button.tsx
+      Modal.tsx
+    hooks/
+      useLocalStorage.ts
+    utils/
+      formatters.ts
+
+  infrastructure/             # Cross-cutting
+    api/
+    auth/
+    monitoring/
+```
+
+### Archivo CLAUDE.md
+
+```markdown
+# CLAUDE.md
+
+## Architecture: Scope Rule
+- **Global**: Used by 2+ features
+- **Local**: Used by 1 feature only
+
+## Tech Stack
+- React 19 + TypeScript
+- Zustand for state
+- React Query for server state
+- Tailwind CSS
+- Vitest + React Testing Library
+- ESLint + Prettier (auto-applied)
+
+## TDD Development Workflow
+
+### Phase 1: Architecture & Planning
+1. scope-rule-architect: Design structure - USE for new features
+2. react-mentor: Architectural guidance - USE for complex decisions
+3. git-workflow-manager: Commit - USE after each phase
+
+### Phase 2: Test-Driven Development
+4. tdd-test-first: Create tests - USE for each functionality
+5. git-workflow-manager: Commit RED phase
+6. react-test-implementer: Implement - USE after tests fail
+7. git-workflow-manager: Commit GREEN phase
+
+### Phase 3: Quality & Security
+8. security-auditor: Audit - USE before main merge
+9. git-workflow-manager: Commit fixes
+10. accessibility-auditor: WCAG - USE after UI complete
+11. git-workflow-manager: Commit improvements
+
+## Git Strategy (NO Claude mentions)
+- Architecture: "feat: add [feature] architecture"
+- Tests: "test: add [feature] tests (RED)"
+- Implementation: "feat: implement [feature] (GREEN)"
+- Security: "fix: security improvements"
+- A11Y: "feat: improve accessibility"
+
+## RULES
+- NEVER write code without concrete functionality
+- NEVER implement without failing tests
+- NEVER mention Claude in commits
+- ALWAYS apply ESLint + Prettier
+```
+
+## Sistema de Subagentes
+
+### Crear Subagentes con /agents
+
+```
+> /agents
+```
+
+Menú interactivo para:
+
+- Ver subagentes disponibles
+- Crear nuevos (automáticamente con descripciones)
+- Editar existentes
+- Eliminar custom agents
+
+### Modelos Recomendados
+
+- **scope-rule-architect**: `claude-opus-4.1` (decisiones críticas)
+- **react-mentor**: `claude-opus-4.1` (conocimiento profundo)
+- **security-auditor**: `claude-opus-4.1` (análisis exhaustivo)
+- **accessibility-auditor**: `claude-opus-4.1` (especialización WCAG)
+- **tdd-test-first**: `claude-4-sonnet` (generación de tests)
+- **react-test-implementer**: `claude-4-sonnet` (implementación)
+- **git-workflow-manager**: `claude-3-5-haiku` (commits simples)
+
+### Los 7 Agentes Principales
+
+#### 1. scope-rule-architect
+
+```
+Architecture specialist for Scope Rule. Decides component placement (global if 2+ features, local if 1).
+Creates project structure, installs React 19, TypeScript, Vitest, ESLint, Prettier.
+Container components must have same name as feature. Structure must scream functionality.
+USE WHEN: Starting new features or projects.
+```
+
+#### 2. react-mentor
+
+```
+React patterns expert. Provides guidance on architectural decisions, performance optimizations,
+and best practices. Knows React 19, TypeScript, hooks patterns, state management.
+USE WHEN: Complex architectural decisions needed.
+```
+
+#### 3. tdd-test-first
+
+```
+TDD specialist that ALWAYS writes tests FIRST. Creates comprehensive test suites with Vitest
+and React Testing Library. Tests must fail initially (RED phase). Covers happy paths,
+edge cases, error states. Tests based on concrete user stories and acceptance criteria.
+USE WHEN: Starting any new functionality (always before coding).
+```
+
+#### 4. react-test-implementer
+
+```
+Implementation specialist. Writes minimal code to pass ALL tests. Follows Container/Presentational
+pattern. Applies ESLint + Prettier automatically. Uses React 19, TypeScript, Zustand, React Query.
+USE WHEN: After tests are failing (RED phase complete).
+```
+
+#### 5. security-auditor
+
+```
+Security expert checking OWASP Top 10, XSS, CSRF, authentication issues. Reviews JWT implementation,
+input validation, API security. Runs npm audit. Checks for exposed secrets.
+USE WHEN: Before merging to main branch.
+```
+
+#### 6. accessibility-auditor
+
+```
+WCAG 2.1 AA compliance expert. Checks keyboard navigation, ARIA labels, screen reader support,
+color contrast. Global components must be perfect. Feature components follow semantic HTML.
+USE WHEN: After UI features are complete.
+```
+
+#### 7. git-workflow-manager
+
+```
+Git specialist for conventional commits. NEVER mentions Claude Code or AI collaboration.
+Uses format: feat|fix|test|docs|refactor|chore(scope): description.
+Creates professional PR descriptions. Manages semantic versioning.
+USE WHEN: After each development phase for commits.
+```
+
+## Proyecto Práctico - TaskFlow
+
+### Archivo de Especificaciones del Proyecto
+
+**IMPORTANTE**: Antes de empezar el desarrollo, creá un archivo `PROJECT_SPECS.md` con todas las especificaciones del proyecto. Este archivo es fundamental para que Claude Code y los subagentes tengan el contexto completo.
+
+#### Contenido del PROJECT_SPECS.md
+
+```markdown
+# TaskFlow - Project Specifications
+
+## Project Description
+TaskFlow is a personal task manager that allows organizing work with projects, priorities, and statuses. Everything is stored in localStorage.
+
+## User Stories
+
+### Epic 1: Basic Task Management
+
+#### US-001: View task list
+As a user, I want to see a list of tasks to know my pending work
+
+**Acceptance Criteria:**
+- Show empty list with "No hay tareas" message initially
+- Each task displays: title, priority (color badge), status
+- Tasks sorted by creation date (newest first)
+**Technical Notes:** Use mocked data initially
+
+#### US-002: Create new task
+As a user, I want to create a new task to add pending work
+
+**Acceptance Criteria:**
+- Form with fields: title (required, 3-100 chars), description (optional), priority (select: low/medium/high)
+- "Create" button disabled if title invalid
+- Task appears immediately in list after creation
+- Clear form after successful creation
+**Validations:** Title between 3-100 characters
+
+[... rest of user stories ...]
+
+## Data Structure
+Interface Task {
+  id: string;        // UUID
+  title: string;     // 3-100 chars
+  description?: string;
+  priority: 'low' | 'medium' | 'high';
+  status: 'TODO' | 'IN_PROGRESS' | 'DONE';
+  project: 'Personal' | 'Trabajo' | 'Estudio' | 'General';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+## Business Rules
+- Status transitions: TODO → IN_PROGRESS → DONE (and back)
+- Default project is "General"
+- Priority colors: low=green, medium=yellow, high=red
+- All data persisted to localStorage key: taskflow_tasks
+```
+
+### Usar el archivo en los comandos
+
+Cuando uses cualquier subagente, referenciá el archivo para dar contexto completo:
+
+```
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-002
+```
+
+O agregalo al CLAUDE.md para que siempre esté disponible:
+
+```markdown
+# CLAUDE.md
+
+## Project Context
+@PROJECT_SPECS.md contains all user stories and requirements
+
+[resto del contenido...]
+```
+
+### Descripción
+
+TaskFlow es un gestor de tareas personal que permite organizar trabajo con proyectos, prioridades y estados. Sin backend, todo en localStorage.
+
+### User Stories Completas
+
+#### Epic 1: Gestión Básica de Tareas
+
+**US-001: Como usuario, quiero ver una lista de tareas para conocer mis pendientes**
+
+- **Criterios de Aceptación:**
+  - Mostrar lista vacía con mensaje "No hay tareas" al inicio
+  - Cada tarea muestra: título, prioridad (badge color), estado
+  - Ordenar por fecha creación (más reciente primero)
+- **Notas técnicas**: Usar datos mockeados inicialmente
+
+**US-002: Como usuario, quiero crear una nueva tarea para agregar trabajo pendiente**
+
+- **Criterios de Aceptación:**
+  - Formulario: título (requerido, 3-100 chars), descripción (opcional), prioridad (select)
+  - Botón "Crear" deshabilitado si título inválido
+  - Tarea aparece inmediatamente en lista
+  - Limpiar formulario después de crear
+- **Validaciones**: Título entre 3-100 caracteres
+
+**US-003: Como usuario, quiero editar una tarea existente para corregir información**
+
+- **Criterios de Aceptación:**
+  - Botón "Editar" abre formulario con datos actuales
+  - Mismas validaciones que crear
+  - Botón "Guardar" actualiza tarea
+  - Botón "Cancelar" cierra sin guardar
+- **Notas**: Inline editing en la lista
+
+**US-004: Como usuario, quiero eliminar una tarea para remover trabajo completado**
+
+- **Criterios de Aceptación:**
+  - Botón "Eliminar" en cada tarea
+  - Confirmación: "¿Estás seguro?"
+  - Tarea se remueve inmediatamente
+- **UX**: Modal de confirmación
+
+#### Epic 2: Estados y Workflow
+
+**US-005: Como usuario, quiero cambiar el estado de una tarea para tracking de progreso**
+
+- **Criterios de Aceptación:**
+  - Estados: TODO → IN_PROGRESS → DONE
+  - Botón/Select para cambiar estado
+  - Visual diferenciado por estado
+  - Contador de tareas por estado
+- **Reglas**: Solo siguiente o anterior estado
+
+**US-006: Como usuario, quiero filtrar tareas por estado para focus específico**
+
+- **Criterios de Aceptación:**
+  - Tabs: "Todas", "Por hacer", "En progreso", "Completadas"
+  - Filtro inmediato
+  - Mantener filtro al crear/editar
+  - Mostrar count en cada tab
+- **Default**: "Todas" al cargar
+
+#### Epic 3: Proyectos
+
+**US-007: Como usuario, quiero organizar tareas en proyectos para mejor organización**
+
+- **Criterios de Aceptación:**
+  - Campo proyecto al crear/editar
+  - Proyectos: "Personal", "Trabajo", "Estudio", "General"
+  - Color distintivo por proyecto
+- **Visual**: Badge con color
+
+**US-008: Como usuario, quiero filtrar tareas por proyecto**
+
+- **Criterios de Aceptación:**
+  - Dropdown con proyectos
+  - Opción "Todos los proyectos"
+  - Combinar con filtro estado
+- **UX**: Filtros acumulativos
+
+#### Epic 4: Persistencia
+
+**US-009: Como usuario, quiero que mis tareas se guarden automáticamente**
+
+- **Criterios de Aceptación:**
+  - Guardar en localStorage después de cada operación
+  - Cargar tareas al iniciar
+  - Mensaje "Guardado" (2 segundos)
+- **Key**: `taskflow_tasks`
+
+**US-010: Como usuario, quiero exportar mis tareas para backup**
+
+- **Criterios de Aceptación:**
+  - Botón "Exportar" descarga JSON
+  - Nombre: `taskflow_backup_YYYY-MM-DD.json`
+  - Incluir metadata
+- **Formato**: JSON indentado
+
+### Estructura de Datos
+
+```typescript
+interface Task {
+  id: string;         // UUID
+  title: string;      // 3-100 chars
+  description?: string;
+  priority: 'low' | 'medium' | 'high';
+  status: 'TODO' | 'IN_PROGRESS' | 'DONE';
+  project: 'Personal' | 'Trabajo' | 'Estudio' | 'General';
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+### Plan de Iteraciones - Workflow Completo
+
+#### Iteración 1: Setup (US-001 parcial)
+
+```
+> Use scope-rule-architect to create initial structure
+> Use git-workflow-manager to commit
+COMMIT: feat: initial project setup with routing
+```
+
+#### Iteración 2: Lista de Tareas (US-001)
+
+```
+# RED Phase - Tests
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-001
+> Use git-workflow-manager to commit
+COMMIT: test: add TaskList tests (RED)
+
+# GREEN Phase - Implementation
+> Use react-test-implementer to make tests pass
+> Use git-workflow-manager to commit
+COMMIT: feat: implement TaskList (GREEN)
+
+# Security Check
+> Use security-auditor to check TaskList
+IF issues found:
+  > Use tdd-test-first to update tests with security requirements
+  > Use react-test-implementer to fix security issues
+  > Use git-workflow-manager to commit
+  COMMIT: fix: security improvements for TaskList
+
+# Accessibility Check
+> Use accessibility-auditor to check TaskList
+IF issues found:
+  > Use tdd-test-first to update tests with a11y requirements
+  > Use react-test-implementer to fix a11y issues
+  > Use git-workflow-manager to commit
+  COMMIT: feat: improve TaskList accessibility
+```
+
+#### Iteración 3: Crear Tarea (US-002)
+
+```
+# RED Phase
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-002
+> Use git-workflow-manager to commit
+COMMIT: test: add CreateTask tests (RED)
+
+# GREEN Phase
+> Use react-test-implementer to make tests pass
+> Use git-workflow-manager to commit
+COMMIT: feat: implement CreateTask form (GREEN)
+
+# Security Check
+> Use security-auditor to check CreateTask
+IF issues found:
+  > Use tdd-test-first to update tests
+  > Use react-test-implementer to fix issues
+  > Use git-workflow-manager to commit
+  COMMIT: fix: security improvements for CreateTask
+
+# Accessibility Check
+> Use accessibility-auditor to check CreateTask
+IF issues found:
+  > Use tdd-test-first to update tests
+  > Use react-test-implementer to fix issues
+  > Use git-workflow-manager to commit
+  COMMIT: feat: improve CreateTask accessibility
+```
+
+#### Iteración 4: Editar Tarea (US-003)
+
+```
+# RED Phase
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-003
+> Use git-workflow-manager to commit
+COMMIT: test: add EditTask tests (RED)
+
+# GREEN Phase
+> Use react-test-implementer to make tests pass
+> Use git-workflow-manager to commit
+COMMIT: feat: implement task editing (GREEN)
+
+# Security & A11Y Checks (mismo proceso)
+```
+
+#### Iteración 5: Eliminar Tarea (US-004)
+
+```
+# RED Phase
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-004
+> Use git-workflow-manager to commit
+COMMIT: test: add DeleteTask tests (RED)
+
+# GREEN Phase
+> Use react-test-implementer to make tests pass
+> Use git-workflow-manager to commit
+COMMIT: feat: implement task deletion (GREEN)
+
+# Security & A11Y Checks (mismo proceso)
+```
+
+#### Iteración 6: Estados (US-005)
+
+```
+# RED Phase
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-005
+> Use git-workflow-manager to commit
+COMMIT: test: add status workflow tests (RED)
+
+# GREEN Phase
+> Use react-test-implementer to make tests pass
+> Use git-workflow-manager to commit
+COMMIT: feat: implement status workflow (GREEN)
+
+# Security & A11Y Checks (mismo proceso)
+```
+
+#### Iteración 7: Filtro Estado (US-006)
+
+```
+# RED Phase
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-006
+> Use git-workflow-manager to commit
+COMMIT: test: add status filter tests (RED)
+
+# GREEN Phase
+> Use react-test-implementer to make tests pass
+> Use git-workflow-manager to commit
+COMMIT: feat: implement status filtering (GREEN)
+
+# Security & A11Y Checks (mismo proceso)
+```
+
+#### Iteración 8: Proyectos (US-007, US-008)
+
+```
+# RED Phase
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-007 and US-008
+> Use git-workflow-manager to commit
+COMMIT: test: add project tests (RED)
+
+# GREEN Phase
+> Use react-test-implementer to make tests pass
+> Use git-workflow-manager to commit
+COMMIT: feat: implement projects (GREEN)
+
+# Security & A11Y Checks (mismo proceso)
+```
+
+#### Iteración 9: Persistencia (US-009)
+
+```
+# RED Phase
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-009
+> Use git-workflow-manager to commit
+COMMIT: test: add persistence tests (RED)
+
+# GREEN Phase
+> Use react-test-implementer to make tests pass
+> Use git-workflow-manager to commit
+COMMIT: feat: implement auto-save (GREEN)
+
+# Security Check (localStorage XSS prevention)
+> Use security-auditor to check persistence
+IF issues found:
+  > Use tdd-test-first to update tests
+  > Use react-test-implementer to fix issues
+  > Use git-workflow-manager to commit
+  COMMIT: fix: secure localStorage implementation
+```
+
+#### Iteración 10: Export (US-010)
+
+```
+# RED Phase
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-010
+> Use git-workflow-manager to commit
+COMMIT: test: add export tests (RED)
+
+# GREEN Phase
+> Use react-test-implementer to make tests pass
+> Use git-workflow-manager to commit
+COMMIT: feat: implement JSON export (GREEN)
+
+# Security & A11Y Checks (mismo proceso)
+```
+
+#### Iteración 11: Final Security & A11Y Audit
+
+```
+# Full Application Audit
+> Use security-auditor to audit entire application
+> Use accessibility-auditor for full WCAG compliance check
+
+IF any issues found:
+  > Use tdd-test-first to create/update tests for the issues
+  > Use react-test-implementer to fix all issues
+  > Use git-workflow-manager to commit
+  COMMIT: fix: final security and accessibility improvements
+```
+
+### Regla Importante del Workflow
+
+**NUNCA modificar código directamente sin actualizar tests primero**
+
+Si security o a11y encuentran problemas:
+
+1. Primero actualizar/crear tests que capturen el problema
+2. Luego modificar el código para que pasen los tests
+3. Commit después de cada cambio
+
+Esto garantiza que:
+
+- Los tests siempre reflejan los requerimientos actuales
+- No se introducen regresiones
+- Security y a11y quedan testeados para el futuro
+
+## Workflow Tony Stark
+
+### El Loop Completo
+
+```
+Tony (define) → Jarvis (orchestrate) → Agents (execute) → Review → Iterate
+```
+
+### Ejemplo Completo: Implementar US-002 (Crear Tarea)
+
+#### ACTO 1: Tony Planifica
+
+```
+> I need to implement US-002 from the project specs
+```
+
+#### ACTO 2: TDD - Tests Primero
+
+```
+> @PROJECT_SPECS.md Use tdd-test-first to create tests for US-002
+```
+
+El subagente leerá los criterios de aceptación directamente del archivo y creará los tests apropiados.
+
+#### ACTO 3: Commit Tests (RED)
+
+```
+> Use git-workflow-manager to commit tests
+```
+
+Resultado: `test: add CreateTask form tests (RED)`
+
+#### ACTO 4: Implementación
+
+```
+> Use react-test-implementer to implement CreateTask to pass all tests
+```
+
+El subagente ya sabe qué implementar porque tiene los tests fallando.
+
+#### ACTO 5: Commit Implementación (GREEN)
+
+```
+> Use git-workflow-manager to commit implementation
+```
+
+Resultado: `feat: implement CreateTask form (GREEN)`
+
+#### ACTO 6: Security & Accessibility
+
+```
+> Use security-auditor to check CreateTask
+> Use accessibility-auditor to verify WCAG compliance
+```
+
+La clave es que con `@PROJECT_SPECS.md` cada subagente tiene todo el contexto necesario sin necesidad de repetir los requerimientos en cada comando.
+
+## Scripts y Automatización
+
+### Package.json
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "lint": "eslint . --ext ts,tsx",
+    "format": "prettier --write .",
+
+    // Claude workflows
+    "ai:architect": "echo 'Use scope-rule-architect' | claude",
+    "ai:test": "echo 'Use tdd-test-first' | claude",
+    "ai:implement": "echo 'Use react-test-implementer' | claude",
+    "ai:security": "echo 'Use security-auditor' | claude",
+    "ai:a11y": "echo 'Use accessibility-auditor' | claude",
+
+    // Full workflow
+    "ai:feature": "npm run ai:test && npm run ai:implement"
+  }
+}
+```
+
+### Comandos Slash Personalizados
+
+```bash
+# Crear comando para optimización
+echo "Analyze performance and suggest optimizations" > .claude/commands/optimize.md
+
+# Usar en Claude Code
+> /optimize
+```
+
+## Comandos de Referencia
+
+### Claude Code Básicos
+
+```bash
+# Iniciar
+claude
+
+# Continuar conversación
+claude --continue
+
+# Selector de conversaciones
+claude --resume
+
+# Output formats
+claude --output-format json
+```
+
+### Dentro de Claude Code
+
+```bash
+# Gestionar agentes
+> /agents
+
+# Referenciar archivos
+> @src/components/TaskList.tsx
+
+# Thinking profundo
+> Think deeply about [topic]
+
+# Usar agente específico
+> Use the [agent-name] subagent to [task]
+```
+
+## Tips y Best Practices
+
+### Para User Stories
+
+✅ **Definir criterios de aceptación claros** ✅ **Incluir validaciones específicas** ✅ **Una funcionalidad concreta por iteración**
+
+### Para TDD
+
+✅ **Tests primero, código después** ✅ **Commit en cada fase (RED, GREEN)** ✅ **Tests basados en criterios de aceptación**
+
+### Para Commits
+
+✅ **Conventional commits siempre** ✅ **NUNCA mencionar Claude o IA** ✅ **Un commit por fase del workflow**
+
+### Para Arquitectura
+
+✅ **Scope Rule estricta: 2+ = global, 1 = local** ✅ **Nombres que griten funcionalidad** ✅ **Container = mismo nombre que feature**
+
+## Conclusión
+
+Con este sistema tenés:
+
+1. **Control Total**: Vos decidís, la IA ejecuta
+2. **7 Agentes Especializados**: Cada uno experto en su área
+3. **Workflow TDD Real**: Tests → Implementation → Security → A11Y
+4. **Arquitectura Clara**: Scope Rule simple y efectiva
+5. **User Stories Concretas**: Como en Jira, con criterios claros
+
+El resultado es código profesional, testeado, seguro y accesible desde el día uno.
+
+*"Sometimes you gotta run before you can walk"* - Tony Stark
+
+Pero con este sistema, vas a correr con tests, seguridad y accesibilidad garantizados.
+
+---
+
+© 2025 - Gentleman Programming  
+*Clean Architecture + IA = Desarrollo Profesional*
