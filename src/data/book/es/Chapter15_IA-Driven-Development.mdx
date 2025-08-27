@@ -65,7 +65,7 @@ claude
 
 ### Paso 3: Iniciar Proyecto con el Arquitecto
 
-```
+```bash
 > Use scope-rule-architect to create TaskFlow app structure with:
 - React 19, TypeScript, Vitest, ESLint, Prettier, Tailwind CSS
 - Features: task-management, project-filtering, export-functionality
@@ -97,7 +97,7 @@ Esto creará automáticamente:
 Tu estructura debe comunicar INMEDIATAMENTE qué hace la aplicación.
 
 ✅ **BIEN - Grita funcionalidad:**
-```
+```bash
 src/
   features/
     shopping-cart/        # ¡Es un carrito!
@@ -106,7 +106,7 @@ src/
 ```
 
 ❌ **MAL - Agrupación técnica:**
-```
+```bash
 src/
   components/  # ¿Qué hace la app?
   containers/  # No dice nada
@@ -127,7 +127,7 @@ src/
 
 ### Estructura Ejemplo
 
-```
+```bash
 src/
   features/
     task-management/
@@ -210,7 +210,7 @@ src/
 
 ### Crear Subagentes con /agents
 
-```
+```bash
 > /agents
 ```
 
@@ -235,7 +235,7 @@ Menú interactivo para:
 
 #### 1. scope-rule-architect
 
-```
+```bash
 Architecture specialist for Scope Rule. Decides component placement (global if 2+ features, local if 1).
 Creates project structure, installs React 19, TypeScript, Vitest, ESLint, Prettier.
 Container components must have same name as feature. Structure must scream functionality.
@@ -244,7 +244,7 @@ USE WHEN: Starting new features or projects.
 
 #### 2. react-mentor
 
-```
+```bash
 React patterns expert. Provides guidance on architectural decisions, performance optimizations,
 and best practices. Knows React 19, TypeScript, hooks patterns, state management.
 USE WHEN: Complex architectural decisions needed.
@@ -252,7 +252,7 @@ USE WHEN: Complex architectural decisions needed.
 
 #### 3. tdd-test-first
 
-```
+```bash
 TDD specialist that ALWAYS writes tests FIRST. Creates comprehensive test suites with Vitest
 and React Testing Library. Tests must fail initially (RED phase). Covers happy paths,
 edge cases, error states. Tests based on concrete user stories and acceptance criteria.
@@ -261,7 +261,7 @@ USE WHEN: Starting any new functionality (always before coding).
 
 #### 4. react-test-implementer
 
-```
+```bash
 Implementation specialist. Writes minimal code to pass ALL tests. Follows Container/Presentational
 pattern. Applies ESLint + Prettier automatically. Uses React 19, TypeScript, Zustand, React Query.
 USE WHEN: After tests are failing (RED phase complete).
@@ -269,7 +269,7 @@ USE WHEN: After tests are failing (RED phase complete).
 
 #### 5. security-auditor
 
-```
+```bash
 Security expert checking OWASP Top 10, XSS, CSRF, authentication issues. Reviews JWT implementation,
 input validation, API security. Runs npm audit. Checks for exposed secrets.
 USE WHEN: Before merging to main branch.
@@ -277,7 +277,7 @@ USE WHEN: Before merging to main branch.
 
 #### 6. accessibility-auditor
 
-```
+```bash
 WCAG 2.1 AA compliance expert. Checks keyboard navigation, ARIA labels, screen reader support,
 color contrast. Global components must be perfect. Feature components follow semantic HTML.
 USE WHEN: After UI features are complete.
@@ -285,7 +285,7 @@ USE WHEN: After UI features are complete.
 
 #### 7. git-workflow-manager
 
-```
+```bash
 Git specialist for conventional commits. NEVER mentions Claude Code or AI collaboration.
 Uses format: feat|fix|test|docs|refactor|chore(scope): description.
 Creates professional PR descriptions. Manages semantic versioning.
@@ -354,7 +354,7 @@ Interface Task {
 
 Cuando uses cualquier subagente, referenciá el archivo para dar contexto completo:
 
-```
+```bash
 > @PROJECT_SPECS.md Use tdd-test-first to create tests for US-002
 ```
 
@@ -486,7 +486,7 @@ interface Task {
 
 #### Iteración 1: Setup (US-001 parcial)
 
-```
+```bash
 > Use scope-rule-architect to create initial structure
 > Use git-workflow-manager to commit
 COMMIT: feat: initial project setup with routing
@@ -494,7 +494,7 @@ COMMIT: feat: initial project setup with routing
 
 #### Iteración 2: Lista de Tareas (US-001)
 
-```
+```bash
 # RED Phase - Tests
 > @PROJECT_SPECS.md Use tdd-test-first to create tests for US-001
 > Use git-workflow-manager to commit
@@ -524,7 +524,7 @@ IF issues found:
 
 #### Iteración 3: Crear Tarea (US-002)
 
-```
+```bash
 # RED Phase
 > @PROJECT_SPECS.md Use tdd-test-first to create tests for US-002
 > Use git-workflow-manager to commit
@@ -554,7 +554,7 @@ IF issues found:
 
 #### Iteración 4: Editar Tarea (US-003)
 
-```
+```bash
 # RED Phase
 > @PROJECT_SPECS.md Use tdd-test-first to create tests for US-003
 > Use git-workflow-manager to commit
@@ -672,7 +672,7 @@ COMMIT: feat: implement JSON export (GREEN)
 
 #### Iteración 11: Final Security & A11Y Audit
 
-```
+```bash
 # Full Application Audit
 > Use security-auditor to audit entire application
 > Use accessibility-auditor for full WCAG compliance check
@@ -704,7 +704,7 @@ Esto garantiza que:
 
 ### El Loop Completo
 
-```
+```bash
 Tony (define) → Jarvis (orchestrate) → Agents (execute) → Review → Iterate
 ```
 
@@ -712,13 +712,13 @@ Tony (define) → Jarvis (orchestrate) → Agents (execute) → Review → Itera
 
 #### ACTO 1: Tony Planifica
 
-```
+```bash
 > I need to implement US-002 from the project specs
 ```
 
 #### ACTO 2: TDD - Tests Primero
 
-```
+```bash
 > @PROJECT_SPECS.md Use tdd-test-first to create tests for US-002
 ```
 
