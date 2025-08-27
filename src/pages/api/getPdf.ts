@@ -28,6 +28,7 @@ export default async function handler(
 		'http://localhost:3000/book/Chapter12_Angular',
 		'http://localhost:3000/book/Chapter13_Barrels',
 		'http://localhost:3000/book/Chapter14_FrontEndHistory',
+		'http://localhost:3000/book/Chapter15_IA-Driven-Development',
 	];
 
 	const pageListSpanish = [
@@ -46,6 +47,7 @@ export default async function handler(
 		'http://localhost:3000/es/book/Chapter12_Angular',
 		'http://localhost:3000/es/book/Chapter13_Barrels',
 		'http://localhost:3000/es/book/Chapter14_FrontEndHistory',
+		'http://localhost:3000/es/book/Chapter15_IA-Driven-Development',
 	];
 
 	const browser = await P.chromium.launch({ headless: true });
