@@ -1,41 +1,15 @@
-import fs from 'fs';
+import { readdir, writeFile } from 'fs/promises';
+import path from 'path';
 import { NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
-import P from 'playwright';
+import { chromium, Page, BrowserContext } from 'playwright';
 
-const BASE_URL = 'http://localhost:3000';
-
-const CHAPTERS = [
-	'Chapter01_Clean-Agile',
-	'Chapter02_Communication-First-and-Foremost',
-	'Chapter03_Hexagonal_Architecture',
-	'Chapter04_GoLang',
-	'Chapter05_NVIM',
-	'Chapter06_Algorithms',
-	'Chapter07_Clean_Architecture',
-	'Chapter08_Clean_Architecture_Front_End',
-	'Chapter09_React',
-	'Chapter10_TypeScript',
-	'Chapter11_FrontEndRadar',
-	'Chapter12_Angular',
-	'Chapter13_Barrels',
-	'Chapter14_FrontEndHistory',
-	'Chapter15_IA-Driven-Development',
-	'Chapter16_Frontend-Manual',
-	'Chapter17_Soft-Skills',
-	'Chapter18_Software-Architecture',
-];
-
-function getPageList(locale: string) {
-	const prefix = locale === 'en' ? '/en' : '/es';
-	return [
-		`${BASE_URL}${prefix}`,
-		...CHAPTERS.map(chapter => `${BASE_URL}${prefix}/book/${chapter}`),
-	];
-}
+const BASE_URL = process.env.PDF_BASE_URL || 'http://localhost:3000';
+const CHAPTERS_DIR = path.join(process.cwd(), 'src/data/book/en');
 
 const STYLE_HOME = `
 	header, footer, hr { display: none !important; }
+	[data-testid="download-btn"], [data-testid="start-reading-btn"] { display: none !important; }
 `;
 
 const STYLE_CHAPTER = `
@@ -47,8 +21,8 @@ const STYLE_CHAPTER = `
 	#__next-build-watcher, #__next-prerender-indicator { display: none !important; }
 `;
 
-const PDF_OPTIONS: Parameters<P.Page['pdf']>[0] = {
-	format: 'A4',
+const PDF_OPTIONS = {
+	format: 'A4' as const,
 	printBackground: true,
 	displayHeaderFooter: false,
 	scale: 0.8,
@@ -60,100 +34,136 @@ const PDF_OPTIONS: Parameters<P.Page['pdf']>[0] = {
 	},
 };
 
-async function processPdfList(
-	context: P.BrowserContext,
-	list: string[],
-): Promise<Uint8Array[]> {
-	return Promise.all(
-		list.map(async (url, idx) => {
-			const page = await context.newPage();
-			await page.goto(url);
-			await page.emulateMedia({ media: 'screen' });
+async function getChapterList(): Promise<string[]> {
+	const files = await readdir(CHAPTERS_DIR);
+	return files
+		.filter(f => f.endsWith('.mdx'))
+		.map(f => f.replace('.mdx', ''))
+		.sort((a, b) => {
+			const numA = parseInt(a.match(/Chapter(\d+)/)?.[1] || '0');
+			const numB = parseInt(b.match(/Chapter(\d+)/)?.[1] || '0');
+			return numA - numB;
+		});
+}
 
-			if (idx === 0) {
-				await page.addStyleTag({ content: STYLE_HOME });
+function getPageUrls(locale: string, chapters: string[]): string[] {
+	const prefix = `/${locale}`;
+	return [
+		`${BASE_URL}${prefix}`,
+		...chapters.map(chapter => `${BASE_URL}${prefix}/book/${chapter}`),
+	];
+}
 
-				// Open all chapters
-				const buttonList = await page
-					.getByRole('main')
-					.getByRole('button')
-					.all();
-				await Promise.all(
-					buttonList.map(async btn => await btn.dispatchEvent('click')),
-				);
+async function processHomePage(page: Page): Promise<void> {
+	await page.addStyleTag({ content: STYLE_HOME });
 
-				// Disable all links
-				const linkList = await page.getByRole('main').getByRole('link').all();
-				await Promise.all(
-					linkList.map(async link => {
-						await link.evaluate((node: HTMLAnchorElement) => (node.href = '#'));
-					}),
-				);
+	// Open all accordion chapters
+	const buttons = await page.getByRole('main').getByRole('button').all();
+	await Promise.all(buttons.map(btn => btn.dispatchEvent('click')));
 
-				// Hide Download button
-				const downloadBtn = page.getByText(/download/i);
-				if ((await downloadBtn.count()) > 0) {
-					await downloadBtn.evaluate((node: HTMLButtonElement) => {
-						node.style.display = 'none';
-					});
-				}
-
-				// Hide Start Reading button
-				const startBtn = page.getByText(/start reading/i);
-				if ((await startBtn.count()) > 0) {
-					await startBtn.evaluate((node: HTMLButtonElement) => {
-						node.style.display = 'none';
-					});
-				}
-			} else {
-				await page.addStyleTag({ content: STYLE_CHAPTER });
-			}
-
-			await page.waitForTimeout(1500);
-			return page.pdf(PDF_OPTIONS);
-		}),
+	// Disable all links to prevent navigation
+	const links = await page.getByRole('main').getByRole('link').all();
+	await Promise.all(
+		links.map(link =>
+			link.evaluate((node: HTMLAnchorElement) => {
+				node.href = '#';
+			}),
+		),
 	);
 }
 
-async function mergePdfBuffers(buffers: Uint8Array[]): Promise<Uint8Array> {
-	const mergedPdf = await PDFDocument.create();
+async function processChapterPage(page: Page): Promise<void> {
+	await page.addStyleTag({ content: STYLE_CHAPTER });
+}
 
-	for (const buffer of buffers) {
+async function generatePdfForPage(
+	context: BrowserContext,
+	url: string,
+	isHomePage: boolean,
+): Promise<Uint8Array> {
+	const page = await context.newPage();
+
+	try {
+		await page.goto(url, { waitUntil: 'networkidle' });
+		await page.emulateMedia({ media: 'screen' });
+
+		if (isHomePage) {
+			await processHomePage(page);
+		} else {
+			await processChapterPage(page);
+		}
+
+		// Wait for fonts and images to load
+		await page.waitForTimeout(1000);
+
+		return await page.pdf(PDF_OPTIONS);
+	} finally {
+		await page.close();
+	}
+}
+
+async function generatePdfForLocale(
+	context: BrowserContext,
+	locale: string,
+	chapters: string[],
+): Promise<Uint8Array> {
+	const urls = getPageUrls(locale, chapters);
+	const pdfBuffers: Uint8Array[] = [];
+
+	// Process pages sequentially to avoid memory issues
+	for (let i = 0; i < urls.length; i++) {
+		const buffer = await generatePdfForPage(context, urls[i], i === 0);
+		pdfBuffers.push(buffer);
+		console.log(`[PDF] ${locale}: ${i + 1}/${urls.length} pages processed`);
+	}
+
+	// Merge all PDFs
+	const mergedPdf = await PDFDocument.create();
+	for (const buffer of pdfBuffers) {
 		const pdf = await PDFDocument.load(buffer);
-		const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-		copiedPages.forEach(page => mergedPdf.addPage(page));
+		const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+		pages.forEach(page => mergedPdf.addPage(page));
 	}
 
 	return mergedPdf.save();
 }
 
 export async function GET() {
+	const startTime = Date.now();
+
 	try {
-		const browser = await P.chromium.launch({ headless: true });
+		const chapters = await getChapterList();
+		console.log(`[PDF] Found ${chapters.length} chapters`);
+
+		const browser = await chromium.launch({ headless: true });
 		const context = await browser.newContext({
 			viewport: { width: 1280, height: 720 },
 		});
 
-		// Generate English PDF
-		const englishPages = getPageList('en');
-		const englishPdfList = await processPdfList(context, englishPages);
-		const englishMerged = await mergePdfBuffers(englishPdfList);
-		fs.writeFileSync('public/gentleman-programming-book.pdf', englishMerged);
+		// Generate both PDFs
+		const [englishPdf, spanishPdf] = await Promise.all([
+			generatePdfForLocale(context, 'en', chapters),
+			generatePdfForLocale(context, 'es', chapters),
+		]);
 
-		// Generate Spanish PDF
-		const spanishPages = getPageList('es');
-		const spanishPdfList = await processPdfList(context, spanishPages);
-		const spanishMerged = await mergePdfBuffers(spanishPdfList);
-		fs.writeFileSync(
-			'public/es/gentleman-programming-book-es.pdf',
-			spanishMerged,
-		);
+		// Write files
+		await Promise.all([
+			writeFile('public/gentleman-programming-book.pdf', englishPdf),
+			writeFile('public/es/gentleman-programming-book-es.pdf', spanishPdf),
+		]);
 
 		await browser.close();
 
-		return NextResponse.json({ status: 'ok' });
+		const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+		console.log(`[PDF] Generation completed in ${duration}s`);
+
+		return NextResponse.json({
+			status: 'ok',
+			chapters: chapters.length,
+			duration: `${duration}s`,
+		});
 	} catch (error) {
-		console.error('PDF generation failed:', error);
+		console.error('[PDF] Generation failed:', error);
 		return NextResponse.json(
 			{ status: 'error', message: String(error) },
 			{ status: 500 },
