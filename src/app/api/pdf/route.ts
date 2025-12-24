@@ -9,8 +9,6 @@ const CHAPTERS_DIR = path.join(process.cwd(), 'src/data/book/en');
 
 const STYLE_HOME = `
 	header, footer, hr { display: none !important; }
-	/* Hide hero buttons (Start reading / Download) - they use heroButton class from vanilla-extract */
-	.hero a[href], .hero a[download] { display: none !important; }
 	/* Hide Next.js dev indicators */
 	nextjs-portal, #__next-build-watcher, #__next-prerender-indicator { display: none !important; }
 	[data-nextjs-toast], [data-nextjs-dialog], [data-nextjs-dialog-overlay] { display: none !important; }
@@ -93,6 +91,22 @@ async function hideNextDevIndicators(page: Page): Promise<void> {
 async function processHomePage(page: Page): Promise<void> {
 	await page.addStyleTag({ content: STYLE_HOME });
 	await hideNextDevIndicators(page);
+
+	// Remove hero buttons (Start reading / Download) - they're before <main>
+	// We do this via JS because vanilla-extract generates dynamic class names
+	await page.evaluate(() => {
+		// Find and remove links that contain "reading" or "Download" text (the hero buttons)
+		document.querySelectorAll('a').forEach(el => {
+			const text = el.textContent?.toLowerCase() || '';
+			if (
+				text.includes('reading') ||
+				text.includes('download') ||
+				text.includes('continue')
+			) {
+				el.remove();
+			}
+		});
+	});
 
 	// Open all accordion chapters to show the full TOC
 	const buttons = await page.getByRole('main').getByRole('button').all();
