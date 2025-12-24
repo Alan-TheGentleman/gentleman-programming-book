@@ -1,8 +1,8 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { Svg } from '@/shared/components/Svg';
 
-export const MenuIcon: React.FC = () => {
+export const MenuIcon: FC = () => {
 	return (
 		<Svg
 			width='1em'

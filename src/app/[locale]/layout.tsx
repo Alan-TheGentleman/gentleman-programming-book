@@ -1,11 +1,6 @@
 import { notFound } from 'next/navigation';
 
-export const LOCALES = ['en', 'es'] as const;
-export type Locale = (typeof LOCALES)[number];
-
-function isValidLocale(locale: string): locale is Locale {
-	return LOCALES.includes(locale as Locale);
-}
+import { isValidLocale, LOCALES } from '@/src/lib/i18n';
 
 interface LocaleLayoutProps {
 	children: React.ReactNode;

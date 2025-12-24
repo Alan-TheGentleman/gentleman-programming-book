@@ -1,8 +1,8 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { Svg } from '@/shared/components/Svg';
 
-export const ZoomOutText: React.FC = () => {
+export const ZoomOutText: FC = () => {
 	return (
 		<Svg
 			width='1em'

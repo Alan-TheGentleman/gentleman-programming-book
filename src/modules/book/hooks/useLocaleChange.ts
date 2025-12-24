@@ -1,11 +1,12 @@
-import { useRouter } from 'next/router';
-import React from 'react';
+import { useParams } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
 export function useIsLocaleChange() {
-	const { locale } = useRouter();
-	const prevLocale = React.useRef(locale);
+	const params = useParams();
+	const locale = params?.locale as string | undefined;
+	const prevLocale = useRef(locale);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (locale === prevLocale.current) return;
 
 		prevLocale.current = locale;

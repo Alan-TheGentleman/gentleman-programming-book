@@ -4,7 +4,7 @@ import rehypeSlug from 'rehype-slug';
 
 import { Heading, Icon, MustachiIcon, Text } from '@/shared/components';
 
-import * as MDXRemoteCss from '@/book/components/MDXRemote/MDXRemote.css';
+import * as MDXRemoteCss from '@/book/styles/mdx.css';
 
 interface ChapterMDXContentProps {
 	source: string;

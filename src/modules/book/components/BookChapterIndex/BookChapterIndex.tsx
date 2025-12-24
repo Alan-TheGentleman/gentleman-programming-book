@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import { FC } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 
 import { BookChapter } from '@/book/models/bookContent';
@@ -25,7 +25,7 @@ type BookChapterIndexProps = AccordionProps & {
 	localStorageService?: LocalStorageService;
 };
 
-export const BookChapterIndex: React.FC<BookChapterIndexProps> = ({
+export const BookChapterIndex: FC<BookChapterIndexProps> = ({
 	items,
 	className,
 	localStorageService = MyLocalStorageService(),

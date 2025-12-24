@@ -1,16 +1,16 @@
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import React from 'react';
+import { FC, ReactElement, ReactNode } from 'react';
 
 import * as AccordionCss from './Accordion.css';
 
 type AccordionItemProps = {
 	className?: string;
-	trigger: React.ReactNode;
-	panel?: React.ReactElement;
+	trigger: ReactNode;
+	panel?: ReactElement;
 	value: string;
 } & Parameters<typeof AccordionPrimitive.Item>['0'];
 
-export const AccordionItem: React.FC<AccordionItemProps> = ({
+export const AccordionItem: FC<AccordionItemProps> = ({
 	className = '',
 	trigger,
 	panel,

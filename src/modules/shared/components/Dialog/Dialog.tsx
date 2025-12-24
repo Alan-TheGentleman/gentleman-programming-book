@@ -1,6 +1,6 @@
 import * as DialogPrimitives from '@radix-ui/react-dialog';
 import clsx from 'clsx';
-import React from 'react';
+import { FC, ReactElement } from 'react';
 import { VscChromeClose } from 'react-icons/vsc';
 
 import { IconButton } from '@/shared/components';
@@ -8,14 +8,14 @@ import { IconButton } from '@/shared/components';
 import * as DialogCss from './Dialog.css';
 
 type DialogProps = {
-	trigger: React.ReactElement;
-	title?: React.ReactElement;
-	description?: React.ReactElement;
-	body: React.ReactElement;
+	trigger: ReactElement;
+	title?: ReactElement;
+	description?: ReactElement;
+	body: ReactElement;
 	classNameContent?: string;
 } & DialogPrimitives.DialogProps;
 
-export const Dialog: React.FC<DialogProps> = ({
+export const Dialog: FC<DialogProps> = ({
 	trigger,
 	title,
 	description,

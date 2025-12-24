@@ -1,8 +1,8 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { Svg } from '@/shared/components/Svg';
 
-export const InstagramIcon: React.FC = () => {
+export const InstagramIcon: FC = () => {
 	return (
 		<Svg
 			width='1em'

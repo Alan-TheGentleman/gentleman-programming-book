@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import React from 'react';
+import { ComponentProps, FC } from 'react';
 
 import * as HrCss from './Hr.css';
 
-type HrProps = HrCss.HrVariants & React.ComponentProps<'hr'>;
+type HrProps = HrCss.HrVariants & ComponentProps<'hr'>;
 
-export const Hr: React.FC<HrProps> = ({
+export const Hr: FC<HrProps> = ({
 	colorScheme,
 	className,
 	...props

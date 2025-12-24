@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import React from 'react';
+import { ComponentProps } from 'react';
 
 import * as HeadingCss from './Heading.css';
 
@@ -10,8 +10,8 @@ type HeadingProps<T extends Tag> = {
 	component?: T;
 } & HeadingCss.HeadingVariants &
 	(T extends 'a'
-		? React.ComponentProps<'a'> & Parameters<typeof Link>['0']
-		: React.ComponentProps<T>);
+		? ComponentProps<'a'> & Parameters<typeof Link>['0']
+		: ComponentProps<T>);
 
 export function Heading<T extends Tag>({
 	component,

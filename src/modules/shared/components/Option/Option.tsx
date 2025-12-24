@@ -1,24 +1,24 @@
 import * as SelectPrimitives from '@radix-ui/react-select';
 import clsx from 'clsx';
-import React from 'react';
+import { forwardRef, ReactNode, Ref } from 'react';
 import { FiCheck as CheckIcon } from 'react-icons/fi';
 
 import * as OptionCss from './Option.css';
 
 type Props = {
-	children: React.ReactNode;
+	children: ReactNode;
 	value: string;
 	className?: string;
 };
 
-export const Option = React.forwardRef(function Option(
+export const Option = forwardRef(function Option(
 	{
 		children,
 		value,
 		className,
 		colorScheme,
 	}: Props & OptionCss.CheckItemVariants,
-	ref: React.Ref<HTMLDivElement> | undefined,
+	ref: Ref<HTMLDivElement> | undefined,
 ) {
 	return (
 		<SelectPrimitives.SelectItem
