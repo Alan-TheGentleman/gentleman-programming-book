@@ -10,6 +10,10 @@ const CHAPTERS_DIR = path.join(process.cwd(), 'src/data/book/en');
 const STYLE_HOME = `
 	header, footer, hr { display: none !important; }
 	[data-testid="download-btn"], [data-testid="start-reading-btn"] { display: none !important; }
+	/* Hide Next.js dev indicators */
+	nextjs-portal, #__next-build-watcher, #__next-prerender-indicator { display: none !important; }
+	[data-nextjs-toast], [data-nextjs-dialog], [data-nextjs-dialog-overlay] { display: none !important; }
+	body > nextjs-portal { display: none !important; }
 `;
 
 const STYLE_CHAPTER = `
@@ -18,7 +22,10 @@ const STYLE_CHAPTER = `
 	h1 { padding-top: 0 !important; }
 	h2 { padding-top: 0 !important; margin-top: 2rem !important; }
 	h2 > div { border: none !important; }
-	#__next-build-watcher, #__next-prerender-indicator { display: none !important; }
+	/* Hide Next.js dev indicators */
+	nextjs-portal, #__next-build-watcher, #__next-prerender-indicator { display: none !important; }
+	[data-nextjs-toast], [data-nextjs-dialog], [data-nextjs-dialog-overlay] { display: none !important; }
+	body > nextjs-portal { display: none !important; }
 `;
 
 const PDF_OPTIONS = {
@@ -54,8 +61,26 @@ function getPageUrls(locale: string, chapters: string[]): string[] {
 	];
 }
 
+async function hideNextDevIndicators(page: Page): Promise<void> {
+	await page.evaluate(() => {
+		// Remove Next.js dev overlay elements from DOM
+		const selectors = [
+			'nextjs-portal',
+			'#__next-build-watcher',
+			'#__next-prerender-indicator',
+			'[data-nextjs-toast]',
+			'[data-nextjs-dialog]',
+			'[data-nextjs-dialog-overlay]',
+		];
+		selectors.forEach(selector => {
+			document.querySelectorAll(selector).forEach(el => el.remove());
+		});
+	});
+}
+
 async function processHomePage(page: Page): Promise<void> {
 	await page.addStyleTag({ content: STYLE_HOME });
+	await hideNextDevIndicators(page);
 
 	// Open all accordion chapters
 	const buttons = await page.getByRole('main').getByRole('button').all();
@@ -74,6 +99,7 @@ async function processHomePage(page: Page): Promise<void> {
 
 async function processChapterPage(page: Page): Promise<void> {
 	await page.addStyleTag({ content: STYLE_CHAPTER });
+	await hideNextDevIndicators(page);
 }
 
 async function generatePdfForPage(
