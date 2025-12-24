@@ -1,38 +1,115 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Gentleman Programming Book
+
+The official book for the Gentleman Programming community - a comprehensive guide to software development, clean code practices, and frontend architecture.
+
+## Tech Stack
+
+- **Framework**: Next.js 16.1.1 (App Router)
+- **React**: 19.1.0
+- **Styling**: Vanilla Extract CSS
+- **Content**: MDX with syntax highlighting
+- **Testing**: Vitest + Playwright
+- **Language**: TypeScript 5.7
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 22.x (see `.nvmrc`)
+- Bun (recommended) or npm
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+# Install dependencies
+bun install
+
+# Start development server
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the book.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```bash
+# Development
+bun run dev              # Start dev server
+bun run build            # Production build
+bun run start            # Start production server
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+# Testing
+bun run test             # Unit tests (watch mode)
+bun run test:run         # Unit tests (single run)
+bun run test:e2e         # E2E tests
+bun run test:e2e:headed  # E2E tests with browser UI
+bun run test:e2e:debug   # E2E tests in debug mode
+bun run test:all         # Run all tests
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# Code Quality
+bun run lint             # Run ESLint
+bun run lint:fix         # Fix ESLint issues
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── [locale]/           # i18n routing (en, es)
+│   │   ├── (book)/         # Book pages
+│   │   └── (home)/         # Home page
+│   ├── _components/        # App-level components
+│   └── api/                # Route Handlers
+├── data/
+│   └── book/               # MDX chapters
+│       ├── en/             # English content
+│       └── es/             # Spanish content
+├── lib/                    # Utilities
+├── modules/                # Feature modules
+│   ├── book/               # Book-specific logic
+│   ├── shared/             # Shared components
+│   └── theme/              # Theme configuration
+└── styles/                 # Global styles
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Multi-language**: English and Spanish support via URL prefix (`/en`, `/es`)
+- **18 Chapters**: Covering Clean Agile, Architecture, React, TypeScript, and more
+- **Dark/Light/Sepia themes**: Reader-friendly color schemes
+- **PDF Generation**: Export the entire book as PDF
+- **Responsive Design**: Works on all devices
+- **Static Generation**: Pre-rendered for optimal performance
 
-## Deploy on Vercel
+## API Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `GET /api/pdf` - Generate PDF versions of the book (EN & ES)
+- `GET /api/hello` - Health check endpoint
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Testing
+
+The project follows TDD practices with comprehensive test coverage:
+
+- **Unit Tests**: 18 tests covering components and hooks
+- **E2E Tests**: 25 tests covering user journeys
+
+See [AGENTS.md](./AGENTS.md) for detailed testing guidelines.
+
+## Contributing
+
+1. Read [AGENTS.md](./AGENTS.md) for development methodology
+2. Follow TDD: Write tests first
+3. Ensure all tests pass before committing
+4. Use conventional commits
+
+## Community
+
+- [YouTube](https://youtube.com/@gentlemanprogramming)
+- [Twitch](https://twitch.tv/gentleman_programming)
+- [Discord](https://discord.gg/gentleman-programming)
+- [Twitter/X](https://twitter.com/gentleman_prog)
+
+## License
+
+This project is open source and available under the MIT License.
