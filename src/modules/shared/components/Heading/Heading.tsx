@@ -13,10 +13,13 @@ type HeadingProps<T extends Tag> = {
 		? React.ComponentProps<'a'> & Parameters<typeof Link>['0']
 		: React.ComponentProps<T>);
 
-export const Heading = React.forwardRef(function Heading<T extends Tag>(
-	{ component, className, fontSize, color, ...props }: HeadingProps<T>,
-	ref: React.ForwardedRef<T>,
-) {
+export function Heading<T extends Tag>({
+	component,
+	className,
+	fontSize,
+	color,
+	...props
+}: HeadingProps<T>) {
 	const Tag = component === 'a' ? Link : component || 'h1';
 
 	return (
@@ -29,10 +32,6 @@ export const Heading = React.forwardRef(function Heading<T extends Tag>(
 				className,
 			)}
 			{...(props as any)}
-			ref={ref}
 		/>
 	);
-}) as <T extends Tag>(
-	props: HeadingProps<T>,
-	ref: React.ForwardedRef<T>,
-) => React.ReactElement<T>;
+}

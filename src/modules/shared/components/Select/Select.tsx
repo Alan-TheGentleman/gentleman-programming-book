@@ -122,15 +122,16 @@ export const Select: React.FC<Props> = ({
 										variant,
 									})}
 								>
-									{React.Children.map(
-										children as React.ReactElement[],
-										(child: React.ReactElement) =>
-											React.cloneElement(child, {
-												...child.props,
-												colorScheme,
-												variant,
-											}),
-									)}
+									{React.Children.map(children, child => {
+										if (!React.isValidElement(child)) return child;
+										return React.cloneElement(
+											child as React.ReactElement<{
+												colorScheme?: string;
+												variant?: string;
+											}>,
+											{ colorScheme, variant },
+										);
+									})}
 								</SelectPrimitives.SelectViewport>
 							</motion.div>
 						</AnimatePresence>
