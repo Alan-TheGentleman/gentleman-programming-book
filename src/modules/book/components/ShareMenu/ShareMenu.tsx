@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+
 import { FaCopy, FaTwitter } from 'react-icons/fa';
 
 import { useSelectedValue } from '@/book/hooks';

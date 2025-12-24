@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { Svg } from '@/shared/components/Svg';
 
@@ -6,7 +6,7 @@ type Props = {
 	className?: string;
 };
 
-export const ThemeIcon: React.FC<Props> = props => {
+export const ThemeIcon: FC<Props> = props => {
 	return (
 		<Svg
 			width='1em'

@@ -1,14 +1,31 @@
 import { render, screen, within } from '@testing-library/react';
 
-import * as ChapterDetail from '@/src/pages/book/[chapterId]';
+import { BookRepository } from '@/book/repository';
+import { ChapterClient } from '@/src/app/[locale]/(book)/book/[chapterId]/_components/chapter-client';
 
-describe('Page <ChapterDetail />', async () => {
-	const res = (await ChapterDetail.getStaticProps({
-		params: { chapterId: 'Chapter01_Clean-Agile' },
-	})) as { props: ChapterDetail.PageProps };
+describe('Page <ChapterDetail />', () => {
+	const chapterId = 'Chapter01_Clean-Agile';
+	const locale = 'en';
+
+	const { chapter: currentChapter, pagination } = BookRepository().findChapter(
+		chapterId,
+		locale,
+	);
+	const chapterList = BookRepository().findAllChapters(locale);
+
+	const props = {
+		chapterList,
+		currentChapter,
+		pagination,
+		locale,
+	};
 
 	it('should contain a header', () => {
-		render(<ChapterDetail.default {...res.props} />);
+		render(
+			<ChapterClient {...props}>
+				<div>MDX Content</div>
+			</ChapterClient>,
+		);
 
 		const header = screen.getByRole('banner');
 
@@ -16,7 +33,11 @@ describe('Page <ChapterDetail />', async () => {
 	});
 
 	it('header -> should contain trigger index dialog and go home link', () => {
-		render(<ChapterDetail.default {...res.props} />);
+		render(
+			<ChapterClient {...props}>
+				<div>MDX Content</div>
+			</ChapterClient>,
+		);
 		const header = screen.getByRole('banner');
 
 		expect(
@@ -28,7 +49,11 @@ describe('Page <ChapterDetail />', async () => {
 	});
 
 	it('header -> should contain the controls settings', () => {
-		render(<ChapterDetail.default {...res.props} />);
+		render(
+			<ChapterClient {...props}>
+				<div>MDX Content</div>
+			</ChapterClient>,
+		);
 		const header = screen.getByRole('banner');
 
 		expect(within(header).getByTitle(/language-select/i)).toBeInTheDocument();
@@ -42,23 +67,35 @@ describe('Page <ChapterDetail />', async () => {
 	});
 
 	it('should contain an aside navigation of the chapter', () => {
-		render(<ChapterDetail.default {...res.props} />);
+		render(
+			<ChapterClient {...props}>
+				<div>MDX Content</div>
+			</ChapterClient>,
+		);
 		const aside = screen.getByLabelText('index');
 
 		expect(aside).toBeInTheDocument();
 	});
 
 	it('aside -> should contain a list of chapters', () => {
-		render(<ChapterDetail.default {...res.props} />);
+		render(
+			<ChapterClient {...props}>
+				<div>MDX Content</div>
+			</ChapterClient>,
+		);
 		const aside = screen.getByLabelText('index');
 
-		res.props.chapterList[0].titleList.forEach(chapter => {
+		props.chapterList[0].titleList.forEach(chapter => {
 			expect(within(aside).getByTitle(chapter.value)).toBeInTheDocument();
 		});
 	});
 
 	it("should contain the navigation's buttons", () => {
-		render(<ChapterDetail.default {...res.props} />);
+		render(
+			<ChapterClient {...props}>
+				<div>MDX Content</div>
+			</ChapterClient>,
+		);
 
 		expect(
 			screen.getByRole('button', { name: /previous/i }),

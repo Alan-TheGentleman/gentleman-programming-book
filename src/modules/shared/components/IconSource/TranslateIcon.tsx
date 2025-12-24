@@ -1,11 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { Svg } from '@/shared/components/Svg';
 
 type Props = {
 	className?: string;
 };
-export const TranslateIcon: React.FC = (props: Props) => {
+export const TranslateIcon: FC = (props: Props) => {
 	return (
 		<Svg
 			width='1em'

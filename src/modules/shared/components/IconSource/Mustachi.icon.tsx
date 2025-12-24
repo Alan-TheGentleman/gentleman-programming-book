@@ -1,8 +1,8 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { Svg } from '@/shared/components/Svg';
 
-export const MustachiIcon: React.FC = () => {
+export const MustachiIcon: FC = () => {
 	return (
 		<Svg
 			version='1.0'

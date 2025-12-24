@@ -1,0 +1,18 @@
+# Gentleman Guardian Angel Configuration
+# https://github.com/Gentleman-Programming/gentleman-guardian-angel
+
+# AI Provider (required)
+# Options: claude, gemini, codex, ollama:<model>
+PROVIDER="claude"
+
+# File patterns to review (comma-separated globs)
+FILE_PATTERNS="*.ts,*.tsx,*.js,*.jsx,*.mdx"
+
+# Patterns to exclude from review (comma-separated globs)
+EXCLUDE_PATTERNS="*.test.ts,*.spec.ts,*.test.tsx,*.spec.tsx,*.d.ts,*.css.ts"
+
+# File containing your coding standards
+RULES_FILE="AGENTS.md"
+
+# Fail if AI response is ambiguous (recommended for CI)
+STRICT_MODE="true"

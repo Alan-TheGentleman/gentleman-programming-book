@@ -3,7 +3,6 @@
 	"extends": [
 		"plugin:prettier/recommended",
 		"plugin:react/recommended",
-		"plugin:react-hooks/recommended",
 		"next/core-web-vitals",
 		"standard",
 		"plugin:@typescript-eslint/recommended",
@@ -11,7 +10,6 @@
 	],
 	"plugins": [
 		"react",
-		"react-hooks",
 		"@typescript-eslint",
 		"simple-import-sort",
 		"prettier",
@@ -65,6 +63,9 @@
 	"settings": {
 		"react": {
 			"version": "detect"
+		},
+		"next": {
+			"rootDir": "."
 		}
 	}
 }

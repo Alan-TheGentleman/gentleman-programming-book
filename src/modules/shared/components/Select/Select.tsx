@@ -1,19 +1,30 @@
+'use client';
+
 import * as SelectPrimitives from '@radix-ui/react-select';
 import { setElementVars } from '@vanilla-extract/dynamic';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
-import React from 'react';
+import {
+	Children,
+	cloneElement,
+	isValidElement,
+	ReactElement,
+	ReactNode,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 
 import * as SelectCss from './Select.css';
 
 type Props = {
 	buttonTextClassName?: string;
-	children: React.ReactNode;
+	children: ReactNode;
 	className?: string;
 	iconLeftContainerClassName?: string;
-	leftIcon?: React.ReactElement;
+	leftIcon?: ReactElement;
 	placeholder?: string;
-	rightIcon?: React.ReactElement;
+	rightIcon?: ReactElement;
 	side?: 'left' | 'right' | 'bottom' | 'top';
 	value?: string;
 	onChange?: (value: string) => void;
@@ -21,7 +32,7 @@ type Props = {
 } & SelectCss.SelectVariants &
 	SelectCss.OptionVariants;
 
-export const Select: React.FC<Props> = ({
+export function Select({
 	buttonTextClassName,
 	children,
 	className,
@@ -35,18 +46,18 @@ export const Select: React.FC<Props> = ({
 	variant = 'outline',
 	title,
 	onChange,
-}) => {
-	const triggerRef = React.useRef<HTMLButtonElement | null>(null);
-	const textRef = React.useRef<HTMLButtonElement | null>(null);
-	const [isOpen, setIsOpen] = React.useState(false);
+}: Props) {
+	const triggerRef = useRef<HTMLButtonElement | null>(null);
+	const textRef = useRef<HTMLButtonElement | null>(null);
+	const [isOpen, setIsOpen] = useState(false);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!buttonTextClassName) return;
 
 		textRef.current?.classList.add(buttonTextClassName);
 	}, [buttonTextClassName]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!isOpen) return;
 
 		const el = document.querySelector('.' + SelectCss.SelectContent);
@@ -122,15 +133,16 @@ export const Select: React.FC<Props> = ({
 										variant,
 									})}
 								>
-									{React.Children.map(
-										children as React.ReactElement[],
-										(child: React.ReactElement) =>
-											React.cloneElement(child, {
-												...child.props,
-												colorScheme,
-												variant,
-											}),
-									)}
+									{Children.map(children, child => {
+										if (!isValidElement(child)) return child;
+										return cloneElement(
+											child as ReactElement<{
+												colorScheme?: string;
+												variant?: string;
+											}>,
+											{ colorScheme, variant },
+										);
+									})}
 								</SelectPrimitives.SelectViewport>
 							</motion.div>
 						</AnimatePresence>
@@ -139,4 +151,4 @@ export const Select: React.FC<Props> = ({
 			</SelectPrimitives.Root>
 		</>
 	);
-};
+}

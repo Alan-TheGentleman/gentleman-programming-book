@@ -1,11 +1,11 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const debounce = <Fn extends (...args: unknown[]) => unknown>(
 	fn: Fn,
 	delay: number,
 ) => {
-	let timer: any;
-	return (...args: any) => {
+	let timer: ReturnType<typeof setTimeout>;
+	return (...args: Parameters<Fn>) => {
 		clearTimeout(timer);
 		timer = setTimeout(() => {
 			fn(...args);
@@ -14,10 +14,9 @@ const debounce = <Fn extends (...args: unknown[]) => unknown>(
 };
 
 export function useSelectedValue() {
-	const [value, setValue] = React.useState<string | null>(null);
+	const [value, setValue] = useState<string | null>(null);
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const debounced = React.useCallback(
+	const debounced = useRef(
 		debounce(() => {
 			const selection = window.getSelection()?.toString();
 			if (selection) {
@@ -26,10 +25,9 @@ export function useSelectedValue() {
 				setValue(null);
 			}
 		}, 500),
-		[],
-	);
+	).current;
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const listener = (_: Event): void => {
 			debounced();
 		};

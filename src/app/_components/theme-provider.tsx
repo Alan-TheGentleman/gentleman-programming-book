@@ -1,14 +1,21 @@
-import React from 'react';
+'use client';
+
+import { useEffect } from 'react';
 
 import { localStorageKeys, MyLocalStorageService } from '@/shared/services';
 import { useThemeStore } from '@/shared/store';
 import { themeClass, ThemeColor, themeColorEnum } from '@/theme/config';
 
-export const ThemeConfig = () => {
+interface ThemeProviderProps {
+	children: React.ReactNode;
+}
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
 	const themeColorCurrent = useThemeStore(s => s.themeColorCurrent);
 	const changeThemeColor = useThemeStore(s => s.changeThemeColor);
 
-	React.useEffect(() => {
+	// Sync theme changes to localStorage and DOM
+	useEffect(() => {
 		const unSub = useThemeStore.subscribe(({ themeColorCurrent }) => {
 			MyLocalStorageService().save(
 				localStorageKeys.themeColor,
@@ -21,9 +28,10 @@ export const ThemeConfig = () => {
 		});
 
 		return () => unSub();
-	});
+	}, []);
 
-	React.useEffect(() => {
+	// Initialize theme from localStorage or system preference
+	useEffect(() => {
 		const themeColorStoraged = MyLocalStorageService().find<ThemeColor>(
 			localStorageKeys.themeColor,
 		);
@@ -42,28 +50,7 @@ export const ThemeConfig = () => {
 		}
 
 		changeThemeColor(themeColorEnum.values.Light);
-	}, [changeThemeColor, themeColorCurrent]);
+	}, [changeThemeColor]);
 
-	// React.useEffect(() => {
-	// 	const listener = (e: MediaQueryListEvent) => {
-	// 		if (themeColorCurrent !== themeColorEnum.values.System) return;
-
-	// 		if (e.matches) {
-	// 			document.documentElement.classList.value =
-	// 				themeClass[themeColorEnum.values.Dark];
-	// 		}
-
-	// 		if (!e.matches) {
-	// 			document.documentElement.classList.value =
-	// 				themeClass[themeColorEnum.values.Light];
-	// 		}
-	// 	};
-
-	// 	const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
-	// 	darkThemeMq.addEventListener('change', listener);
-
-	// 	return () => darkThemeMq.removeEventListener('change', listener);
-	// }, [themeColorCurrent]);
-
-	return null;
-};
+	return <>{children}</>;
+}

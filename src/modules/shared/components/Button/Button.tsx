@@ -1,18 +1,24 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import React from 'react';
+import {
+	ComponentProps,
+	forwardRef,
+	ForwardedRef,
+	ReactElement,
+	ReactNode,
+} from 'react';
 
 import * as ButtonCss from './Button.css';
 
 type Tag = 'button' | 'a';
 
 type ButtonProps<T extends Tag> = {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	component?: T;
 } & ButtonCss.ButtonVariants &
-	(T extends 'a' ? Parameters<typeof Link>['0'] : React.ComponentProps<T>);
+	(T extends 'a' ? Parameters<typeof Link>['0'] : ComponentProps<T>);
 
-export const Button = React.forwardRef(function Button<T extends Tag>(
+export const Button = forwardRef(function Button<T extends Tag>(
 	{
 		children,
 		colorScheme,
@@ -22,7 +28,7 @@ export const Button = React.forwardRef(function Button<T extends Tag>(
 		component,
 		...props
 	}: ButtonProps<T>,
-	ref: React.ForwardedRef<unknown>,
+	ref: ForwardedRef<unknown>,
 ) {
 	const Tag = component === 'a' ? Link : component || 'button';
 
@@ -42,4 +48,4 @@ export const Button = React.forwardRef(function Button<T extends Tag>(
 			{children}
 		</Tag>
 	);
-}) as <T extends Tag>(props: ButtonProps<T>) => React.ReactElement<T>;
+}) as <T extends Tag>(props: ButtonProps<T>) => ReactElement<T>;
