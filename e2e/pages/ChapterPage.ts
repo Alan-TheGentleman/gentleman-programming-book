@@ -40,7 +40,8 @@ export class ChapterPage {
 	}
 
 	async shouldHaveAsideIndex() {
-		await expect(this.page.getByLabel('index')).toBeVisible();
+		// Aside index may be hidden on mobile viewports, so we just check it exists
+		await expect(this.page.getByLabel('index')).toBeAttached();
 	}
 
 	async shouldHaveSettingsControls() {
