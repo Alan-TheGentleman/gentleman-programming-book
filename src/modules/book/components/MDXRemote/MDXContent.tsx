@@ -1,20 +1,25 @@
-'use client';
-
-import { MDXRemote as MDX, MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { ReactNode } from 'react';
+import { MDXRemote as MDXRemoteRSC } from 'next-mdx-remote/rsc';
+import rehypePrism from 'rehype-prism-plus';
+import rehypeSlug from 'rehype-slug';
 
 import { Heading, Icon, MustachiIcon, Text } from '@/shared/components';
 
 import * as MDXRemoteCss from './MDXRemote.css';
 
-interface MDXRemoteProps extends MDXRemoteSerializeResult {
-	components?: Record<string, React.ComponentType<{ children?: ReactNode }>>;
+interface MDXContentProps {
+	source: string;
 }
 
-export function MDXRemote(props: MDXRemoteProps) {
+export async function MDXContent({ source }: MDXContentProps) {
 	return (
-		<MDX
-			{...props}
+		<MDXRemoteRSC
+			source={source}
+			options={{
+				mdxOptions: {
+					rehypePlugins: [rehypeSlug, rehypePrism],
+					format: 'mdx',
+				},
+			}}
 			components={{
 				p: ({ children, ...rest }) => (
 					<Text component='p' {...(rest as Record<string, unknown>)}>
@@ -73,7 +78,6 @@ export function MDXRemote(props: MDXRemoteProps) {
 						{children}
 					</Text>
 				),
-				...props.components,
 			}}
 		/>
 	);

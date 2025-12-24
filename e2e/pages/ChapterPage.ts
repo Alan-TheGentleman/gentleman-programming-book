@@ -10,8 +10,8 @@ export class ChapterPage {
 	// ==================== Navigation ====================
 
 	async open(chapterId: string, locale: 'en' | 'es' = 'en') {
-		const basePath = locale === 'es' ? '/es' : '';
-		await this.page.goto(`${basePath}/book/${chapterId}`);
+		// App Router uses /locale/book/chapterId path
+		await this.page.goto(`/${locale}/book/${chapterId}`);
 	}
 
 	// ==================== Assertions ====================
@@ -133,10 +133,6 @@ export class ChapterPage {
 	}
 
 	async shouldBeOnLocale(locale: 'en' | 'es') {
-		if (locale === 'es') {
-			await expect(this.page).toHaveURL(/\/es\//);
-		} else {
-			await expect(this.page).not.toHaveURL(/\/es\//);
-		}
+		await expect(this.page).toHaveURL(new RegExp(`/${locale}/`));
 	}
 }

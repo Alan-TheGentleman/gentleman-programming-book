@@ -18,7 +18,7 @@ export default defineConfig({
 	test: {
 		environment: 'jsdom',
 		globals: true,
-		setupFiles: ['vitestSetup.ts'],
+		setupFiles: ['vitestSetup.tsx'],
 		exclude: [...configDefaults.exclude, '**/old/**', '**/e2e/**'],
 	},
 });

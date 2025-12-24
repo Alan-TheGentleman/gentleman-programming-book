@@ -85,7 +85,8 @@ test.describe('Chapter Page', () => {
 			await chapterPage.open('Chapter01_Clean-Agile');
 			await chapterPage.clickHome();
 
-			await expect(page).toHaveURL('/');
+			// With App Router, home is at /en (locale segment)
+			await expect(page).toHaveURL('/en');
 		});
 	});
 

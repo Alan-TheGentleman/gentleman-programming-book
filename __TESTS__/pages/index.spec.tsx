@@ -4,20 +4,20 @@ import { describe, expect } from 'vitest';
 
 import { BookRepository } from '@/book/repository';
 import { LocalStorageStubService } from '@/shared/services';
-import Home from '@/src/pages';
+import { HomeClient } from '@/src/app/[locale]/(home)/_components/home-client';
 
 describe('Page <Home />', () => {
 	const bookContent = BookRepository().findAllChapters('en');
 
 	it('should contain a header', () => {
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 		const header = screen.getByRole('banner');
 
 		expect(header).toBeDefined();
 	});
 
 	it('header -> should contain the social media links', () => {
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 		const header = screen.getByRole('banner');
 
 		expect(within(header).getByTitle('twitch')).toBeInTheDocument();
@@ -28,7 +28,7 @@ describe('Page <Home />', () => {
 	});
 
 	it('header -> should contain the controls settings', () => {
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 		const header = screen.getByRole('banner');
 
 		expect(within(header).getByTitle(/language-select/i)).toBeInTheDocument();
@@ -42,14 +42,14 @@ describe('Page <Home />', () => {
 	});
 
 	it('should contain an image of mustachi', () => {
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 		const image = screen.getByRole('img', { name: /mustachi/i });
 
 		expect(image).toBeInTheDocument();
 	});
 
 	it('should contain the name of the book', () => {
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 		const heading = screen.getByRole('heading', {
 			level: 1,
 		});
@@ -59,7 +59,7 @@ describe('Page <Home />', () => {
 	});
 
 	it('should contain a quote from the author', () => {
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 		const quote = screen.getByRole('blockquote');
 
 		expect(quote).toBeInTheDocument();
@@ -67,7 +67,7 @@ describe('Page <Home />', () => {
 	});
 
 	it('should contain a link to start reading', () => {
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 		const link = screen.getByRole('link', { name: /start reading/i });
 
 		expect(link).toBeInTheDocument();
@@ -79,8 +79,9 @@ describe('Page <Home />', () => {
 		localStorageService.save('[BOOKMARK]_CHAPTER', url);
 
 		render(
-			<Home
+			<HomeClient
 				chapterIndexList={bookContent}
+				locale='en'
 				localStorageService={localStorageService}
 			/>,
 		);
@@ -92,7 +93,7 @@ describe('Page <Home />', () => {
 	});
 
 	it('should contain the chapters', () => {
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 
 		bookContent.forEach(chapter => {
 			const link = screen.getByText(chapter.name);
@@ -104,7 +105,7 @@ describe('Page <Home />', () => {
 
 	it('chapter -> should contain its titles', async () => {
 		const user = userEvent.setup();
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 		const chapter = screen.getAllByTestId('accordion-item')[0];
 		const button = within(chapter).getByRole('button');
 
@@ -121,14 +122,14 @@ describe('Page <Home />', () => {
 	});
 
 	it('should contain the footer', () => {
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 		const footer = screen.getByRole('contentinfo');
 
 		expect(footer).toBeInTheDocument();
 	});
 
 	it('footer -> should contain the social media links (discord, twitch)', () => {
-		render(<Home chapterIndexList={bookContent} />);
+		render(<HomeClient chapterIndexList={bookContent} locale='en' />);
 		const footer = screen.getByRole('contentinfo');
 
 		expect(within(footer).getByTitle('discord')).toBeInTheDocument();

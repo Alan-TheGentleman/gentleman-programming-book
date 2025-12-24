@@ -1,22 +1,16 @@
-/* eslint-disable simple-import-sort/imports */
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { serialize } from 'next-mdx-remote/serialize';
-import { useRouter } from 'next/router';
+'use client';
+
+import { usePathname, useRouter } from 'next/navigation';
+import { ReactNode } from 'react';
 import { HiHome, HiSelector } from 'react-icons/hi';
-import rehypePrism from 'rehype-prism-plus';
-import rehypeSlug from 'rehype-slug';
 
 import {
 	BookChapterIndex,
-	MDXRemote,
 	ShareMenu,
 	ZoomImageConfig,
 } from '@/book/components';
 import { useFontSize } from '@/book/hooks';
 import { BookChapter, Pagination } from '@/book/models';
-import { BookRepository } from '@/book/repository/book.repo';
-import { pathListScheme } from '@/book/schemes';
 import {
 	Button,
 	Dialog,
@@ -28,80 +22,43 @@ import {
 	ZoomInText,
 	ZoomOutText,
 } from '@/shared/components';
-import { SEO } from '@/shared/components/SEO';
 import * as chapterDetailCss from '@/src/styles/ChapterDetail.css';
 import { ThemeSelect } from '@/theme/components';
 
-export const getStaticPaths: GetStaticPaths = ({ locales = [] }) => {
-	type Paths = Awaited<ReturnType<GetStaticPaths>>['paths'][0];
-	const pathList = new Set<Paths>();
-
-	const paths = BookRepository().findPaths();
-
-	for (const path of paths) {
-		for (const locale of locales) {
-			pathList.add({ params: { chapterId: path }, locale });
-		}
-	}
-
-	return {
-		paths: pathListScheme.parse(Array.from(pathList)),
-		fallback: 'blocking',
-	};
-};
-
-export const getStaticProps: GetStaticProps<
-	PageProps,
-	{ chapterId: string }
-> = async ({ params, locale }) => {
-	const {
-		chapter: currentChapter,
-		pagination,
-		content,
-	} = BookRepository().findChapter(params?.chapterId || '', locale);
-	const chapterList = BookRepository().findAllChapters(locale);
-
-	const mdxSource = await serialize(content, {
-		mdxOptions: {
-			rehypePlugins: [rehypeSlug, rehypePrism],
-			format: 'mdx',
-		},
-	});
-
-	return {
-		props: {
-			mdxSource,
-			chapterList,
-			currentChapter,
-			pagination,
-		},
-	};
-};
-
-export interface PageProps {
-	mdxSource: MDXRemoteSerializeResult;
+interface ChapterClientProps {
 	chapterList: BookChapter[];
 	currentChapter: BookChapter;
 	pagination: Pagination;
+	locale: string;
+	children: ReactNode;
 }
 
-export default function ChapterDetail({
+export function ChapterClient({
 	pagination,
 	chapterList,
 	currentChapter,
-	mdxSource,
-}: PageProps) {
+	locale,
+	children,
+}: ChapterClientProps) {
 	const fontSize = useFontSize();
 	const router = useRouter();
+	const pathname = usePathname();
+
+	const handleLocaleChange = (newLocale: string) => {
+		const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+		router.push(newPath);
+	};
+
+	const handleNavigation = (link: string | null) => {
+		if (link) {
+			// Convert full URL to relative path for App Router
+			const url = new URL(link);
+			router.push(url.pathname);
+		}
+	};
 
 	return (
 		<>
-			<SEO
-				title='Gentleman Programming Book'
-				siteTitle={currentChapter.name}
-				locale={router.locale}
-			/>
-
 			<ZoomImageConfig />
 
 			<div className={chapterDetailCss.layout}>
@@ -136,18 +93,16 @@ export default function ChapterDetail({
 									colorScheme='secondary'
 									title='home'
 									component='a'
-									href='/'
+									href={`/${locale}`}
 								/>
 							</li>
 							<li className={chapterDetailCss.containerItem}>
 								<Select
-									value={router.locale}
+									value={locale}
 									colorScheme='secondary'
 									leftIcon={<TranslateIcon />}
 									title='language-select'
-									onChange={value =>
-										router.push(router.asPath, undefined, { locale: value })
-									}
+									onChange={handleLocaleChange}
 									rightIcon={<HiSelector width='1em' height='1em' />}
 								>
 									<Option value='es'>Es</Option>
@@ -182,17 +137,12 @@ export default function ChapterDetail({
 					<ShareMenu />
 				</header>
 
-				<main className={chapterDetailCss.main}>
-					<MDXRemote {...mdxSource} />
-				</main>
+				<main className={chapterDetailCss.main}>{children}</main>
 
 				<div className={chapterDetailCss.paginationControls}>
 					<Button
 						size='lg'
-						onClick={() =>
-							pagination.previousChapter &&
-							router.push(pagination.previousChapter)
-						}
+						onClick={() => handleNavigation(pagination.previousChapter)}
 						disabled={!pagination.previousChapter}
 						className={chapterDetailCss.controlButton}
 					>
@@ -201,9 +151,7 @@ export default function ChapterDetail({
 
 					<Button
 						size='lg'
-						onClick={() =>
-							pagination.nextChapter && router.push(pagination.nextChapter)
-						}
+						onClick={() => handleNavigation(pagination.nextChapter)}
 						disabled={!pagination.nextChapter}
 						className={chapterDetailCss.controlButton}
 					>

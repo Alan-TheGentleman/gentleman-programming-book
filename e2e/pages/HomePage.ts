@@ -10,8 +10,8 @@ export class HomePage {
 	// ==================== Navigation ====================
 
 	async open(locale: 'en' | 'es' = 'en') {
-		const path = locale === 'es' ? '/es' : '/';
-		await this.page.goto(path);
+		// App Router uses /locale path segment
+		await this.page.goto(`/${locale}`);
 	}
 
 	// ==================== Assertions ====================
