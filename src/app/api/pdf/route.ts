@@ -27,43 +27,52 @@ const STYLE_TOC = `
 	
 	* { margin: 0; padding: 0; box-sizing: border-box; }
 	
-	body { 
+	html, body { 
 		font-family: 'Merriweather', Georgia, serif; 
-		background: linear-gradient(180deg, #fdfcfb 0%, #f5f3f0 100%);
-		color: #2d2d2d;
-		padding: 50px 60px;
+		background: #090005;
+		color: #e0e0e0;
+		padding: 0;
+		margin: 0;
 		min-height: 100vh;
 	}
 	
 	.toc-container { 
 		max-width: 700px; 
-		margin: 0 auto; 
+		margin: 0 auto;
+		padding: 50px 60px;
 	}
 	
 	.toc-header { 
 		text-align: center; 
 		margin-bottom: 45px; 
 		padding-bottom: 25px; 
-		border-bottom: 3px solid #e74c8c; 
+		border-bottom: 2px solid #e74c8c; 
 	}
 	
 	.toc-logo {
-		width: 80px;
-		height: 80px;
+		width: 100px;
+		height: 100px;
 		margin: 0 auto 20px;
-		background: #1a1a1a;
+		background: #1e1e1e;
 		border-radius: 50%;
+		padding: 12px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 2rem;
+		border: 2px solid #333;
+	}
+	
+	.toc-logo img {
+		width: 100%;
+		height: auto;
+		object-fit: contain;
 	}
 	
 	.toc-title { 
 		font-family: 'Inter', sans-serif;
 		font-size: 2rem; 
 		font-weight: 700; 
-		color: #1a1a1a; 
+		color: #ffffff; 
 		margin-bottom: 6px; 
 		letter-spacing: 0.02em; 
 	}
@@ -82,7 +91,7 @@ const STYLE_TOC = `
 	.toc-chapter { 
 		margin-bottom: 22px;
 		padding-bottom: 18px;
-		border-bottom: 1px solid #eee;
+		border-bottom: 1px solid #2a2a2a;
 	}
 	
 	.toc-chapter:last-child {
@@ -91,7 +100,8 @@ const STYLE_TOC = `
 	
 	.toc-chapter-header { 
 		display: flex; 
-		align-items: baseline; 
+		align-items: baseline;
+		gap: 16px;
 		margin-bottom: 6px; 
 	}
 	
@@ -102,18 +112,19 @@ const STYLE_TOC = `
 		font-weight: 600; 
 		text-transform: uppercase; 
 		letter-spacing: 0.12em;
-		min-width: 85px;
+		min-width: 95px;
+		flex-shrink: 0;
 	}
 	
 	.toc-chapter-title { 
 		font-size: 1.1rem; 
 		font-weight: 700; 
-		color: #1a1a1a;
+		color: #ffffff;
 		line-height: 1.3;
 	}
 	
 	.toc-sections { 
-		padding-left: 85px; 
+		padding-left: 111px; 
 		margin-top: 8px; 
 	}
 	
@@ -122,7 +133,7 @@ const STYLE_TOC = `
 		align-items: baseline; 
 		padding: 3px 0;
 		font-size: 0.9rem;
-		color: #666;
+		color: #999;
 		line-height: 1.4;
 	}
 	
@@ -140,16 +151,19 @@ const STYLE_TOC = `
 	.toc-footer {
 		margin-top: 40px;
 		padding-top: 20px;
-		border-top: 1px solid #ddd;
+		border-top: 1px solid #2a2a2a;
 		text-align: center;
 		font-size: 0.8rem;
-		color: #999;
+		color: #666;
 		font-style: italic;
 	}
 `;
 
 const STYLE_CHAPTER = `
-	main { margin: 0 !important; }
+	/* Force dark background on entire page including margins */
+	html, body { background: #090005 !important; margin: 0 !important; padding: 0 !important; }
+	/* Add padding to main content area */
+	main { margin: 0 !important; padding: 50px 40px !important; }
 	header, button { display: none !important; }
 	h1 { padding-top: 0 !important; }
 	h2 { padding-top: 0 !important; margin-top: 2rem !important; }
@@ -175,10 +189,10 @@ const PDF_OPTIONS = {
 	displayHeaderFooter: false,
 	scale: 0.8,
 	margin: {
-		bottom: '60px',
-		top: '60px',
-		left: '50px',
-		right: '50px',
+		bottom: '0px',
+		top: '0px',
+		left: '0px',
+		right: '0px',
 	},
 };
 
@@ -265,7 +279,9 @@ function generateTocHtml(chapters: ChapterMetadata[], locale: string): string {
 		<body>
 			<div class="toc-container">
 				<header class="toc-header">
-					<div class="toc-logo">🎩</div>
+					<div class="toc-logo">
+						<img src="${BASE_URL}/img/mustache.png" alt="Gentleman Programming" />
+					</div>
 					<h1 class="toc-title">${title}</h1>
 					<p class="toc-subtitle">${subtitle}</p>
 				</header>
@@ -324,8 +340,22 @@ async function generateChapterPdf(
 	const page = await context.newPage();
 
 	try {
+		// Set dark mode preference before loading the page
+		await page.emulateMedia({ colorScheme: 'dark' });
+
 		await page.goto(url, { waitUntil: 'networkidle' });
-		await page.emulateMedia({ media: 'screen' });
+		await page.emulateMedia({ media: 'screen', colorScheme: 'dark' });
+
+		// Force dark theme by clicking the theme selector
+		await page.evaluate(() => {
+			// Set localStorage to dark theme so the app initializes in dark mode
+			localStorage.setItem('theme-color', '"Dark"');
+		});
+
+		// Reload to apply the theme from localStorage
+		await page.reload({ waitUntil: 'networkidle' });
+		await page.emulateMedia({ media: 'screen', colorScheme: 'dark' });
+
 		await page.addStyleTag({ content: STYLE_CHAPTER });
 		await hideNextDevIndicators(page);
 		await page.waitForTimeout(1000);
