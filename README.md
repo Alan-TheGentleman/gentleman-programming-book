@@ -105,10 +105,9 @@ See [AGENTS.md](./AGENTS.md) for detailed testing guidelines.
 
 ## Community
 
-- [YouTube](https://youtube.com/@gentlemanprogramming)
-- [Twitch](https://twitch.tv/gentleman_programming)
-- [Discord](https://discord.gg/gentleman-programming)
-- [Twitter/X](https://twitter.com/gentleman_prog)
+Join the Gentleman Programming community:
+
+👉 **https://doras.to/gentleman-programming**
 
 ## License
 
