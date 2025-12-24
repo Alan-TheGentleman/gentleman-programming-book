@@ -2,6 +2,62 @@
 
 This document defines how AI agents and developers should behave when working on this project. It establishes TDD practices, testing strategies, and architectural decisions.
 
+> **Note**: This file is also used by [Gentleman Guardian Angel (gga)](https://github.com/Gentleman-Programming/gentleman-guardian-angel) for AI-powered code review on every commit.
+
+---
+
+## Gentleman Guardian Angel (GGA) Integration
+
+### What is GGA?
+
+GGA is a provider-agnostic code review tool that validates staged files against this `AGENTS.md` on every commit. It's like having a senior developer review every line before it hits the repo.
+
+```
+┌─────────────────┐     ┌──────────────┐     ┌─────────────────┐
+│   git commit    │ ──▶ │  AI Review   │ ──▶ │  ✅ Pass/Fail   │
+│  (staged files) │     │  (any LLM)   │     │  (with details) │
+└─────────────────┘     └──────────────┘     └─────────────────┘
+```
+
+### Installation
+
+```bash
+# Install via Homebrew
+brew tap gentleman-programming/tap
+brew install gga
+
+# Initialize in project
+gga init
+
+# Install git hook
+gga install
+```
+
+### Configuration (.gga)
+
+```bash
+# AI Provider
+PROVIDER="claude"
+
+# File patterns to review
+FILE_PATTERNS="*.ts,*.tsx,*.js,*.jsx"
+
+# Exclude test files from review
+EXCLUDE_PATTERNS="*.test.ts,*.spec.ts,*.test.tsx,*.spec.tsx,*.d.ts"
+
+# Rules file (this file!)
+RULES_FILE="AGENTS.md"
+
+# Fail on ambiguous AI responses
+STRICT_MODE="true"
+```
+
+### Bypass Review (Emergency Only)
+
+```bash
+git commit --no-verify -m "hotfix: urgent fix"
+```
+
 ---
 
 ## Core Philosophy

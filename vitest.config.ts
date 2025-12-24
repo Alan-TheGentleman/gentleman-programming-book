@@ -9,7 +9,7 @@ export default defineConfig({
 		environment: 'jsdom',
 		globals: true,
 		setupFiles: ['vitestSetup.ts'],
-		exclude: [...configDefaults.exclude, '**/old/**'],
+		exclude: [...configDefaults.exclude, '**/old/**', '**/e2e/**'],
 		alias: [
 			{
 				find: '@/book',
