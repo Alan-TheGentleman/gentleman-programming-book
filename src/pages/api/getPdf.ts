@@ -29,6 +29,9 @@ export default async function handler(
 		'http://localhost:3000/book/Chapter13_Barrels',
 		'http://localhost:3000/book/Chapter14_FrontEndHistory',
 		'http://localhost:3000/book/Chapter15_IA-Driven-Development',
+		'http://localhost:3000/book/Chapter16_Frontend-Manual',
+		'http://localhost:3000/book/Chapter17_Soft-Skills',
+		'http://localhost:3000/book/Chapter18_Software-Architecture',
 	];
 
 	const pageListSpanish = [
@@ -48,6 +51,9 @@ export default async function handler(
 		'http://localhost:3000/es/book/Chapter13_Barrels',
 		'http://localhost:3000/es/book/Chapter14_FrontEndHistory',
 		'http://localhost:3000/es/book/Chapter15_IA-Driven-Development',
+		'http://localhost:3000/es/book/Chapter16_Frontend-Manual',
+		'http://localhost:3000/es/book/Chapter17_Soft-Skills',
+		'http://localhost:3000/es/book/Chapter18_Software-Architecture',
 	];
 
 	const browser = await P.chromium.launch({ headless: true });
@@ -110,18 +116,20 @@ export default async function handler(
 					);
 
 					// hidde Download button
-					await page
-						.getByText(/download/i)
-						.evaluate((node: HTMLButtonElement) => {
+					const downloadBtn = page.getByText(/download/i);
+					if ((await downloadBtn.count()) > 0) {
+						await downloadBtn.evaluate((node: HTMLButtonElement) => {
 							node.style.display = 'none';
 						});
+					}
 
 					// hidde Start Reading button
-					await page
-						.getByText(/start reading/i)
-						.evaluate((node: HTMLButtonElement) => {
+					const startBtn = page.getByText(/start reading/i);
+					if ((await startBtn.count()) > 0) {
+						await startBtn.evaluate((node: HTMLButtonElement) => {
 							node.style.display = 'none';
 						});
+					}
 				} else {
 					await page.addStyleTag({ content: styleTagContent });
 				}

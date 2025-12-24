@@ -1,0 +1,2386 @@
+---
+id: 'definitive-frontend-manual'
+order: 16
+name: 'The Definitive Frontend Developer Manual'
+titleList:
+  [
+    { name: 'Part I - Fundamentals', tagId: 'part-i---fundamentals' },
+    { name: 'Semantic HTML and the DOM', tagId: 'semantic-html-and-the-dom' },
+    { name: 'CSS Fundamentals', tagId: 'css-fundamentals' },
+    { name: 'JavaScript Fundamentals', tagId: 'javascript-fundamentals' },
+    { name: 'Forms', tagId: 'forms' },
+    { name: 'Responsive Design', tagId: 'responsive-design' },
+    { name: 'Networking', tagId: 'networking' },
+    { name: 'Part II - Intermediate', tagId: 'part-ii---intermediate' },
+    { name: 'Accessibility', tagId: 'accessibility' },
+    { name: 'State Management', tagId: 'state-management' },
+    { name: 'Component Design', tagId: 'component-design' },
+    { name: 'Media Optimization', tagId: 'media-optimization' },
+    { name: 'Browser Fundamentals', tagId: 'browser-fundamentals' },
+    { name: 'Rendering Strategies', tagId: 'rendering-strategies' },
+    { name: 'Fonts', tagId: 'fonts' },
+    { name: 'Testing Strategies', tagId: 'testing-strategies' },
+    { name: 'Deployment Basics', tagId: 'deployment-basics' },
+    { name: 'Part III - Advanced', tagId: 'part-iii---advanced' },
+    {
+      name: 'Build Systems and Module Formats',
+      tagId: 'build-systems-and-module-formats',
+    },
+    { name: 'Security Basics', tagId: 'security-basics' },
+    { name: 'Privacy and Permissions', tagId: 'privacy-and-permissions' },
+    { name: 'Offline-First and PWAs', tagId: 'offline-first-and-pwas' },
+    { name: 'Internationalization', tagId: 'internationalization' },
+    { name: 'Maintainable CSS', tagId: 'maintainable-css' },
+    { name: 'Performance', tagId: 'performance' },
+    { name: 'Design Systems', tagId: 'design-systems' },
+  ]
+---
+
+# The Definitive Frontend Developer Manual
+
+### By Gentleman Programming
+
+> "It's not about memorizing code, it's about understanding concepts. Code changes, concepts remain."
+
+Hey there, here we go again. This book is the result of years of experience breaking things, fixing them, and explaining them on YouTube, Twitch, and wherever they let me talk about code. The idea is simple: give you everything you need to know to be a frontend developer who truly understands what they're doing, not one who copies and pastes from Stack Overflow without understanding why it works.
+
+We'll go from the most basic to the most advanced, but always with the same approach: understanding the **why** before the **how**. Because when you understand the problem a tool solves, using it becomes natural.
+
+Let's go.
+
+---
+
+## Part I - Fundamentals
+
+---
+
+## Semantic HTML and the DOM
+
+### The problem we solve
+
+Imagine you're building a house. HTML is the structure: walls, roof, rooms. You could build a house where everything is a gray rectangle without marked windows or doors, but nobody would understand how to move around inside. The same happens with HTML: you can do everything with `<div>` and `<span>`, but you're building an incomprehensible maze.
+
+Semantic HTML is giving meaning to each part of your structure. It's not just to make the code look nice; it's so browsers, screen readers, search engines, and yourself in 6 months understand what each part does.
+
+### Why does semantics matter?
+
+Semantics has a direct impact on three critical areas:
+
+**1. Accessibility**: Screen readers (like VoiceOver on macOS or NVDA on Windows) use semantic tags to navigate. A `<nav>` tells them "this is navigation", a `<main>` tells them "here's the main content". Without semantics, a blind user hears "div, div, div, div" and understands nothing.
+
+**2. SEO**: Google uses semantic structure to understand your content. An `<article>` with a clear `<h1>` is much more valuable to the search engine than a `<div class="title">`.
+
+**3. Maintainability**: When you come back to your code in 6 months, `<header>`, `<main>`, `<footer>` tell you exactly what each thing is. `<div class="container-1">` tells you nothing.
+
+### Semantic HTML: The tags that matter
+
+```html
+<!-- BAD: Everything is div, nobody understands anything -->
+<div class="header">
+	<div class="nav">
+		<div class="link">Home</div>
+	</div>
+</div>
+<div class="main">
+	<div class="article">
+		<div class="title">My article</div>
+	</div>
+</div>
+
+<!-- GOOD: Each element has its purpose -->
+<header>
+	<nav>
+		<a href="/">Home</a>
+	</nav>
+</header>
+<main>
+	<article>
+		<h1>My article</h1>
+	</article>
+</main>
+```
+
+### The main semantic tags
+
+**Document structure:**
+
+- `<header>`: The header. Can be for the entire document or a section. Generally contains navigation, logo, main title.
+- `<nav>`: Navigation. Menus, important links. Not every group of links is a `<nav>`, only main navigation.
+- `<main>`: The main content. There should only be one per page. This is where the meat of the matter goes.
+- `<article>`: Independent, self-contained content. A blog post, a news story, a comment. It should make sense on its own.
+- `<section>`: A thematic section of content. Groups related content.
+- `<aside>`: Related but tangential content. Sidebars, advertising, related links.
+- `<footer>`: The footer. Of the document or a section. Copyright, secondary links, contact information.
+
+**Content:**
+
+- `<h1>` to `<h6>`: Heading hierarchy. Only one `<h1>` per page, and don't skip levels.
+- `<p>`: Paragraphs.
+- `<ul>`, `<ol>`, `<li>`: Lists. Unordered, ordered, and their items.
+- `<figure>` and `<figcaption>`: For images, diagrams, code with their description.
+- `<blockquote>`: Long quotes.
+- `<code>`, `<pre>`: Inline code and code blocks.
+- `<time>`: Dates and times. Has a `datetime` attribute for the machine-readable version.
+- `<address>`: Contact information.
+- `<mark>`: Highlighted text.
+
+```html
+<article>
+	<header>
+		<h1>How the Event Loop Works</h1>
+		<time datetime="2024-01-15">January 15, 2024</time>
+	</header>
+
+	<section>
+		<h2>What is the Event Loop?</h2>
+		<p>The Event Loop is the heart of JavaScript...</p>
+
+		<figure>
+			<img src="event-loop.png" alt="Event Loop Diagram" />
+			<figcaption>Event Loop flow in JavaScript</figcaption>
+		</figure>
+	</section>
+
+	<aside>
+		<h3>Related resources</h3>
+		<ul>
+			<li><a href="/promises">Promises Guide</a></li>
+			<li><a href="/async-await">Async/Await explained</a></li>
+		</ul>
+	</aside>
+
+	<footer>
+		<address>
+			Written by <a href="mailto:contact@gentleman.dev">Gentleman</a>
+		</address>
+	</footer>
+</article>
+```
+
+### The DOM (Document Object Model)
+
+The DOM is the in-memory representation of your HTML. When the browser reads your HTML, it creates a tree of objects that JavaScript can manipulate. Each tag becomes a **node**.
+
+**Why is understanding the DOM important?**
+
+The DOM is the interface between your static HTML and JavaScript interactivity. Without understanding the DOM:
+
+- You can't manipulate elements dynamically
+- You don't understand why some operations are slow
+- You don't know how to optimize re-renders
+
+```
+document
+└── html
+    ├── head
+    │   ├── title
+    │   └── meta
+    └── body
+        ├── header
+        │   └── nav
+        └── main
+            └── article
+```
+
+### Accessing the DOM
+
+```javascript
+// By ID (returns one element or null)
+const header = document.getElementById('main-header');
+
+// By CSS selector (returns first match or null)
+const nav = document.querySelector('nav.main-nav');
+
+// By CSS selector (returns NodeList with all matches)
+const links = document.querySelectorAll('nav a');
+
+// By class (returns HTMLCollection - live)
+const buttons = document.getElementsByClassName('btn');
+
+// By tag (returns HTMLCollection - live)
+const paragraphs = document.getElementsByTagName('p');
+```
+
+**Important difference:** `querySelectorAll` returns a static `NodeList` (a snapshot of the moment). `getElementsByClassName` and `getElementsByTagName` return an `HTMLCollection` that is **live** (updates automatically if the DOM changes).
+
+### Manipulating the DOM
+
+```javascript
+// Create elements
+const newDiv = document.createElement('div');
+newDiv.textContent = 'Hello world';
+newDiv.classList.add('my-class');
+newDiv.setAttribute('data-id', '123');
+
+// Add to DOM
+document.body.appendChild(newDiv);
+
+// Insert at specific position
+const reference = document.querySelector('.reference');
+reference.parentNode.insertBefore(newDiv, reference);
+
+// Modern, more readable methods
+reference.before(newDiv); // Before the element
+reference.after(newDiv); // After the element
+reference.prepend(newDiv); // First child
+reference.append(newDiv); // Last child
+reference.replaceWith(newDiv); // Replace
+
+// Remove
+newDiv.remove();
+```
+
+### The performance problem
+
+Every time you modify the DOM, the browser has to recalculate styles, layouts, and possibly repaint. This is expensive. That's why:
+
+```javascript
+// BAD: Multiple modifications = multiple recalculations
+for (let i = 0; i < 1000; i++) {
+	document.body.innerHTML += `<div>${i}</div>`;
+}
+
+// GOOD: Use DocumentFragment
+const fragment = document.createDocumentFragment();
+for (let i = 0; i < 1000; i++) {
+	const div = document.createElement('div');
+	div.textContent = i;
+	fragment.appendChild(div);
+}
+document.body.appendChild(fragment); // Single recalculation
+```
+
+### Important attributes
+
+**Accessibility:**
+
+- `alt`: Alternative text for images. Required.
+- `aria-*`: Advanced accessibility attributes.
+- `role`: Defines the role of an element when semantic isn't enough.
+- `tabindex`: Tab order control.
+
+**SEO and metadata:**
+
+- `lang`: Content language.
+- `title`: Additional information (tooltip).
+- `data-*`: Custom attributes for JavaScript.
+
+```html
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="Description for search engines" />
+		<title>Page Title</title>
+	</head>
+</html>
+```
+
+### Chapter conclusion
+
+Semantic HTML is not optional, it's the foundation of everything. A well-thought-out structure makes CSS simpler, JavaScript cleaner, accessibility better, and SEO more effective. Before writing a single line of CSS, make sure your HTML makes sense.
+
+---
+
+## CSS Fundamentals
+
+### The problem we solve
+
+You have the structure of your house (HTML), now you need to paint it, decorate it, and decide where each piece of furniture goes. CSS is that: the visual presentation. But CSS has a reputation for being unpredictable, and that's because most people don't understand how it really works.
+
+### The Cascade: The heart of CSS
+
+CSS means "Cascading Style Sheets". The "cascading" part isn't decorative; it's the central mechanism that determines which styles apply when there are conflicts.
+
+**What problem does the cascade solve?**
+
+When you have multiple rules that apply to the same element, which one wins? The cascade answers that question with a clear priority system:
+
+1. **Origin and importance**
+2. **Specificity**
+3. **Order of appearance**
+
+### Origin and Importance
+
+```css
+/* Order from lowest to highest priority */
+
+/* 1. Browser styles (user agent) */
+/* 2. User styles (accessibility settings) */
+/* 3. Author styles (your CSS) */
+/* 4. Author styles with !important */
+/* 5. User styles with !important */
+/* 6. CSS animations */
+/* 7. CSS transitions */
+```
+
+`!important` breaks the natural flow. Use it only when there really is no other option (spoiler: there almost never is).
+
+```css
+/* BAD: !important war */
+.button {
+	color: red !important;
+}
+.button.primary {
+	color: blue !important; /* This wins, but it's a mess */
+}
+
+/* GOOD: Use specificity correctly */
+.button {
+	color: red;
+}
+.button.primary {
+	color: blue; /* Wins by higher specificity */
+}
+```
+
+### Specificity: The point system
+
+Specificity is a point system that determines which selector wins. Think of it as a 4-digit number:
+
+| Selector                                                           | Points |
+| ------------------------------------------------------------------ | ------ |
+| Inline styles (`style=""`)                                         | 1000   |
+| IDs (`#id`)                                                        | 100    |
+| Classes, attributes, pseudo-classes (`.class`, `[attr]`, `:hover`) | 10     |
+| Elements, pseudo-elements (`div`, `::before`)                      | 1      |
+| Universal (`*`), combinators (` `, `>`, `+`, `~`)                  | 0      |
+
+```css
+/* Specificity: 0-0-1 (1 element) */
+p {
+	color: black;
+}
+
+/* Specificity: 0-1-0 (1 class) */
+.text {
+	color: blue;
+}
+
+/* Specificity: 0-1-1 (1 class + 1 element) */
+p.text {
+	color: green;
+}
+
+/* Specificity: 1-0-0 (1 ID) */
+#paragraph {
+	color: red;
+}
+
+/* Specificity: 1-1-1 (1 ID + 1 class + 1 element) */
+p#paragraph.text {
+	color: purple;
+}
+```
+
+### The Box Model
+
+Everything in CSS is a box. Understanding the box model is understanding CSS.
+
+```
+┌─────────────────────────────────────┐
+│            margin                   │
+│  ┌───────────────────────────────┐  │
+│  │         border                │  │
+│  │  ┌─────────────────────────┐  │  │
+│  │  │       padding           │  │  │
+│  │  │  ┌───────────────────┐  │  │  │
+│  │  │  │    content        │  │  │  │
+│  │  │  │                   │  │  │  │
+│  │  │  │                   │  │  │  │
+│  │  │  └───────────────────┘  │  │  │
+│  │  └─────────────────────────┘  │  │
+│  └───────────────────────────────┘  │
+└─────────────────────────────────────┘
+```
+
+**Box-sizing: The change you need**
+
+By default, `width` and `height` only apply to content. Padding and border are added on top. This is a disaster for layouts.
+
+```css
+/* With box-sizing: content-box (default) */
+.box {
+	width: 100px;
+	padding: 20px;
+	border: 5px solid black;
+}
+/* Total width: 100 + 40 + 10 = 150px */
+
+/* With box-sizing: border-box */
+.box {
+	box-sizing: border-box;
+	width: 100px;
+	padding: 20px;
+	border: 5px solid black;
+}
+/* Total width: 100px (padding and border included) */
+```
+
+**Universal recommendation:**
+
+```css
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+```
+
+### Display and Flow
+
+The `display` value determines how an element behaves in the document flow.
+
+**Block vs Inline: The fundamental difference**
+
+```css
+/* BLOCK: Takes up full available width, starts on new line */
+/* div, p, h1-h6, section, article, header, footer, nav, main */
+.block {
+	display: block;
+	/* width, height, margin, padding: all work */
+}
+
+/* INLINE: Only takes up space of its content, doesn't break line */
+/* span, a, strong, em, code */
+.inline {
+	display: inline;
+	/* width, height: DON'T work */
+	/* margin-top, margin-bottom: DON'T work */
+	/* padding: works but doesn't affect vertical layout */
+}
+
+/* INLINE-BLOCK: Inline but respects width/height */
+.inline-block {
+	display: inline-block;
+	/* Everything works, but doesn't break line */
+}
+```
+
+### Flexbox: Layout in one dimension
+
+Flexbox solves the layout problem in one dimension (row or column). It's the hammer you need for 80% of layouts.
+
+**What problem does Flexbox solve?**
+
+Before Flexbox, centering an element vertically and horizontally required hacks. Distributing space between elements was a nightmare of floats and clearfixes. Flexbox solves this elegantly.
+
+```css
+.container {
+	display: flex;
+
+	/* Main direction */
+	flex-direction: row; /* default: horizontal */
+	flex-direction: column; /* vertical */
+
+	/* Alignment on main axis */
+	justify-content: flex-start; /* default */
+	justify-content: center;
+	justify-content: space-between; /* space between items */
+	justify-content: space-evenly; /* uniform space */
+
+	/* Alignment on cross axis */
+	align-items: stretch; /* default: takes full height */
+	align-items: center;
+	align-items: flex-start;
+
+	/* Gap (space between items) - modern and clean */
+	gap: 1rem;
+}
+
+.item {
+	/* Grow to fill available space */
+	flex-grow: 1;
+
+	/* Don't shrink */
+	flex-shrink: 0;
+
+	/* Base size */
+	flex-basis: 200px;
+
+	/* Shorthand */
+	flex: 1; /* flex-grow: 1, flex-shrink: 1, flex-basis: 0% */
+}
+```
+
+### Common Flexbox patterns
+
+```css
+/* Perfect centering */
+.centered {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* Navbar with logo on left and links on right */
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+/* Footer stuck to bottom */
+.page {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+.page-content {
+	flex: 1;
+}
+```
+
+### CSS Grid: Layout in two dimensions
+
+Grid solves layouts in two dimensions (rows and columns). It's more powerful than Flexbox for complex layouts.
+
+```css
+.grid-container {
+	display: grid;
+
+	/* Define columns */
+	grid-template-columns: 200px 1fr 200px; /* fixed, flexible, fixed */
+	grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* responsive! */
+
+	/* Define rows */
+	grid-template-rows: auto 1fr auto; /* header, content, footer */
+
+	/* Gap */
+	gap: 1rem;
+}
+```
+
+### Grid Areas: The best of Grid
+
+```css
+.layout {
+	display: grid;
+	grid-template-columns: 200px 1fr 200px;
+	grid-template-rows: auto 1fr auto;
+	grid-template-areas:
+		'header header header'
+		'sidebar main aside'
+		'footer footer footer';
+	min-height: 100vh;
+}
+
+.header {
+	grid-area: header;
+}
+.sidebar {
+	grid-area: sidebar;
+}
+.main {
+	grid-area: main;
+}
+.footer {
+	grid-area: footer;
+}
+```
+
+### When to use Flexbox vs Grid
+
+**Use Flexbox when:**
+
+- You have a single dimension (row or column)
+- Content defines the size
+- You want to distribute space between items
+
+**Use Grid when:**
+
+- You have two dimensions (rows AND columns)
+- Layout defines the size
+- You need precise positioning
+
+**In practice:** Grid for general page layout, Flexbox for internal components.
+
+---
+
+## JavaScript Fundamentals
+
+### The problem we solve
+
+HTML is the structure, CSS is the presentation, JavaScript is the behavior. It's what makes your page react, communicate with servers, and behave like a real application.
+
+### The JavaScript execution model
+
+Before writing a line of code, you need to understand how JavaScript executes your code. JavaScript is **single-threaded** but **asynchronous**. How is that possible?
+
+**The Event Loop** is the mechanism that makes it work:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                         Call Stack                          │
+│  (where synchronous code executes)                         │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      Microtask Queue                        │
+│  (Promises, queueMicrotask - high priority)                │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      Macrotask Queue                        │
+│  (setTimeout, setInterval, I/O, UI rendering)              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**The cycle:**
+
+1. Execute everything in the Call Stack
+2. Process ALL microtasks
+3. Process ONE macrotask
+4. Go back to step 2
+
+### Data types
+
+JavaScript has primitive types and objects.
+
+**Primitives:**
+
+```javascript
+// String
+const name = 'Gentleman';
+const template = `Hello ${name}`; // Template literal
+
+// Number (integers and decimals, same type)
+const integer = 42;
+const decimal = 3.14;
+const notANumber = NaN; // "Not a Number", but typeof NaN === 'number' 🤦
+
+// Boolean
+const truthy = true;
+const falsy = false;
+
+// Undefined (declared variable without value)
+let noValue;
+console.log(noValue); // undefined
+
+// Null (intentional absence of value)
+const empty = null;
+
+// Symbol (unique identifier)
+const id = Symbol('description');
+```
+
+**Objects:**
+
+```javascript
+// Object literal
+const person = {
+	name: 'Gentleman',
+	age: 30,
+	greet() {
+		return `Hi, I'm ${this.name}`;
+	},
+};
+
+// Array (special object)
+const numbers = [1, 2, 3, 4, 5];
+
+// Map (key-value with any type of key)
+const map = new Map();
+map.set('key', 'value');
+map.set(42, 'number as key');
+
+// Set (unique values)
+const set = new Set([1, 2, 2, 3, 3, 3]);
+console.log([...set]); // [1, 2, 3]
+```
+
+### Scope and Closures
+
+**Scope determines where variables live:**
+
+```javascript
+// var: function scope (avoid it)
+// let, const: block scope
+
+function example() {
+	if (true) {
+		var withVar = 'visible outside the if';
+		let withLet = 'only visible inside the if';
+		const withConst = 'also only inside the if';
+	}
+	console.log(withVar); // works
+	console.log(withLet); // ReferenceError
+}
+```
+
+**Closures: functions that remember their scope**
+
+```javascript
+function createCounter() {
+	let count = 0; // This variable "lives" in the closure
+
+	return {
+		increment: () => ++count,
+		decrement: () => --count,
+		get: () => count,
+	};
+}
+
+const counter = createCounter();
+counter.increment(); // 1
+counter.increment(); // 2
+// No way to access 'count' directly
+```
+
+### Promises and Async/Await
+
+**Promises represent a value that may be available now, in the future, or never.**
+
+```javascript
+// States of a Promise:
+// - pending: initial, waiting
+// - fulfilled: successful operation
+// - rejected: failed operation
+
+const myPromise = new Promise((resolve, reject) => {
+	const success = true;
+	if (success) {
+		resolve('It worked!');
+	} else {
+		reject(new Error('Something went wrong'));
+	}
+});
+
+// Consume with then/catch
+myPromise
+	.then(result => console.log(result))
+	.catch(error => console.error(error.message))
+	.finally(() => console.log('Always executes'));
+```
+
+**Async/Await: syntactic sugar over Promises**
+
+```javascript
+async function getUser(id) {
+	try {
+		const response = await fetch(`/api/users/${id}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return await response.json();
+	} catch (error) {
+		console.error('Error loading user:', error);
+		throw error;
+	}
+}
+
+// Parallel execution
+async function loadAll() {
+	const [user, posts, comments] = await Promise.all([
+		getUser(1),
+		getPosts(),
+		getComments(),
+	]);
+	return { user, posts, comments };
+}
+```
+
+### Common patterns
+
+```javascript
+// Debounce: wait for user to stop typing
+function debounce(fn, delay) {
+	let timeoutId;
+	return function (...args) {
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => fn.apply(this, args), delay);
+	};
+}
+
+// Throttle: limit execution frequency
+function throttle(fn, limit) {
+	let inThrottle;
+	return function (...args) {
+		if (!inThrottle) {
+			fn.apply(this, args);
+			inThrottle = true;
+			setTimeout(() => (inThrottle = false), limit);
+		}
+	};
+}
+
+// Retry with exponential backoff
+async function fetchWithRetry(url, maxRetries = 3) {
+	for (let i = 0; i < maxRetries; i++) {
+		try {
+			const response = await fetch(url);
+			if (!response.ok) throw new Error(`HTTP ${response.status}`);
+			return await response.json();
+		} catch (error) {
+			if (i === maxRetries - 1) throw error;
+			await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+		}
+	}
+}
+```
+
+---
+
+## Forms
+
+### The problem we solve
+
+Forms are the main form of bidirectional interaction with the user. They seem simple but have a lot of details: validation, accessibility, UX, and data handling.
+
+### HTML forms with native validation
+
+HTML5 includes native validation that works without JavaScript:
+
+```html
+<form action="/api/contact" method="POST">
+	<!-- Text input with validation -->
+	<label for="name">Full name</label>
+	<input
+		type="text"
+		id="name"
+		name="name"
+		required
+		minlength="2"
+		maxlength="100"
+		autocomplete="name"
+	/>
+
+	<!-- Email with native validation -->
+	<label for="email">Email</label>
+	<input type="email" id="email" name="email" required autocomplete="email" />
+
+	<!-- Password with pattern -->
+	<label for="password">Password</label>
+	<input
+		type="password"
+		id="password"
+		name="password"
+		required
+		minlength="8"
+		pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+		title="Minimum 8 characters, one uppercase, one lowercase and one number"
+	/>
+
+	<button type="submit">Submit</button>
+</form>
+```
+
+### Forms with JavaScript
+
+```javascript
+const form = document.querySelector('form');
+
+form.addEventListener('submit', async event => {
+	event.preventDefault();
+
+	// Get data with FormData
+	const formData = new FormData(form);
+	const data = Object.fromEntries(formData);
+
+	try {
+		const response = await fetch('/api/contact', {
+			method: 'POST',
+			body: formData,
+		});
+
+		if (!response.ok) throw new Error('Submit error');
+
+		form.reset();
+		showMessage('Sent successfully');
+	} catch (error) {
+		showError(error.message);
+	}
+});
+
+// Constraint Validation API
+function validateInput(input) {
+	const validity = input.validity;
+
+	if (validity.valueMissing) return 'This field is required';
+	if (validity.typeMismatch) return 'Invalid format';
+	if (validity.tooShort) return `Minimum ${input.minLength} characters`;
+	if (validity.patternMismatch) return input.title || 'Invalid format';
+
+	return '';
+}
+```
+
+---
+
+## Responsive Design
+
+### The problem we solve
+
+People use your site from a phone on the bus, a tablet on the couch, and a 4K monitor in the office. Responsive design is making everything work well everywhere without making three different versions.
+
+### Mobile First: The right strategy
+
+**Mobile First** means starting by designing for mobile and adding complexity for larger screens. Why?
+
+1. **Performance**: Mobiles have slower connections, starting simple is better
+2. **Prioritization**: Forces you to think about what's really important
+3. **Progressivity**: It's easier to add than to remove
+
+```css
+/* Mobile First: base styles for mobile */
+.container {
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Tablet: 768px+ */
+@media (min-width: 768px) {
+	.container {
+		padding: 2rem;
+		flex-direction: row;
+	}
+}
+
+/* Desktop: 1024px+ */
+@media (min-width: 1024px) {
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+}
+```
+
+### Responsive units
+
+```css
+/* rem: relative to root (html) font-size */
+html {
+	font-size: 16px;
+}
+.title {
+	font-size: 2rem;
+} /* 32px */
+
+/* vw, vh: relative to viewport */
+.hero {
+	height: 100vh;
+}
+
+/* clamp: responsive value with limits */
+.title {
+	font-size: clamp(1.5rem, 4vw, 3rem);
+	/* minimum: 1.5rem, ideal: 4vw, maximum: 3rem */
+}
+
+/* ch: width of "0" (useful for text widths) */
+.readable-text {
+	max-width: 65ch; /* ~65 characters per line */
+}
+```
+
+### Auto-responsive Grid
+
+```css
+/* Magic: columns that adapt automatically */
+.auto-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 1rem;
+}
+/* If there's space: more columns. If not: fewer. Automatic. */
+```
+
+---
+
+## Networking
+
+### The problem we solve
+
+Your frontend doesn't live alone; it needs to communicate with servers, APIs, and external services. Understanding how the network works is the difference between an app that flies and one that lags.
+
+### HTTP: The web protocol
+
+HTTP is a request-response protocol. The client asks, the server responds.
+
+**HTTP methods and their meaning:**
+
+- `GET`: Get data (idempotent, cacheable)
+- `POST`: Create resources (not idempotent)
+- `PUT`: Replace complete resource (idempotent)
+- `PATCH`: Partially modify (not necessarily idempotent)
+- `DELETE`: Delete resource (idempotent)
+
+**Important Status Codes:**
+
+```
+2xx - Success
+  200 OK
+  201 Created
+  204 No Content
+
+3xx - Redirection
+  301 Moved Permanently
+  304 Not Modified (cache hit)
+
+4xx - Client Error
+  400 Bad Request
+  401 Unauthorized
+  403 Forbidden
+  404 Not Found
+  429 Too Many Requests
+
+5xx - Server Error
+  500 Internal Server Error
+  503 Service Unavailable
+```
+
+### Fetch API
+
+```javascript
+// Simple GET
+const response = await fetch('/api/users');
+const users = await response.json();
+
+// POST with JSON
+const newUser = await fetch('/api/users', {
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json',
+	},
+	body: JSON.stringify({
+		name: 'Gentleman',
+		email: 'gentleman@dev.com',
+	}),
+});
+
+// Timeout for fetch
+async function fetchWithTimeout(url, timeout = 5000) {
+	const controller = new AbortController();
+	const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+	try {
+		const response = await fetch(url, { signal: controller.signal });
+		return await response.json();
+	} finally {
+		clearTimeout(timeoutId);
+	}
+}
+```
+
+### Caching: The fastest request is the one you don't make
+
+```
+# Never cache
+Cache-Control: no-store
+
+# Cache but always revalidate
+Cache-Control: no-cache
+
+# Cache for 1 hour
+Cache-Control: max-age=3600
+
+# Cache for 1 year (for versioned assets)
+Cache-Control: max-age=31536000, immutable
+```
+
+---
+
+## Part II - Intermediate
+
+---
+
+## Accessibility
+
+### The problem we solve
+
+Approximately 15% of the world's population has some type of disability. But beyond that, accessibility improves the experience for everyone: users with slow connections, people using the site in difficult situations (direct sunlight, one hand free), and more.
+
+### Why is accessibility critical?
+
+**The cost of bad accessibility:**
+
+1. User arrives at the site
+2. Confused by the interface
+3. Can't navigate with keyboard
+4. Gives up
+5. Lawsuit (Domino's Pizza lost a $4M lawsuit)
+
+**Legal requirements:**
+
+- ADA (Americans with Disabilities Act)
+- Section 508
+- WCAG (Web Content Accessibility Guidelines)
+
+### WCAG: The 4 Principles (POUR)
+
+**1. Perceivable**
+
+- Text alternatives for images
+- Captions for videos
+- Sufficient color contrast
+
+**2. Operable**
+
+- Keyboard accessible
+- Enough time to read
+- No flashing that causes seizures
+
+**3. Understandable**
+
+- Readable text
+- Predictable behavior
+- Input assistance
+
+**4. Robust**
+
+- Compatible with assistive technologies
+- Valid HTML
+
+### Accessibility Levels
+
+```
+Level A: Minimum (basic)
+Level AA: Mid range (target for most sites)
+Level AAA: Highest (not required for all content)
+```
+
+**Target: WCAG 2.1 Level AA**
+
+### Keyboard First
+
+Everything that can be done with a mouse should be doable with a keyboard.
+
+```html
+<!-- Naturally focusable elements -->
+<a href="/page">Link</a>
+<button>Button</button>
+<input type="text" />
+
+<!-- Make something focusable that isn't -->
+<div tabindex="0" role="button">Custom button</div>
+
+<!-- tabindex values -->
+<!-- 0: enters natural tab order -->
+<!-- -1: focusable by JS but not by tab -->
+<!-- >0: AVOID, breaks natural order -->
+```
+
+### Visible focus
+
+```css
+/* NEVER do this */
+:focus {
+	outline: none;
+}
+
+/* Better: Customize the outline */
+:focus-visible {
+	outline: 2px solid #0066cc;
+	outline-offset: 2px;
+}
+```
+
+### ARIA (Accessible Rich Internet Applications)
+
+ARIA adds semantics when HTML isn't enough. **The first rule of ARIA is: don't use ARIA if you can use semantic HTML.**
+
+```html
+<!-- BAD: Unnecessary ARIA -->
+<div role="button" tabindex="0" aria-label="Submit">Submit</div>
+
+<!-- GOOD: Semantic HTML -->
+<button>Submit</button>
+
+<!-- ARIA when you really need it -->
+<button aria-expanded="false" aria-controls="menu">Open menu</button>
+<ul id="menu" aria-hidden="true">
+	<li>Option 1</li>
+</ul>
+```
+
+### Color Contrast
+
+WCAG requires minimum contrast ratios:
+
+- **AA (minimum)**: 4.5:1 for normal text, 3:1 for large text
+- **AAA (optimal)**: 7:1 for normal text, 4.5:1 for large text
+
+**Tools:**
+
+- Chrome DevTools: Inspect element → Contrast ratio
+- WebAIM Contrast Checker
+- Axe DevTools (browser extension)
+
+---
+
+## State Management
+
+### The problem we solve
+
+An application has state: the logged-in user, cart items, whether a modal is open. When state grows and is shared between components, you need a system to manage it predictably.
+
+### What is state?
+
+**State** is any data that can change during the life of your application:
+
+- **UI state**: modal open/closed, active tab, loading
+- **Server state**: API data, authenticated user
+- **Form state**: input values, validation errors
+- **URL state**: route parameters, query strings
+
+### Local vs global state
+
+```javascript
+// Local state: only one component needs it
+function Counter() {
+	const [count, setCount] = useState(0);
+	return <button onClick={() => setCount(c => c + 1)}>{count}</button>;
+}
+
+// Global state: multiple components need it
+// - Authenticated user
+// - Shopping cart
+// - Theme (dark/light)
+// - Notifications
+```
+
+### Lifting State Up
+
+The simplest pattern: lift state to the nearest common ancestor.
+
+```javascript
+function GoodForm() {
+	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
+
+	return (
+		<>
+			<NameInput value={name} onChange={setName} />
+			<EmailInput value={email} onChange={setEmail} />
+			<Summary name={name} email={email} />
+		</>
+	);
+}
+```
+
+### Context API: Avoid prop drilling
+
+**Prop drilling** is when you pass props through multiple levels of components that don't use them, just to reach the component that does.
+
+```javascript
+const AuthContext = createContext(null);
+
+function AuthProvider({ children }) {
+	const [user, setUser] = useState(null);
+
+	const login = async credentials => {
+		const user = await api.login(credentials);
+		setUser(user);
+	};
+
+	const logout = () => setUser(null);
+
+	return (
+		<AuthContext.Provider value={{ user, login, logout }}>
+			{children}
+		</AuthContext.Provider>
+	);
+}
+
+function useAuth() {
+	const context = useContext(AuthContext);
+	if (!context) {
+		throw new Error('useAuth must be used within AuthProvider');
+	}
+	return context;
+}
+```
+
+### Reducer Pattern: For complex state
+
+When you have multiple actions that modify state, a reducer makes code more predictable.
+
+```javascript
+const initialState = {
+	items: [],
+	loading: false,
+	error: null,
+};
+
+function cartReducer(state, action) {
+	switch (action.type) {
+		case 'LOAD_START':
+			return { ...state, loading: true, error: null };
+
+		case 'LOAD_SUCCESS':
+			return { ...state, loading: false, items: action.payload };
+
+		case 'ADD_ITEM':
+			return { ...state, items: [...state.items, action.payload] };
+
+		case 'REMOVE_ITEM':
+			return {
+				...state,
+				items: state.items.filter(item => item.id !== action.payload),
+			};
+
+		default:
+			return state;
+	}
+}
+
+function Cart() {
+	const [state, dispatch] = useReducer(cartReducer, initialState);
+
+	const addItem = product => {
+		dispatch({ type: 'ADD_ITEM', payload: product });
+	};
+}
+```
+
+### Server state vs client state
+
+Server state (API data) has different characteristics than client state:
+
+- Can be cached
+- Can be stale
+- Multiple clients can modify it
+
+**TanStack Query (React Query)** solves this elegantly:
+
+```javascript
+function Users() {
+	const { data, isLoading, error } = useQuery({
+		queryKey: ['users'],
+		queryFn: () => fetch('/api/users').then(r => r.json()),
+		staleTime: 5 * 60 * 1000, // 5 minutes
+	});
+
+	const mutation = useMutation({
+		mutationFn: newUser =>
+			fetch('/api/users', {
+				method: 'POST',
+				body: JSON.stringify(newUser),
+			}),
+		onSuccess: () => {
+			queryClient.invalidateQueries(['users']);
+		},
+	});
+}
+```
+
+---
+
+## Component Design
+
+### The problem we solve
+
+Components are the building blocks of your UI. Poorly designed, they generate duplicate code and are hard to maintain. Well designed, they're like LEGO: combinable and predictable.
+
+### Principles of good component design
+
+**1. Single Responsibility**: One component = One responsibility
+
+```javascript
+// BAD: One component does everything
+function ProductPage({ productId }) {
+	// Fetch data, manage cart, show reviews, recommendations...
+}
+
+// GOOD: Components with clear responsibilities
+function ProductPage({ productId }) {
+	return (
+		<PageLayout>
+			<ProductDetails productId={productId} />
+			<AddToCartSection productId={productId} />
+			<ProductReviews productId={productId} />
+			<RelatedProducts productId={productId} />
+		</PageLayout>
+	);
+}
+```
+
+**2. Composition over inheritance**
+
+```javascript
+function Button({ variant = 'default', size = 'md', children, ...props }) {
+	const classes = `btn btn-${variant} btn-${size}`;
+	return (
+		<button className={classes} {...props}>
+			{children}
+		</button>
+	);
+}
+
+function IconButton({ icon, children, ...props }) {
+	return (
+		<Button {...props}>
+			<Icon name={icon} />
+			{children}
+		</Button>
+	);
+}
+```
+
+**3. Container vs Presentational**
+
+```javascript
+// Presentational: Only renders, receives everything via props
+function UserAvatar({ user, size = 'md' }) {
+	return (
+		<img
+			src={user.avatarUrl}
+			alt={user.name}
+			className={`avatar avatar-${size}`}
+		/>
+	);
+}
+
+// Container: Fetches data, handles logic
+function UserAvatarContainer({ userId, size }) {
+	const { data: user, isLoading } = useUser(userId);
+
+	if (isLoading) return <AvatarSkeleton size={size} />;
+	return <UserAvatar user={user} size={size} />;
+}
+```
+
+### Compound Components
+
+For complex components with multiple related parts:
+
+```javascript
+<Tabs defaultValue='tab1'>
+	<Tabs.List>
+		<Tabs.Trigger value='tab1'>Tab 1</Tabs.Trigger>
+		<Tabs.Trigger value='tab2'>Tab 2</Tabs.Trigger>
+	</Tabs.List>
+	<Tabs.Content value='tab1'>Content 1</Tabs.Content>
+	<Tabs.Content value='tab2'>Content 2</Tabs.Content>
+</Tabs>
+```
+
+---
+
+## Media Optimization
+
+### The problem we solve
+
+Images and videos are the heaviest content on the web. A page with poorly optimized images can take 10 seconds to load.
+
+### Modern image formats
+
+```html
+<picture>
+	<source srcset="image.avif" type="image/avif" />
+	<source srcset="image.webp" type="image/webp" />
+	<img src="image.jpg" alt="Description" />
+</picture>
+```
+
+**When to use each format:**
+
+- **AVIF**: Maximum compression, growing support
+- **WebP**: Excellent compression, wide support
+- **JPEG**: Photos, universal fallback
+- **PNG**: Transparency, few colors
+- **SVG**: Logos, icons, illustrations
+
+### Lazy Loading
+
+```html
+<img src="image.jpg" loading="lazy" alt="..." />
+<img src="hero.jpg" loading="eager" alt="..." />
+<img src="lcp-image.jpg" fetchpriority="high" alt="..." />
+```
+
+### Aspect Ratio and CLS
+
+**CLS (Cumulative Layout Shift)**: How much content moves while loading. Reserving space for images prevents it.
+
+```css
+.image-container {
+	aspect-ratio: 16 / 9;
+	width: 100%;
+	background: #f0f0f0;
+}
+
+.image-container img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+```
+
+---
+
+## Browser Fundamentals
+
+### The problem we solve
+
+To optimize performance, you need to understand how the browser converts your code into pixels.
+
+### The rendering process
+
+```
+HTML → DOM Tree
+              ↘
+                 → Render Tree → Layout → Paint → Composite
+              ↗
+CSS → CSSOM
+```
+
+**Each step has a cost:**
+
+1. **Parse**: Read HTML/CSS
+2. **Style**: Calculate computed styles
+3. **Layout**: Calculate geometry (position, size)
+4. **Paint**: Draw pixels
+5. **Composite**: Combine layers
+
+### Repaint vs Reflow
+
+**Reflow (Layout)**: The browser recalculates geometry. VERY expensive.
+
+Triggers: width, height, margin, padding, font-size, adding/removing elements
+
+**Repaint**: Redraws without changing geometry. Less expensive.
+
+Triggers: color, background-color, visibility
+
+```javascript
+// BAD: Layout thrashing
+elements.forEach(el => {
+	const width = el.offsetWidth; // Read → forces layout
+	el.style.width = width + 10 + 'px'; // Write → invalidates layout
+});
+
+// GOOD: Batch reads, then writes
+const measurements = elements.map(el => el.offsetWidth);
+elements.forEach((el, i) => {
+	el.style.width = measurements[i] + 10 + 'px';
+});
+```
+
+### Performant properties
+
+Only `transform` and `opacity` can be animated without causing repaint:
+
+```css
+/* Only composite (most performant) */
+transform: translateX(100px); /* Instead of left */
+transform: scale(1.5); /* Instead of width/height */
+opacity: 0.5;
+
+.animated {
+	will-change: transform; /* Hint to browser to optimize */
+}
+```
+
+---
+
+## Rendering Strategies
+
+### The problem we solve
+
+Where is the HTML generated? Each strategy has trade-offs in performance, SEO, and complexity.
+
+### Client-Side Rendering (CSR)
+
+The server sends empty HTML, JavaScript generates everything.
+
+**Flow:**
+
+1. Browser requests page
+2. Server responds with minimal HTML + JS bundle
+3. Browser downloads and executes JS
+4. JS fetches data
+5. JS renders the UI
+
+**Advantages:** Simple server, smooth transitions
+**Disadvantages:** Bad for SEO, high Time to First Paint
+
+**When to use:** Apps behind login, dashboards
+
+### Server-Side Rendering (SSR)
+
+The server generates complete HTML on each request.
+
+**Flow:**
+
+1. Browser requests page
+2. Server executes code, fetches data
+3. Server generates complete HTML
+4. Browser receives HTML ready to display
+5. JS "hydrates" the page (adds interactivity)
+
+**Advantages:** Good SEO, fast First Paint
+**Disadvantages:** More complex server, higher TTFB
+
+**When to use:** Public content that needs SEO
+
+### Static Site Generation (SSG)
+
+HTML is generated at build time, not on each request.
+
+**Advantages:** Maximum performance, easy to cache
+**Disadvantages:** Rebuild to update
+
+**When to use:** Blogs, documentation, marketing sites
+
+### Server Components
+
+The most recent evolution: components that ONLY run on the server.
+
+```javascript
+// Server Component - runs on the server
+async function ProductList() {
+	const products = await db.products.findMany();
+	return (
+		<ul>
+			{products.map(p => (
+				<li key={p.id}>{p.name}</li>
+			))}
+		</ul>
+	);
+}
+
+// Client Component - runs in the browser
+('use client');
+function AddToCartButton({ productId }) {
+	const [loading, setLoading] = useState(false);
+	return <button onClick={() => addToCart(productId)}>Add</button>;
+}
+```
+
+---
+
+## Fonts
+
+### The problem we solve
+
+Fonts are critical. A bad strategy causes: Flash of Invisible Text (FOIT), Flash of Unstyled Text (FOUT), and layout shift.
+
+### Font-display
+
+```css
+@font-face {
+	font-family: 'MyFont';
+	src: url('myfont.woff2') format('woff2');
+	font-display: swap;
+}
+
+/* Values:
+   swap: immediate fallback, swap when loaded (FOUT)
+   fallback: brief FOIT, then fallback
+   optional: fallback, swap only if in cache
+*/
+```
+
+### Preload critical fonts
+
+```html
+<link
+	rel="preload"
+	href="/fonts/myfont.woff2"
+	as="font"
+	type="font/woff2"
+	crossorigin
+/>
+```
+
+---
+
+## Testing Strategies
+
+### The problem we solve
+
+Code without tests is code that breaks in production. Tests give confidence to make changes.
+
+### The Testing Pyramid
+
+```
+       /\
+      /E2E\       ← Few (5-10%): slow, expensive
+     /____\
+    /      \
+   /Integr. \    ← Moderate (20-30%): balance
+  /__________\
+ /            \
+/  Unit Tests  \  ← Many (60-70%): fast, cheap
+/_______________\
+```
+
+**Principle:** More unit tests, fewer E2E
+
+### Unit Tests
+
+**Characteristics:**
+
+- **Fast**: < 10ms per test
+- **Isolated**: No external dependencies
+- **Deterministic**: Same input = same output
+
+**When to use:** Pure functions, business logic, calculations, validations
+
+```javascript
+import { formatPrice, calculateDiscount } from './utils';
+
+describe('formatPrice', () => {
+	it('formats price in USD', () => {
+		expect(formatPrice(100)).toBe('$100.00');
+	});
+});
+
+describe('calculateDiscount', () => {
+	it('calculates discount correctly', () => {
+		expect(calculateDiscount(100, 20)).toBe(80);
+	});
+
+	it('throws error with negative discount', () => {
+		expect(() => calculateDiscount(100, -10)).toThrow();
+	});
+});
+```
+
+### Integration Tests
+
+**Characteristics:**
+
+- **Moderately fast**: 100-500ms per test
+- **Connected**: Multiple components together
+- **Functional**: Validate user flows
+
+**Testing Library Philosophy:**
+
+> "The more your tests resemble the way your software is used, the more confidence they can give you."
+
+```javascript
+import { render, screen, fireEvent } from '@testing-library/react';
+
+describe('Button', () => {
+	it('renders the text', () => {
+		render(<Button>Click me</Button>);
+		expect(screen.getByText('Click me')).toBeInTheDocument();
+	});
+
+	it('calls onClick', () => {
+		const handleClick = jest.fn();
+		render(<Button onClick={handleClick}>Test</Button>);
+		fireEvent.click(screen.getByRole('button'));
+		expect(handleClick).toHaveBeenCalledTimes(1);
+	});
+});
+```
+
+### E2E Tests
+
+**Characteristics:**
+
+- **Slow**: 1-10 seconds per test
+- **Real**: Browser + Network + Backend
+- **Critical**: Validate complete flows
+
+```javascript
+// Playwright
+test('user can complete purchase', async ({ page }) => {
+	await page.goto('/products');
+	await page.click('text=Test Product');
+	await page.click('button:has-text("Add to cart")');
+	await page.click('[data-testid="cart-icon"]');
+	await page.click('text=Proceed to checkout');
+	await expect(page).toHaveURL(/\/order-confirmation/);
+});
+```
+
+### Coverage Strategy
+
+```javascript
+coverage: {
+  thresholds: {
+    global: {
+      functions: 100,    // All functions
+      lines: 80,         // 80% lines
+      branches: 80,      // 80% branches
+      statements: 80     // 80% statements
+    }
+  }
+}
+```
+
+**100% functions, 80% lines is realistic**
+
+---
+
+## Deployment Basics
+
+### The problem we solve
+
+Your app works on localhost. Deploying is putting it on real servers.
+
+### Static Hosting
+
+For sites without a server (SSG, SPAs).
+
+```
+Your code → Build → Static files → CDN → User
+```
+
+Providers: Vercel, Netlify, Cloudflare Pages, AWS S3 + CloudFront
+
+### Edge vs Origin
+
+```
+Edge (CDN): Close to user, ~20-50ms, cached content
+Origin: Your server, ~100-300ms, dynamic content
+```
+
+### Basic CI/CD
+
+```yaml
+# GitHub Actions
+name: Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npm run deploy
+```
+
+---
+
+## Part III - Advanced
+
+---
+
+## Build Systems and Module Formats
+
+### The problem we solve
+
+The code you write is not the code that runs in the browser. Bundlers transform, optimize, and package your code.
+
+### History of modules in JavaScript
+
+Before ES Modules, JavaScript had no native module system. This led to various solutions:
+
+```javascript
+// CommonJS (Node.js) - synchronous, doesn't work in browser
+const fs = require('fs');
+module.exports = { method };
+
+// ES Modules (the modern standard)
+import { something } from './module.js';
+export const method = () => {};
+export default class MyClass {}
+```
+
+### What does a bundler do?
+
+A bundler like Vite, Webpack, or Rollup:
+
+1. **Resolves imports**: Finds all modules your code needs
+2. **Transforms code**: TypeScript → JavaScript, JSX → JavaScript
+3. **Tree shaking**: Removes unused code
+4. **Code splitting**: Splits into chunks for on-demand loading
+5. **Minifies**: Reduces size by removing spaces, shortening names
+
+### Tree Shaking
+
+Removes unused code:
+
+```javascript
+// utils.js
+export function used() {}
+export function notUsed() {}
+
+// app.js
+import { used } from './utils.js';
+used();
+// notUsed() is not in the final bundle
+```
+
+**Important:** Tree shaking only works with ES Modules (import/export), not with CommonJS (require/module.exports).
+
+### Code Splitting
+
+```javascript
+// Split by route
+const Home = lazy(() => import('./pages/Home'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+
+function App() {
+	return (
+		<Suspense fallback={<Loading />}>
+			<Routes>
+				<Route path='/' element={<Home />} />
+				<Route path='/dashboard' element={<Dashboard />} />
+			</Routes>
+		</Suspense>
+	);
+}
+```
+
+---
+
+## Security Basics
+
+### The problem we solve
+
+Security is not optional. A vulnerable site can leak data and destroy reputations.
+
+### XSS (Cross-Site Scripting)
+
+**The attack:** Attacker injects malicious JavaScript code that runs in other users' browsers.
+
+**Types of XSS:**
+
+1. **Stored**: Code saved in DB, affects all users
+2. **Reflected**: Code in URL, affects specific victim
+3. **DOM-based**: Manipulates DOM directly
+
+```javascript
+// ❌ Vulnerable
+element.innerHTML = userInput;
+
+// ✅ Safe
+element.textContent = userInput;
+
+// ✅ If you need dynamic HTML, sanitize
+import DOMPurify from 'dompurify';
+element.innerHTML = DOMPurify.sanitize(userInput);
+```
+
+**Why is React safer?** React automatically escapes content in JSX. `{userInput}` is safe because React treats it as text, not HTML.
+
+### CSRF (Cross-Site Request Forgery)
+
+**The attack:** Malicious site makes the user's browser send requests to your API using their session cookies.
+
+**Defenses:**
+
+```javascript
+// 1. SameSite Cookies
+res.cookie('session', token, {
+	sameSite: 'strict', // Cookie only sent to same site
+	httpOnly: true,
+	secure: true,
+});
+
+// 2. CSRF Tokens
+<input type="hidden" name="_csrf" value={csrfToken}>
+```
+
+### Content Security Policy (CSP)
+
+CSP tells the browser WHAT resources it can load and FROM WHERE:
+
+```html
+<meta
+	http-equiv="Content-Security-Policy"
+	content="
+  default-src 'self';
+  script-src 'self';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: https:;
+  connect-src 'self' https://api.example.com;
+"
+/>
+```
+
+### Essential Security Headers
+
+```javascript
+// X-Frame-Options: Prevent clickjacking
+res.setHeader('X-Frame-Options', 'DENY');
+
+// X-Content-Type-Options: Prevent MIME sniffing
+res.setHeader('X-Content-Type-Options', 'nosniff');
+
+// Strict-Transport-Security: Force HTTPS
+res.setHeader(
+	'Strict-Transport-Security',
+	'max-age=31536000; includeSubDomains',
+);
+```
+
+---
+
+## Privacy and Permissions
+
+### The problem we solve
+
+Users have a right to their privacy. Laws require it and browsers restrict access.
+
+### Cookies and SameSite
+
+```javascript
+// Create cookie
+document.cookie = 'name=value; max-age=86400; path=/; secure; samesite=strict';
+
+// SameSite values:
+// Strict: Only same-site requests
+// Lax: + top-level navigation (default)
+// None; Secure: Always (requires HTTPS)
+```
+
+### Browser Permissions
+
+```javascript
+// Notification
+const permission = await Notification.requestPermission();
+if (permission === 'granted') {
+	new Notification('Hello!');
+}
+
+// Geolocation
+navigator.geolocation.getCurrentPosition(
+	pos => console.log(pos.coords),
+	err => console.error(err),
+);
+
+// Camera/Microphone
+const stream = await navigator.mediaDevices.getUserMedia({
+	video: true,
+	audio: true,
+});
+```
+
+---
+
+## Offline-First and PWAs
+
+### The problem we solve
+
+The network is not reliable. An offline-first app works without connection and syncs when it can.
+
+### Service Workers: The power behind PWAs
+
+A Service Worker is a script that runs in the background, separate from the main thread:
+
+```javascript
+// sw.js
+const CACHE_NAME = 'my-app-v1';
+const ASSETS = ['/', '/index.html', '/styles.css', '/app.js'];
+
+// Installation: cache assets
+self.addEventListener('install', event => {
+	event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
+});
+
+// Fetch: serve from cache
+self.addEventListener('fetch', event => {
+	event.respondWith(
+		caches.match(event.request).then(cached => cached || fetch(event.request)),
+	);
+});
+
+// Register
+if ('serviceWorker' in navigator) {
+	navigator.serviceWorker.register('/sw.js');
+}
+```
+
+### Caching strategies
+
+```javascript
+// Cache First (static assets)
+async function cacheFirst(request) {
+	const cached = await caches.match(request);
+	return cached || fetch(request);
+}
+
+// Network First (API calls)
+async function networkFirst(request) {
+	try {
+		const response = await fetch(request);
+		const cache = await caches.open(CACHE_NAME);
+		cache.put(request, response.clone());
+		return response;
+	} catch {
+		return caches.match(request);
+	}
+}
+
+// Stale While Revalidate
+async function staleWhileRevalidate(request) {
+	const cache = await caches.open(CACHE_NAME);
+	const cached = await cache.match(request);
+
+	const fetchPromise = fetch(request).then(response => {
+		cache.put(request, response.clone());
+		return response;
+	});
+
+	return cached || fetchPromise;
+}
+```
+
+---
+
+## Internationalization
+
+### The problem we solve
+
+Your app will be used by people from different countries and languages. i18n is preparing your code for this.
+
+### Native Intl API
+
+```javascript
+// Numbers
+new Intl.NumberFormat('en-US', {
+	style: 'currency',
+	currency: 'USD',
+}).format(1234.56); // "$1,234.56"
+
+// Dates
+new Intl.DateTimeFormat('en-US', {
+	dateStyle: 'full',
+}).format(new Date()); // "Sunday, January 15, 2024"
+
+// Relative
+new Intl.RelativeTimeFormat('en', {
+	numeric: 'auto',
+}).format(-1, 'day'); // "yesterday"
+```
+
+### RTL (Right-to-Left)
+
+```html
+<html lang="ar" dir="rtl"></html>
+```
+
+```css
+/* Logical CSS */
+.box {
+	margin-inline-start: 1rem; /* margin-left in LTR, margin-right in RTL */
+	text-align: start; /* left in LTR, right in RTL */
+}
+```
+
+---
+
+## Maintainable CSS
+
+### The problem we solve
+
+CSS at scale is a disaster if you don't have a strategy. Specificity wars, !important everywhere, dead code.
+
+### BEM (Block Element Modifier)
+
+```css
+/* Block */
+.card {
+}
+
+/* Element (part of block) */
+.card__title {
+}
+.card__image {
+}
+
+/* Modifier (variant) */
+.card--featured {
+}
+.card__title--large {
+}
+```
+
+```html
+<article class="card card--featured">
+	<img class="card__image" src="..." />
+	<h2 class="card__title card__title--large">Title</h2>
+</article>
+```
+
+### CSS Variables (Custom Properties)
+
+```css
+:root {
+	--color-primary: #0066cc;
+	--spacing-md: 1rem;
+	--radius: 0.25rem;
+}
+
+.button {
+	background: var(--color-primary);
+	padding: var(--spacing-md);
+	border-radius: var(--radius);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-primary: #4dabf7;
+	}
+}
+```
+
+---
+
+## Performance
+
+### The problem we solve
+
+A slow app is an app nobody uses. Performance is UX.
+
+### Real vs Perceived Performance
+
+**Real performance** (objective): Measured in milliseconds
+
+**Perceived performance** (subjective): How fast it FEELS
+
+**Key insight**: Users remember how it felt, not the actual milliseconds.
+
+### Psychology of waiting
+
+```
+< 100ms: Instant → Feels like direct manipulation
+100-300ms: Slight delay → Simple feedback
+300ms-1s: Notable delay → Needs loading indicator
+1-3s: Significant wait → Progress indicator
+> 3s: User will probably abandon
+```
+
+### Core Web Vitals
+
+```
+LCP (Largest Contentful Paint): < 2.5s
+  → When main content is visible
+
+FID (First Input Delay): < 100ms
+  → How fast interactions respond
+
+CLS (Cumulative Layout Shift): < 0.1
+  → How much content moves
+```
+
+### Skeleton Screens
+
+Showing structure while loading feels 2x faster:
+
+```javascript
+{
+	isLoading ? <ProductListSkeleton /> : <ProductList products={products} />;
+}
+```
+
+### Optimistic UI
+
+Update UI before confirming with server:
+
+```javascript
+const addToCart = async product => {
+	// 1. Optimistic update (instant)
+	setCart(prev => [...prev, product]);
+
+	try {
+		// 2. Save to server (background)
+		await api.post('/cart', { productId: product.id });
+	} catch (error) {
+		// 3. Revert on error
+		setCart(prev => prev.filter(p => p.id !== product.id));
+		toast.error('Could not add to cart');
+	}
+};
+```
+
+---
+
+## Design Systems
+
+### The problem we solve
+
+Without a system, every dev does things differently. A design system is the shared vocabulary between design and development.
+
+### Components of a Design System
+
+**1. Tokens (Design Tokens)**
+
+```css
+:root {
+	/* Colors */
+	--color-primary-500: #2196f3;
+
+	/* Typography */
+	--font-family-sans: 'Inter', system-ui, sans-serif;
+	--font-size-base: 1rem;
+
+	/* Spacing */
+	--space-4: 1rem;
+
+	/* Radii */
+	--radius-md: 0.5rem;
+}
+```
+
+**2. Base Components**
+
+```javascript
+function Button({ variant = 'primary', size = 'md', children, ...props }) {
+	return (
+		<button className={`btn btn-${variant} btn-${size}`} {...props}>
+			{children}
+		</button>
+	);
+}
+```
+
+**3. Documentation (Storybook)**
+
+```javascript
+export default {
+	title: 'Components/Button',
+	component: Button,
+};
+
+export const Primary = {
+	args: {
+		variant: 'primary',
+		children: 'Button',
+	},
+};
+```
+
+### Structure of a Design System
+
+```
+design-system/
+├── tokens/
+│   ├── colors.css
+│   ├── typography.css
+│   └── spacing.css
+├── components/
+│   ├── Button/
+│   │   ├── Button.jsx
+│   │   ├── Button.test.jsx
+│   │   └── Button.stories.jsx
+│   └── Input/
+└── docs/
+    └── getting-started.md
+```
+
+---
+
+## Final Words
+
+You made it this far. Good job.
+
+This was a journey from semantic HTML to design systems, covering performance, security, accessibility, and everything you need to be a complete frontend developer.
+
+Remember: it's not about knowing everything by heart. It's about understanding the concepts, knowing they exist, and knowing where to look when you need them.
+
+Frameworks come and go. JavaScript evolves. But the fundamentals remain: how the browser works, how to optimize performance, how to write maintainable code, how to think about the user.
+
+Let's go, time to build things. 🚀
+
+**- Gentleman Programming**

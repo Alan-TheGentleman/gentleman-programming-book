@@ -1,0 +1,586 @@
+---
+id: 'software-architecture'
+order: 18
+name: 'Software Architecture'
+titleList:
+  [
+    {
+      name: 'Monolith, Modular Monolith or Microservices',
+      tagId: 'monolith-modular-monolith-or-microservices',
+    },
+    {
+      name: 'Layered vs Vertical Slice vs Hexagonal vs Scope Rule',
+      tagId: 'layered-vs-vertical-slice-vs-hexagonal-vs-scope-rule',
+    },
+    {
+      name: 'Principle of Least Surprise',
+      tagId: 'principle-of-least-surprise',
+    },
+    {
+      name: 'Accidental vs Essential Complexity',
+      tagId: 'accidental-vs-essential-complexity',
+    },
+    {
+      name: 'Synchronous vs Asynchronous Communication',
+      tagId: 'synchronous-vs-asynchronous-communication',
+    },
+    { name: 'Idempotency', tagId: 'idempotency' },
+    { name: 'Race Conditions', tagId: 'race-conditions' },
+    {
+      name: 'Queues vs Streams vs Direct Calls',
+      tagId: 'queues-vs-streams-vs-direct-calls',
+    },
+    { name: 'Sagas', tagId: 'sagas' },
+    { name: 'Processing Guarantees', tagId: 'processing-guarantees' },
+    { name: 'Handling Partial Failures', tagId: 'handling-partial-failures' },
+    {
+      name: 'Consistency Between Services',
+      tagId: 'consistency-between-services',
+    },
+    {
+      name: 'Resilience Against External Failures',
+      tagId: 'resilience-against-external-failures',
+    },
+    { name: 'Detecting Slow Services', tagId: 'detecting-slow-services' },
+    { name: 'Caching: L1 and L2', tagId: 'caching-l1-and-l2' },
+    {
+      name: 'Vertical vs Horizontal Scaling',
+      tagId: 'vertical-vs-horizontal-scaling',
+    },
+    { name: 'Read-Heavy Workloads', tagId: 'read-heavy-workloads' },
+    { name: 'Reducing Database Load', tagId: 'reducing-database-load' },
+    { name: 'Hot Partitions', tagId: 'hot-partitions' },
+    { name: 'Write-Heavy Workloads', tagId: 'write-heavy-workloads' },
+    { name: 'Relational vs Document', tagId: 'relational-vs-document' },
+    {
+      name: 'Distributed Transactions vs Eventual Consistency',
+      tagId: 'distributed-transactions-vs-eventual-consistency',
+    },
+    {
+      name: 'Auditing Without Killing Performance',
+      tagId: 'auditing-without-killing-performance',
+    },
+    {
+      name: 'Schema Evolution Without Downtime',
+      tagId: 'schema-evolution-without-downtime',
+    },
+  ]
+---
+
+# Software Architecture Concepts
+
+_What you really need to know to think like an architect_
+
+Look, before we start, I want you to understand something: software architecture isn't about memorizing definitions. It's about understanding the _why_ behind each decision. It's like being a building architect: knowing that reinforced concrete exists isn't enough—you need to know when to use it and when not to.
+
+In this chapter, we'll cover each concept with the depth it deserves, using analogies that'll stick with you. Let's go.
+
+## Monolith, Modular Monolith or Microservices
+
+This is probably the first architectural decision you'll have to make, and they'll ask you about it in every interview. But before you answer "microservices because it's modern," hold on a second.
+
+### The Monolith
+
+Imagine you're building a house. The monolith is like building the entire house as one piece: the kitchen, the living room, the bedrooms, all under the same roof, with the same plumbing, the same electrical installation.
+
+Is it bad? Not at all. If you're building a house for a family, it's exactly what you need. The problem appears when that "house" starts growing and growing, and suddenly you have 50 people living there and you want to remodel the bathroom but you have to turn off the lights for the whole house to do it.
+
+Technically: all the code in a single deployable artifact. One process. One database. Simple to develop, simple to debug (one stack trace), simple to deploy. The drama: scaling means scaling everything, and a deploy means redeploying everything.
+
+### The Modular Monolith
+
+Here's the hidden gem that many ignore. We continue with the house analogy, but now each room has its own key, its own electricity meter, and you can close one room without affecting the others.
+
+It's a monolith on the outside (one deploy) but inside it has modules with clear boundaries. Each module is a _bounded context_: it has its domain, its logic, and communicates with other modules through defined interfaces, not by directly accessing their internals.
+
+Why do I like it so much? Because it gives you 80% of the benefits of microservices with 20% of the complexity. You can evolve to microservices later if you really need to, but you start with something manageable.
+
+### Microservices
+
+Now yes, instead of a house, you have a neighborhood. Each service is an independent house with its own infrastructure: its own land, its own water connection, its own electricity.
+
+If one house catches fire, the others keep working. You can remodel one house without the neighbors knowing. You can have a big house and a small one depending on what each needs.
+
+But, and here's the important part: now you need to manage an entire neighborhood. You need streets (network), you need houses to be able to find each other (service discovery), you need to coordinate when they do roadwork (deploy coordination), and if one house needs to pass something to another, they have to communicate by phone instead of yelling down the hallway.
+
+The operational complexity is real. Don't get into microservices because it's trendy. Get into it when the pain of not having them is greater than the pain of having them.
+
+## Layered vs Vertical Slice vs Hexagonal vs Scope Rule
+
+Okay, you've decided whether to go with monolith or microservices. Now comes the question: how do you organize the code _inside_?
+
+### Layered Architecture
+
+It's the classic that everyone knows: Presentation on top, Business in the middle, Data at the bottom. Like a building where the first floor can only talk to the second, and the second with the third.
+
+The problem is that when you want to add a feature, you have to touch all floors. Want to add a new field? Controller, Service, Repository, Entity, Migration. It's like if you wanted to hang a picture in the living room, you'd have to run cables through the entire building.
+
+And the worst part: when you want to delete a feature, you have to go floor by floor looking for what belongs to that feature. A disaster.
+
+### Vertical Slice
+
+Instead of organizing by technical layers, you organize by features. Each "slice" is a vertical slice containing everything needed for a specific functionality.
+
+Think of it as an office building where each company has its complete floor: its reception, its offices, its meeting room, its bathroom. It shares nothing with other companies. If a company wants to remodel, it doesn't affect anyone else.
+
+The mental shift is strong: you stop thinking "all controllers go together" and start thinking "everything for 'Create User' goes together." This scales much better in large teams.
+
+### Hexagonal Architecture (Ports & Adapters)
+
+The central concept is simple but powerful: **the domain doesn't know the outside world exists**.
+
+Imagine a fortress. In the center is the king (your domain, your business logic). The king never leaves the fortress, doesn't know if there's a PostgreSQL or MongoDB database outside, doesn't know if it's being called from a REST API or GraphQL.
+
+Ports are the fortress doors: they define WHAT can enter and exit, but not HOW. Adapters are the guards that translate: "Sir, an HTTP message arrived asking for users" becomes "Give me the active users."
+
+The benefit? You can change the database without touching a line of business logic. You can test the domain without spinning up any infrastructure. The domain is pure, it's yours, it doesn't depend on frameworks or trends.
+
+### The Scope Rule: The Evolution That Combines Everything
+
+Here's where it gets interesting. After years working with these architectures, I developed something I call **Scope Rule**. It's the combination of Clean Architecture, Screaming Architecture, and Container-Presentational Pattern, designed specifically for how modern bundlers work and code traceability.
+
+**The principle is simple but absolute: "The scope determines the structure."**
+
+- Code used by **1 single feature** → stays **local** within that feature
+- Code used by **2+ features** → goes to **shared/global**
+
+No exceptions. It's a golden rule that's non-negotiable.
+
+#### Why does it work so well?
+
+**1. Automatically optimized chunks**
+
+When everything for a feature is in its folder, the bundler (Webpack, Vite, Turbopack) can create smart chunks. If the user navigates to `/shop`, only shop stuff loads. If they go to `/dashboard`, only dashboard stuff loads. You don't drag code from features you're not using.
+
+```
+src/
+  app/
+    (shop)/                        # Feature: Shop
+      shop/
+        page.tsx
+        _components/               # ONLY shop components
+          product-list.tsx
+          product-filter.tsx
+      cart/
+        page.tsx
+        _components/               # ONLY cart components
+          cart-item.tsx
+          cart-summary.tsx
+      _hooks/                      # Hooks shared WITHIN shop
+        use-products.ts
+        use-cart.ts
+      _actions/                    # Shop server actions
+        cart-actions.ts
+      _types.ts                    # Shop types
+```
+
+**2. Brutal traceability**
+
+Need to delete the wishlist feature? Delete the `wishlist/` folder and you're done. You're not searching through the entire project "was this component from wishlist or somewhere else?" Everything that belongs to wishlist IS in wishlist.
+
+Need to understand how the cart works? Everything is in `(shop)/cart/`. The components, the hooks, the actions, the types. You're not jumping between 15 different folders.
+
+**3. Screaming Architecture: The structure screams what the app does**
+
+Look at this structure:
+
+```
+src/app/
+  (auth)/
+    login/
+    register/
+  (dashboard)/
+    dashboard/
+    profile/
+  (shop)/
+    shop/
+    cart/
+    wishlist/
+```
+
+Without reading a line of code, you already know this app has authentication, a dashboard with profile, and a store with cart and wishlist. The structure tells you the business story, not the technology story.
+
+**4. Integrated Container-Presentational**
+
+Within each feature, you follow the pattern:
+
+- `page.tsx` → The container. Gets data, coordinates.
+- `_components/` → The presentationals. Receive props, render.
+- `_hooks/` → Reusable logic within the feature.
+- `_actions/` → Server actions (mutations).
+
+The underscore (`_`) is key: it tells Next.js that folder is private, not a route. And visually it indicates "this is internal to this feature."
+
+**5. The promotion rule**
+
+When a component starts being used in more than one feature, you "promote" it to `shared/`:
+
+```
+shared/
+  components/
+    ui/                            # Base components (Button, Card, Input)
+    product-card.tsx               # Used in shop, cart AND wishlist
+  hooks/
+    use-local-storage.ts           # Used in multiple features
+  types/
+    api.ts                         # Global types
+```
+
+But careful: you only promote when it's REALLY used in 2+ places. Not "just in case." Code is born local and gets promoted when it deserves it, not before.
+
+#### The mental benefit
+
+The most important thing about Scope Rule is that **it eliminates decision paralysis**. Where do I put this component? If it's for a single feature, it goes in that feature. If it's for multiple, it goes in shared. Done. No debate, no philosophy, no "it depends on the context."
+
+And when the whole team follows the same rule, the code becomes predictable. Anyone can find anything because we all organize the same way.
+
+## Principle of Least Surprise
+
+This principle seems obvious but is violated constantly. It says something simple: **things should behave as one expects them to behave**.
+
+If you have a function called `getUser()`, it should get a user. It shouldn't modify it, shouldn't send you an email, shouldn't log to an external database. It should get a user. Period.
+
+It's like going to a restaurant and asking for "water." You expect water. You don't expect them to bring you sparkling water with lemon, hot, and also charge you for the cover without telling you. You want water, they give you water.
+
+In APIs: GET reads, POST creates, PUT replaces, PATCH partially modifies, DELETE deletes. If your GET modifies data, you're violating this principle and someone's going to have a really bad time when an indexing bot goes through your API.
+
+Names matter. Behaviors must be predictable. When code does what it looks like it does, maintenance stops being archaeology.
+
+## Accidental vs Essential Complexity
+
+This concept comes from Fred Brooks and is fundamental to not over-engineer.
+
+### Essential Complexity
+
+It's the complexity that comes with the problem. If you're building a flight system, you need to handle reservations, seats, connections, cancellations, refunds. That's complex because THE PROBLEM is complex. You can't simplify it without stopping to solve the problem.
+
+It's like building a bridge over a rushing river. The river is wide, there are currents, the terrain is complicated. You didn't choose that, it comes with the territory.
+
+### Accidental Complexity
+
+This is what we add ourselves. The "just in case." The "someday we'll need." The "I saw a Netflix video and they do it this way."
+
+It's when to cross a 6-foot stream you build a Golden Gate Bridge. Yes, it works. Yes, it's impressive. But you spent 10 times more resources than necessary and now you have to maintain a giant bridge to cross a stream.
+
+Microservices for a 3-screen app. Kubernetes for a project that runs on a single server. Event Sourcing for a simple CRUD. That's accidental complexity.
+
+The rule: **start simple, add complexity when the pain justifies it**. Not before.
+
+## Synchronous vs Asynchronous Communication
+
+When two services need to talk, you have to decide how they do it. And this decision has important consequences.
+
+### Synchronous Communication
+
+It's a phone call. You call, wait for them to answer, talk, wait for the response, hang up. Meanwhile, you're stuck there waiting.
+
+HTTP/REST is the typical example. Simple to understand, simple to debug (you see the request, you see the response), simple to implement. The problem: if the other doesn't answer, you're left waiting. If the other is slow, you're slow. You're temporally coupled.
+
+### Asynchronous Communication
+
+It's a WhatsApp. You send the message and continue with your life. They read it when they can, respond when they can. You don't sit there staring at the phone waiting for the blue double-check.
+
+You use queues or events. The benefit is brutal: temporal decoupling. If the destination service is down, the message waits in the queue. If there's a traffic spike, the queue absorbs the hit.
+
+The cost: it's harder to reason about, harder to debug ("the message was sent but never arrived... where is it?"), and you have to deal with eventual consistency. The world isn't immediate, things "eventually" synchronize.
+
+**When to use each one?** Synchronous when you need the response right now to continue. Asynchronous when you can "fire and forget" or when you want to decouple systems.
+
+## Idempotency
+
+If there's one concept you need to tattoo on your brain for distributed systems, it's this.
+
+An operation is idempotent when **executing it once or executing it a thousand times produces the same result**.
+
+Real-world example: the elevator button. Pressing it once or pressing it 47 times with anxiety has the same effect: the elevator comes. That's idempotent.
+
+Counter-example: transferring money. If the operation "transfer $100" executes twice, you transferred $200. It's not idempotent and you have a problem.
+
+Why does it matter? Because in distributed systems, retries are inevitable. The network fails, timeouts happen, and the client doesn't know if the operation executed or not. If your operation is idempotent, it can retry peacefully.
+
+**Techniques:** use unique operation IDs (idempotency keys), design operations as "set balance to X" instead of "add X to balance," save operation results to return on retries.
+
+## Race Conditions
+
+A race condition is when your program's result depends on who reaches the finish line first, and you have no control over that.
+
+Imagine two people trying to sit in the last chair of a musical chairs game. Both see the chair is free, both run toward it, and... who wins? It depends on timing, luck, factors you don't control.
+
+In code: two users try to buy the last product. Both read "stock: 1," both proceed to buy, both decrement the stock. Now you have stock: -1 and two customers waiting for a product that doesn't exist.
+
+**Solutions:**
+
+- **Optimistic lock:** "I'll try, and if someone else changed something in the meantime, I fail and retry." You use versions or timestamps.
+- **Pessimistic lock:** "I lock the resource before using it, nobody else can touch it." Safer but can generate contention.
+- **Atomic operations:** `UPDATE stock SET quantity = quantity - 1 WHERE quantity > 0`. The database guarantees atomicity.
+- **Queues:** Serialize operations. Everyone goes through the same line, one at a time.
+
+## Queues vs Streams vs Direct Calls
+
+Three ways to communicate services, three different use cases.
+
+### Direct Calls (HTTP/gRPC)
+
+Ring the doorbell and wait for them to open. Request-response, here and now. Use it when you need the response immediately to continue your flow.
+
+### Queues (RabbitMQ, SQS)
+
+Leaving a letter in the mailbox. The message is delivered, processed, and disappears. The mailman doesn't go back through messages already delivered.
+
+Perfect for tasks that must execute exactly once: send an email, process a payment, generate a report. Once processed, the message is gone.
+
+### Streams (Kafka, Kinesis)
+
+A journal that's kept forever. Events are written to an immutable log. Multiple readers can read the same events, and you can "rewind" to read from the beginning again.
+
+Ideal for event sourcing (rebuilding state from events), analytics (processing the same stream in different ways), and systems where history is important.
+
+The key difference: in a queue, the message is consumed and disappears. In a stream, the message is read but remains.
+
+## Sagas
+
+ACID transactions are beautiful: everything happens or nothing happens. But in distributed systems, you can't have a transaction spanning multiple services (well, you can, but you'll suffer).
+
+A Saga is the pragmatic solution: instead of one big transaction, you have a sequence of local transactions. If something fails in the middle, you execute _compensating transactions_ to undo what you already did.
+
+Example: booking a trip. Step 1: book flight. Step 2: book hotel. Step 3: book car. If the car fails, you have to cancel the hotel and cancel the flight. Those cancellations are the compensations.
+
+### Choreography vs Orchestration
+
+**Choreography:** each service knows what to do when it receives an event. There's no director, each dancer knows the choreography. More decoupled but harder to follow the complete flow.
+
+**Orchestration:** there's a central service (the orchestra conductor) that tells each one what to do and when. Easier to understand and monitor, but that orchestrator is a coupling point.
+
+## Processing Guarantees
+
+### Exactly-Once
+
+The message is processed exactly once. Sounds perfect, right? The problem: in pure distributed systems, it's theoretically impossible to guarantee (look up the "Two Generals Problem" if you want to understand why).
+
+Some systems like Kafka Streams offer exactly-once _semantics_ within their ecosystem, but it requires specific conditions.
+
+### Effectively-Once
+
+The pragmatic approach: the message _can_ arrive multiple times, but the _effect_ is as if it arrived once. How? Combining at-least-once delivery with idempotent operations.
+
+It's easier to implement and more robust in practice. You accept there may be duplicates and design so they don't matter.
+
+## Handling Partial Failures
+
+In distributed systems, partial failures are the norm, not the exception. One part of the system can be working while another is down. And the fun part: sometimes you don't know if something failed or is just slow.
+
+You sent a request, didn't receive a response. Did it fail? Or did it execute but the response got lost? You don't know. And that uncertainty is what you have to design for.
+
+**Strategies:**
+
+- **Sensible timeouts:** Don't wait forever. Define what "too long" is and fail fast.
+- **Circuit Breakers:** If a service fails a lot, stop calling it for a while. Give it time to recover.
+- **Retries with backoff:** Retrying is fine, but not immediately. Wait 1 second, then 2, then 4... don't hammer a service trying to get up.
+- **Fallbacks:** If the main service fails, can you give a degraded response? Cached data, default values, reduced functionality.
+
+## Consistency Between Services
+
+When data lives in different services, keeping it consistent is one of the biggest challenges. The CAP theorem isn't just academic theory, it's your day-to-day.
+
+**Patterns:**
+
+- **Two-Phase Commit (2PC):** Strong consistency but blocking. Everyone votes if they can commit, if everyone says yes, it commits. If someone says no, it aborts. Fragile to failures.
+- **Sagas:** Eventual consistency with compensations. More resilient but more complex to reason about.
+- **Outbox Pattern:** You write the event and the data in the same local transaction, then a separate process publishes the event. You guarantee the event publishes if and only if the data was saved.
+- **Event Sourcing + CQRS:** Events are the source of truth. Views are built by projecting events. Eventual consistency but perfect audit.
+
+## Resilience Against External Failures
+
+Your system depends on things you don't control: databases, third-party APIs, payment services, email services. What happens when they fail?
+
+A resilient system isn't one that never fails (that doesn't exist). It's one that **fails gracefully** and recovers quickly.
+
+### Circuit Breaker
+
+It's like your house's circuit breaker. When it detects something's wrong (many consecutive failures), it "cuts" the circuit. Calls fail immediately without even trying, giving the service time to recover.
+
+After a while, the circuit goes to "half-open": it lets some calls through to see if the service recovered. If they work, the circuit closes and normality returns. If they fail, it opens again.
+
+### Bulkhead
+
+On a ship, watertight compartments (bulkheads) prevent water from entering one section and sinking the whole ship.
+
+In software: you isolate resources by dependency. If the payment service is slow and consuming all your threads, it shouldn't affect the catalog service. Each has its own isolated resources.
+
+## Detecting Slow Services
+
+A slow service can be worse than a dead one. Why? Because a dead service fails fast and you can handle it. A slow service consumes resources while you wait, blocks threads, exhausts connection pools.
+
+It's like a waiter who never comes: you'd rather they tell you "no tables available" than make you wait 2 hours to bring you the menu.
+
+**Strategies:**
+
+- **Aggressive timeouts:** If it doesn't respond in X time, fail. Don't wait eternally.
+- **Health checks with latency:** Not just verify it responds, but that it responds in acceptable time.
+- **Load shedding:** When you're overloaded, reject new requests to protect those you're already processing.
+- **Adaptive concurrency:** Dynamically adjust how many concurrent requests you allow based on the latency you're observing.
+
+## Caching: L1 and L2
+
+Cache is your best friend for performance, but it can also be your worst enemy if you don't handle it well.
+
+### L1: Local Cache
+
+Lives in process memory. Ultra-fast access (nanoseconds), but each instance has its own copy and doesn't share between them.
+
+It's like having the documents you use most on your desk. Immediate access, but if your colleague needs one, they have to go get their own copy.
+
+### L2: Distributed Cache
+
+Redis, Memcached. Shared between all instances. Slower than L1 (there's network involved) but consistent and with greater capacity.
+
+It's like the office's central archive. Everyone accesses the same place, takes a bit longer to go get it, but everyone sees the same thing.
+
+### Stale Data and Thundering Herd
+
+**Stale data:** cached data that's no longer true. Solutions: appropriate TTLs, active invalidation, or accepting some staleness when the business allows it.
+
+**Thundering herd:** when popular data expires from cache and 1000 requests all go to the database at the same time. Solutions: cache locking (only one regenerates while others wait), stale-while-revalidate (serve old while updating in background).
+
+## Vertical vs Horizontal Scaling
+
+### Vertical (Scale Up)
+
+Buy a bigger computer. More RAM, more CPU, more disk. Simple: you don't change code, just hardware.
+
+It's like enlarging your house by adding a floor. It works until you hit the physical limit of the land.
+
+**Signs to scale vertically:** your app is single-threaded, the bottleneck is CPU or RAM of a process, or it's simply cheaper than redesigning.
+
+### Horizontal (Scale Out)
+
+Buy more computers. Instead of one giant machine, many normal machines.
+
+It's like building more houses in the neighborhood. Theoretically you can keep adding houses, but now you have to coordinate an entire neighborhood.
+
+Requires your app to be stateless (or handle distributed state), load balancing, and thinking about things like sessions, files, and synchronization.
+
+**Signs to scale horizontally:** you need high availability, traffic is highly variable, or you've already maxed out vertical.
+
+## Read-Heavy Workloads
+
+Most applications read much more than they write. An e-commerce has thousands of people browsing products for every one who buys.
+
+**Optimizations:**
+
+- **Read replicas:** read-only copies of the database. Distribute read load.
+- **Aggressive caching:** L1, L2, CDN. What doesn't change often, cache it.
+- **Materialized views:** pre-compute common queries. If you always ask for "sales this month by region," calculate it once and store it.
+- **CQRS:** separate read and write models. Optimize each for its purpose.
+- **Denormalization:** yes, you duplicate data. But you avoid costly JOINs at read time.
+
+## Reducing Database Load
+
+The database is usually the bottleneck. Protecting it is priority.
+
+- **Connection pooling:** reuse connections instead of creating a new one per request. Connections are expensive.
+- **Query optimization:** appropriate indexes, avoid N+1, use EXPLAIN, don't fetch columns you don't need.
+- **Pagination:** NEVER fetch unlimited results. Always limit.
+- **Lazy loading:** load relationships only when needed, not "just in case."
+- **Batch operations:** instead of 1000 INSERTs, one INSERT with 1000 rows.
+
+## Hot Partitions
+
+When you partition data (sharding), you assume load will distribute more or less evenly. A hot partition is when one partition receives disproportionately more traffic than the others.
+
+Example: you partition by user_id, and it turns out Taylor Swift is a user of your platform. Her partition explodes while the others are calm.
+
+**Solutions:**
+
+- **Choose good partition keys:** ones that distribute uniformly. Avoid keys that concentrate (timestamps, sequential IDs).
+- **Salting:** add a random suffix to the key to distribute. user_123_0, user_123_1, user_123_2...
+- **Write sharding:** for counters, have multiple partial counters and sum them when reading.
+- **Proactive monitoring:** detect hot spots before they bring down the system.
+
+## Write-Heavy Workloads
+
+Logging, IoT, analytics, tracking. Systems where thousands or millions of writes per second arrive.
+
+- **Write-behind cache:** write to cache and persist asynchronously to the database. Risk: you can lose data if the cache fails before persisting.
+- **Batching:** group multiple writes in one operation. Fewer round-trips, more efficiency.
+- **Append-only logs:** databases optimized for sequential writing (Kafka, Cassandra). Writing at the end is faster than updating in the middle.
+- **Sharding:** distribute writes among multiple nodes.
+- **Async processing:** accept the data quickly ("received") and process in background.
+
+## Relational vs Document
+
+It's not that one is better than the other. They're different tools for different problems.
+
+### Relational Database
+
+PostgreSQL, MySQL. Structured data with clear relationships. The schema is defined and the database enforces it.
+
+**Choose it when:** you need strong consistency (ACID), complex queries with JOINs, the data model is well-defined and stable, or you have many relationships between entities.
+
+### Document Database
+
+MongoDB, DynamoDB. Flexible documents without rigid schema. Each document can have different structure.
+
+**Choose it when:** the schema evolves frequently, data is hierarchical or semi-structured, you need to scale horizontally easily, or you access data primarily as complete documents.
+
+## Distributed Transactions vs Eventual Consistency
+
+The eternal trade-off. You can't have everything: strong consistency, availability, and partition tolerance. Pick two.
+
+### Distributed Transactions
+
+2PC, 3PC, Paxos. Guarantee that all nodes agree on the same value at the same time. Strong consistency.
+
+**The cost:** latency (have to wait for everyone to vote), reduced availability (if a node doesn't respond, the transaction can't complete), complexity.
+
+### Eventual Consistency
+
+The system eventually converges to a consistent state, but there can be windows where different nodes have different values.
+
+It's easier to scale, more available, and more fault-tolerant. Most modern distributed systems adopt it.
+
+**The key:** design the domain to tolerate temporary inconsistencies. Does it matter if the likes counter is 2 seconds outdated? Probably not.
+
+## Auditing Without Killing Performance
+
+Complete auditing means recording who did what, when, and being able to reconstruct the system state at any moment. Sounds beautiful until you see the storage bill and the performance impact.
+
+**Strategies:**
+
+- **Event Sourcing:** events ARE your data model. Auditing comes free because every change is an immutable event.
+- **Separate audit log:** write audit events to a store optimized for append-only, separate from your main database.
+- **Async audit writes:** don't block the main operation waiting for the audit to write. Fire-and-forget (with guarantees).
+- **Sampling:** for VERY high volume systems, audit a statistically significant percentage instead of 100%.
+- **Cold storage:** move historical data to cheap storage. You don't need fast access to audit from 3 years ago.
+
+## Schema Evolution Without Downtime
+
+Changing a database schema in production without bringing down the service. It's like changing a car's tires while it's moving.
+
+**The Expand-Contract pattern:**
+
+1. **Expand:** add the new column/table without removing the old one. Both coexist.
+2. **Migrate:** copy/transform data from old structure to new. Can take time.
+3. **Update code:** deploy code that uses the new structure.
+4. **Contract:** remove the old structure once all code uses the new one.
+
+**Golden rules:**
+
+- New columns always with DEFAULT or nullable
+- Never delete columns used by code in production
+- Feature flags to control which code uses which schema version
+- Tools like gh-ost or pt-online-schema-change for online migrations
+
+---
+
+## Final Words
+
+You made it this far. Good job.
+
+Look, everything you just read is useless if you don't internalize it. It's not about memorizing definitions to spit them out in an interview. It's about understanding the trade-offs, knowing that every decision has a cost, and consciously choosing what price you're willing to pay.
+
+Architecture isn't exact science. It's the art of making decisions with incomplete information, balancing present needs with future flexibility. It's knowing when something is _good enough_ and when it's worth investing more.
+
+And most importantly: start simple. Accidental complexity is the enemy. Don't build a skyscraper when you need a small house. But design the small house so that, if someday you need to expand it, you can do so without having to demolish the whole thing.
+
+As I always say: let's go, but with criteria.

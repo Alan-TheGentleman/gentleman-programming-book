@@ -8,10 +8,16 @@ titleList:
       name: 'Filosofía del Desarrollo Asistido por IA',
       tagId: 'filosofía-del-desarrollo-asistido-por-ia',
     },
-    { name: 'Instalación y Configuración', tagId: 'instalación-y-configuración' },
+    {
+      name: 'Instalación y Configuración',
+      tagId: 'instalación-y-configuración',
+    },
     { name: 'Arquitectura Scope Rule', tagId: 'arquitectura-scope-rule' },
     { name: 'Sistema de Subagentes', tagId: 'sistema-de-subagentes' },
-    { name: 'Proyecto Práctico - TaskFlow', tagId: 'proyecto-práctico---taskflow' },
+    {
+      name: 'Proyecto Práctico - TaskFlow',
+      tagId: 'proyecto-práctico---taskflow',
+    },
     { name: 'Workflow Tony Stark', tagId: 'workflow-tony-stark' },
     { name: 'Scripts y Automatización', tagId: 'scripts-y-automatización' },
     { name: 'Comandos de Referencia', tagId: 'comandos-de-referencia' },
@@ -97,6 +103,7 @@ Esto creará automáticamente:
 Tu estructura debe comunicar INMEDIATAMENTE qué hace la aplicación.
 
 ✅ **BIEN - Grita funcionalidad:**
+
 ```bash
 src/
   features/
@@ -106,11 +113,15 @@ src/
 ```
 
 ❌ **MAL - Agrupación técnica:**
+
 ```bash
 src/
-  components/  # ¿Qué hace la app?
+  components/
+    ...todos los componentes de la app # ¿Qué hace la app?
   containers/  # No dice nada
+    ...todos los contenedores de la app # ¿Qué hace la app?
   hooks/       # Puramente técnico
+    ...todos los hooks de la app # ¿Qué hace la app?
 ```
 
 #### 3. Container/Presentational Pattern
@@ -162,10 +173,14 @@ src/
 # CLAUDE.md
 
 ## Architecture: Scope Rule
+
 - **Global**: Used by 2+ features
 - **Local**: Used by 1 feature only
+- Los servicios, que estén en el root,
+  deben de ser singleton.
 
 ## Tech Stack
+
 - React 19 + TypeScript
 - Zustand for state
 - React Query for server state
@@ -176,23 +191,27 @@ src/
 ## TDD Development Workflow
 
 ### Phase 1: Architecture & Planning
+
 1. scope-rule-architect: Design structure - USE for new features
 2. react-mentor: Architectural guidance - USE for complex decisions
 3. git-workflow-manager: Commit - USE after each phase
 
 ### Phase 2: Test-Driven Development
+
 4. tdd-test-first: Create tests - USE for each functionality
 5. git-workflow-manager: Commit RED phase
 6. react-test-implementer: Implement - USE after tests fail
 7. git-workflow-manager: Commit GREEN phase
 
 ### Phase 3: Quality & Security
+
 8. security-auditor: Audit - USE before main merge
 9. git-workflow-manager: Commit fixes
 10. accessibility-auditor: WCAG - USE after UI complete
 11. git-workflow-manager: Commit improvements
 
 ## Git Strategy (NO Claude mentions)
+
 - Architecture: "feat: add [feature] architecture"
 - Tests: "test: add [feature] tests (RED)"
 - Implementation: "feat: implement [feature] (GREEN)"
@@ -200,6 +219,7 @@ src/
 - A11Y: "feat: improve accessibility"
 
 ## RULES
+
 - NEVER write code without concrete functionality
 - NEVER implement without failing tests
 - NEVER mention Claude in commits
@@ -304,6 +324,7 @@ USE WHEN: After each development phase for commits.
 # TaskFlow - Project Specifications
 
 ## Project Description
+
 TaskFlow is a personal task manager that allows organizing work with projects, priorities, and statuses. Everything is stored in localStorage.
 
 ## User Stories
@@ -311,39 +332,45 @@ TaskFlow is a personal task manager that allows organizing work with projects, p
 ### Epic 1: Basic Task Management
 
 #### US-001: View task list
+
 As a user, I want to see a list of tasks to know my pending work
 
 **Acceptance Criteria:**
+
 - Show empty list with "No hay tareas" message initially
 - Each task displays: title, priority (color badge), status
 - Tasks sorted by creation date (newest first)
-**Technical Notes:** Use mocked data initially
+  **Technical Notes:** Use mocked data initially
 
 #### US-002: Create new task
+
 As a user, I want to create a new task to add pending work
 
 **Acceptance Criteria:**
+
 - Form with fields: title (required, 3-100 chars), description (optional), priority (select: low/medium/high)
 - "Create" button disabled if title invalid
 - Task appears immediately in list after creation
 - Clear form after successful creation
-**Validations:** Title between 3-100 characters
+  **Validations:** Title between 3-100 characters
 
 [... rest of user stories ...]
 
 ## Data Structure
+
 Interface Task {
-  id: string;        // UUID
-  title: string;     // 3-100 chars
-  description?: string;
-  priority: 'low' | 'medium' | 'high';
-  status: 'TODO' | 'IN_PROGRESS' | 'DONE';
-  project: 'Personal' | 'Trabajo' | 'Estudio' | 'General';
-  createdAt: Date;
-  updatedAt: Date;
+id: string; // UUID
+title: string; // 3-100 chars
+description?: string;
+priority: 'low' | 'medium' | 'high';
+status: 'TODO' | 'IN_PROGRESS' | 'DONE';
+project: 'Personal' | 'Trabajo' | 'Estudio' | 'General';
+createdAt: Date;
+updatedAt: Date;
 }
 
 ## Business Rules
+
 - Status transitions: TODO → IN_PROGRESS → DONE (and back)
 - Default project is "General"
 - Priority colors: low=green, medium=yellow, high=red
@@ -364,6 +391,7 @@ O agregalo al CLAUDE.md para que siempre esté disponible:
 # CLAUDE.md
 
 ## Project Context
+
 @PROJECT_SPECS.md contains all user stories and requirements
 
 [resto del contenido...]
@@ -471,14 +499,14 @@ TaskFlow es un gestor de tareas personal que permite organizar trabajo con proye
 
 ```typescript
 interface Task {
-  id: string;         // UUID
-  title: string;      // 3-100 chars
-  description?: string;
-  priority: 'low' | 'medium' | 'high';
-  status: 'TODO' | 'IN_PROGRESS' | 'DONE';
-  project: 'Personal' | 'Trabajo' | 'Estudio' | 'General';
-  createdAt: Date;
-  updatedAt: Date;
+ id: string; // UUID
+ title: string; // 3-100 chars
+ description?: string;
+ priority: 'low' | 'medium' | 'high';
+ status: 'TODO' | 'IN_PROGRESS' | 'DONE';
+ project: 'Personal' | 'Trabajo' | 'Estudio' | 'General';
+ createdAt: Date;
+ updatedAt: Date;
 }
 ```
 
@@ -763,24 +791,24 @@ La clave es que con `@PROJECT_SPECS.md` cada subagente tiene todo el contexto ne
 
 ```json
 {
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "lint": "eslint . --ext ts,tsx",
-    "format": "prettier --write .",
+ "scripts": {
+  "dev": "vite",
+  "build": "tsc && vite build",
+  "test": "vitest",
+  "test:watch": "vitest --watch",
+  "lint": "eslint . --ext ts,tsx",
+  "format": "prettier --write .",
 
-    // Claude workflows
-    "ai:architect": "echo 'Use scope-rule-architect' | claude",
-    "ai:test": "echo 'Use tdd-test-first' | claude",
-    "ai:implement": "echo 'Use react-test-implementer' | claude",
-    "ai:security": "echo 'Use security-auditor' | claude",
-    "ai:a11y": "echo 'Use accessibility-auditor' | claude",
+  // Claude workflows
+  "ai:architect": "echo 'Use scope-rule-architect' | claude",
+  "ai:test": "echo 'Use tdd-test-first' | claude",
+  "ai:implement": "echo 'Use react-test-implementer' | claude",
+  "ai:security": "echo 'Use security-auditor' | claude",
+  "ai:a11y": "echo 'Use accessibility-auditor' | claude",
 
-    // Full workflow
-    "ai:feature": "npm run ai:test && npm run ai:implement"
-  }
+  // Full workflow
+  "ai:feature": "npm run ai:test && npm run ai:implement"
+ }
 }
 ```
 
@@ -858,11 +886,11 @@ Con este sistema tenés:
 
 El resultado es código profesional, testeado, seguro y accesible desde el día uno.
 
-*"Sometimes you gotta run before you can walk"* - Tony Stark
+_"Sometimes you gotta run before you can walk"_ - Tony Stark
 
 Pero con este sistema, vas a correr con tests, seguridad y accesibilidad garantizados.
 
 ---
 
 © 2025 - Gentleman Programming  
-*Clean Architecture + IA = Desarrollo Profesional*
+_Clean Architecture + IA = Desarrollo Profesional_
