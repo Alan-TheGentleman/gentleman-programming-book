@@ -1,3 +1,4 @@
+const path = require('path');
 const { createVanillaExtractPlugin } = require('@vanilla-extract/next-plugin');
 const withVanillaExtract = createVanillaExtractPlugin();
 
@@ -8,6 +9,7 @@ const nextConfig = {
 		largePageDataBytes: 128 * 100000,
 	},
 	compress: true,
+	outputFileTracingRoot: path.join(__dirname, './'),
 };
 
 module.exports = withVanillaExtract(nextConfig);
