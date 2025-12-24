@@ -63,6 +63,9 @@
 	"settings": {
 		"react": {
 			"version": "detect"
+		},
+		"next": {
+			"rootDir": "."
 		}
 	}
 }

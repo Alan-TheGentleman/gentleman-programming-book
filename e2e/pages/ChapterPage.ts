@@ -32,10 +32,10 @@ export class ChapterPage {
 
 	async shouldHaveNavigation() {
 		await expect(
-			this.page.getByRole('button', { name: /previous/i }),
+			this.page.getByRole('button', { name: 'Previous', exact: true }),
 		).toBeVisible();
 		await expect(
-			this.page.getByRole('button', { name: /next/i }),
+			this.page.getByRole('button', { name: 'Next', exact: true }),
 		).toBeVisible();
 	}
 
@@ -64,36 +64,38 @@ export class ChapterPage {
 
 	async previousButtonShouldBeDisabled() {
 		await expect(
-			this.page.getByRole('button', { name: /previous/i }),
+			this.page.getByRole('button', { name: 'Previous', exact: true }),
 		).toBeDisabled();
 	}
 
 	async previousButtonShouldBeEnabled() {
 		await expect(
-			this.page.getByRole('button', { name: /previous/i }),
+			this.page.getByRole('button', { name: 'Previous', exact: true }),
 		).toBeEnabled();
 	}
 
 	async nextButtonShouldBeDisabled() {
 		await expect(
-			this.page.getByRole('button', { name: /next/i }),
+			this.page.getByRole('button', { name: 'Next', exact: true }),
 		).toBeDisabled();
 	}
 
 	async nextButtonShouldBeEnabled() {
 		await expect(
-			this.page.getByRole('button', { name: /next/i }),
+			this.page.getByRole('button', { name: 'Next', exact: true }),
 		).toBeEnabled();
 	}
 
 	// ==================== Actions ====================
 
 	async clickNext() {
-		await this.page.getByRole('button', { name: /next/i }).click();
+		await this.page.getByRole('button', { name: 'Next', exact: true }).click();
 	}
 
 	async clickPrevious() {
-		await this.page.getByRole('button', { name: /previous/i }).click();
+		await this.page
+			.getByRole('button', { name: 'Previous', exact: true })
+			.click();
 	}
 
 	async clickHome() {
