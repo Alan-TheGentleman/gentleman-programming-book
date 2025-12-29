@@ -1,8 +1,10 @@
-# Gentleman Guardian Angel Configuration
+# Gentleman Guardian Angel Configuration v2.4.0
 # https://github.com/Gentleman-Programming/gentleman-guardian-angel
 
 # AI Provider (required)
 # Options: claude, gemini, codex, ollama:<model>
+# Local: uses claude (requires ANTHROPIC_API_KEY)
+# CI: uses gemini via GitHub Actions (requires GEMINI_API_KEY secret)
 PROVIDER="claude"
 
 # File patterns to review (comma-separated globs)
