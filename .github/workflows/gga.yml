@@ -25,7 +25,7 @@ jobs:
           # Clone GGA repo and install
           git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
           sudo cp /tmp/gga/bin/gga /usr/local/bin/
-          sudo cp -r /tmp/gga/lib /usr/local/lib/gga
+          sudo cp /tmp/gga/lib/*.sh /usr/local/lib/
           sudo chmod +x /usr/local/bin/gga
 
       - name: Install Gemini CLI
