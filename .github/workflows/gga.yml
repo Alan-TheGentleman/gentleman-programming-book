@@ -22,8 +22,11 @@ jobs:
 
       - name: Install GGA
         run: |
-          curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentleman-guardian-angel/main/install.sh | bash
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          # Clone GGA repo and install
+          git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
+          sudo cp /tmp/gga/bin/gga /usr/local/bin/
+          sudo cp -r /tmp/gga/lib /usr/local/lib/gga
+          sudo chmod +x /usr/local/bin/gga
 
       - name: Install Gemini CLI
         run: npm install -g @google/gemini-cli
