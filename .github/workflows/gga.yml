@@ -20,12 +20,32 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Cache npm global packages
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-gemini-cli-v1
+          restore-keys: |
+            ${{ runner.os }}-npm-gemini-cli-
+
+      - name: Cache Gemini CLI
+        uses: actions/cache@v4
+        id: gemini-cache
+        with:
+          path: /usr/local/lib/node_modules/@google/gemini-cli
+          key: ${{ runner.os }}-gemini-cli-v1
+
       - name: Install GGA
         run: |
-          curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentleman-guardian-angel/main/install.sh | bash
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          # Clone GGA repo and install
+          git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
+          sudo cp /tmp/gga/bin/gga /usr/local/bin/
+          sudo cp /tmp/gga/lib/*.sh /usr/local/lib/
+          sudo chmod +x /usr/local/bin/gga
 
       - name: Install Gemini CLI
+        if: steps.gemini-cache.outputs.cache-hit != 'true'
         run: npm install -g @google/gemini-cli
 
       - name: Run GGA Code Review
