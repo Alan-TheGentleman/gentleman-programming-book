@@ -1,9 +1,9 @@
 import { readdir, readFile, writeFile } from 'fs/promises';
-import matter from 'gray-matter';
-import { NextResponse } from 'next/server';
 import path from 'path';
+import { NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
-import { BrowserContext, chromium, Page } from 'playwright';
+import { chromium, Page, BrowserContext } from 'playwright';
+import matter from 'gray-matter';
 
 const BASE_URL = process.env.PDF_BASE_URL || 'http://localhost:3000';
 const CHAPTERS_DIR_EN = path.join(process.cwd(), 'src/data/book/en');

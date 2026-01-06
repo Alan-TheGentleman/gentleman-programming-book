@@ -2,8 +2,9 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypePrism from 'rehype-prism-plus';
 import rehypeSlug from 'rehype-slug';
 
-import * as MDXRemoteCss from '@/book/styles/mdx.css';
 import { Heading, Icon, MustachiIcon, Text } from '@/shared/components';
+
+import * as MDXRemoteCss from '@/book/styles/mdx.css';
 
 interface ChapterMDXContentProps {
 	source: string;
@@ -61,11 +62,10 @@ export async function ChapterMDXContent({ source }: ChapterMDXContentProps) {
 						{children}
 					</Text>
 				),
-				img: props => (
-					// eslint-disable-next-line @next/next/no-img-element
+				img: ({ ...rest }) => (
+					// eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
 					<img
-						alt={props.alt ?? ''}
-						{...(props as Record<string, unknown>)}
+						{...(rest as Record<string, unknown>)}
 						className={MDXRemoteCss.mdxImage}
 					/>
 				),
