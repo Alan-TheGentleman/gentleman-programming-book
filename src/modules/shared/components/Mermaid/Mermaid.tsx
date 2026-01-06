@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import mermaid from 'mermaid';
 
 interface MermaidProps {
@@ -31,13 +31,14 @@ mermaid.initialize({
 export function Mermaid({ chart }: MermaidProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [svg, setSvg] = useState<string>('');
+	const id = useId();
 
 	useEffect(() => {
 		const renderChart = async () => {
 			if (containerRef.current) {
-				const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+				const mermaidId = `mermaid-${id.replace(/:/g, '')}`;
 				try {
-					const { svg } = await mermaid.render(id, chart);
+					const { svg } = await mermaid.render(mermaidId, chart);
 					setSvg(svg);
 				} catch (error) {
 					console.error('Mermaid rendering error:', error);
@@ -46,7 +47,7 @@ export function Mermaid({ chart }: MermaidProps) {
 		};
 
 		renderChart();
-	}, [chart]);
+	}, [chart, id]);
 
 	return (
 		<div
