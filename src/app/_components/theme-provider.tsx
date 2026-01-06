@@ -11,7 +11,6 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-	const themeColorCurrent = useThemeStore(s => s.themeColorCurrent);
 	const changeThemeColor = useThemeStore(s => s.changeThemeColor);
 
 	// Sync theme changes to localStorage and DOM

@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import {
 	ComponentProps,
-	forwardRef,
 	ForwardedRef,
+	forwardRef,
 	ReactElement,
 	ReactNode,
 } from 'react';

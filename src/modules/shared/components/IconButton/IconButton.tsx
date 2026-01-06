@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import { ComponentProps, forwardRef, ForwardedRef, ReactElement } from 'react';
+import { ComponentProps, ForwardedRef, forwardRef, ReactElement } from 'react';
 
 import * as IconButtonCss from './IconButton.css';
 

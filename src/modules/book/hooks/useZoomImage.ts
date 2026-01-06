@@ -14,7 +14,7 @@ export function useZoomImage() {
 
 	useEffect(() => {
 		function handler(e: globalThis.MouseEvent) {
-			if (e.target && 'tagName' in e?.target && e.target.tagName === 'IMG') {
+			if (e.target && 'tagName' in e.target && e.target.tagName === 'IMG') {
 				const currentTarget = e.target as HTMLImageElement;
 				const cur = currentTarget.currentSrc.slice(envVariables.WEB_URL.length);
 

@@ -1,7 +1,6 @@
 import { readdirSync } from 'fs';
-import path from 'path';
-
 import { MetadataRoute } from 'next';
+import path from 'path';
 
 export default function sitemap(): MetadataRoute.Sitemap {
 	const baseUrl = 'https://gentleman-programming-book.vercel.app';
