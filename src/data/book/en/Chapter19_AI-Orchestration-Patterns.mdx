@@ -78,15 +78,15 @@ This is the most intuitive pattern and probably the one you'll use most. It work
 **Construction analogy:** Think of the chief architect on a construction site. They don't run the electrical cables, don't weld the pipes, don't install the windows. But they know exactly what each specialist needs to do, in what order, and how to combine everything so the building works. The electrician reports to them, the plumber reports to them, and they make the coordination decisions.
 
 ```
-┌─────────────────────────────────────────┐
-│              SUPERVISOR                 │
-│   (Receives request, delegates, synthesizes)   │
-└──────────┬──────────┬──────────┬────────┘
-           │          │          │
-     ┌─────┴───┐ ┌────┴────┐ ┌───┴─────┐
-     │ Worker  │ │ Worker  │ │ Worker  │
-     │Research │ │ Writer  │ │ Analyst │
-     └─────────┘ └─────────┘ └─────────┘
+      ┌─────────────────────────┐
+      │       SUPERVISOR        │
+      │ (Receives,deleg,synth.) │
+      └───┬────────┬────────┬───┘
+          │        │        │
+     ┌────┴───┐┌───┴───┐┌───┴────┐
+     │ Worker ││Worker ││ Worker │
+     │Research││Writer ││Analyst │
+     └────────┘└───────┘└────────┘
 ```
 
 **When to use it:**
@@ -147,21 +147,21 @@ This is my favorite for complex tasks. The idea is simple but powerful: **you co
 First, a Planner (large, capable model) generates a complete plan with all steps. Then, Executors (can be smaller, cheaper models) execute each step without needing to reason about the complete plan.
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                    PLANNER                          │
-│  (Claude Opus / GPT-4 - Large model)                │
-│  Input: Complex task                                │
-│  Output: [Step1, Step2, Step3, Step4, Step5]        │
-└─────────────────────────┬───────────────────────────┘
-                          │
-                          ▼
-┌─────────────────────────────────────────────────────┐
-│                   EXECUTORS                         │
-│  (Claude Haiku / GPT-3.5 - Economic models)         │
-│  Step1 ──► Result1                                  │
-│  Step2 ──► Result2                                  │
-│  Step3 ──► Result3                                  │
-└─────────────────────────────────────────────────────┘
+┌───────────────────────────────┐
+│           PLANNER             │
+│   (Claude Opus / GPT-4)       │
+│   Input: Complex task         │
+│   Output: [Step1...Step5]     │
+└──────────────┬────────────────┘
+               │
+               ▼
+┌───────────────────────────────┐
+│          EXECUTORS            │
+│  (Haiku/GPT-3.5 - economic)   │
+│  Step1 ──► Result1            │
+│  Step2 ──► Result2            │
+│  Step3 ──► Result3            │
+└───────────────────────────────┘
 ```
 
 **Construction analogy:** It's exactly how real construction works. The architect (Planner) designs the complete blueprints. Then, different teams (Executors) execute each part of the blueprint without needing to understand the complete design. The electrician doesn't need to know why the kitchen is where it is, they just need to know where the outlets go.
@@ -280,16 +280,16 @@ This is a more sophisticated pattern that combines the best of Supervisor and Pl
 The Manager doesn't just delegate, it also does **dynamic re-planning**. If a task fails or returns unexpected results, it can adjust the plan without having to start from scratch.
 
 ```
-┌────────────────────────────────────────────────────────┐
-│                     MANAGER AGENT                      │
-│  ┌──────────────────────────────────────────────────┐  │
-│  │              TASK LEDGER                         │  │
-│  │  Task 1: Research    [✓ DONE]   Result: {...}    │  │
-│  │  Task 2: Analyze     [⟳ RUNNING] Depends: T1     │  │
-│  │  Task 3: Write       [○ PENDING] Depends: T2     │  │
-│  │  Task 4: Review      [○ PENDING] Depends: T3     │  │
-│  └──────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────┘
+┌────────────────────────────────┐
+│        MANAGER AGENT           │
+│  ┌──────────────────────────┐  │
+│  │       TASK LEDGER        │  │
+│  │ T1: Research [✓] Res:{}  │  │
+│  │ T2: Analyze  [⟳] Dep:T1  │  │
+│  │ T3: Write    [○] Dep:T2  │  │
+│  │ T4: Review   [○] Dep:T3  │  │
+│  └──────────────────────────┘  │
+└────────────────────────────────┘
 ```
 
 ### The Code Execution Pattern: Anthropic's Recommendation
@@ -371,33 +371,33 @@ Now comes the part I like most. How does all this fit into **Clean Architecture*
 ### The Layer Structure
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                   INFRASTRUCTURE                        │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
-│  │ LLM Adapter │  │Vector Store │  │ MCP Clients │      │
-│  │(Claude/GPT) │  │ (Pinecone)  │  │  (Servers)  │      │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘      │
-└─────────┼────────────────┼────────────────┼─────────────┘
-          │                │                │
-          ▼                ▼                ▼
-┌─────────────────────────────────────────────────────────┐
-│                    APPLICATION                          │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │              ORCHESTRATION LAYER                │    │
-│  │   Agents, RAG Pipelines, Multi-step Workflows   │    │
-│  └─────────────────────────────────────────────────┘    │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │                 USE CASES                       │    │
-│  │   ProcessDocument, AnalyzeData, GenerateReport  │    │
-│  └─────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────┘
-                          │
-                          ▼
-┌─────────────────────────────────────────────────────────┐
-│                      DOMAIN                             │
-│   Entities, Value Objects, Business Rules, Validation   │
-│            ⚠️ NO AI DEPENDENCIES ⚠️                     │
-└─────────────────────────────────────────────────────────┘
+┌───────────────────────────────┐
+│       INFRASTRUCTURE          │
+│ ┌────────┐┌────────┐┌───────┐ │
+│ │  LLM   ││VectorDB││  MCP  │ │
+│ │Adapter ││Pinecone││Clients│ │
+│ └───┬────┘└───┬────┘└───┬───┘ │
+└─────┼─────────┼─────────┼─────┘
+      │         │         │
+      ▼         ▼         ▼
+┌───────────────────────────────┐
+│        APPLICATION            │
+│ ┌───────────────────────────┐ │
+│ │   ORCHESTRATION LAYER     │ │
+│ │  Agents, RAG, Workflows   │ │
+│ └───────────────────────────┘ │
+│ ┌───────────────────────────┐ │
+│ │       USE CASES           │ │
+│ │ ProcessDoc,Analyze,Report │ │
+│ └───────────────────────────┘ │
+└───────────────────────────────┘
+              │
+              ▼
+┌───────────────────────────────┐
+│          DOMAIN               │
+│ Entities, ValueObjects, Rules │
+│      ⚠️ NO AI DEPS ⚠️        │
+└───────────────────────────────┘
 ```
 
 ### The Sacred Principle
