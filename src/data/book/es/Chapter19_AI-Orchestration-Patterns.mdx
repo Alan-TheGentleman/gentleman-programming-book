@@ -80,17 +80,15 @@ Este es el patron mas intuitivo y probablemente el que vas a usar mas. Funciona 
 
 **Analogia de construccion:** Pensa en el arquitecto jefe de una obra. El no pone los cables electricos, no suelda las tuberias, no coloca los vidrios. Pero sabe exactamente que tiene que hacer cada especialista, en que orden, y como combinar todo para que el edificio funcione. El electricista le reporta a el, el plomero le reporta a el, y el toma las decisiones de coordinacion.
 
-```
-      ┌─────────────────────────┐
-      │       SUPERVISOR        │
-      │ (Recibe,delega,sintet.) │
-      └───┬────────┬────────┬───┘
-          │        │        │
-     ┌────┴───┐┌───┴───┐┌───┴────┐
-     │ Worker ││Worker ││ Worker │
-     │Research││Writer ││Analyst │
-     └────────┘└───────┘└────────┘
-```
+<Mermaid
+	chart={`
+graph TD
+    S[SUPERVISOR<br/>Recibe, delega, sintetiza]
+    S --> R[Worker<br/>Research]
+    S --> W[Worker<br/>Writer]
+    S --> A[Worker<br/>Analyst]
+`}
+/>
 
 **Cuando usarlo:**
 
@@ -264,16 +262,16 @@ Pero aca viene lo importante: una vez que el usuario esta hablando con el especi
 User: "Tengo un problema con mi factura"
   │
   ▼
-┌─────────────────┐
+┌───────────────────┐
 │ Intent Classifier │ ──► "billing"
-└─────────────────┘
-         │
-         ▼  HANDOFF
-┌─────────────────┐
-│ Billing Agent   │ ◄── PERSISTENTE hasta cambio de tema
-│ (MCP: billing-  │
-│  server tools)  │
-└─────────────────┘
+└─────────┬─────────┘
+          │
+          ▼  HANDOFF
+┌───────────────────┐
+│ Billing Agent     │ ◄── PERSISTENTE
+│ (MCP: billing-    │
+│  server tools)    │
+└───────────────────┘
 ```
 
 ### El Patron Magentic: Manager con Task Ledger
@@ -283,16 +281,16 @@ Este es un patron mas sofisticado que combina lo mejor del Supervisor y Plan-and
 El Manager no solo delega, tambien hace **re-planning dinamico**. Si una tarea falla o devuelve resultados inesperados, puede ajustar el plan sin tener que empezar de cero.
 
 ```
-┌────────────────────────────────┐
-│        MANAGER AGENT           │
-│  ┌──────────────────────────┐  │
-│  │       TASK LEDGER        │  │
-│  │ T1: Research [✓] Res:{}  │  │
-│  │ T2: Analyze  [⟳] Dep:T1  │  │
-│  │ T3: Write    [○] Dep:T2  │  │
-│  │ T4: Review   [○] Dep:T3  │  │
-│  └──────────────────────────┘  │
-└────────────────────────────────┘
+┌──────────────────────────────┐
+│        MANAGER AGENT         │
+│  ┌────────────────────────┐  │
+│  │      TASK LEDGER       │  │
+│  │ T1: Research [✓] Res:{} │  │
+│  │ T2: Analyze  [⟳] Dep:T1 │  │
+│  │ T3: Write    [○] Dep:T2 │  │
+│  │ T4: Review   [○] Dep:T3 │  │
+│  └────────────────────────┘  │
+└──────────────────────────────┘
 ```
 
 ### El Patron Code Execution: La Recomendacion de Anthropic
@@ -374,33 +372,33 @@ Ahora viene la parte que mas me gusta. Como encaja todo esto en **Clean Architec
 ### La Estructura de Capas
 
 ```
-┌───────────────────────────────┐
-│       INFRASTRUCTURE          │
-│ ┌────────┐┌────────┐┌───────┐ │
-│ │  LLM   ││VectorDB││  MCP  │ │
-│ │Adapter ││Pinecone││Clients│ │
-│ └───┬────┘└───┬────┘└───┬───┘ │
-└─────┼─────────┼─────────┼─────┘
-      │         │         │
-      ▼         ▼         ▼
-┌───────────────────────────────┐
-│        APPLICATION            │
-│ ┌───────────────────────────┐ │
-│ │   ORCHESTRATION LAYER     │ │
-│ │  Agents, RAG, Workflows   │ │
-│ └───────────────────────────┘ │
-│ ┌───────────────────────────┐ │
-│ │       USE CASES           │ │
-│ │ ProcessDoc,Analyze,Report │ │
-│ └───────────────────────────┘ │
-└───────────────────────────────┘
+┌─────────────────────────────┐
+│      INFRASTRUCTURE         │
+│ ┌───────┐┌───────┐┌───────┐ │
+│ │  LLM  ││VectorD││  MCP  │ │
+│ │Adapter││Pinecne││Clients│ │
+│ └───┬───┘└───┬───┘└───┬───┘ │
+└─────┼────────┼────────┼─────┘
+      │        │        │
+      ▼        ▼        ▼
+┌─────────────────────────────┐
+│       APPLICATION           │
+│ ┌─────────────────────────┐ │
+│ │  ORCHESTRATION LAYER    │ │
+│ │ Agents, RAG, Workflows  │ │
+│ └─────────────────────────┘ │
+│ ┌─────────────────────────┐ │
+│ │      USE CASES          │ │
+│ │ ProcessDoc,Analyze,Rept │ │
+│ └─────────────────────────┘ │
+└─────────────────────────────┘
               │
               ▼
-┌───────────────────────────────┐
-│          DOMAIN               │
-│ Entities, ValueObjects, Rules │
-│     ⚠️ SIN DEPS DE IA ⚠️     │
-└───────────────────────────────┘
+┌─────────────────────────────┐
+│         DOMAIN              │
+│ Entities,ValueObjects,Rules │
+│    ⚠️ SIN DEPS DE IA ⚠️    │
+└─────────────────────────────┘
 ```
 
 ### El Principio Sagrado

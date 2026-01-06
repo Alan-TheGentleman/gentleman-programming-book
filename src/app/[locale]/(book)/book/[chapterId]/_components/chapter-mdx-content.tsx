@@ -1,8 +1,15 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypePrism from 'rehype-prism-plus';
 import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 
-import { Heading, Icon, MustachiIcon, Text } from '@/shared/components';
+import {
+	Heading,
+	Icon,
+	Mermaid,
+	MustachiIcon,
+	Text,
+} from '@/shared/components';
 
 import * as MDXRemoteCss from '@/book/styles/mdx.css';
 
@@ -16,6 +23,7 @@ export async function ChapterMDXContent({ source }: ChapterMDXContentProps) {
 			source={source}
 			options={{
 				mdxOptions: {
+					remarkPlugins: [remarkGfm],
 					rehypePlugins: [rehypeSlug, rehypePrism],
 					format: 'mdx',
 				},
@@ -78,6 +86,7 @@ export async function ChapterMDXContent({ source }: ChapterMDXContentProps) {
 						{children}
 					</Text>
 				),
+				Mermaid,
 			}}
 		/>
 	);

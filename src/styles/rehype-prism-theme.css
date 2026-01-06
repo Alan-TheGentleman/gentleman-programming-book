@@ -176,3 +176,34 @@ pre:not([class*='language-']) code {
 		0 0 5px #dc078e33,
 		0 0 10px #fff3;
 }
+
+/* Markdown tables (GFM) - base styles */
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 1.5em 0;
+	font-size: 0.9em;
+	overflow-x: auto;
+	display: block;
+}
+
+thead {
+	background: linear-gradient(to bottom, #2a2139 75%, #34294f);
+}
+
+th {
+	color: #f92aad;
+	font-weight: bold;
+	text-align: left;
+	padding: 0.75em 1em;
+	border-bottom: 2px solid #f92aad;
+}
+
+td {
+	padding: 0.75em 1em;
+	border-bottom: 1px solid #f92aad33;
+}
+
+tr:hover {
+	background-color: #f92aad11;
+}

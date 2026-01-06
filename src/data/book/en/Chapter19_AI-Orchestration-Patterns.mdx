@@ -261,16 +261,16 @@ But here's the important part: once the user is talking to the billing specialis
 User: "I have a problem with my invoice"
   │
   ▼
-┌─────────────────┐
+┌───────────────────┐
 │ Intent Classifier │ ──► "billing"
-└─────────────────┘
-         │
-         ▼  HANDOFF
-┌─────────────────┐
-│ Billing Agent   │ ◄── PERSISTENT until topic change
-│ (MCP: billing-  │
-│  server tools)  │
-└─────────────────┘
+└─────────┬─────────┘
+          │
+          ▼  HANDOFF
+┌───────────────────┐
+│ Billing Agent     │ ◄── PERSISTENT
+│ (MCP: billing-    │
+│  server tools)    │
+└───────────────────┘
 ```
 
 ### The Magentic Pattern: Manager with Task Ledger
@@ -280,16 +280,16 @@ This is a more sophisticated pattern that combines the best of Supervisor and Pl
 The Manager doesn't just delegate, it also does **dynamic re-planning**. If a task fails or returns unexpected results, it can adjust the plan without having to start from scratch.
 
 ```
-┌────────────────────────────────┐
-│        MANAGER AGENT           │
-│  ┌──────────────────────────┐  │
-│  │       TASK LEDGER        │  │
-│  │ T1: Research [✓] Res:{}  │  │
-│  │ T2: Analyze  [⟳] Dep:T1  │  │
-│  │ T3: Write    [○] Dep:T2  │  │
-│  │ T4: Review   [○] Dep:T3  │  │
-│  └──────────────────────────┘  │
-└────────────────────────────────┘
+┌──────────────────────────────┐
+│        MANAGER AGENT         │
+│  ┌────────────────────────┐  │
+│  │      TASK LEDGER       │  │
+│  │ T1: Research [✓] Res:{} │  │
+│  │ T2: Analyze  [⟳] Dep:T1 │  │
+│  │ T3: Write    [○] Dep:T2 │  │
+│  │ T4: Review   [○] Dep:T3 │  │
+│  └────────────────────────┘  │
+└──────────────────────────────┘
 ```
 
 ### The Code Execution Pattern: Anthropic's Recommendation
@@ -371,33 +371,33 @@ Now comes the part I like most. How does all this fit into **Clean Architecture*
 ### The Layer Structure
 
 ```
-┌───────────────────────────────┐
-│       INFRASTRUCTURE          │
-│ ┌────────┐┌────────┐┌───────┐ │
-│ │  LLM   ││VectorDB││  MCP  │ │
-│ │Adapter ││Pinecone││Clients│ │
-│ └───┬────┘└───┬────┘└───┬───┘ │
-└─────┼─────────┼─────────┼─────┘
-      │         │         │
-      ▼         ▼         ▼
-┌───────────────────────────────┐
-│        APPLICATION            │
-│ ┌───────────────────────────┐ │
-│ │   ORCHESTRATION LAYER     │ │
-│ │  Agents, RAG, Workflows   │ │
-│ └───────────────────────────┘ │
-│ ┌───────────────────────────┐ │
-│ │       USE CASES           │ │
-│ │ ProcessDoc,Analyze,Report │ │
-│ └───────────────────────────┘ │
-└───────────────────────────────┘
+┌─────────────────────────────┐
+│      INFRASTRUCTURE         │
+│ ┌───────┐┌───────┐┌───────┐ │
+│ │  LLM  ││VectorD││  MCP  │ │
+│ │Adapter││Pinecne││Clients│ │
+│ └───┬───┘└───┬───┘└───┬───┘ │
+└─────┼────────┼────────┼─────┘
+      │        │        │
+      ▼        ▼        ▼
+┌─────────────────────────────┐
+│       APPLICATION           │
+│ ┌─────────────────────────┐ │
+│ │  ORCHESTRATION LAYER    │ │
+│ │ Agents, RAG, Workflows  │ │
+│ └─────────────────────────┘ │
+│ ┌─────────────────────────┐ │
+│ │      USE CASES          │ │
+│ │ ProcessDoc,Analyze,Rept │ │
+│ └─────────────────────────┘ │
+└─────────────────────────────┘
               │
               ▼
-┌───────────────────────────────┐
-│          DOMAIN               │
-│ Entities, ValueObjects, Rules │
-│      ⚠️ NO AI DEPS ⚠️        │
-└───────────────────────────────┘
+┌─────────────────────────────┐
+│         DOMAIN              │
+│ Entities,ValueObjects,Rules │
+│      ⚠️ NO AI DEPS ⚠️      │
+└─────────────────────────────┘
 ```
 
 ### The Sacred Principle

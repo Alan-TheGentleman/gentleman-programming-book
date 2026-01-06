@@ -7,6 +7,7 @@ export * from './Icon';
 export * from './IconButton';
 export * from './IconSource';
 export * from './Link';
+export * from './Mermaid';
 export * from './Option';
 export * from './Select';
 export * from './Svg';

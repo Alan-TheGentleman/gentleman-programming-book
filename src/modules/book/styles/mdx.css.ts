@@ -1,6 +1,8 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 import { darkTheme } from '@/theme/config/modes/dark.theme.css';
+import { lightTheme } from '@/theme/config/modes/ligth.theme.css';
+import { sepiaTheme } from '@/theme/config/modes/sepia.theme.css';
 import { themeVars } from '@/theme/config/modes/theme.contract.css';
 
 export const mdxLi = style({
@@ -55,4 +57,33 @@ export const mdxStrong = style({
 	fontWeight: '900',
 	fontFamily: themeVars.font.merriweather,
 	color: themeVars.color.primary.base,
+});
+
+// Table styles - using globalStyle for elements rendered by MDX
+globalStyle(`${darkTheme} table td`, {
+	color: '#ffffff',
+});
+
+globalStyle(`${lightTheme} table td`, {
+	color: '#1a1a1a',
+});
+
+globalStyle(`${sepiaTheme} table td`, {
+	color: '#3d2914',
+});
+
+globalStyle(`${lightTheme} thead`, {
+	background: 'linear-gradient(to bottom, #f5f0f8 75%, #e8e0f0)',
+});
+
+globalStyle(`${sepiaTheme} thead`, {
+	background: 'linear-gradient(to bottom, #d4a574 75%, #c49660)',
+});
+
+globalStyle(`${lightTheme} tr:hover`, {
+	backgroundColor: '#f92aad22',
+});
+
+globalStyle(`${sepiaTheme} tr:hover`, {
+	backgroundColor: '#c4966044',
 });
