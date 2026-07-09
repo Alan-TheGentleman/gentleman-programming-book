@@ -604,6 +604,18 @@ const renderWithProviders = (ui: React.ReactElement) => {
 - [Next.js Testing](https://nextjs.org/docs/testing)
 - [Kent C. Dodds - Testing JavaScript](https://testingjavascript.com/)
 
+## Book Chapter Content Rules
+
+When creating or reviewing MDX chapters in `src/data/book/{en,es}/`:
+
+- Follow the user-level `book-chapter` skill as the source of truth for chapter conventions.
+- A chapter should have book-level depth: mechanisms, numbers, examples, and consequences, not thin summaries.
+- EN is the source of truth; ES is a faithful natural translation/adaptation with the same section structure, concepts, numbers, examples, pull-quotes, and image placement.
+- Spanish chapter prose follows the current convention used by the newest chapters: Rioplatense voseo, no accent marks, no inverted punctuation, and no em dashes.
+- `titleList[].tagId` must match the actual `rehype-slug` anchor for each `##` heading. Since current ES headings are accent-free, ES tagIds are accent-free too.
+- Chapter registration is automatic: `src/app/api/pdf/route.ts` discovers chapter MDX files from `src/data/book/en` and `src/data/book/es`. Do not require manual PDF URL-list updates.
+- Image assets for chapter diagrams live under `public/{topic-slug}/`; image paths in MDX must exist and captions must match the actual diagram content.
+
 ## CRITICAL RULES - NON-NEGOTIABLE
 
 ### React
