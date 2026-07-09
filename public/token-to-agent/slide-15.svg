@@ -1,0 +1,44 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Anatomía de la ventana de contexto: segmentos que consumen tokens antes de tu mensaje">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s15-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#DFBD76" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <!-- Header -->
+  <text x="30" y="26" font-size="10" letter-spacing="2" fill="#A1AABB">VENTANA DE CONTEXTO</text>
+  <text x="30" y="48" font-size="16" font-weight="600" fill="#F3F6F9">Anatomía de la ventana</text>
+
+  <!-- Chip top-right -->
+  <rect x="356" y="14" width="150" height="22" rx="11" fill="#1c212c" stroke="#DFBD76"/>
+  <text x="431" y="28" text-anchor="middle" font-size="9" fill="#DFBD76">anunciada: 200k ≠ disponible</text>
+
+  <!-- Memory-map bar -->
+  <rect x="270" y="78" width="140" height="38" rx="6" fill="#232A36" stroke="#313342"/>
+  <text x="340" y="100" text-anchor="middle" font-size="9" fill="#A1AABB">system prompt</text>
+
+  <rect x="270" y="119" width="140" height="54" rx="6" fill="#1c212c" stroke="#313342"/>
+  <text x="340" y="149" text-anchor="middle" font-size="9" fill="#A1AABB">definiciones de tools</text>
+
+  <rect x="270" y="176" width="140" height="36" rx="6" fill="#232A36" stroke="#313342"/>
+  <text x="340" y="197" text-anchor="middle" font-size="9" fill="#A1AABB">reglas del proyecto</text>
+
+  <rect x="270" y="215" width="140" height="62" rx="6" fill="#1c212c" stroke="#313342"/>
+  <text x="340" y="249" text-anchor="middle" font-size="9" fill="#A1AABB">historial</text>
+
+  <rect x="270" y="280" width="140" height="40" rx="6" fill="#232A36" stroke="#313342"/>
+  <text x="340" y="303" text-anchor="middle" font-size="9" fill="#A1AABB">resultados de tools</text>
+
+  <!-- TU MENSAJE slot -->
+  <rect x="270" y="323" width="140" height="19" rx="5" fill="#DFBD76" filter="url(#s15-glow)"/>
+  <text x="340" y="336" text-anchor="middle" font-size="9" font-weight="700" fill="#1c212c" letter-spacing="1">TU MENSAJE</text>
+
+  <!-- Bracket over segments before the message -->
+  <path d="M264 78 H256 V196 H250 M250 202 H256 V320 H264" stroke="#DFBD76" stroke-width="1.5" opacity="0.8"/>
+
+  <!-- Bracket caption -->
+  <text x="240" y="185" text-anchor="end" font-size="10" fill="#A1AABB">decenas de miles</text>
+  <text x="240" y="200" text-anchor="end" font-size="10" fill="#A1AABB">de tokens <tspan fill="#DFBD76" font-weight="600">ANTES</tspan> de</text>
+  <text x="240" y="215" text-anchor="end" font-size="10" fill="#A1AABB">tu primera palabra</text>
+</svg>

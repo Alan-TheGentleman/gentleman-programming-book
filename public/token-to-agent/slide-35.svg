@@ -1,0 +1,59 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Panel de jueces: dos jueces con venda que no se ven entre sí revisan el mismo diff y sus veredictos se combinan en confirmado, sospechoso o escala">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <marker id="s35-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M1 0 L6 3 L1 6" stroke="#DEBA87" stroke-width="1.2" fill="none"/>
+    </marker>
+  </defs>
+
+  <text x="30" y="30" font-size="10" letter-spacing="2" fill="#A1AABB">VERIFICACIÓN</text>
+  <text x="30" y="52" font-size="15" font-weight="600" fill="#F3F6F9">Panel de jueces</text>
+
+  <!-- judge A -->
+  <rect x="80" y="68" width="150" height="76" rx="10" fill="#1c212c" stroke="#DEBA87" stroke-opacity="0.7"/>
+  <circle cx="118" cy="104" r="16" fill="#232A36" stroke="#DEBA87"/>
+  <rect x="98" y="99" width="40" height="9" rx="3.5" fill="#DEBA87"/>
+  <text x="180" y="102" font-size="10" font-weight="600" fill="#F3F6F9" text-anchor="middle">JUEZ A</text>
+  <text x="180" y="117" font-size="7" fill="#8394A3" text-anchor="middle">review a ciegas</text>
+
+  <!-- judge B -->
+  <rect x="290" y="68" width="150" height="76" rx="10" fill="#1c212c" stroke="#DEBA87" stroke-opacity="0.7"/>
+  <circle cx="328" cy="104" r="16" fill="#232A36" stroke="#DEBA87"/>
+  <rect x="308" y="99" width="40" height="9" rx="3.5" fill="#DEBA87"/>
+  <text x="390" y="102" font-size="10" font-weight="600" fill="#F3F6F9" text-anchor="middle">JUEZ B</text>
+  <text x="390" y="117" font-size="7" fill="#8394A3" text-anchor="middle">review a ciegas</text>
+
+  <!-- barrier -->
+  <line x1="260" y1="64" x2="260" y2="148" stroke="#DEBA87" stroke-dasharray="4 4" opacity="0.8"/>
+  <text x="260" y="160" font-size="7.5" fill="#DEBA87" text-anchor="middle">no se ven</text>
+
+  <!-- arrows to diff -->
+  <line x1="155" y1="148" x2="226" y2="172" stroke="#DEBA87" marker-end="url(#s35-arrow)"/>
+  <line x1="365" y1="148" x2="294" y2="172" stroke="#DEBA87" marker-end="url(#s35-arrow)"/>
+
+  <!-- target diff -->
+  <rect x="190" y="176" width="140" height="26" rx="9" fill="#232A36" stroke="#DEBA87"/>
+  <text x="260" y="193" font-size="8.5" fill="#F3F6F9" text-anchor="middle">mismo diff · mismo target</text>
+
+  <!-- verdict matrix -->
+  <rect x="90" y="216" width="340" height="24" rx="8" fill="#1c212c" stroke="#313342"/>
+  <circle cx="104" cy="228" r="3" fill="#B7CC85"/>
+  <text x="114" y="231" font-size="8.5" fill="#A1AABB">los dos lo ven</text>
+  <rect x="310" y="220" width="108" height="16" rx="8" fill="#232A36" stroke="#B7CC85"/>
+  <text x="364" y="231" font-size="8" font-weight="600" fill="#B7CC85" text-anchor="middle">→ CONFIRMADO</text>
+
+  <rect x="90" y="246" width="340" height="24" rx="8" fill="#1c212c" stroke="#313342"/>
+  <circle cx="104" cy="258" r="3" fill="#DFBD76"/>
+  <text x="114" y="261" font-size="8.5" fill="#A1AABB">uno solo lo ve</text>
+  <rect x="310" y="250" width="108" height="16" rx="8" fill="#232A36" stroke="#DFBD76"/>
+  <text x="364" y="261" font-size="8" font-weight="600" fill="#DFBD76" text-anchor="middle">→ SOSPECHOSO</text>
+
+  <rect x="90" y="276" width="340" height="24" rx="8" fill="#1c212c" stroke="#313342"/>
+  <circle cx="104" cy="288" r="3" fill="#CB7C94"/>
+  <text x="114" y="291" font-size="8.5" fill="#A1AABB">se contradicen</text>
+  <rect x="310" y="280" width="108" height="16" rx="8" fill="#232A36" stroke="#CB7C94"/>
+  <text x="364" y="291" font-size="8" font-weight="600" fill="#CB7C94" text-anchor="middle">→ ESCALA</text>
+
+  <!-- footer -->
+  <text x="260" y="330" font-size="10" font-weight="600" fill="#DEBA87" text-anchor="middle">la independencia convierte opiniones en evidencia</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Diagrama de inferencia en dos fases: prefill en paralelo y decode secuencial">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s09-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="s09-arr-blue" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#7FB4CA"/></marker>
+    <marker id="s09-arr-green" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#B7CC85"/></marker>
+  </defs>
+
+  <text x="260" y="30" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">INFERENCIA · DOS FASES</text>
+  <text x="260" y="52" text-anchor="middle" font-size="16" font-weight="600" fill="#F3F6F9">Prefill y decode</text>
+
+  <!-- PREFILL panel -->
+  <rect x="24" y="72" width="230" height="256" rx="12" fill="#1c212c" stroke="#313342"/>
+  <text x="139" y="96" text-anchor="middle" font-size="10" letter-spacing="2" fill="#7FB4CA">PREFILL</text>
+
+  <!-- parallel arrows entering together -->
+  <line x1="63" y1="110" x2="63" y2="132" stroke="#7FB4CA" stroke-width="1.5" marker-end="url(#s09-arr-blue)"/>
+  <line x1="101" y1="110" x2="101" y2="132" stroke="#7FB4CA" stroke-width="1.5" marker-end="url(#s09-arr-blue)"/>
+  <line x1="139" y1="110" x2="139" y2="132" stroke="#7FB4CA" stroke-width="1.5" marker-end="url(#s09-arr-blue)"/>
+  <line x1="177" y1="110" x2="177" y2="132" stroke="#7FB4CA" stroke-width="1.5" marker-end="url(#s09-arr-blue)"/>
+  <line x1="215" y1="110" x2="215" y2="132" stroke="#7FB4CA" stroke-width="1.5" marker-end="url(#s09-arr-blue)"/>
+
+  <!-- token grid processed all at once -->
+  <g fill="#232A36" stroke="#7FB4CA" stroke-opacity="0.45">
+    <rect x="47" y="140" width="32" height="22" rx="5"/><rect x="85" y="140" width="32" height="22" rx="5"/><rect x="123" y="140" width="32" height="22" rx="5"/><rect x="161" y="140" width="32" height="22" rx="5"/><rect x="199" y="140" width="32" height="22" rx="5"/>
+    <rect x="47" y="168" width="32" height="22" rx="5"/><rect x="85" y="168" width="32" height="22" rx="5"/><rect x="123" y="168" width="32" height="22" rx="5"/><rect x="161" y="168" width="32" height="22" rx="5"/><rect x="199" y="168" width="32" height="22" rx="5"/>
+    <rect x="47" y="196" width="32" height="22" rx="5"/><rect x="85" y="196" width="32" height="22" rx="5"/><rect x="123" y="196" width="32" height="22" rx="5"/><rect x="161" y="196" width="32" height="22" rx="5"/><rect x="199" y="196" width="32" height="22" rx="5"/>
+  </g>
+
+  <text x="139" y="238" text-anchor="middle" font-size="9" fill="#8394A3">todo el prompt de una vez</text>
+  <text x="139" y="262" text-anchor="middle" font-size="10" fill="#A1AABB">en paralelo · límite: cálculo</text>
+  <rect x="87" y="276" width="104" height="26" rx="9" fill="#232A36" stroke="#7FB4CA" stroke-opacity="0.5" filter="url(#s09-glow)"/>
+  <text x="139" y="293" text-anchor="middle" font-size="11" font-weight="600" fill="#7FB4CA">→ TTFT</text>
+
+  <!-- DECODE panel -->
+  <rect x="266" y="72" width="230" height="256" rx="12" fill="#1c212c" stroke="#313342"/>
+  <text x="381" y="96" text-anchor="middle" font-size="10" letter-spacing="2" fill="#B7CC85">DECODE</text>
+
+  <!-- sequential chain, one token at a time -->
+  <rect x="288" y="148" width="34" height="26" rx="6" fill="#232A36" stroke="#B7CC85" stroke-opacity="0.35"/>
+  <rect x="336" y="148" width="34" height="26" rx="6" fill="#232A36" stroke="#B7CC85" stroke-opacity="0.5"/>
+  <rect x="384" y="148" width="34" height="26" rx="6" fill="#232A36" stroke="#B7CC85" stroke-opacity="0.7"/>
+  <rect x="432" y="148" width="34" height="26" rx="6" fill="#232A36" stroke="#B7CC85" filter="url(#s09-glow)"/>
+  <text x="305" y="165" text-anchor="middle" font-size="9" fill="#F3F6F9">t1</text>
+  <text x="353" y="165" text-anchor="middle" font-size="9" fill="#F3F6F9">t2</text>
+  <text x="401" y="165" text-anchor="middle" font-size="9" fill="#F3F6F9">t3</text>
+  <text x="449" y="165" text-anchor="middle" font-size="9" fill="#F3F6F9">t4</text>
+  <line x1="324" y1="161" x2="332" y2="161" stroke="#B7CC85" stroke-width="1.5" marker-end="url(#s09-arr-green)"/>
+  <line x1="372" y1="161" x2="380" y2="161" stroke="#B7CC85" stroke-width="1.5" marker-end="url(#s09-arr-green)"/>
+  <line x1="420" y1="161" x2="428" y2="161" stroke="#B7CC85" stroke-width="1.5" marker-end="url(#s09-arr-green)"/>
+
+  <!-- autoregressive loop -->
+  <path d="M449 184 C449 212 305 212 305 184" stroke="#B7CC85" stroke-opacity="0.55" stroke-dasharray="4 4" marker-end="url(#s09-arr-green)"/>
+  <text x="377" y="232" text-anchor="middle" font-size="9" fill="#8394A3">cada token vuelve como input</text>
+
+  <text x="381" y="262" text-anchor="middle" font-size="10" fill="#A1AABB">secuencial · límite: memoria</text>
+  <rect x="329" y="276" width="104" height="26" rx="9" fill="#232A36" stroke="#B7CC85" stroke-opacity="0.5" filter="url(#s09-glow)"/>
+  <text x="381" y="293" text-anchor="middle" font-size="11" font-weight="600" fill="#B7CC85">→ tok/s</text>
+</svg>

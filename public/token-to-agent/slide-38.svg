@@ -1,0 +1,67 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="DAG de fases SDD desde proposal hasta archive con artefactos persistidos por referencia">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s38-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#7FB4CA" flood-opacity="0.35"/>
+    </filter>
+    <marker id="s38-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#7FB4CA"/>
+    </marker>
+  </defs>
+
+  <text x="20" y="28" font-size="10" letter-spacing="2" fill="#A1AABB">SDD PIPELINE</text>
+  <text x="20" y="48" font-size="16" font-weight="600" fill="#F3F6F9">El DAG de fases</text>
+
+  <rect x="316" y="16" width="190" height="22" rx="11" fill="#232A36" stroke="#7FB4CA" stroke-opacity="0.7"/>
+  <text x="411" y="30" text-anchor="middle" font-size="9" fill="#7FB4CA">sobrevive crash y compactación</text>
+
+  <!-- Edges -->
+  <g stroke="#7FB4CA" stroke-width="1.5" marker-end="url(#s38-arrow)">
+    <line x1="86" y1="105" x2="112" y2="83"/>
+    <line x1="86" y1="115" x2="112" y2="139"/>
+    <line x1="170" y1="80" x2="198" y2="103"/>
+    <line x1="170" y1="142" x2="198" y2="118"/>
+    <line x1="254" y1="110" x2="280" y2="110"/>
+    <line x1="336" y1="110" x2="362" y2="110"/>
+    <line x1="418" y1="110" x2="442" y2="110"/>
+  </g>
+
+  <!-- Nodes -->
+  <g filter="url(#s38-glow)">
+    <rect x="22" y="97" width="64" height="26" rx="8" fill="#1c212c" stroke="#7FB4CA"/>
+    <rect x="118" y="62" width="52" height="26" rx="8" fill="#1c212c" stroke="#7FB4CA"/>
+    <rect x="118" y="132" width="52" height="26" rx="8" fill="#1c212c" stroke="#7FB4CA"/>
+    <rect x="204" y="97" width="50" height="26" rx="8" fill="#1c212c" stroke="#7FB4CA"/>
+    <rect x="286" y="97" width="50" height="26" rx="8" fill="#1c212c" stroke="#7FB4CA"/>
+    <rect x="368" y="97" width="50" height="26" rx="8" fill="#1c212c" stroke="#7FB4CA"/>
+    <rect x="448" y="97" width="58" height="26" rx="8" fill="#1c212c" stroke="#7FB4CA"/>
+  </g>
+  <text x="54" y="114" text-anchor="middle" font-size="10" fill="#F3F6F9">proposal</text>
+  <text x="144" y="79" text-anchor="middle" font-size="10" fill="#F3F6F9">specs</text>
+  <text x="144" y="149" text-anchor="middle" font-size="10" fill="#F3F6F9">design</text>
+  <text x="229" y="114" text-anchor="middle" font-size="10" fill="#F3F6F9">tasks</text>
+  <text x="311" y="114" text-anchor="middle" font-size="10" fill="#F3F6F9">apply</text>
+  <text x="393" y="114" text-anchor="middle" font-size="10" fill="#F3F6F9">verify</text>
+  <text x="477" y="114" text-anchor="middle" font-size="10" fill="#F3F6F9">archive</text>
+  <text x="144" y="107" text-anchor="middle" font-size="8" fill="#8394A3">en paralelo</text>
+
+  <!-- Referencias hacia arriba -->
+  <g stroke="#7FB4CA" stroke-opacity="0.5" stroke-dasharray="3 4">
+    <line x1="54" y1="240" x2="54" y2="127"/>
+    <line x1="138" y1="240" x2="138" y2="92"/>
+    <line x1="152" y1="240" x2="152" y2="162"/>
+    <line x1="229" y1="240" x2="229" y2="127"/>
+    <line x1="311" y1="240" x2="311" y2="127"/>
+    <line x1="393" y1="240" x2="393" y2="127"/>
+    <line x1="477" y1="240" x2="477" y2="127"/>
+  </g>
+
+  <!-- Almacén de artefactos -->
+  <rect x="40" y="240" width="450" height="36" rx="10" fill="#232A36" stroke="#313342"/>
+  <circle cx="62" cy="258" r="4" fill="#7FB4CA" fill-opacity="0.8"/>
+  <text x="76" y="262" font-size="10" fill="#F3F6F9">artefactos persistidos (claves de tópico)</text>
+  <text x="480" y="262" text-anchor="end" font-size="9" fill="#8394A3">memory store</text>
+
+  <line x1="150" y1="298" x2="182" y2="298" stroke="#7FB4CA" stroke-opacity="0.6" stroke-dasharray="3 4"/>
+  <text x="190" y="301" font-size="9" fill="#7FB4CA">referencias, no copias</text>
+</svg>

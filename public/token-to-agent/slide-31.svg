@@ -1,0 +1,68 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Anti-patrón god agent: un solo agente sobrecargado llena su contexto y degrada sus decisiones">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s31-glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#CB7C94" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <text x="30" y="30" font-size="10" letter-spacing="2" fill="#A1AABB">ANTI-PATRÓN</text>
+  <text x="30" y="52" font-size="15" font-weight="600" fill="#F3F6F9">God agent: un agente para todo</text>
+
+  <!-- God agent card -->
+  <rect x="30" y="70" width="225" height="170" rx="12" fill="#1c212c" stroke="#CB7C94" stroke-opacity="0.8" filter="url(#s31-glow)"/>
+  <text x="142" y="88" font-size="8" letter-spacing="1" fill="#CB7C94" text-anchor="middle">GOD AGENT · HACE TODO</text>
+
+  <!-- chaotic chips -->
+  <g transform="rotate(-4 73 107)">
+    <rect x="44" y="98" width="58" height="18" rx="6" fill="#232A36" stroke="#CB7C94" stroke-opacity="0.5"/>
+    <text x="73" y="110" font-size="8" fill="#F3F6F9" text-anchor="middle">explorar</text>
+  </g>
+  <g transform="rotate(3 126 115)">
+    <rect x="98" y="106" width="56" height="18" rx="6" fill="#232A36" stroke="#313342"/>
+    <text x="126" y="118" font-size="8" fill="#F3F6F9" text-anchor="middle">escribir</text>
+  </g>
+  <g transform="rotate(-3 194 107)">
+    <rect x="168" y="98" width="52" height="18" rx="6" fill="#232A36" stroke="#CB7C94" stroke-opacity="0.5"/>
+    <text x="194" y="110" font-size="8" fill="#F3F6F9" text-anchor="middle">testear</text>
+  </g>
+  <g transform="rotate(2 79 141)">
+    <rect x="52" y="132" width="54" height="18" rx="6" fill="#232A36" stroke="#313342"/>
+    <text x="79" y="144" font-size="8" fill="#F3F6F9" text-anchor="middle">revisar</text>
+  </g>
+  <g transform="rotate(-3 139 149)">
+    <rect x="104" y="140" width="70" height="18" rx="6" fill="#232A36" stroke="#CB7C94" stroke-opacity="0.5"/>
+    <text x="139" y="152" font-size="8" fill="#F3F6F9" text-anchor="middle">50 archivos</text>
+  </g>
+  <g transform="rotate(5 206 141)">
+    <rect x="186" y="132" width="40" height="18" rx="6" fill="#232A36" stroke="#313342"/>
+    <text x="206" y="144" font-size="8" fill="#F3F6F9" text-anchor="middle">logs</text>
+  </g>
+  <g transform="rotate(-6 169 175)">
+    <rect x="148" y="166" width="42" height="18" rx="6" fill="#232A36" stroke="#CB7C94" stroke-opacity="0.5"/>
+    <text x="169" y="178" font-size="8" fill="#F3F6F9" text-anchor="middle">diffs</text>
+  </g>
+  <text x="142" y="212" font-size="7.5" fill="#8394A3" text-anchor="middle">todo en el mismo hilo</text>
+  <text x="142" y="226" font-size="7.5" fill="#8394A3" text-anchor="middle">el contexto nunca se limpia</text>
+
+  <!-- context gauge -->
+  <text x="291" y="64" font-size="7" letter-spacing="1" fill="#A1AABB" text-anchor="middle">CONTEXT</text>
+  <rect x="272" y="70" width="38" height="170" rx="8" fill="#1c212c" stroke="#313342"/>
+  <rect x="277" y="88" width="28" height="147" rx="5" fill="#CB7C94" opacity="0.9"/>
+  <text x="291" y="158" font-size="10" font-weight="600" fill="#1c212c" text-anchor="middle">92%</text>
+  <text x="291" y="254" font-size="7" fill="#CB7C94" text-anchor="middle">casi lleno</text>
+
+  <!-- degradation chart -->
+  <rect x="328" y="70" width="178" height="170" rx="10" fill="#1c212c" stroke="#313342"/>
+  <text x="417" y="88" font-size="8" fill="#A1AABB" text-anchor="middle">calidad de decisión</text>
+  <line x1="342" y1="208" x2="496" y2="208" stroke="#313342"/>
+  <polyline points="344,110 376,116 404,136 436,166 490,200" stroke="#CB7C94" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="344" cy="110" r="3" fill="#B7CC85"/>
+  <circle cx="490" cy="200" r="3" fill="#CB7C94"/>
+  <text x="344" y="103" font-size="7.5" fill="#A1AABB">decisión 1 <tspan fill="#B7CC85">✓</tspan></text>
+  <text x="494" y="222" font-size="7.5" fill="#A1AABB" text-anchor="end">decisión 30 <tspan fill="#CB7C94">✗</tspan></text>
+
+  <!-- footer -->
+  <text x="260" y="300" font-size="12.5" font-weight="600" fill="#CB7C94" text-anchor="middle">funciona hasta que no</text>
+  <text x="260" y="318" font-size="8" fill="#8394A3" text-anchor="middle">la degradación es gradual y silenciosa</text>
+</svg>

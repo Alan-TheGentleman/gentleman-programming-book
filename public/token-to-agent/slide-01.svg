@@ -1,0 +1,77 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Un LLM predice el siguiente token: los tokens de entrada pasan por el transformer y producen una distribución de probabilidades sobre todo el vocabulario">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s01-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+
+  <!-- Header -->
+  <text x="260" y="28" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">QUÉ ES UN LLM</text>
+  <text x="260" y="48" text-anchor="middle" font-size="15" font-weight="600" fill="#F3F6F9">Predicción, no pensamiento</text>
+
+  <!-- Input tokens -->
+  <text x="62" y="86" text-anchor="middle" font-size="9" letter-spacing="2" fill="#A1AABB">INPUT</text>
+  <g>
+    <rect x="24" y="95" width="76" height="24" rx="8" fill="#232A36" stroke="#313342"/>
+    <text x="62" y="111" text-anchor="middle" font-size="10" fill="#F3F6F9">La</text>
+    <rect x="24" y="127" width="76" height="24" rx="8" fill="#232A36" stroke="#313342"/>
+    <text x="62" y="143" text-anchor="middle" font-size="10" fill="#F3F6F9">capital</text>
+    <rect x="24" y="159" width="76" height="24" rx="8" fill="#232A36" stroke="#313342"/>
+    <text x="62" y="175" text-anchor="middle" font-size="10" fill="#F3F6F9">de</text>
+    <rect x="24" y="191" width="76" height="24" rx="8" fill="#232A36" stroke="#313342"/>
+    <text x="62" y="207" text-anchor="middle" font-size="10" fill="#F3F6F9">Francia</text>
+    <rect x="24" y="223" width="76" height="24" rx="8" fill="#232A36" stroke="#313342"/>
+    <text x="62" y="239" text-anchor="middle" font-size="10" fill="#F3F6F9">es</text>
+  </g>
+
+  <!-- Arrow input -> transformer -->
+  <line x1="106" y1="171" x2="140" y2="171" stroke="#7FB4CA" stroke-width="1.5"/>
+  <path d="M140 166 L148 171 L140 176 Z" fill="#7FB4CA"/>
+
+  <!-- Transformer card -->
+  <rect x="152" y="95" width="138" height="155" rx="12" fill="#7FB4CA" opacity="0.15" filter="url(#s01-glow)"/>
+  <rect x="152" y="95" width="138" height="155" rx="12" fill="#1c212c" stroke="#313342"/>
+  <text x="221" y="120" text-anchor="middle" font-size="11" font-weight="600" letter-spacing="1.5" fill="#7FB4CA">TRANSFORMER</text>
+  <rect x="166" y="134" width="110" height="30" rx="8" fill="#232A36"/>
+  <text x="221" y="153" text-anchor="middle" font-size="10" fill="#A1AABB">atención</text>
+  <rect x="166" y="172" width="110" height="30" rx="8" fill="#232A36"/>
+  <text x="221" y="191" text-anchor="middle" font-size="10" fill="#A1AABB">feed-forward</text>
+  <text x="221" y="228" text-anchor="middle" font-size="9" fill="#8394A3">× N capas</text>
+
+  <!-- Arrow transformer -> output -->
+  <line x1="296" y1="171" x2="326" y2="171" stroke="#7FB4CA" stroke-width="1.5"/>
+  <path d="M326 166 L334 171 L326 176 Z" fill="#7FB4CA"/>
+
+  <!-- Output probabilities -->
+  <text x="424" y="86" text-anchor="middle" font-size="9" letter-spacing="2" fill="#A1AABB">OUTPUT</text>
+
+  <!-- París (highlighted) -->
+  <text x="340" y="110" font-size="10" font-weight="600" fill="#7FB4CA">París</text>
+  <rect x="382" y="101" width="86" height="11" rx="4" fill="#232A36"/>
+  <rect x="382" y="101" width="70" height="11" rx="4" fill="#7FB4CA" opacity="0.5" filter="url(#s01-glow)"/>
+  <rect x="382" y="101" width="70" height="11" rx="4" fill="#7FB4CA"/>
+  <text x="508" y="110" text-anchor="end" font-size="9" font-weight="600" fill="#7FB4CA">82%</text>
+
+  <!-- Lyon -->
+  <text x="340" y="148" font-size="10" fill="#A1AABB">Lyon</text>
+  <rect x="382" y="139" width="86" height="11" rx="4" fill="#232A36"/>
+  <rect x="382" y="139" width="6" height="11" rx="3" fill="#A3B5D6"/>
+  <text x="508" y="148" text-anchor="end" font-size="9" fill="#8394A3">6%</text>
+
+  <!-- Roma -->
+  <text x="340" y="186" font-size="10" fill="#A1AABB">Roma</text>
+  <rect x="382" y="177" width="86" height="11" rx="4" fill="#232A36"/>
+  <rect x="382" y="177" width="5" height="11" rx="2.5" fill="#A3B5D6"/>
+  <text x="508" y="186" text-anchor="end" font-size="9" fill="#8394A3">4%</text>
+
+  <!-- Otros -->
+  <text x="340" y="224" font-size="10" fill="#A1AABB">…</text>
+  <rect x="382" y="215" width="86" height="11" rx="4" fill="#232A36"/>
+  <rect x="382" y="215" width="8" height="11" rx="4" fill="#A3B5D6"/>
+  <text x="508" y="224" text-anchor="end" font-size="9" fill="#8394A3">8%</text>
+
+  <!-- Footer chip -->
+  <rect x="130" y="306" width="260" height="26" rx="13" fill="#1c212c" stroke="#313342"/>
+  <text x="260" y="323" text-anchor="middle" font-size="10" fill="#A1AABB">una distribución sobre ~100k tokens</text>
+</svg>

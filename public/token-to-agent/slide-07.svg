@@ -1,0 +1,57 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Diagrama de costos por token: el output cuesta unas cinco veces más que el input, y una cuenta rápida muestra cómo el system prompt multiplica los tokens diarios">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s07-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#B7CC85" flood-opacity="0.4"/>
+    </filter>
+    <filter id="s07-glow-y" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#DFBD76" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Header -->
+  <text x="24" y="30" font-size="10" letter-spacing="2" fill="#A1AABB">COSTOS</text>
+  <text x="24" y="52" font-size="16" font-weight="600" fill="#F3F6F9">Tokens = plata</text>
+
+  <!-- Left card: price bars -->
+  <rect x="20" y="66" width="225" height="248" rx="12" fill="#1c212c" stroke="#313342"/>
+  <text x="132" y="88" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">PRECIO / 1M TOKENS</text>
+
+  <!-- Output bar (5x, with glow) -->
+  <rect x="152" y="104" width="50" height="168" rx="4" fill="#B7CC85" fill-opacity="0.9" filter="url(#s07-glow)"/>
+  <text x="177" y="98" text-anchor="middle" font-size="13" font-weight="600" fill="#B7CC85">$15</text>
+  <!-- Input bar -->
+  <rect x="62" y="238" width="50" height="34" rx="4" fill="#7FB4CA" fill-opacity="0.9"/>
+  <text x="87" y="228" text-anchor="middle" font-size="13" font-weight="600" fill="#7FB4CA">$3</text>
+
+  <!-- ~5x indicator -->
+  <line x1="132" y1="110" x2="132" y2="236" stroke="#B7CC85" stroke-opacity="0.5" stroke-dasharray="4 4"/>
+  <rect x="114" y="162" width="36" height="18" rx="5" fill="#1c212c"/>
+  <text x="132" y="175" text-anchor="middle" font-size="11" font-weight="600" fill="#B7CC85">~5x</text>
+
+  <!-- Baseline + labels -->
+  <line x1="42" y1="272" x2="222" y2="272" stroke="#313342"/>
+  <text x="87" y="290" text-anchor="middle" font-size="10" fill="#A1AABB">INPUT</text>
+  <text x="177" y="290" text-anchor="middle" font-size="10" fill="#A1AABB">OUTPUT</text>
+
+  <!-- Right card: stacked calculation -->
+  <rect x="262" y="66" width="238" height="248" rx="12" fill="#1c212c" stroke="#313342"/>
+  <text x="381" y="88" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">CUENTA RÁPIDA</text>
+
+  <rect x="278" y="100" width="206" height="36" rx="8" fill="#232A36"/>
+  <text x="290" y="122" font-size="11" fill="#A1AABB">system prompt</text>
+  <text x="472" y="122" text-anchor="end" font-size="12" font-weight="600" fill="#F3F6F9">5.000 tokens</text>
+
+  <text x="381" y="154" text-anchor="middle" font-size="14" fill="#8394A3">×</text>
+
+  <rect x="278" y="162" width="206" height="36" rx="8" fill="#232A36"/>
+  <text x="290" y="184" font-size="11" fill="#A1AABB">requests/día</text>
+  <text x="472" y="184" text-anchor="end" font-size="12" font-weight="600" fill="#F3F6F9">10.000</text>
+
+  <text x="381" y="216" text-anchor="middle" font-size="14" fill="#8394A3">=</text>
+
+  <rect x="278" y="224" width="206" height="42" rx="8" fill="#232A36" stroke="#DFBD76" filter="url(#s07-glow-y)"/>
+  <text x="381" y="250" text-anchor="middle" font-size="15" font-weight="600" fill="#DFBD76">50M tokens/día</text>
+
+  <text x="381" y="294" text-anchor="middle" font-size="10" fill="#DEBA87">se pagan SIEMPRE, se usen o no</text>
+</svg>

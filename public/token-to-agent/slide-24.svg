@@ -1,0 +1,63 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Diagrama del patrón router y módulo: un índice pequeño siempre cargado enruta la tarea y solo el módulo react.md se carga al contexto">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s24-glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="s24-arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#B7CC85"/>
+    </marker>
+    <marker id="s24-arrow-grey" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#A1AABB"/>
+    </marker>
+  </defs>
+
+  <text x="260" y="26" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">ROUTER + MÓDULO</text>
+
+  <!-- task chip -->
+  <rect x="24" y="48" width="158" height="28" rx="14" fill="#232A36" stroke="#B7CC85" stroke-opacity="0.6"/>
+  <text x="103" y="66" text-anchor="middle" font-size="9" fill="#F3F6F9">tarea: componente React</text>
+  <line x1="186" y1="62" x2="212" y2="62" stroke="#A1AABB" stroke-width="1.5" marker-end="url(#s24-arrow-grey)"/>
+
+  <!-- index card -->
+  <rect x="220" y="40" width="180" height="104" rx="10" fill="#1c212c" stroke="#313342"/>
+  <text x="310" y="58" text-anchor="middle" font-size="9" letter-spacing="1" fill="#A1AABB">ÍNDICE (SIEMPRE CARGADO)</text>
+  <rect x="232" y="66" width="156" height="17" rx="5" fill="#232A36" stroke="#B7CC85" stroke-opacity="0.8"/>
+  <text x="240" y="78" font-size="9" fill="#B7CC85">react → ui</text>
+  <rect x="232" y="86" width="156" height="17" rx="5" fill="#232A36"/>
+  <text x="240" y="98" font-size="9" fill="#A1AABB">go → backend</text>
+  <rect x="232" y="106" width="156" height="17" rx="5" fill="#232A36"/>
+  <text x="240" y="118" font-size="9" fill="#A1AABB">sql → data</text>
+  <text x="310" y="137" text-anchor="middle" font-size="8" fill="#8394A3">decenas de tokens</text>
+
+  <!-- router decision arrow -->
+  <line x1="310" y1="150" x2="268" y2="181" stroke="#B7CC85" stroke-width="1.8" marker-end="url(#s24-arrow-green)" filter="url(#s24-glow)"/>
+  <text x="322" y="170" font-size="8" fill="#B7CC85">router decide</text>
+
+  <!-- module shelf -->
+  <rect x="70" y="202" width="110" height="44" rx="8" fill="#1c212c" stroke="#313342"/>
+  <text x="125" y="227" text-anchor="middle" font-size="10" fill="#A1AABB">go.md</text>
+
+  <rect x="205" y="186" width="110" height="48" rx="8" fill="none" stroke="#B7CC85" stroke-width="2" filter="url(#s24-glow)"/>
+  <rect x="205" y="186" width="110" height="48" rx="8" fill="#1c212c" stroke="#B7CC85"/>
+  <text x="260" y="206" text-anchor="middle" font-size="10" font-weight="600" fill="#B7CC85">react.md</text>
+  <text x="260" y="222" text-anchor="middle" font-size="8" fill="#8394A3">80 líneas</text>
+
+  <rect x="340" y="202" width="110" height="44" rx="8" fill="#1c212c" stroke="#313342"/>
+  <text x="395" y="227" text-anchor="middle" font-size="10" fill="#A1AABB">sql.md</text>
+
+  <line x1="60" y1="250" x2="460" y2="250" stroke="#313342" stroke-width="2"/>
+  <text x="458" y="262" text-anchor="end" font-size="8" fill="#8394A3">módulos en disco</text>
+
+  <!-- load into context -->
+  <line x1="260" y1="238" x2="260" y2="266" stroke="#B7CC85" stroke-width="1.8" marker-end="url(#s24-arrow-green)" filter="url(#s24-glow)"/>
+
+  <text x="112" y="270" font-size="8" fill="#8394A3">contexto</text>
+  <rect x="110" y="274" width="300" height="28" rx="8" fill="#232A36" stroke="#313342"/>
+  <rect x="115" y="279" width="86" height="18" rx="5" fill="#B7CC85" fill-opacity="0.2" stroke="#B7CC85"/>
+  <text x="158" y="291" text-anchor="middle" font-size="9" fill="#B7CC85">react.md</text>
+  <text x="300" y="292" text-anchor="middle" font-size="8" fill="#8394A3">espacio libre</text>
+
+  <text x="260" y="332" text-anchor="middle" font-size="11" font-weight="600" fill="#B7CC85">mismo conocimiento, fracción del costo</text>
+</svg>

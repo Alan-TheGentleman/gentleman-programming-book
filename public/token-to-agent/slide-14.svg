@@ -1,0 +1,62 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Sampling: distribución con temperatura 0 concentrada en un token frente a temperatura 1.2 aplanada, con corte top-p que recorta la cola">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s14-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <text x="260" y="28" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">TEMPERATURA · TOP-P</text>
+  <text x="260" y="52" text-anchor="middle" font-size="16" font-weight="600" fill="#F3F6F9">Sampling</text>
+
+  <!-- TEMP 0 -->
+  <rect x="24" y="72" width="228" height="204" rx="12" fill="#1c212c" stroke="#313342"/>
+  <text x="138" y="94" text-anchor="middle" font-size="10" letter-spacing="2" fill="#7FB4CA">TEMP 0</text>
+
+  <rect x="50" y="224" width="22" height="12" rx="3" fill="#8394A3" fill-opacity="0.3"/>
+  <rect x="81" y="218" width="22" height="18" rx="3" fill="#8394A3" fill-opacity="0.3"/>
+  <rect x="112" y="118" width="22" height="118" rx="3" fill="#7FB4CA" filter="url(#s14-glow)"/>
+  <rect x="143" y="222" width="22" height="14" rx="3" fill="#8394A3" fill-opacity="0.3"/>
+  <rect x="174" y="227" width="22" height="9" rx="3" fill="#8394A3" fill-opacity="0.3"/>
+  <rect x="205" y="230" width="22" height="6" rx="3" fill="#8394A3" fill-opacity="0.3"/>
+  <line x1="44" y1="236" x2="232" y2="236" stroke="#313342"/>
+  <text x="61" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t1</text>
+  <text x="92" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t2</text>
+  <text x="123" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t3</text>
+  <text x="154" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t4</text>
+  <text x="185" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t5</text>
+  <text x="216" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t6</text>
+  <text x="138" y="268" text-anchor="middle" font-size="10" fill="#A1AABB">siempre el más probable</text>
+
+  <!-- TEMP 1.2 -->
+  <rect x="268" y="72" width="228" height="204" rx="12" fill="#1c212c" stroke="#313342"/>
+  <text x="382" y="94" text-anchor="middle" font-size="10" letter-spacing="2" fill="#FF8DD7">TEMP 1.2</text>
+
+  <!-- top-p shaded tail -->
+  <rect x="413" y="112" width="60" height="124" fill="#8394A3" fill-opacity="0.08"/>
+  <line x1="413" y1="112" x2="413" y2="236" stroke="#A1AABB" stroke-dasharray="3 3"/>
+  <text x="443" y="104" text-anchor="middle" font-size="8" fill="#A1AABB">top-p recorta la cola</text>
+
+  <rect x="294" y="190" width="22" height="46" rx="3" fill="#FF8DD7" fill-opacity="0.75"/>
+  <rect x="325" y="198" width="22" height="38" rx="3" fill="#FF8DD7" fill-opacity="0.75"/>
+  <rect x="356" y="164" width="22" height="72" rx="3" fill="#FF8DD7"/>
+  <rect x="387" y="202" width="22" height="34" rx="3" fill="#FF8DD7" fill-opacity="0.75"/>
+  <rect x="418" y="212" width="22" height="24" rx="3" fill="#8394A3" fill-opacity="0.3"/>
+  <rect x="449" y="222" width="22" height="14" rx="3" fill="#8394A3" fill-opacity="0.3"/>
+  <line x1="288" y1="236" x2="476" y2="236" stroke="#313342"/>
+  <text x="305" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t1</text>
+  <text x="336" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t2</text>
+  <text x="367" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t3</text>
+  <text x="398" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t4</text>
+  <text x="429" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t5</text>
+  <text x="460" y="250" text-anchor="middle" font-size="8" fill="#8394A3">t6</text>
+  <text x="382" y="268" text-anchor="middle" font-size="10" fill="#FF8DD7">arriesga</text>
+
+  <!-- footer chips -->
+  <rect x="96" y="300" width="124" height="28" rx="9" fill="#232A36" stroke="#313342"/>
+  <text x="158" y="318" text-anchor="middle" font-size="10" fill="#A1AABB">código: <tspan font-weight="600" fill="#7FB4CA">0–0.3</tspan></text>
+  <text x="240" y="318" text-anchor="middle" font-size="10" fill="#8394A3">·</text>
+  <rect x="260" y="300" width="164" height="28" rx="9" fill="#232A36" stroke="#313342"/>
+  <text x="342" y="318" text-anchor="middle" font-size="10" fill="#A1AABB">brainstorming: <tspan font-weight="600" fill="#FF8DD7">0.7–1</tspan></text>
+</svg>

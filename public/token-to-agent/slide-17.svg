@@ -1,0 +1,75 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Compactación: una ventana llena se resume con pérdida y los detalles no persistidos desaparecen">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s17-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#DEBA87" flood-opacity="0.45"/>
+    </filter>
+    <marker id="s17-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#DEBA87"/>
+    </marker>
+  </defs>
+
+  <!-- Header -->
+  <text x="260" y="26" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">CUANDO LA VENTANA SE LLENA</text>
+  <text x="260" y="48" text-anchor="middle" font-size="16" font-weight="600" fill="#F3F6F9">Compactación</text>
+
+  <!-- Left: full window -->
+  <rect x="28" y="70" width="172" height="234" rx="10" fill="#1c212c" stroke="#313342"/>
+  <text x="114" y="87" text-anchor="middle" font-size="8" letter-spacing="1.5" fill="#A1AABB">VENTANA LLENA</text>
+
+  <rect x="40" y="96" width="148" height="16" rx="4" fill="#232A36" stroke="#DEBA87" stroke-opacity="0.5"/>
+  <text x="46" y="107" font-size="8" fill="#A1AABB">decisión: usar JWT</text>
+
+  <rect x="40" y="118" width="148" height="16" rx="4" fill="#232A36"/>
+  <text x="46" y="129" font-size="8" fill="#A1AABB">intento fallido #1</text>
+
+  <rect x="40" y="140" width="148" height="16" rx="4" fill="#232A36" stroke="#DEBA87" stroke-opacity="0.5"/>
+  <text x="46" y="151" font-size="8" fill="#A1AABB">restricción: API v2</text>
+
+  <rect x="40" y="162" width="148" height="16" rx="4" fill="#232A36"/>
+  <text x="46" y="173" font-size="8" fill="#A1AABB">resultados de tools</text>
+
+  <rect x="40" y="184" width="148" height="16" rx="4" fill="#232A36"/>
+  <text x="46" y="195" font-size="8" fill="#A1AABB">intento fallido #2</text>
+
+  <rect x="40" y="206" width="148" height="16" rx="4" fill="#232A36" stroke="#DEBA87" stroke-opacity="0.5"/>
+  <text x="46" y="217" font-size="8" fill="#A1AABB">decisión: cache LRU</text>
+
+  <rect x="40" y="228" width="148" height="16" rx="4" fill="#232A36"/>
+  <text x="46" y="239" font-size="8" fill="#A1AABB">historial de código</text>
+
+  <rect x="40" y="250" width="148" height="16" rx="4" fill="#232A36" stroke="#DEBA87" stroke-opacity="0.5"/>
+  <text x="46" y="261" font-size="8" fill="#A1AABB">restricción: sin ORM</text>
+
+  <rect x="40" y="272" width="148" height="16" rx="4" fill="#232A36"/>
+  <text x="46" y="283" font-size="8" fill="#A1AABB">logs y debugging</text>
+
+  <!-- Center arrow -->
+  <text x="254" y="168" text-anchor="middle" font-size="9" letter-spacing="1.5" font-weight="600" fill="#DEBA87">RESUMEN</text>
+  <line x1="210" y1="185" x2="296" y2="185" stroke="#DEBA87" stroke-width="2" marker-end="url(#s17-arrow)"/>
+  <text x="254" y="203" text-anchor="middle" font-size="8" fill="#8394A3">(con pérdida)</text>
+
+  <!-- Right: small summary block -->
+  <rect x="312" y="96" width="180" height="72" rx="10" fill="#232A36" stroke="#DEBA87" filter="url(#s17-glow)"/>
+  <text x="402" y="116" text-anchor="middle" font-size="9" font-weight="600" fill="#F3F6F9">resumen compacto</text>
+  <rect x="330" y="128" width="144" height="4" rx="2" fill="#A1AABB" opacity="0.55"/>
+  <rect x="330" y="139" width="120" height="4" rx="2" fill="#A1AABB" opacity="0.4"/>
+  <rect x="330" y="150" width="96" height="4" rx="2" fill="#A1AABB" opacity="0.3"/>
+
+  <!-- Ghost chips drifting away -->
+  <g opacity="0.6" transform="rotate(-4 370 199)">
+    <rect x="326" y="190" width="88" height="18" rx="9" stroke="#CB7C94" stroke-dasharray="3 3"/>
+    <text x="370" y="202" text-anchor="middle" font-size="8" fill="#CB7C94">el porqué</text>
+  </g>
+  <g opacity="0.45" transform="rotate(3 425 234)">
+    <rect x="368" y="225" width="114" height="18" rx="9" stroke="#CB7C94" stroke-dasharray="3 3"/>
+    <text x="425" y="237" text-anchor="middle" font-size="8" fill="#CB7C94">intentos fallidos</text>
+  </g>
+  <g opacity="0.35" transform="rotate(-3 404 270)">
+    <rect x="340" y="261" width="128" height="18" rx="9" stroke="#CB7C94" stroke-dasharray="3 3"/>
+    <text x="404" y="273" text-anchor="middle" font-size="8" fill="#CB7C94">restricciones al pasar</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="260" y="336" text-anchor="middle" font-size="12" font-weight="600" fill="#F3F6F9">lo no persistido <tspan fill="#CB7C94">puede desaparecer</tspan></text>
+</svg>

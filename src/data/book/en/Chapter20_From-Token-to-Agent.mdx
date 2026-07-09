@@ -1,0 +1,580 @@
+---
+id: 'from-token-to-agent'
+order: 20
+name: 'From Token to Agent'
+titleList:
+  [
+    {
+      name: 'Introduction: The Machine Under the Hood',
+      tagId: 'introduction-the-machine-under-the-hood',
+    },
+    {
+      name: 'A Prediction Machine, Nothing More',
+      tagId: 'a-prediction-machine-nothing-more',
+    },
+    {
+      name: 'Tokens: The Currency of Everything',
+      tagId: 'tokens-the-currency-of-everything',
+    },
+    {
+      name: 'KV Cache: The Trick That Makes Agents Viable',
+      tagId: 'kv-cache-the-trick-that-makes-agents-viable',
+    },
+    {
+      name: 'The Context Window Is a Budget',
+      tagId: 'the-context-window-is-a-budget',
+    },
+    {
+      name: "The Industry's Context Workarounds",
+      tagId: 'the-industrys-context-workarounds',
+    },
+    {
+      name: 'The Agentic Loop',
+      tagId: 'the-agentic-loop',
+    },
+    {
+      name: 'From AGENTS.md to Skills',
+      tagId: 'from-agentsmd-to-skills',
+    },
+    {
+      name: 'Skills Registry and Contextual Loading',
+      tagId: 'skills-registry-and-contextual-loading',
+    },
+    {
+      name: 'Persistent Memory: A Brain Outside the Window',
+      tagId: 'persistent-memory-a-brain-outside-the-window',
+    },
+    {
+      name: 'Engram in Practice: Lightweight Memory That Scales',
+      tagId: 'engram-in-practice-lightweight-memory-that-scales',
+    },
+    {
+      name: 'Agent Patterns and Model Routing',
+      tagId: 'agent-patterns-and-model-routing',
+    },
+    {
+      name: 'Spec-Driven Orchestration',
+      tagId: 'spec-driven-orchestration',
+    },
+    {
+      name: 'Quality Loops You Can Verify',
+      tagId: 'quality-loops-you-can-verify',
+    },
+    {
+      name: 'Conclusion: The Car Around the Engine',
+      tagId: 'conclusion-the-car-around-the-engine',
+    },
+    {
+      name: 'References and Resources',
+      tagId: 'references-and-resources',
+    },
+  ]
+---
+
+
+# From Token to Agent
+
+_What really happens between your prompt and the code an agent delivers_
+
+---
+
+## Introduction: The Machine Under the Hood
+
+Hey, here we are again. Look, if you're reading this it's because you've already used an AI agent, maybe every single day, and at some point you asked yourself the question that separates users from engineers: **what is actually happening under the hood?**
+
+Because here's the thing. Most people treat the model like magic. They throw a prompt at it, they get code back, and when it fails they shrug and say "the AI hallucinated". No, no, no. That's like driving a car your whole life and never asking why it needs fuel, why the engine overheats, or why it slows down going uphill. You can drive like that, sure. But you'll never be the one who designs the race strategy. And when the car breaks down at kilometer 300, the driver who never opened the hood is the one standing on the side of the road waving at traffic.
+
+I want to be very concrete about what this chapter promises, because I'm allergic to "AI is powerful" content. Every section of this chapter leaves you with at least one of three things: a **mechanism** (how something actually works inside), a **number** (something you can put in a spreadsheet or an architecture doc), or a **decision rule** (an if-this-then-that you can apply tomorrow morning). If a paragraph doesn't give you one of those three, I cut it. That was the deal I made with myself when writing this, and I'm telling you right now so you can hold me to it.
+
+Why does this matter so much? Because the industry moved. Two years ago knowing how to write a decent prompt made you look like a wizard. Today every junior on the planet can paste an error into a chat window. The differentiation moved down the stack: it's now in understanding tokens, caches, context windows, loops, memory, and verification, and in composing those pieces into systems that deliver working software instead of plausible-looking text. That composition has a name, agent engineering, and it's a proper engineering discipline with budgets, invariants, and failure modes, just like the distributed systems you already know.
+
+In Chapter 15 we covered how to work with Claude Code day to day, and in Chapter 19 we went deep on orchestration patterns and MCP. This chapter is the missing floor underneath both: the machine itself. We're going from the smallest unit, the token, all the way up to engineering loops of agents that verify their own work. Ten stops on the way up: what the model computes, what a token costs, how the KV cache makes generation fast, why the context window is a budget, how a loop plus tools turns a text predictor into an agent, how to feed that loop knowledge on demand, how to give it memory that survives, how to split work across many agents, and how to wrap the whole thing in a process you can actually trust.
+
+One more thing before we open the hood. Four ideas are going to reappear over and over in this chapter, like recurring characters in a series. I'll name them now so you recognize them when they show up: **the context is a budget**, **the API is stateless so everything gets re-sent**, **search cheap and deepen expensive**, and **verifiable trust, never blind trust**. Every time one of them reappears, I'll point at it. They're the glue of everything.
+
+> _"The difference between using AI and engineering with AI is knowing what you're paying for on every single request."_
+
+---
+
+## A Prediction Machine, Nothing More
+
+Let's start by killing the biggest myth in the room. A Large Language Model, an LLM, does not think. It does not want things, it does not understand you, it does not have a plan. It does exactly ONE thing, and I want you to read this sentence twice: given a sequence of tokens, it produces a probability distribution over its entire vocabulary, around 100,000 possible pieces, for what the next token should be. That's it. That's the whole trick. Everything you've ever seen an LLM do, write poetry, refactor your service layer, explain quantum physics to your nephew, is that single operation repeated once per generated token.
+
+![next-token-prediction](/token-to-agent/slide-01.svg 'An LLM computes one thing: a probability distribution over the next token')
+
+Under the hood, the architecture doing this is called a **transformer**: stacked layers of attention (a mechanism we'll dissect in the KV cache section) and feed-forward networks (plain matrix multiplications). Tokens go in one end, and out the other end comes a score for every single entry in the vocabulary. "The capital of France is" goes in, and "Paris" comes out with a very high probability, "Lyon" with a much lower one, and "banana" with a probability so small it's basically zero. The model picks one (we'll see HOW it picks in the sampling section, it's juicier than you think), appends it to the sequence, and runs the whole computation again for the next token. One token at a time, every single time. When you watch a response "stream" into your screen word by word, you're not watching a loading animation. You're watching the actual generation process in real time.
+
+Now, how does a pile of matrix multiplications learn to predict the next token so well that it can write your unit tests? Three training stages, and each one has a completely different job. This separation explains more weird model behavior than any other single fact, so pay attention:
+
+1. **Pretraining**: the model reads billions of tokens from the internet, books, code, everything, with one objective: predict the next token. Get it wrong, adjust the weights, try again, repeat trillions of times. This is where it learns language, facts, code syntax, and the statistical structure of the world. It's brutally expensive, months of thousands of GPUs, and it's where ALL the knowledge comes from.
+2. **Fine-tuning** (also called SFT, supervised fine-tuning): thousands of carefully curated example conversations. A raw pretrained model is a text CONTINUER, not an assistant. Ask it "how do I center a div?" and it might continue with "is a question junior developers ask often" because that's a statistically plausible continuation. Fine-tuning teaches it the assistant format: when someone asks, you ANSWER.
+3. **RLHF** (reinforcement learning from human feedback, or its cousin DPO): humans compare pairs of answers and vote for the better one, and the model learns which styles of answer we prefer. Helpful over evasive, honest over confident nonsense, structured over rambling.
+
+The one-line summary you take to every architecture meeting: **knowledge comes from pretraining, behavior comes from the other two stages**. Why does the model confidently invent a library function that doesn't exist? Because pretraining rewarded plausible continuations, and a plausible-sounding function name IS a good continuation, statistically speaking. Why does it apologize so much? RLHF. Why does it know your framework but not the version released last month? Pretraining has a cutoff date. Once you have the three-stage picture in your head, "the AI is being weird" turns into "I know exactly which stage produced this behavior".
+
+Now let's talk about size, because "bigger model better" is only half the story and the other half is your hardware budget. The **parameters** of a model are the internal numbers of the network, the weights that got adjusted during training. When you hear "a 7B model", that's 7 billion parameters. And here's the napkin rule you should tattoo somewhere: **VRAM needed is roughly parameters times bytes per parameter**. VRAM is the memory on your graphics card, where the model has to live to run fast. A 7B model in FP16, which means 16-bit floating point precision, 2 bytes per parameter, needs about 14 GB. That's a good laptop or a modest GPU. A 70B model at the same precision is 140 GB: that's multiple serious datacenter GPUs. That single multiplication tells you what runs where, and it's why the section on quantization later is going to feel like a cheat code.
+
+And the frontier models, the biggest and most capable ones on the market? They use an architecture called **MoE, Mixture of Experts**. Instead of one giant dense network where every parameter participates in every token, an MoE model has hundreds of billions of TOTAL parameters organized into "experts", and a small router network activates only a subset of them for each token. Think of a hospital instead of one superhuman doctor: the building holds hundreds of specialists, but your particular consultation only wakes up two or three of them. Enormous total capacity, contained cost per token. When you see a model with a colossal parameter count that's somehow cheap and fast, MoE is the answer to the riddle.
+
+![model-size-vram-moe](/token-to-agent/slide-03.svg 'Model size is budget math: parameters times bytes define VRAM, and MoE activates only part of the network per token')
+
+And now the fact that changes absolutely everything, the one that generates the rest of this chapter. **The API is stateless.** The model remembers NOTHING between calls. Zero. Every request you send re-sends the entire conversation from the very first message, and the model processes all of it from scratch, as if seeing it for the first time. Your chat "remembers" your name for one reason only: the client application re-sends the full history with every single message. Try it yourself with the raw API: send "my name is Alan" in one request, then send "what's my name?" in a fresh request with no history. The model has no idea. Not because it's playing dumb. Because the previous request has ceased to exist.
+
+![stateless-api](/token-to-agent/slide-04.svg 'The API is stateless: every request re-sends the entire conversation from zero')
+
+Sit with the implications for a second, because they're the skeleton of everything that follows. Remembering? Not the model, it's the client re-sending history. Searching the web? Not the model, it's a tool wrapped around it. Executing code? Same. Every capability you associate with "the AI" beyond next-token prediction is a SYSTEM built around the model by regular engineers. And statelessness plants three questions that the rest of this chapter answers one by one: if everything gets re-sent every time, who pays for that? (the KV cache section). What happens when the conversation doesn't fit anymore? (the context window section). And how do we remember things for real? (the memory section). Hold on tight, because this chapter is literally the story of those three answers.
+
+---
+
+## Tokens: The Currency of Everything
+
+The model doesn't see letters and it doesn't see words. It sees **tokens**, and tokens are the unit in which you pay money, wait time, and burn context. Every pricing page is denominated in tokens. Every latency benchmark is denominated in tokens. Every context limit is denominated in tokens. If you don't understand tokens, every one of those pages is going to lie to you, not because it's dishonest, but because you're reading it in the wrong currency.
+
+So what is a token? A chunk of text, somewhere between a character and a word, drawn from a fixed vocabulary the model was built with. And the way that vocabulary gets built is a beautiful little algorithm called **BPE, Byte Pair Encoding**, that runs BEFORE training even starts. It works like this: start with individual characters. Scan a giant corpus of text and find the pair of adjacent units that appears most frequently, say "t" followed by "h". Merge them into a new unit, "th". Repeat: maybe "th" plus "e" is now the most frequent pair, merge into "the". Do this tens of thousands of times and you end up with a vocabulary of roughly 50,000 to 200,000 pieces where common sequences got compressed into single units and rare sequences stayed fragmented.
+
+![bpe-tokenization](/token-to-agent/slide-05.svg 'BPE merges the most frequent character pairs until it builds the vocabulary')
+
+The consequences fall out immediately. Frequent words cost 1 token: "the", "function", "return" are single tokens because the corpus was drenched in them. Rare words cost several: "antidisestablishmentarianism" gets chopped into pieces. The practical rule for English: **1 token is about 4 characters, or roughly three quarters of a word**. And here's one that stings if you write in Spanish, like a huge part of my community does: Spanish costs MORE tokens than English for the same meaning. Not because Spanish is worse, but because the training corpus was dominated by English, so the merge process spent most of its vocabulary slots on English patterns. The same sentence can cost 20 or 30 percent more tokens in Spanish. Same idea, higher bill, higher latency. That's not an opinion, that's BPE arithmetic.
+
+Now, the famous strawberry problem, because this is where tokenization stops being trivia and becomes a decision rule. Ask a model how many R's are in "strawberry" and watch it stumble. People love posting this as proof that AI is dumb. It's not dumb. It's BLIND. The model never saw ten letters: "strawberry" enters the network as two or three integer IDs, something like `[496, 675, 15717]`, and the information about which characters live inside those IDs literally does not exist in the representation. Asking it to count letters is like asking you to count the brushstrokes in a painting while only ever showing you a thumbnail. The information is not there to be counted.
+
+And this generalizes way beyond one meme word. Counting characters, reversing strings, precise arithmetic on long numbers, rhyming, anything that requires seeing INSIDE tokens is structurally fragile. The decision rule you take home: **if the task needs to see characters, give the model a tool that runs code**. A model that writes and executes `"strawberry".count("r")` gets it right one hundred percent of the time. Don't ask the network to do what its representation can't support. This is the first appearance of a theme we'll formalize later: the model requests, the harness executes.
+
+Now the money part, and I want you to do the arithmetic with me because this is the difference between reading a pricing page and UNDERSTANDING it. Input tokens, what you send, and output tokens, what the model generates, have different prices, and **output costs about 5 times more than input**. A typical order of magnitude: $3 per million input tokens, $15 per million output tokens. Why the asymmetry? You'll be able to answer that yourself after the next section (spoiler: input gets processed in one parallel pass, output has to be generated token by token, and the model's time is what you're renting).
+
+![token-pricing](/token-to-agent/slide-07.svg 'Output tokens cost about 5x input tokens: think 3 versus 15 dollars per million')
+
+Here's the calculation that changes how teams write system prompts. Say your product has a 5,000 token system prompt, the fixed instructions that get injected into every request. Nice and thorough, someone was proud of it. Your app serves 10,000 requests a day. That's 5,000 times 10,000: **50 million input tokens per day** that you pay for whether the request used those instructions or not. At $3 per million that's $150 a day, $4,500 a month, for the PRIVILEGE of the model reading the same instructions over and over. Multiply by every agent your company runs. Trimming that prompt to what's actually needed isn't code golf, and structuring it to be cacheable (next section, hold on) isn't elegance. **Optimizing context is billing.** When we get to skills and progressive disclosure, remember this number.
+
+And the time part, because tokens are also the currency of latency, and here people mix up two metrics constantly. **TTFT, time to first token**, is how long you stare at a blank screen before the first word appears. It's punished by INPUT length: the model has to process your entire prompt before it can say anything. **Tokens per second** is how fast the response flows once it starts. It's punished by OUTPUT length. They're different numbers, they degrade for different reasons, and they need different fixes. A chatbot with slow TTFT feels broken even if it streams fast afterwards; users abandon before the first word. A code generator with fast TTFT but slow tokens per second feels responsive but takes forever to finish a long file. Diagnose the right metric before you optimize anything.
+
+Why are they two different physical phenomena and not one? That question has a precise, beautiful answer, and it's the door to the most technical section of this chapter. Let's go.
+
+---
+
+## KV Cache: The Trick That Makes Agents Viable
+
+This is the heart of the chapter and the section that makes you dangerous in an architecture meeting. It's also the one where most people's eyes glaze over, so I'm going to take it slow and build it piece by piece. Stay with me, because at the end of this section you'll understand your API bill at a level most people writing agents never reach.
+
+### Two phases, two bottlenecks
+
+Generating a response has two physically different phases inside the GPU, and everything in the previous section about TTFT versus tokens per second follows from this. **Prefill**: the model processes your ENTIRE prompt in parallel. All the tokens of your input go through the network at once, in one giant batch of matrix multiplications. This phase is **compute-bound**: the limit is how fast the GPU can multiply matrices. Prefill is what determines TTFT, because nothing can come out until all of it has gone in. **Decode**: the model generates the response token by token, and each token depends on the one before it, so there is NO parallelism to exploit across the sequence. This phase is **memory-bandwidth-bound**: for every single token, the GPU has to stream the model's weights from memory, and the limit is how fast bytes move, not how fast it multiplies. Decode is what determines tokens per second.
+
+![prefill-decode](/token-to-agent/slide-09.svg 'Prefill processes the prompt in parallel; decode generates token by token')
+
+Same GPU, same model, two completely different physical regimes. It's like a printing press versus a calligrapher: the press stamps the whole page at once and is limited by the machine's power; the calligrapher writes stroke by stroke and is limited by hand speed. That's why prompt length and response length hurt you in different ways, and why "the model is slow" is never a complete diagnosis. Slow WHERE? Before the first token or during the stream? Different phase, different physics, different fix.
+
+### Q, K, V: the three vectors
+
+Now let's open the attention mechanism itself, because the cache we're building toward lives inside it. Attention is the operation that lets each token look at the tokens before it and decide which ones matter. For every token, the model computes three vectors via three learned linear projections (fancy words for "multiply by three different matrices"):
+
+- **Q, the Query**: what am I looking for? The token's question to the past.
+- **K, the Key**: what do I offer? The token's advertisement of what it contains.
+- **V, the Value**: what do I actually contribute if someone attends to me? The payload.
+
+The mechanism: to figure out what the current token should attend to, its Query gets compared against the Key of every previous token. Match scores come out. Those scores get normalized into weights, and the output is the weighted sum of the Values. Think of a library: your Query is the topic you're researching, every book's spine label is its Key, and the content inside is its Value. You compare your topic against all the spines, pick the shelves that match, and read a blend of what's inside, weighted by how well each spine matched.
+
+The formula, and yes, put it on a t-shirt: `Attention(Q, K, V) = softmax(QK^T / sqrt(d)) V`. Reading it left to right: multiply Q against all the Keys transposed (that's the matching), scale down by the square root of the dimension so the numbers don't explode (that's the `sqrt(d)`), squash the scores into probabilities that sum to 1 (that's the `softmax`), and use those probabilities to blend the Values. That single line, stacked in layers and repeated across many "heads" looking for different kinds of patterns, is the engine of every transformer.
+
+The part you must retain for what's next: **to generate token N, its Q gets compared against the K and V of ALL previous tokens**. Token 5,000 attends over the Keys and Values of tokens 1 through 4,999. That total dependence on the whole past is the root of the problem we're about to solve.
+
+### The cache
+
+See the problem coming? During decode, we generate one token at a time. Token N needs the K and V of every previous token. Without any optimization, generating token N would mean recomputing the K and V vectors of the ENTIRE prefix, all N minus 1 tokens, from scratch. Then token N+1 recomputes them all again, plus one. That's quadratic work, and here's the offensive part: it's quadratic work producing results we ALREADY COMPUTED. The K and V of token 47 don't depend on anything that comes after token 47. They never change. We'd be recalculating the same numbers thousands of times and throwing them away.
+
+The fix is so simple it's beautiful: **the K and V of a token never change once computed, so store them**. That's the KV cache. During prefill, the model processes your whole prompt once and fills the cache with every token's K and V vectors. During decode, each new step computes Q, K, V only for the ONE new token, appends its K and V to the cache, and attends against everything already stored. No recomputation, ever. This is exactly why the first token takes a while (prefill is doing all the heavy lifting and filling the cache) and the rest fly out (decode only touches the new token). The pause and then the flow: you've felt it a thousand times, and now you know its name.
+
+![kv-cache](/token-to-agent/slide-11.svg 'The KV cache stores every token K and V so decode only computes the new token')
+
+Of course, nothing is free. The cost is memory, and it's not small. In a typical 8B model with modern attention, the cache costs about 0.13 MB per token, so **8,000 tokens of context eat roughly 1 GB of VRAM in cache alone**, on top of the 14-plus GB the weights already occupy. And that's WITH an optimization called **GQA, grouped-query attention**, where several Query heads share one Key/Value head; without it the same context would cost around 4 GB. This is why long context windows are expensive to serve, why providers price them the way they do, and why memory, not compute, is often the real constraint in inference. When someone advertises a million-token context window, your first thought should now be: that's a LOT of VRAM per user, someone is paying for it.
+
+### Prompt caching: renting the provider's cache
+
+And now the part that touches your wallet directly, because providers had an idea that changes the economics of everything you'll build in the rest of this chapter. If the KV cache holds the processed state of a prompt, and your NEXT request starts with the exact same text... why recompute it? Providers now persist your prefix's KV cache between requests and rent it back to you. It's called **prompt caching**, and the reference numbers (Anthropic's) are worth memorizing: **writing to the cache costs 1.25x the normal input price. Reading from it costs 0.1x, a 90 percent discount. The cache lives for about 5 minutes** and refreshes each time it's used.
+
+![prompt-caching](/token-to-agent/slide-12.svg 'Prompt caching: write at 1.25x, read at 0.1x, TTL about 5 minutes, byte-identical prefix')
+
+But there's a hard condition, and this is where engineering discipline enters: **the prefix must be byte-identical**. Not similar. Not semantically equivalent. IDENTICAL, byte by byte, from the very first character. The cache matches your request's prefix against the stored one, and one changed character invalidates everything from that point forward. Put a timestamp at the top of your system prompt? Congratulations, you just bought a 0 percent cache hit rate and you're paying 1.25x to rewrite the cache on every single request. I've seen this exact bug in production. A `Current time: 14:32:07` line at the top of the prompt, silently multiplying the bill by ten.
+
+The golden rule that falls out of the mechanism: **stable content first, variable content last**. System prompt, then tool definitions, then reference documents, then conversation history, and your fresh message at the very end. The layers that never change go at the top and you do NOT touch them, not even to reorder two tools, because ordering is bytes too.
+
+Why do I insist so hard on this? Count with me. An agent, as we'll see in two sections, is a loop that re-sends its ENTIRE context on every iteration, because remember, the API is stateless. A real coding task can take 30 iterations. That means re-sending the whole accumulated history 30 times. Without prompt caching, you pay full input price 30 times on mostly identical content: the bill is quadratic-ish in conversation length and the prefill latency compounds on every step. With caching, iterations 2 through 30 pay 0.1x on everything already seen. That's not a 20 percent optimization, it's the difference between viable and unpayable.
+
+> _"Prompt caching is not an optimization for agents. It's survival."_
+
+### Local models: quantization and the home stack
+
+One more gift from this section, because everything we just learned about VRAM has a practical payoff: running models on YOUR machine. The blocker for local AI is memory: a 7B model in FP16 needs 14 GB of VRAM, and most laptops don't have that sitting in the GPU. The unlock is **quantization**: storing the weights with less precision. Full precision uses 16 bits per parameter, but it turns out the network tolerates rounding remarkably well. The table to remember for a 7B or 8B model: **FP16 is about 14 GB, Q8 (8 bits) is 7 to 8 GB, Q4 (4 bits) is 4 to 5 GB**. And the quality loss at Q4 is surprisingly small; the measured degradation curve stays nearly flat down to Q4 and only falls off a cliff below Q3. Half the precision, most of the intelligence. A gaming laptop runs a Q4 8B model comfortably.
+
+![quantization](/token-to-agent/slide-13.svg 'Quantization: a 7B goes from 14 GB in FP16 to 4-5 GB in Q4 losing very little')
+
+The local stack has three layers with names you'll see everywhere: **GGUF** is the file format quantized models ship in, **llama.cpp** is the inference engine that runs them on consumer hardware, and **Ollama** or **LM Studio** are the friendly apps wrapping it all. Fifteen minutes and you have a model running on your machine. And do it at least once even if you'll use APIs forever, because you will SEE this chapter with your own eyes: throw a long prompt at a local model and you'll physically notice the prefill pause, then the decode flowing token by token. The KV cache working, live, on your hardware.
+
+When local, when API? Local wins on **privacy** (nothing leaves your machine, huge for legal, health, finance), **cost** (zero per token, run it all night), **offline** (planes, secure facilities), and **latency floor** (no network round trip). API wins on **raw quality** (frontier models don't fit in your laptop, full stop), **giant contexts**, and **zero operations** (nothing to install, update, or babysit). The decision rule: prototype and handle sensitive data locally; ship your hardest reasoning to the API. It's not a religion, it's a routing decision, and we'll formalize routing as a pattern near the end of the chapter.
+
+### Sampling: the creativity knob
+
+Last piece of the inference story, and it answers a question from the very first section: HOW does the model pick the next token from the probability distribution? Because it doesn't have to pick the most likely one, and this knob is where a lot of "AI is being weird" actually lives. The model's raw output is a vector of scores called **logits**, one per vocabulary entry. A component called the **sampler** turns those scores into a choice, and you control it.
+
+**Temperature** scales the logits before they become probabilities. Temperature 0 is greedy: always pick the single most probable token. Deterministic, same input gives same output, which is exactly what you want for code, extraction, and anything you need to test: use 0 to 0.3. High temperature flattens the distribution so less likely tokens get real chances: use 0.7 to 1.0 for brainstorming and variety. **Top-k** limits the choice to the k most probable candidates, and **top-p** cuts the candidate list by accumulated probability mass, dropping the long tail of absurd options. They're guardrails so that even at high temperature you don't sample garbage.
+
+I'm telling you right now: a lot of what people call "creative hallucination" is just sampling configured wrong. A model at temperature 1.0 asked for a precise API name is being FORCED to gamble on the tail of the distribution. Run the same prompt three times at temperature 0 and you get identical output; at 1.2 you get three different answers. That's not the model having moods. That's a dial someone forgot to set. Check the dial before you blame the engine.
+
+---
+
+## The Context Window Is a Budget
+
+Everything the model gets to see when it makes a prediction lives in one place: the **context window**. And the single most common beginner mistake is thinking the context window is "your question". No. The window is EVERYTHING that travels with it, and the anatomy matters: the system prompt at the top, then tool definitions (each tool is a schema plus a description, and a serious agent carries dozens), then project rule files, then the entire conversation history, then every tool result accumulated so far, and finally, at the very end, your actual message, the newest and often smallest tenant in the building.
+
+Want a real number? Open a coding agent in a real project and inspect the context before typing anything (Claude Code has a `/context` command for exactly this; we touched the workflow in Chapter 15). A fresh session routinely starts with TENS of thousands of tokens already spent: system prompt, tool schemas, project instructions, memory files. Before your first word. So when the pricing page says the model has a 200k window, do the subtraction: the advertised window is never the available window. You're not moving into an empty apartment, the furniture of the harness is already there.
+
+And now the counterintuitive part, the one backed by a paper you should be able to cite. Filling the window doesn't help. There's a measured phenomenon, documented by **Liu et al. in 2023** under the unimprovable title "Lost in the Middle": when relevant information sits in a long context, the model's ability to actually retrieve and use it draws a **U-shaped curve** with respect to position. Information at the BEGINNING of the context gets used well. Information at the END gets used well. Information in the MIDDLE gets lost, measurably and consistently, with accuracy drops that can reach dozens of percentage points. And no, this doesn't fully vanish with newer models; the U flattens, it doesn't disappear.
+
+![lost-in-the-middle](/token-to-agent/slide-16.svg 'Liu et al. 2023: retrieval follows a U-shaped curve, the middle of the context gets lost')
+
+Let that reframe everything: stuffing 150k tokens into the window does not mean the model USES 150k tokens. You're paying (money, remember the input pricing; and latency, remember prefill) for tokens that sit in the attention dead zone. Two practical rules fall out. First: critical instructions go at the beginning or the end, never buried in the middle of a giant paste. Second, and more important: **small and relevant beats huge and dirty, every single time**. The dump-everything-in strategy isn't just lazy, it's measurably worse.
+
+It gets worse before it gets better. What happens when a long session actually approaches the window limit? The agent can't just stop, so it **compacts**: it takes the old history, asks a model to summarize it, throws away the original, and continues with the summary in its place. Sounds reasonable until you realize what summarization IS: lossy compression, lossy by design. The coarse facts survive: "we implemented the auth module, tests pass". What dies is everything that made the session intelligent: the WHY behind each decision, the three approaches you tried and rejected and the reasons, the constraint your teammate mentioned in passing that ruled out the obvious design. Two hours later the agent cheerfully proposes the exact approach you rejected at minute ten, because the rejection was in the part that got compressed away. If you've worked long sessions with an agent, you have LIVED this. Now you know its name and its mechanism. The rule: **everything that isn't persisted OUTSIDE the window can disappear without warning**.
+
+![compaction](/token-to-agent/slide-17.svg 'Compaction summarizes old history and discards the original: facts survive, the why dies')
+
+So here's the mental shift this whole section builds to. The amateur question is "how much context can I fit?". The professional question is **"what is the MINIMUM context that produces the BEST answer?"**. Because every token in the window costs money on every request (statelessness, remember), degrades attention (the U-curve), and brings compaction closer (forced amnesia). Every token competes with every other token.
+
+> _"Every token in the window competes with every other token. Context is not storage, it's attention."_
+
+And there are exactly three strategies for spending the budget well. Not two, not seven. Three, and they structure the entire rest of this chapter:
+
+1. **Load on demand**: don't carry all knowledge all the time, bring rules in only when the task needs them. That's the skills section.
+2. **Persist outside**: knowledge that matters must survive the window, in storage that doesn't evaporate. That's the memory section.
+3. **Divide the work**: multiple agents, each with a clean window, instead of one agent with a stuffed one. That's the patterns section.
+
+![context-engineering-strategies](/token-to-agent/slide-18.svg 'Context engineering has three strategies: load on demand, persist outside the window, and divide the work')
+
+Keep this trio in your pocket. Everything from here on is one of these three, wearing different clothes.
+
+---
+
+
+## The Industry's Context Workarounds
+
+Now that you understand the context window as a budget, the next question is obvious: how is the industry trying to buy more room? Because every serious AI product hits the same wall. The demo works beautifully for ten minutes, then the real workflow arrives: a repository with thousands of files, a user with months of preferences, a conversation with fifty tool calls, and a design decision hidden in a message from yesterday. Suddenly the model is not failing because it is weak. It is failing because the system is asking one volatile window to behave like a knowledge base, a filesystem, a team notebook, and a project manager at the same time. That's not an LLM problem. That's bad architecture wearing an AI hoodie.
+
+The first workaround is **long context**: make the window bigger. One hundred thousand tokens, two hundred thousand, one million, eventually more. Long context is useful, don't let anyone turn this into ideology. If you need to compare a 70-page contract against a policy document, a giant window is a gift. But it does not delete the mechanisms from the previous section. Prefill still gets slower as input grows. Input tokens still cost money. Lost in the middle still punishes buried facts. Compaction still becomes necessary in interactive sessions. Long context is like a larger whiteboard: fantastic when the problem really needs more surface area, terrible when the team starts dumping trash on it because there is room.
+
+
+The second workaround is **RAG, retrieval-augmented generation**. RAG means you do not paste the whole knowledge base into the prompt. You search it first, retrieve a few relevant chunks, and place only those chunks in the window. Mechanically this is progressive disclosure with a search engine in front of the model. Classic RAG uses embeddings: vectors that represent semantic similarity, so a query like "password reset flow" can retrieve a document that says "credential recovery" even if the words differ. That's powerful, but it has failure modes. Chunking can split the one paragraph you needed across two chunks. Embeddings can retrieve semantically close but operationally wrong content. Ranking can return the policy from 2021 above the policy from 2024 if freshness is not modeled. RAG is not a memory. RAG is a retrieval strategy, and retrieval without curation is just a quieter way to be wrong.
+
+The third workaround is **fine-tuning**. People reach for it too early because it sounds like the model will "learn our company". Careful. Fine-tuning changes model behavior, style, and specialized response patterns. It is great when you have many examples of the same shape: classify tickets, format legal summaries, produce domain-specific text, follow a house style. It is bad as a place to put facts that change weekly. If the deployment command changed this morning, you don't fine-tune a model so it knows the new command. You put the command in a live source of truth and retrieve it. Fine-tuning is a training pipeline with data collection, evaluation sets, versioning, rollout, and rollback. Treat it like a model product, not like a sticky note.
+
+The fourth workaround is **memory layers**: something outside the window that stores what happened and what matters. This is where the field is still young and messy. Some products save chat summaries. Some save vector memories. Some save every tool call, which sounds complete but usually becomes a swamp. Some try to infer user preferences automatically and end up preserving nonsense with great confidence. The core challenge is not storage. Storage is easy. The hard part is deciding what deserves to become memory, how to search it cheaply, how to handle contradictions, and how to keep it from poisoning future sessions with stale truth. A memory layer is only as good as its write discipline and its retrieval discipline.
+
+
+So the professional answer is not picking ONE workaround and declaring victory. It's composing them. Use long context when the task genuinely needs a big shared surface. Use RAG when the knowledge base is large and mostly read-only. Use fine-tuning when you need consistent behavior across thousands of similar cases. Use memory when decisions, preferences, root causes, and project history must survive sessions. And above all, keep asking the budget question: what is the minimum context that produces the best answer? The best systems don't eliminate the context window. They stop abusing it.
+
+Mini-case: imagine a support agent for a SaaS product. Long context helps it read a full customer thread. RAG helps it retrieve the current billing policy. Fine-tuning helps it answer in the company's tone and classify urgency. Memory helps it remember that this exact enterprise customer has a custom contract exception approved by Legal last month. If you put all of that into the prompt every time, you drown the model. If you put all of it into fine-tuning, it goes stale. If you put all of it into RAG, you lose the narrative of decisions. The architecture is the combination, not the buzzword.
+
+
+A practical decision rule makes this less abstract. If the knowledge changes often, do not fine-tune it. Retrieve it. If the knowledge is stable but huge, don't paste it. Index it. If the knowledge is a decision with a reason, don't bury it in RAG chunks. Save it as memory with a topic key. If the knowledge is a repeatable behavior, like "always write rollback tests for migrations", don't save it as a memory. Turn it into a skill. The category of the knowledge decides the mechanism. Facts go to retrieval. Decisions go to memory. Behaviors go to skills. Long documents go to long context only when the task truly needs their whole shape.
+
+Here is the smell test I use with teams: ask what happens when the source changes tomorrow. If the answer is "we need to retrain", you probably chose the wrong layer. If the answer is "we update one document and search finds it", you're closer. If the answer is "we update one skill and every future agent follows it", you're encoding behavior correctly. If the answer is "we save a new observation that supersedes the old one", you're handling institutional memory correctly. The point is not to worship a tool. The point is to put each type of knowledge where change is cheap.
+
+---
+
+## The Agentic Loop
+
+"Agent" might be the most abused word in the industry right now, so let's give it a definition with edges. The difference between a chat and an agent is NOT the model. Same model, same weights, same API. The difference is the **harness**: the system wrapped around the model. A chat is `response = llm(messages)`: text in, text out, and every action in the real world is still yours to perform. You copy the code, you run it, you paste the error back. YOU are the loop. An agent inverts that: the model can request actions, the harness executes them, and the model sees the results and decides what's next.
+
+And here's the part that should be shocking: the complete mechanism fits in five lines of pseudocode. Not a simplified diagram of it. The actual thing:
+
+```text
+while (true) {
+  r = llm(context)
+  if (r.tool_call) {
+    context += execute(r.tool_call)
+  } else return r
+}
+```
+
+That's it. That's the whole secret of agents. Call the model with the context. If it responds with a tool call, execute the tool, append the result to the context, and go around again. If it responds with plain text, we're done, return it. Every agent product you have ever used, no matter how it's marketed, is this loop with better clothes: a session of "fix this failing test" is the loop reading the test file (iteration 1), reading the source (iteration 2), editing it (iteration 3), running the tests (iteration 4), reading the failure, editing again, re-running, and returning "done, it was a timezone bug" (iteration 8). Autonomy is not a model capability. Autonomy is a while loop.
+
+![agentic-loop](/token-to-agent/slide-20.svg 'The complete agentic loop in five lines: call, execute tool, append, repeat')
+
+But now look at those five lines with everything this chapter has taught you, because there are two consequences hiding in there that almost nobody sees on first read. **Consequence one**: `llm(context)` runs on EVERY iteration, and the API is stateless, so every iteration re-sends the ENTIRE accumulated context. Thirty iterations means re-sending the whole history thirty times. This is why we spent a full section on prompt caching, and why I said it's survival rather than optimization: the loop is the reason. **Consequence two**: `context += ...`. Look at that operator. Append, append, append. Tool results ACCUMULATE, and the context only ever grows, every file read, every command output, every error message, piling up. The agentic loop is, mechanically, a machine for filling context windows. Which means everything from the previous section, the U-curve, compaction, the budget question, applies to agents with interest. The loop doesn't just have a context problem. The loop IS a context problem, by construction.
+
+Now, what exactly is a **tool**? Demystify it, because it's less exotic than it sounds: a tool is a JSON schema describing parameters plus a plain-text description, both injected into the context. That's it. The model reads the description, and when it wants the action, it emits a structured block called `tool_use` with the tool name and arguments. The harness executes the actual code (the model NEVER executes anything itself, it has no hands) and appends a `tool_result` block with the output. The model requests, the harness executes, the model observes. Keep that division of labor sharp in your head: it's also the security boundary. Every permission question about agents ("can it delete my files?") is a question about the harness, not the model.
+
+Two things follow. First, since the model chooses tools by READING their descriptions, writing good tool descriptions IS prompt engineering, with everything that implies: a vague description gets your tool ignored or misused, a precise one gets it called correctly. If your agent keeps picking the wrong tool, read your descriptions before you blame the model; the model can only choose based on what the text says. Second, tools need a way to connect at scale, and that's **MCP, the Model Context Protocol**: a standard client-server protocol so any tool server can plug into any compatible agent, the USB-C of agents. We covered MCP in depth in Chapter 19, the N by M problem it solves and the orchestration patterns on top, so I won't re-teach it here. What matters for THIS chapter is the layer it occupies: MCP is how the harness's hands get extended, and the loop stays exactly the same five lines.
+
+One more idea before moving on, because it quietly changes how teams work. Look at where an agent's BEHAVIOR actually lives. Not in compiled code. In text injected into the context: the persona, the rules, the delegation protocols, the memory discipline. It's Markdown. Which means it's versionable, diffable, reviewable in a pull request, testable, and installable, like any other file in the repo. The consequence is professional, not technical: **your team's prompts are an engineering artifact with their own lifecycle**. When a team member figures out an instruction that makes the agent stop committing broken code, that's not a personal trick to hoard in their notes, that's a fix that belongs in version control where everyone gets it. Treat prompts like code, because operationally they are.
+
+---
+
+## From AGENTS.md to Skills
+
+First budget strategy, and the one you can implement this week. Let's start from the failure mode, because you've probably already lived it. Your agent needs to know your project's conventions, so you create a rules file, an AGENTS.md or CLAUDE.md or whatever your harness calls it. And it GROWS. Naming conventions. The React patterns. The Go error-handling style. That gotcha with the test database. The deploy notes. Every incident adds a paragraph, nobody ever deletes anything, and I have personally seen a 2,400-line monster that started as ten lines of "use TypeScript strict mode". Two thousand four hundred lines, entering COMPLETE into every single session, whether the task is a React component or a typo fix in the README.
+
+Count the punishment, because it's triple. **One, money and space**: thousands of tokens burned before the first line of code, on every request, every day (remember the 50-million-tokens-a-day arithmetic from the tokens section; this is that bill, in your repo). **Two, earlier amnesia**: those tokens push the session toward the window limit sooner, so compaction, forced lossy amnesia, arrives earlier. **Three, and the most perverse: diluted attention**. Remember lost in the middle? Your 2,400-line rules file IS a long context, and your most important rule is buried at line 1,200, in the dead zone of the U-curve. The file you wrote to make the agent reliable is now the reason it ignores your rules. You made the agent worse by trying to make it better. That one hurts.
+
+The pattern that fixes it is a **router with modules**, and the architecture has exactly two layers. Layer one: a lightweight **index** that stays always loaded, containing just a name and a trigger for each module of rules: "react-rules: when writing React components", "go-style: when editing Go files", "db-migrations: when touching schema". A few dozen tokens per entry, a few hundred for the whole index. Layer two: the **full modules**, each around 80 focused lines of actual rules, that load ONLY when the task matches the trigger. You ask for a React component, the harness matches the trigger, and the React module enters the context BEFORE the agent writes code. You never touch Go today? The Go module costs you zero today. Same total knowledge as the monolith, a fraction of the cost per session, and, just as important, each loaded module is small enough to sit in the healthy zones of attention instead of the mushy middle.
+
+![router-plus-module](/token-to-agent/slide-24.svg 'A lightweight always-loaded index routes to full modules loaded only on trigger match')
+
+Compare the numbers side by side: monolith, 2,400 lines in every session; router, an index of a few hundred tokens plus one or two 80-line modules relevant to the task at hand. That's an order of magnitude less context spent on rules, with BETTER rule-following, not worse. This is exactly how the "skills" of modern agents work, the ones you saw configured in Chapter 15: each skill is a module with a trigger in its description, the list of skills is the index, and the harness does the routing. When you write a skill, you're writing a module for this exact architecture, which also tells you how to write it well: sharp trigger, focused content, no padding.
+
+And the general pattern behind this has a name I want you to engrave, because it's one of our four recurring characters and you're about to see it two more times: **progressive disclosure**. Search cheap, deepen expensive. Structure knowledge in levels, index first, then detail, then full content, and pay for each level ONLY if the previous one says it's worth it. It's how you use a library: catalog first, then the shelf, then the book. Nobody reads the entire library every morning just in case, and that's exactly what the monolithic prompt was doing. Watch for the pattern in the next section (memory retrieval: search, then timeline, then full read) and in the patterns section (delegation: summary first, artifact if needed, code only at the end). Same shape, three scales.
+
+![progressive-disclosure](/token-to-agent/slide-25.svg 'Progressive disclosure: index, then detail, then full content, each level paid only if needed')
+
+---
+
+
+## Skills Registry and Contextual Loading
+
+Skills solve the monolith problem, but once a team has twenty or thirty skills, a new problem appears: who decides which skill applies? If the human has to remember to say "use the React skill" every time, the system is fragile. Humans forget. Agents forget too, especially after compaction. The next layer is a **skill registry**: an index of every available skill with enough metadata for the orchestrator to route work before execution begins. Think of it as the table of contents for the team's operational knowledge.
+
+
+A good registry entry is tiny but precise: skill name, trigger, scope, path, and maybe a short description. The trigger is the most important field. Bad trigger: "use for frontend". Better trigger: "use when editing React components, hooks, state management, or JSX tests". The difference matters because routing is classification. If the trigger is vague, either the skill loads too often and bloats context, or it doesn't load when it should and the agent writes generic code. The registry is not documentation for humans first. It is routing data for machines, written clearly enough that humans can review it.
+
+Now connect this to the orchestrator-minion pattern. The orchestrator reads the registry once at the start of a session and keeps a compact index. When it delegates a task, it matches two signals: **file context** and **task context**. File context means paths and extensions: `src/components/**/*.tsx`, `migrations/*.sql`, `docs/**/*.md`. Task context means intent: testing, review, PR creation, chapter writing, security audit. If either signal matches, the orchestrator injects the exact skill path into the minion prompt and tells the minion to read that `SKILL.md` before working. That ordering is important: resolve centrally, consume locally. The orchestrator decides what knowledge is relevant; the minion loads the full rules only when it is about to use them.
+
+
+This is how teams teach agents without turning the system prompt into a landfill. A senior engineer discovers that every migration must include a rollback test. That becomes a skill. A designer defines the correct accessibility checklist for a component library. That becomes a skill. The release manager codifies the PR description format and risk labels. That becomes a skill. The knowledge stops living in one person's private chat history and becomes an installable, reviewable artifact. This is boring in the best possible way: operational excellence encoded as Markdown.
+
+There is one subtle failure mode you need to guard against: registry drift. A skill can move paths, change scope, or become obsolete. If the registry points to dead paths, the orchestrator will confidently inject garbage. If two skills claim the same trigger, minions get contradictory rules. So the registry needs verification like any other artifact: paths exist, triggers are non-overlapping where possible, and conflicting rules are surfaced during review. The moment a team says "the agent should know that", ask where that knowledge lives, who owns it, and how it gets updated. If there is no answer, the agent doesn't know it. Someone merely hoped it would.
+
+
+The consequence for your day-to-day workflow is simple and powerful: don't write bigger prompts, write better indexes. A 20-line registry that reliably routes to ten focused skills beats a 2,000-line rule dump every time. The mechanism is the same one we've been following since the beginning: search cheap, deepen expensive. The registry is cheap. The skill is expensive. The full codebase is more expensive. Pay in that order.
+
+---
+
+## Persistent Memory: A Brain Outside the Window
+
+Second budget strategy, and the one that hurts the most when you don't have it. Let me paint the scene, and be honest about whether you've lived it. Yesterday you spent an hour with your agent debating an architecture decision: hexagonal, with the adapters organized just so, for reasons that took real discussion to establish. You found the root cause of that nasty race condition in the test suite. The agent learned you hate barrel files. Then you closed the terminal. This morning you open a new session and... nothing. "What architecture does this project use?" gets you a generic answer. The decision, the root cause, the preferences: gone. Not damaged. GONE. You're onboarding a new employee every single morning, an employee who happens to be brilliant and happens to remember nothing.
+
+None of this should surprise you anymore, because the mechanism is this chapter's oldest character: the API is stateless, the window is volatile by design, and compaction prunes it live even WITHIN a session (remember: the why dies first). The conclusion is not optional, it's structural: **memory has to live OUTSIDE the context window**. Outside the process, outside the session, on disk, where closing a terminal is not a lobotomy.
+
+So what does a real agent memory need? Three components, and I promise none of them is exotic:
+
+1. **Durable local storage.** A database on YOUR disk. And before you architect a distributed vector cluster: a simple SQLite file is plenty. The design principle here is local-first: your team's accumulated knowledge should not need someone else's server to exist. It's a file. You can back it up, inspect it, grep it.
+2. **Ranked full-text search.** The agent must SEARCH memory, not read all of it (reading everything would just recreate the context problem we're solving). SQLite ships FTS5 with BM25 ranking, which are the boring, battle-tested search engine internals that power half the tools you already use. Query goes in, the most relevant memories come out, best first.
+3. **A standard connection protocol**, which is MCP again: expose the memory as an MCP server and ANY compatible agent can use it. Your memory stops being a feature of one product and becomes infrastructure that survives you switching tools.
+
+![memory-anatomy](/token-to-agent/slide-27.svg 'A real agent memory: durable local storage, ranked full-text search, standard protocol')
+
+The analogy that makes it click, and it's technically precise, not just cute: **the context window is RAM, memory is disk**. RAM is fast, expensive, small, and evaporates on power-off; that's the window. Disk is slower per access, cheap, huge, and persistent; that's memory. And no operating system engineer has ever tried to solve persistence by adding more RAM. You solve it with a disk and a good strategy for what to load when. Same here.
+
+Now, the classic mistake, the one everyone building their first agent memory makes: recording EVERYTHING. Every tool call, every file read, every intermediate step, hoovered into the database. Congratulations, you've built a surveillance log, and your memory is now exactly as noisy as the context it was supposed to fix; searching it returns 40 hits of trivia around every real answer. What works is **curation**: the agent saves few things, but the RIGHT things. Decisions and their reasons. Root causes of bugs (not the symptom, the cause). Conventions established. Discoveries that surprised. As a rule of thumb, the test is: would a teammate joining tomorrow need this? If yes, save. If it's just what happened, let it die with the window, that's what the window is FOR.
+
+And structure at save time, because a memory you can't interrogate cheaply is a diary, not a database. Each entry follows a fixed template: **What** was done, one sentence. **Why**, the motivation, this is the part compaction always kills, so it's the most valuable field in the whole system. **Where**, files and paths affected. **Learned**, the gotchas and surprises, omitted if none. Plus **topic keys**: stable identifiers like `architecture/auth-model`, so that when knowledge on the same subject evolves, the save UPDATES one memory with revision history instead of piling up a third and fourth near-duplicate that future searches have to wade through. The filter is the value. Signal, not noise.
+
+There's a subtlety here that separates toy memories from serious ones, and most implementations skip it entirely: knowledge contradicts itself over time. Today the memory faithfully records "we use Clean Architecture". Three months later the team migrates and a new save says "we use Hexagonal". A naive memory stores both, happily, and now a future search returns two confident, contradictory answers, and the agent picks whichever ranks higher that day. That's not memory, that's a coin flip with citations. A serious memory **detects the collision at save time**, using the same full-text machinery to notice that highly similar content already exists, and forces a judgment about the relationship: does the new one **supersede** the old (mark it superseded, keep it as history)? Do they **conflict** (surface it, a human decides)? Are they **compatible** (different scopes, both true)? Future searches show the verdict alongside the results. And knowledge AGES even without direct contradiction: memories untouched for months get flagged "needs review" instead of being trusted blindly, stale context clearly labeled as stale. Write it down: **a memory that contradicts itself in silence is worse than no memory at all**, because no memory at least KNOWS it doesn't know.
+
+![memory-reconciliation](/token-to-agent/slide-29.svg 'Memory reconciliation records supersedes, conflicts and compatible relationships instead of letting stale truth compete silently')
+
+And now the part that makes all of it actually work, and it's not the database. I've watched teams deploy a perfect memory stack and get nothing from it, because the agent never used it: the model has no built-in urge to remember. What makes memory work is **protocol**, injected discipline, instructions in the agent's context (Markdown again, the system prompt as product). Four moments: **On open**, recover the previous session's context before doing anything; the morning amnesia dies right there. **During work**, save proactively at trigger moments (a decision made, a bug fixed, a convention set), WITHOUT waiting to be asked, because the user won't remember to ask either. **On close**, write a session summary: goal, discoveries, accomplishments, next steps; the next session's opening read. **After a compaction**, rehydrate from memory and keep going, because now compaction only takes what's already persisted somewhere safe.
+
+![memory-protocol](/token-to-agent/slide-30.svg 'The protocol: recover on open, save proactively during, summarize on close, rehydrate after compaction')
+
+And retrieval? Told you it would come back: **progressive disclosure**, appearance number two. Search first, around 100 tokens per result, titles and snippets. Then the timeline of a topic's evolution if you need the story. Then the full content of one specific memory, only if needed. The memory can hold ten thousand entries and a session only ever pays for the three that matter. That's the whole design, and it's the same shape as the skills index. If you want a reference implementation to study instead of building from scratch, Engram (open source, listed in the references) implements this entire section: SQLite plus FTS5, What/Why/Where/Learned, topic keys, reconciliation with supersedes and conflicts, aging, the protocol, all of it over MCP.
+
+> _"An agent without memory is a brilliant employee with amnesia: you pay the onboarding every single morning."_
+
+---
+
+
+## Engram in Practice: Lightweight Memory That Scales
+
+Let's make the memory architecture concrete. Engram is not important here because of branding. It is important because it embodies a set of decisions worth studying: local-first storage, full-text search instead of mandatory embeddings, structured observations, topic keys, reconciliation, MCP exposure, and a protocol that agents can actually follow. You could build a different tool with the same principles and I would still be happy. The principles are the point.
+
+![engram-structured-memory](/token-to-agent/slide-28.svg 'Engram stores signal, not everything: decisions, bug fixes, conventions and discoveries')
+
+The storage decision is deliberately boring: **Go plus SQLite plus FTS5**. One binary. No external service required. No vector database before you have proven you need one. SQLite gives durability, transactions, backups, and local ownership. FTS5 gives ranked full-text search. BM25 ranking is old, proven, and cheap. This matters because memory must be available at the exact moment an agent starts work, not after someone starts a cloud cluster. The best memory system is the one that is always on, including on a plane, in a hotel, or inside a locked-down client network.
+
+
+The tool surface is intentionally small. You need a way to know the current project, search observations, fetch a full observation, save a new one, and update or reconcile an existing one. That's the critical set. Search returns compact results: titles, snippets, dates, maybe scores. Full read returns the complete content only when the search result deserves it. Save captures the observation plus structured fields. Update handles evolution. The smaller the tool surface, the easier it is to teach the agent the discipline. Five sharp tools beat twenty ambiguous ones.
+
+
+A concrete two-session loop shows why this changes everything. Session 1: the team decides that the new billing workflow will use an application service, not fat controllers, because retries and idempotency must be centralized. The agent saves that decision with the topic key `architecture/billing-workflow`, including the why and the affected paths. Session 2, maybe three days later: a different agent starts implementing the endpoint. Before writing, it searches memory for billing workflow, reads the observation, and writes code consistent with the decision. Without memory, session 2 starts from vibes. With memory, session 2 starts from institutional knowledge.
+
+
+For teams, synchronization is the next question. There are two sane paths, and they serve different needs. **Git sync** is the simple path: memory data is exported or synced through the repository workflow, asynchronous and familiar. It costs no new infrastructure and works beautifully for small teams that already live in git. **Cloud mode** is the operational path: the same memory concept backed by Postgres and a self-hosted server, with dashboard, authentication, roles, and real-time synchronization. The tradeoff is classic: git sync is simpler and cheaper; cloud mode is more visible and coordinated. Pick based on team shape, not based on hype.
+
+
+A detail I love because it prevents a stupid class of bugs: project detection should come from the working directory, not from the model. If an LLM is allowed to invent the project name for every save, you will get `gentle-ai`, `gentle_ai`, `gentle ai`, and `current project` as four different memory silos. Engram's approach is to derive the project from the cwd and git remote, normalize it, and remove that argument from write tools when possible. The model should not be trusted to name the database partition. It is the same security boundary as tools: let the harness determine facts about the environment.
+
+
+Another quiet but powerful feature is prompt capture. When a memory is saved, the prompt that triggered it is often the missing context. "We chose Redis locks" is less useful than "We chose Redis locks while investigating duplicate invoice generation under concurrent webhook delivery". Capturing the associated prompt automatically preserves the situation that created the decision without asking the user to remember an extra command. Again, this is the pattern: good agent systems remove fragile human rituals and replace them with protocol.
+
+
+
+
+Use this operational map when the design starts to blur. **Session continuity** belongs in memory: what did we decide, what remains, what should the next session know? **Project conventions** belong in skills: how do we write tests, structure files, name components, prepare releases? **Large reference material** belongs behind retrieval: policies, docs, architecture records, previous incidents. **Current working state** belongs in the context window: the files, failures and constraints needed right now. Confusing these layers is how teams build expensive messes. They store conventions as memories, so search returns old style notes instead of current rules. They put decisions in skills, so the rule says what to do but not why. They paste reference docs into context, so the model gets slower and worse. Layering is the quiet discipline behind every reliable agent stack.
+
+And here's the consequence for maintenance. Memory needs review because truth ages. Skills need ownership because conventions change. Retrieval indexes need freshness because stale docs can rank high. Context needs pruning because today's working set becomes tomorrow's noise. None of this is glamorous, but this is engineering. A cognitive stack is still a stack. It needs boundaries, owners, and lifecycle.
+
+
+One last operational rule for memory: write the entry while the reason is still hot. A decision saved three days later becomes archaeology. A decision saved in the minute it happens preserves the tradeoff, the rejected path, the constraint, and the confidence level. That is the difference between a useful future answer and a vague note that sounds important but teaches nothing.
+
+Why does lightweight win so often? Because early teams do not need a perfect cognitive database. They need a memory that exists, searches fast, stays local, and does not require infrastructure meetings. No server. No embeddings bill. No cloud dependency. No telemetry. A local SQLite memory with disciplined saves beats an enterprise-grade memory roadmap that nobody installs. Start lightweight, prove the loop, then add complexity only when the mechanism demands it.
+
+
+---
+
+## Agent Patterns and Model Routing
+
+Third budget strategy: divide the work. And this is where I get to name the anti-pattern I see absolutely everywhere, in demos, in tutorials, in production systems that should know better. **The god agent**: one agent, one window, doing EVERYTHING. It explores the codebase, writes the code, runs the tests, reviews its own work, all in a single ever-growing context. And you already know, mechanically, why this dies, because the loop section showed you the `context +=` and the window section showed you what accumulation costs. Every file it read while exploring is still in the window while it writes. Every stack trace from every test run is still there while it reviews. Old tool results, entire files it needed for one line, failed attempts: everything piles up. Attention dilutes across the pile (the U-curve strikes again), compaction arrives early and eats the reasoning, and you can measure the decay: the decisions at hour two are visibly worse than the decisions at minute ten. It's the one-person team: works great until it doesn't, and it fails exactly when the task gets big enough to matter.
+
+The professional default is the **orchestrator-minion pattern**, and I want you to see it as an org chart, because that's what it is. The **orchestrator** keeps ONE thin conversation thread, the one you talk to. Its job is to decide and delegate, and its discipline is defined by what it does NOT do: it does not read code, it does not write files, it does not run tests. Every one of those is a context-fattening operation, and the orchestrator's thinness IS its value, a fat orchestrator is just a god agent with extra steps. The **minions** are where work happens: each one is born with a CLEAN context, receives one scoped task plus exactly the context it needs (not the whole conversation, just its mission briefing), executes, returns a SHORT summary, and dies.
+
+And here's the mechanical beauty, the sentence that justifies the whole pattern: **its tokens die with it**. A minion that explores half the repo to answer "how does auth work here?" might burn 50,000 tokens reading files. Those 50,000 tokens live in the MINION's window, and when it dies, they vanish. What returns to the orchestrator is a 500-token summary: the answer, not the journey. The parent's thin thread stays thin through a hundred delegations. Do the division: that's a 100-to-1 compression on every delegated task, and it's the only reason long, complex multi-hour sessions can exist at all. Bonus that people underrate: a fresh minion has no bias from three hours of conversation history, it sees only its mission, which is sometimes exactly the fresh pair of eyes the task needed.
+
+![orchestrator-minion](/token-to-agent/slide-32.svg 'The orchestrator delegates to minions born clean; their tokens die with them, only summaries return')
+
+Now, when do you delegate versus just do it inline? Don't leave it to vibes, because vibes always answer "I'll just do this one inline" and the window fattens one reasonable decision at a time. The guiding question is: **does this inflate my context without need?** And the answer is enforced with **stop rules**, hard triggers with numbers in them:
+
+- **The 4-file rule**: understanding something requires reading 4 or more files? Stop. Delegate an explorer minion that reads them and returns the map, not the files.
+- **The multi-file write rule**: writing 2 or more non-trivial files? Delegate a dedicated writer with the plan.
+- **The long-session rule**: around 20 tool calls, or 5 exploratory reads, without a single delegation, and complexity still growing? Stop and delegate the rest, you're becoming the god agent in slow motion.
+- **The fresh review rule**: EVERY review happens in fresh context, never in the thread that wrote the code. A context that just spent an hour building something is structurally incapable of seeing it neutrally; it will defend its own decisions. Never review your own work in your own window applies to agents too.
+
+![stop-rules](/token-to-agent/slide-33.svg 'Stop rules with numbers: 4 files to read, 2 files to write, 20 calls, review always fresh')
+
+Why numbers instead of judgment? Because these thresholds are where the inline-versus-delegate math visibly flips, and because a rule with a number fires BEFORE the damage instead of being debated during it. If delegating is optional, the context inflates anyway, politely, one exception at a time.
+
+Two invariants keep multi-minion work sane, and they map exactly onto an intuition you already have from concurrent programming. **Reading parallelizes for free**: N minions exploring different parts of the repo simultaneously share no state and cannot collide, so fan out as wide as you like; three explorers mapping three modules at once return three summaries in a third of the wall-clock time. **Writing never does**: two writers on the same repo are a merge conflict with legs, and unlike git, agents resolve conflicts by confidently overwriting each other. So: **single writer rule**, one writing minion at a time, unless you've explicitly isolated them in separate worktrees. Reads scale out, writes serialize; it's readers-writer locking for agents. Add **launch deduplication**: every delegated task gets logged with a fingerprint (phase plus scope), and the same task never launches twice, because an orchestrator that loses track WILL happily relaunch the same exploration and pay for it twice.
+
+![fan-out-single-writer](/token-to-agent/slide-34.svg 'Reads can fan out safely, but writes must serialize through a single writer unless worktrees isolate them')
+
+For evaluation there's a pattern I love, because it converts opinions into evidence using nothing but structure: the **judge panel**. You want to know if a piece of work is good. One reviewer gives you an opinion. Instead: N reviewers in parallel, **blind to each other**, no reviewer sees another's conclusions, same target, and then you synthesize by agreement. Two independent judges flag the same critical issue? Confirmed, act on it. Only one sees it? Suspect, worth a look, not a fire alarm. They directly contradict each other? Escalate to the human, this is exactly the ambiguity humans are for. Why blind, why so strict about it? Anchoring bias: a reviewer who reads another reviewer's take first anchors on it, and you paid for two reviews but got one review plus one echo. Independence is the entire value of the panel; protect it structurally, not with good intentions.
+
+![judge-panel](/token-to-agent/slide-35.svg 'A blind judge panel turns independent reviewer agreement into stronger evidence')
+
+And the last pattern closes the loop on something from the local-AI section: **model routing**. Not every phase needs the same brain, and once work is split into minions, each minion can run on a DIFFERENT model. The routing of a serious pipeline: exploration goes to a mid-tier model (structural reading is not where genius pays). Design and architecture proposals go to the most powerful model available, because the expensive-to-reverse decisions live there and a bad call costs weeks. Implementation against written specs goes back to the mid-tier fast one (the thinking already happened, this is guided mechanics). Archiving, formatting, mechanical chores go to the cheapest thing with a pulse, or a free local Q4 model on your own machine. The model is one more budgetable resource, same as tokens and VRAM: **power where there are decisions, speed where there's mechanics**. Running everything on the frontier model isn't rigor, it's paying a surgeon to take blood pressure.
+
+The model landscape makes this even more practical than it was a year ago. Models like Kimi K2.6, MiniMax M2.7 and GLM-5 show that there is now a cheaper near-frontier tier worth evaluating, especially for high-volume work. Their prices can be dramatically lower than Opus or GPT-class frontier calls, and some benchmark slices put them close enough to make the routing conversation serious, but do not turn that into a universal law. The only professional claim is narrower: validate model quality per task, then route volume where the evaluation holds. Repository exploration, draft transformations, test generation, mechanical review passes, data extraction, formatting, summarization, and batch classification can often move to these models when measured quality is good enough. The consequence is huge: model routing stops being only "frontier versus local" and becomes a portfolio. Frontier for irreversible decisions. Efficient near-frontier for validated volume. Local for privacy and free mechanical loops. Same discipline, better price curve.
+
+![model-routing](/token-to-agent/slide-36.svg 'Model routing budgets power where decisions happen and cheaper engines where mechanics dominate')
+
+The ecosystem view is the same architecture at product scale: **Engram gives continuity, SDD gives structure, Skills give consistency**. Continuity solves amnesia. Structure solves improvisation. Consistency solves generic output. You can use one without the others, but the compound effect is the point. Memory without structure remembers chaos. Structure without skills still writes code in a generic style. Skills without memory forget why a convention exists. Together, they become a cognitive stack around the model.
+
+![complete-agent-stack](/token-to-agent/slide-43.svg 'The complete stack layers model, inference, context, harness, knowledge, patterns and process')
+
+Model routing becomes much more powerful once the work is split into phases. The deck version is practical: Gemini for architecture, Opus for implementation, Codex for testing, Copilot for autocomplete. The exact brand names will change, but the rule will not: match the engine to the phase. Some platforms already expose this directly through subagent model configuration, so the SDD designer can run on a reasoning-heavy model while the archive phase runs on something cheap. This is not about being fancy. It is cost control and quality control in the same move.
+
+
+The result you want is not "more AI". It is **velocity plus consistency plus quality**. Velocity comes from automation and fan-out. Consistency comes from skills and registries. Quality comes from specs, verification, and review loops. The developer moves from writing every line to directing and validating the system that writes lines. That sentence scares people who attach their identity to keystrokes, but it should excite engineers. We have always climbed the abstraction ladder. This is another rung.
+
+
+And the packaging matters. A stack that only works in one editor for one operating system is a demo, not infrastructure. The practical goal is one command, many agents, many operating systems: Claude Code today, OpenCode tomorrow, Gemini CLI in another repo, maybe Codex or Windsurf in a solo-agent mode where delegation is not native. Full delegation is ideal because every phase gets fresh context. Solo-agent mode is still useful when the tool cannot spawn subagents, as long as artifacts and memory persist between phases. The architecture should survive tool churn, because tools WILL churn.
+
+
+If you want these patterns formalized at the framework level, Supervisor, Hierarchical, handoffs and friends, that's Chapter 19 territory and I won't repeat it. What I care about here is that you feel the WHY in your gut, and the why is always the same sentence: it's all context budget.
+
+---
+
+
+## Spec-Driven Orchestration
+
+Now let's put the pieces together into a workflow that can ship real code. The philosophy is simple: stop asking one agent to improvise an entire project from a prompt. Build an assembly line of specialized roles, each with a clean context, each producing a persistent artifact, each checked before the next role runs. That is **Spec-Driven Development**, SDD. It is not bureaucracy for its own sake. It is how you stop turning ambiguity into code before anyone has noticed the ambiguity.
+
+![vibe-coding-vs-specs](/token-to-agent/slide-37.svg 'Vibe coding produces patches nobody can explain, while SDD gives every line a spec behind it')
+
+The roles map to the natural flow of engineering work. The **Explorer** reads the existing codebase and answers "what is true today?" The **Proposer** defines the product slice: business problem, scope, non-goals, and assumptions. The **Spec Writer** turns that into acceptance criteria and scenarios. The **Designer** decides architecture, integration points, data shape, tradeoffs, and rejected alternatives. The **Task Planner** breaks the spec and design into implementation slices. The **Implementer** writes code against the tasks. The **Verifier** checks the result against the upstream artifacts. Notice what changed: implementation is no longer the first meaningful act. It is the sixth.
+
+The dependency graph is the enforcement mechanism:
+
+```text
+proposal --> specs ----+
+        \--> design ---+--> tasks --> apply --> verify --> archive
+```
+
+![sdd-phase-dag](/token-to-agent/slide-38.svg 'The SDD phase DAG persists artifacts and passes references instead of copied context')
+
+Specs and design can run in parallel because both need the proposal and neither depends on the other. Tasks needs both because slicing work without knowing the requirements and the architecture is fake planning. Apply needs tasks. Verify needs apply. Archive closes the state. This graph looks small, but it eliminates a huge class of AI mistakes: implementing before deciding, verifying against vibes, and forgetting why a slice exists. The DAG gives the orchestration layer a simple rule: if the dependency is missing, stop. Not "try your best". Stop.
+
+Mini-case: create a users endpoint in a service that already has authentication and audit logging. In prompt-and-pray mode, the agent opens files, guesses conventions, adds a route, maybe writes a test, and returns something plausible. In SDD, the Explorer first discovers the stack: Express or Fastify, ORM, auth middleware, test runner, existing endpoint patterns. The Proposer narrows scope: create user, not update or delete, admin-only, audit event required. Spec writes scenarios: missing email returns 400, duplicate email returns 409, non-admin returns 403, successful create emits audit event. Design decides where validation lives, how transactions wrap user plus audit, and why not to put business rules in the controller. Tasks then slice the work into four steps. The Implementer has no excuse to invent. It executes.
+
+
+Why does this scale better than one long agent session? **Context isolation**: every phase starts clean and reads only the artifacts it needs. **Checkpoints**: every phase produces a document that can be read, diffed, corrected, or rejected before downstream cost is incurred. **Institutional memory**: decisions live in artifacts and memory, not in a dying context window. **Failure containment**: if verify rejects the implementation, the failure is localized to apply or design, not smeared across a two-hour conversation nobody can inspect.
+
+
+This also changes the human role in a healthy way. The developer stops being a typist and becomes a director. You steer scope, correct assumptions, approve design, inspect risks, and validate evidence. That is not less engineering. That's MORE engineering, because the valuable work moved from typing syntax to controlling the system that creates and verifies syntax. AI is a tool. You direct. The agent executes. If you surrender direction, you don't get automation. You get randomness with confidence.
+
+The open-source shape of this stack is a library: an orchestrator with delegate-only discipline, phase agents with skills, a dependency DAG, persistent artifacts, and memory integration. The important part is not the command name. The important part is the invariant: every phase must be reproducible from artifacts, not from chat memory. If your pipeline cannot resume after closing the terminal, it is not a pipeline yet. It is a conversation.
+
+
+---
+
+## Quality Loops You Can Verify
+
+Everything above scales OUTPUT. More agents, cleaner windows, more work per hour. This section scales the thing that actually gates adoption: TRUST. Because let's be honest about where we are: generating code was never the problem, not since the first demo in 2022. The problem is knowing the code is RIGHT, and knowing it without a human re-reading every line, because if a human re-reads every line you haven't automated anything, you've hired a very fast intern with no memory and kept all the review burden.
+
+The starting point is admitting what "prompt and pray" actually is, structurally. You prompted, code appeared, it seems to work, ship it. Now answer three questions: what exactly was asked for? What was decided along the way, and what was considered and REJECTED? Why is line 47 the way it is? Nobody knows. Not the developer (they didn't write it), not the agent (that context was compacted or died with the session, you know the mechanism by now). The knowledge that justifies the code has evaporated, and code whose justification has evaporated is legacy code. You're now generating legacy at machine speed. Congratulations?
+
+The alternative is not new. It's the engineering pipeline our industry already invented for exactly this problem, applied to agents: **spec-driven development**. Explore, propose, specify, design, plan, implement, verify. The twist that makes it native to this chapter: each phase is a MINION with a clean context (the patterns section, paying rent), and each phase produces a **persistent, reviewable artifact**: a proposal document, a spec with acceptance scenarios, a design with the decisions AND the rejected alternatives, a task list, a verification report. The artifacts are the memory of the project's intent. Every line of code traces back to a spec; "why is line 47 like that" has an answer a year later, written down, findable.
+
+The phases form a dependency graph, a DAG, and the graph decides what runs next, not intuition and not enthusiasm:
+
+```text
+proposal --> specs ----+
+        \--> design ---+--> tasks --> apply --> verify --> archive
+```
+
+Read the edges, they're load-bearing. Specs (WHAT it must do) and design (HOW it will do it) both need the proposal, but not each other: they can run in PARALLEL, two minions, fan-out, free speedup. Tasks needs BOTH, because slicing work requires knowing what and how. Apply implements the tasks, verify checks the result against everything upstream, archive closes the cycle. An edge in the graph is a hard prerequisite: no tasks before design exists, no verify before apply finishes. The number one failure mode of AI-generated code, implementation racing ahead of thinking, becomes structurally impossible instead of relying on discipline. The graph is the discipline.
+
+
+And notice the detail that ties the entire chapter into one knot: phases do NOT pass copied context to each other. No giant handoff message where the design phase's window gets pasted into the tasks phase. They pass **references**. The artifacts live in persistent memory (the memory section, paying rent) under topic keys, and each phase READS what it needs, progressive disclosure, appearance number three. This is why the pipeline survives everything that kills a god-agent session: a crash, a compaction, your laptop battery, the weekend. The state lives OUTSIDE every window. Any fresh minion can pick up exactly where the last one stopped by reading the artifacts. Statelessness stops being the enemy the moment state has somewhere real to live.
+
+Structure alone isn't enough, though, because minions lie. Not maliciously: a model under pressure to report success will round "mostly done" up to "done", claim artifacts it didn't quite produce, drift from the spec and not notice. So the pipeline adds two enforcement pieces. First, every phase returns a fixed **result contract**: status, executive summary, artifacts produced, risks, recommended next phase. Same shape every time, no freeform victory prose. Second, between phases stands a **gatekeeper**: a validator that checks the contract BEFORE the DAG advances. Do the claimed artifacts actually exist, at those paths, with content? Does the implementation match the spec, or did it drift? Any hallucinated deliverables? Contract fails, the phase redoes; no validated contract, no advance. This is our fourth recurring thread with its formal clothes on: **verifiable trust, never blind trust**. Don't trust the phase's word for it, check the work product. Trust, but verify, wearing a JSON schema.
+
+![result-contracts-gatekeeper](/token-to-agent/slide-39.svg 'Result contracts and a gatekeeper prevent the pipeline from advancing on missing artifacts, hallucination or spec drift')
+
+Now, review. Here's a truth about code review that predates AI: generic review finds generic problems. Point a general reviewer at a diff and you get comments about naming and a missed null check, while the SQL injection sails through, because "review this" spreads attention evenly and important problems are not evenly distributed. What works: **specialized read-only reviewers**, each with ONE lens. A **security** lens: secrets, authorization, injection, data exposure. A **maintainability** lens: naming, complexity, the debt you'll curse in six months. A **reliability** lens: does anything TEST the behavior, determinism, regressions. A **resilience** lens: what happens when things fail, retries, backoff, partial failures, observability. Four narrow perfectionists instead of one shallow generalist.
+
+And you don't run all four on every one-line change, that's theater. You select by **risk signal**, with a table, not a mood: touching shell commands that mutate state? Reliability plus resilience. Pure rename refactor? Maintainability alone is fine. Auth, payments, security-sensitive paths, or any diff over 400 lines? All four, in parallel (they're read-only, fan-out is free, the invariants section already gave you this for free). The cost of review scales with the risk of the change, which is exactly how a good tech lead already allocates human review attention.
+
+![four-review-lenses](/token-to-agent/slide-40.svg 'The 4R review lenses focus attention on security, maintainability, reliability and resilience based on risk')
+
+The adversarial version is my favorite piece of this whole chapter, because it's the judge panel from the patterns section, promoted to production with a fix loop bolted on. **Blind judges**: two reviewer minions in parallel over the same diff, mutually invisible, synthesis by agreement. Both flag the same critical bug: CONFIRMED, no human needed to arbitrate. Only one flags something: suspect, logged, not blocking by itself. They contradict: escalate to the human, that's precisely what humans are for. Then, and this detail is everything: a SEPARATE fix agent, fresh context, applies ONLY the confirmed findings. Not the judges fixing what they found (the reviewer is never the author, the oldest rule in engineering, surviving intact into the agent era), and not freelancing on "improvements" beyond the confirmed list. Then the result gets **re-judged** automatically. Terminal states: approved, or escalated to the human after 2 fix iterations without approval. It cannot spin forever, and it cannot approve itself. Structure produces the trust, not any individual model's judgment.
+
+![blind-judges](/token-to-agent/slide-41.svg 'Two blind judges, synthesis by agreement, a separate fix agent, automatic re-judge')
+
+And underneath the whole review machine, the bookkeeping that makes it ENGINEERING instead of an impressive demo: every finding enters a **findings ledger**, a persistent record with id, lens, location, severity, status, evidence. Findings don't live in chat scrollback where compaction eats them; they live in a table with lifecycle: open, fixed, verified, or explicitly won't-fix. And the review loop itself is engineered with the two properties I want you to demand of ANY agent loop anyone tries to sell you. **Bounded**: the diff gets swept repeatedly until 2 consecutive passes find nothing new, with a hard ceiling of 4 sweeps total, so termination is guaranteed by construction, not by hope. **Auditable**: the re-review after fixes verifies the ledger entries against the fix diff, checking each finding's resolution, it does NOT re-read the whole original diff from scratch, so cost stays proportional to what changed. Bounded and auditable. Say it with me, and use it as the acid test on every "autonomous quality loop" pitch you'll hear this year.
+
+![findings-ledger](/token-to-agent/slide-42.svg 'Every finding enters a ledger; the loop sweeps until 2 dry passes, hard ceiling of 4')
+
+> _"If your agent loop isn't bounded and auditable, you don't have a loop. You have a prayer."_
+
+---
+
+## Conclusion: The Car Around the Engine
+
+Let's stack the whole chapter, bottom to top, because it was never ten separate topics. It's ONE story, one machine, and now you own every floor of it. The **model** predicts the next token, that's all it computes, knowledge from pretraining and behavior from fine-tuning. **Inference** makes that prediction fast and steerable: prefill and decode, the KV cache that stops quadratic recomputation, prompt caching that rents that cache back to you at 0.1x, quantization that puts a model on your laptop, sampling that turns logits into choices. The **context window** turns everything into a budget: anatomy, the U-curve, compaction, and the three strategies for spending well. The **harness** turns the predictor into an agent with five lines of loop plus tools it can request. **Knowledge** feeds that loop at a fraction of the cost: skills loading on demand, memory persisting outside the window, progressive disclosure everywhere. **Patterns** divide the work across clean windows: orchestrator and minions, stop rules, fan-out with a single writer, judges, model routing. And **process** turns output into something you can trust: specs, a DAG, contracts, gatekeepers, blind judges, a bounded and auditable ledger.
+
+Notice what you can do now that you couldn't before. When an agent is slow, you ask: prefill or decode, TTFT or tokens per second? When the bill spikes, you check the cache hit rate and look for the timestamp someone put at the top of the prompt. When the agent "forgets", you know whether it was compaction, statelessness, or a memory that was never persisted. When someone demos an "autonomous team of agents", you ask about stop rules, the single writer, and whether the review loop is bounded. Those aren't tricks. That's a mental model, and it doesn't expire with the next model release, because we built it on mechanisms, not on product features.
+
+![same-model-different-result](/token-to-agent/slide-44.svg 'The same model produces radically different outcomes when surrounded by context, memory, bounded loops and verification')
+
+And here's the closing thought, the one I want you to carry out of this chapter. The model is the same for everyone. It sits in a catalog. It costs the same per million tokens for you, for me, and for the biggest company on the planet. Nobody has a better GPT or Claude than you do. So where does the difference come from? From EVERYTHING you build around it: budgeted context, persistent memory, bounded loops, adversarial verification. Two teams, same model, same pricing page: one has a chatbot that throws plausible code, the other has a system that delivers verified software with a paper trail. The entire difference is architecture around the model. That's agent engineering.
+
+And you know what? Now you know how to build it. So don't let this be a chapter you nod at and archive.
+
+![closing-takeaways](/token-to-agent/slide-45.svg 'The first step is small and measurable: memory plus stop rules in your own repo for one week')
+
+Get your hands dirty with the smallest real experiment: take the agent you ALREADY use, give it persistent memory and stop rules, in YOUR repo, for one week. Save the decisions, recover them next session, delegate at 4 files, review in fresh context. Then measure: how often did recovered context save you re-explaining? How much thinner did your main thread stay? That number is yours, nobody can sell it to you and nobody can take it away. The chapter ends here. Your loop is just starting.
+
+> _"The model is the engine. You build the car."_
+
+---
+
+## References and Resources
+
+- **Chapter 15 of this book**: AI-Driven Development with Claude Code, the day-to-day workflow this chapter runs underneath.
+- **Chapter 19 of this book**: AI Orchestration Patterns, MCP and multi-agent frameworks in depth, the formal layer above the patterns section.
+- **Vaswani et al. 2017**: "Attention Is All You Need", the transformer paper, where Q, K and V were born. Read it after this chapter and the formula will feel like an old friend.
+- **Liu et al. 2023**: "Lost in the Middle: How Language Models Use Long Contexts", the measured U-curve behind every context-budget argument in this chapter.
+- **Anthropic documentation on prompt caching**: the authoritative source for the 1.25x write, 0.1x read, and TTL mechanics, plus the byte-identical prefix rules.
+- **llama.cpp, Ollama and LM Studio**: the local inference stack. Run a Q4 model once and watch prefill, decode, and the KV cache with your own eyes; it's the cheapest lab in AI.
+- **Tiktokenizer and similar web tokenizers**: paste the same sentence in English and Spanish, then "strawberry", and watch this chapter's tokens section happen live.
+- **Engram**: open source reference implementation of persistent agent memory, SQLite plus FTS5, What/Why/Where/Learned, topic keys, reconciliation and the session protocol, exposed over MCP.
+- **gentle-ai**: open source configurator of the full stack described in this chapter: skills, memory protocol, orchestration with stop rules, review lenses and the adversarial judgment loop.

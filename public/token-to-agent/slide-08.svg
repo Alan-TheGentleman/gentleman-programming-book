@@ -1,0 +1,75 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Dos líneas de tiempo de latencia: el TTFT crece con el largo del prompt y luego los tokens fluyen a un ritmo constante de tokens por segundo">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s08-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#FF8DD7" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Header -->
+  <text x="24" y="30" font-size="10" letter-spacing="2" fill="#A1AABB">LATENCIA</text>
+  <text x="24" y="52" font-size="16" font-weight="600" fill="#F3F6F9">TTFT y tok/s</text>
+
+  <!-- Timelines card -->
+  <rect x="20" y="64" width="480" height="196" rx="12" fill="#1c212c" stroke="#313342"/>
+
+  <!-- Timeline 1: short prompt -->
+  <text x="40" y="90" font-size="9" letter-spacing="2" fill="#A1AABB">PROMPT CORTO</text>
+  <text x="474" y="90" text-anchor="end" font-size="10" font-weight="600" fill="#B7CC85">tok/s</text>
+  <line x1="40" y1="112" x2="480" y2="112" stroke="#313342"/>
+  <circle cx="44" cy="112" r="4" fill="#F3F6F9"/>
+  <text x="40" y="134" font-size="8" fill="#8394A3">request</text>
+  <rect x="52" y="104" width="122" height="16" rx="5" fill="#FF8DD7" filter="url(#s08-glow)"/>
+  <text x="113" y="115" text-anchor="middle" font-size="9" font-weight="600" fill="#1A1E27">TTFT</text>
+  <line x1="180" y1="98" x2="180" y2="126" stroke="#8394A3" stroke-dasharray="3 3"/>
+  <text x="180" y="138" text-anchor="middle" font-size="8" fill="#8394A3">1er token</text>
+  <g stroke="#B7CC85" stroke-width="3" stroke-linecap="round">
+    <line x1="190" y1="105" x2="190" y2="119"/>
+    <line x1="206" y1="105" x2="206" y2="119"/>
+    <line x1="222" y1="105" x2="222" y2="119"/>
+    <line x1="238" y1="105" x2="238" y2="119"/>
+    <line x1="254" y1="105" x2="254" y2="119"/>
+    <line x1="270" y1="105" x2="270" y2="119"/>
+    <line x1="286" y1="105" x2="286" y2="119"/>
+    <line x1="302" y1="105" x2="302" y2="119"/>
+    <line x1="318" y1="105" x2="318" y2="119"/>
+    <line x1="334" y1="105" x2="334" y2="119"/>
+    <line x1="350" y1="105" x2="350" y2="119"/>
+    <line x1="366" y1="105" x2="366" y2="119"/>
+    <line x1="382" y1="105" x2="382" y2="119"/>
+    <line x1="398" y1="105" x2="398" y2="119"/>
+    <line x1="414" y1="105" x2="414" y2="119"/>
+    <line x1="430" y1="105" x2="430" y2="119"/>
+    <line x1="446" y1="105" x2="446" y2="119"/>
+    <line x1="462" y1="105" x2="462" y2="119"/>
+  </g>
+
+  <!-- Timeline 2: long prompt -->
+  <text x="40" y="172" font-size="9" letter-spacing="2" fill="#A1AABB">PROMPT LARGO</text>
+  <line x1="40" y1="194" x2="480" y2="194" stroke="#313342"/>
+  <circle cx="44" cy="194" r="4" fill="#F3F6F9"/>
+  <rect x="52" y="186" width="272" height="16" rx="5" fill="#FF8DD7" filter="url(#s08-glow)"/>
+  <text x="188" y="197" text-anchor="middle" font-size="9" font-weight="600" fill="#1A1E27">TTFT (procesa TODO el prompt)</text>
+  <line x1="330" y1="180" x2="330" y2="208" stroke="#8394A3" stroke-dasharray="3 3"/>
+  <g stroke="#B7CC85" stroke-width="3" stroke-linecap="round">
+    <line x1="340" y1="187" x2="340" y2="201"/>
+    <line x1="356" y1="187" x2="356" y2="201"/>
+    <line x1="372" y1="187" x2="372" y2="201"/>
+    <line x1="388" y1="187" x2="388" y2="201"/>
+    <line x1="404" y1="187" x2="404" y2="201"/>
+    <line x1="420" y1="187" x2="420" y2="201"/>
+    <line x1="436" y1="187" x2="436" y2="201"/>
+    <line x1="452" y1="187" x2="452" y2="201"/>
+    <line x1="468" y1="187" x2="468" y2="201"/>
+  </g>
+
+  <!-- Annotations -->
+  <line x1="188" y1="206" x2="188" y2="220" stroke="#FF8DD7" stroke-opacity="0.6"/>
+  <text x="188" y="236" text-anchor="middle" font-size="10" fill="#FF8DD7">prompt largo castiga el TTFT</text>
+  <line x1="404" y1="206" x2="404" y2="220" stroke="#B7CC85" stroke-opacity="0.6"/>
+  <text x="404" y="236" text-anchor="middle" font-size="10" fill="#B7CC85">respuesta larga castiga el total</text>
+
+  <!-- Footer teaser chip -->
+  <rect x="150" y="300" width="220" height="28" rx="14" fill="#232A36" stroke="#FF8DD7" stroke-opacity="0.5"/>
+  <text x="260" y="318" text-anchor="middle" font-size="11" fill="#FF8DD7">¿por qué? → prefill y decode</text>
+</svg>

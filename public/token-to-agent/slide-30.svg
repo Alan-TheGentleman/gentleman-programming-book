@@ -1,0 +1,56 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="El protocolo de memoria: abrir recupera contexto, durante se guarda cada decisión, cerrar deja un resumen y la compactación rehidrata; la recuperación es progresiva">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s30-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <text x="260" y="28" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">DISCIPLINA DE SESIÓN</text>
+  <text x="260" y="50" text-anchor="middle" font-size="16" font-weight="600" fill="#F3F6F9">El protocolo de memoria</text>
+
+  <!-- Línea de sesión -->
+  <line x1="30" y1="105" x2="484" y2="105" stroke="#313342" stroke-width="2"/>
+  <path d="M484 105l-8-5v10z" fill="#313342"/>
+
+  <circle cx="77" cy="105" r="5" fill="#7FB4CA"/>
+  <line x1="77" y1="110" x2="77" y2="122" stroke="#7FB4CA" stroke-opacity="0.5"/>
+  <rect x="25" y="122" width="104" height="40" rx="9" fill="#1c212c" stroke="#7FB4CA"/>
+  <text x="77" y="138" text-anchor="middle" font-size="9" font-weight="600" fill="#7FB4CA">ABRIR</text>
+  <text x="77" y="153" text-anchor="middle" font-size="8" fill="#A1AABB">recuperar contexto</text>
+
+  <circle cx="194" cy="105" r="5" fill="#B7CC85"/>
+  <line x1="194" y1="110" x2="194" y2="122" stroke="#B7CC85" stroke-opacity="0.5"/>
+  <rect x="134" y="122" width="120" height="40" rx="9" fill="#1c212c" stroke="#B7CC85" filter="url(#s30-glow)"/>
+  <text x="194" y="138" text-anchor="middle" font-size="9" font-weight="600" fill="#B7CC85">DURANTE</text>
+  <text x="194" y="153" text-anchor="middle" font-size="8" fill="#A1AABB">guardar cada decisión</text>
+  <path d="M250 114l2 5 5 1-4 3 1 5-4-3-4 3 1-5-4-3 5-1z" fill="#B7CC85"/>
+  <text x="264" y="124" font-size="7" fill="#B7CC85">auto</text>
+
+  <circle cx="312" cy="105" r="5" fill="#DFBD76"/>
+  <line x1="312" y1="110" x2="312" y2="122" stroke="#DFBD76" stroke-opacity="0.5"/>
+  <rect x="256" y="122" width="112" height="40" rx="9" fill="#1c212c" stroke="#DFBD76"/>
+  <text x="312" y="138" text-anchor="middle" font-size="9" font-weight="600" fill="#DFBD76">CERRAR</text>
+  <text x="312" y="153" text-anchor="middle" font-size="8" fill="#A1AABB">resumen de sesión</text>
+
+  <!-- Compactación: rama desde el medio de la línea -->
+  <circle cx="400" cy="105" r="5" fill="#FF8DD7"/>
+  <path d="M400 105c18 0 34 16 39 45" stroke="#FF8DD7" stroke-dasharray="4 3" fill="none"/>
+  <rect x="380" y="150" width="118" height="40" rx="9" fill="#1c212c" stroke="#FF8DD7"/>
+  <text x="439" y="166" text-anchor="middle" font-size="9" font-weight="600" fill="#FF8DD7">COMPACTACIÓN</text>
+  <text x="439" y="181" text-anchor="middle" font-size="8" fill="#A1AABB">rehidratar</text>
+
+  <!-- Escalera de recuperación -->
+  <text x="260" y="228" text-anchor="middle" font-size="9" letter-spacing="2" fill="#A1AABB">PROGRESSIVE DISCLOSURE</text>
+  <rect x="34" y="276" width="182" height="26" rx="8" fill="#232A36" stroke="#B7CC85" stroke-opacity="0.4"/>
+  <text x="125" y="293" text-anchor="middle" font-size="8.5" fill="#F3F6F9">buscar (~100 tokens/resultado)</text>
+  <path d="M220 285l24-13m0 0l-6-1m6 1l-1 6" stroke="#B7CC85" stroke-linecap="round" fill="none"/>
+  <rect x="248" y="260" width="90" height="26" rx="8" fill="#232A36" stroke="#B7CC85" stroke-opacity="0.6"/>
+  <text x="293" y="277" text-anchor="middle" font-size="8.5" fill="#F3F6F9">timeline</text>
+  <path d="M342 269l22-13m0 0l-6-1m6 1l-1 6" stroke="#B7CC85" stroke-linecap="round" fill="none"/>
+  <rect x="368" y="244" width="118" height="26" rx="8" fill="#232A36" stroke="#B7CC85"/>
+  <text x="427" y="261" text-anchor="middle" font-size="8.5" fill="#F3F6F9">leer completo</text>
+
+  <text x="260" y="332" text-anchor="middle" font-size="11" fill="#8394A3">la disciplina, no la base de datos</text>
+</svg>

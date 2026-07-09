@@ -1,0 +1,75 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Señal, no ruido: grabar todo produce ruido; una memoria curada con campos estructurados y topic key evoluciona en revisiones en lugar de duplicarse">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s28-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <text x="260" y="28" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">MEMORIA CON CRITERIO</text>
+  <text x="260" y="50" text-anchor="middle" font-size="16" font-weight="600" fill="#F3F6F9">Señal, no ruido</text>
+
+  <line x1="252" y1="70" x2="252" y2="310" stroke="#313342" stroke-dasharray="3 5" opacity="0.6"/>
+
+  <!-- Grabar todo (rechazado) -->
+  <text x="132" y="80" text-anchor="middle" font-size="9" letter-spacing="2" fill="#8394A3">GRABAR TODO</text>
+  <g font-size="7" fill="#8394A3">
+    <rect x="30" y="90" width="44" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="52" y="99" text-anchor="middle">tool call</text>
+    <rect x="80" y="90" width="32" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="96" y="99" text-anchor="middle">read</text>
+    <rect x="118" y="90" width="24" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="130" y="99" text-anchor="middle">ls</text>
+    <rect x="148" y="90" width="32" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="164" y="99" text-anchor="middle">grep</text>
+    <rect x="186" y="90" width="26" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="199" y="99" text-anchor="middle">cd</text>
+    <rect x="42" y="110" width="28" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="56" y="119" text-anchor="middle">cat</text>
+    <rect x="76" y="110" width="30" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="91" y="119" text-anchor="middle">diff</text>
+    <rect x="112" y="110" width="28" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="126" y="119" text-anchor="middle">env</text>
+    <rect x="146" y="110" width="30" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="161" y="119" text-anchor="middle">curl</text>
+    <rect x="182" y="110" width="26" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="195" y="119" text-anchor="middle">log</text>
+    <rect x="56" y="132" width="30" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="71" y="141" text-anchor="middle">stat</text>
+    <rect x="92" y="132" width="34" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="109" y="141" text-anchor="middle">echo</text>
+    <rect x="132" y="132" width="28" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="146" y="141" text-anchor="middle">tmp</text>
+    <rect x="166" y="132" width="36" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="184" y="141" text-anchor="middle">watch</text>
+    <rect x="70" y="156" width="32" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="86" y="165" text-anchor="middle">read</text>
+    <rect x="108" y="156" width="36" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="126" y="165" text-anchor="middle">ls -la</text>
+    <rect x="150" y="156" width="32" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="166" y="165" text-anchor="middle">grep</text>
+    <rect x="88" y="180" width="30" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="103" y="189" text-anchor="middle">tool</text>
+    <rect x="124" y="180" width="36" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="142" y="189" text-anchor="middle">write</text>
+    <rect x="106" y="204" width="44" height="13" rx="4" fill="#232A36" stroke="#313342"/><text x="128" y="213" text-anchor="middle">tool call</text>
+  </g>
+  <path d="M38 106L110 232M226 106L154 232" stroke="#313342" stroke-dasharray="3 4"/>
+
+  <!-- Papelera -->
+  <rect x="90" y="228" width="84" height="8" rx="3" fill="#232A36" stroke="#8394A3"/>
+  <path d="M96 240h72l-8 54h-56z" fill="#232A36" stroke="#8394A3"/>
+  <path d="M118 252l28 28M146 252l-28 28" stroke="#CB7C94" stroke-width="3.5" stroke-linecap="round" filter="url(#s28-glow)"/>
+  <text x="132" y="316" text-anchor="middle" font-size="10" fill="#CB7C94">grabar todo = ruido</text>
+
+  <!-- Memoria curada -->
+  <rect x="268" y="72" width="228" height="196" rx="12" fill="#1c212c" stroke="#7AA89F" stroke-opacity="0.7" filter="url(#s28-glow)"/>
+  <text x="382" y="92" text-anchor="middle" font-size="10" letter-spacing="2" fill="#7AA89F">UNA MEMORIA CURADA</text>
+
+  <rect x="280" y="102" width="204" height="22" rx="6" fill="#7AA89F" fill-opacity="0.1" stroke="#7AA89F" stroke-opacity="0.3"/>
+  <text x="288" y="117" font-size="9"><tspan fill="#7AA89F" font-weight="600">WHAT</tspan><tspan fill="#A1AABB"> · qué se hizo</tspan></text>
+  <rect x="280" y="130" width="204" height="22" rx="6" fill="#7AA89F" fill-opacity="0.1" stroke="#7AA89F" stroke-opacity="0.3"/>
+  <text x="288" y="145" font-size="9"><tspan fill="#7AA89F" font-weight="600">WHY</tspan><tspan fill="#A1AABB"> · por qué</tspan></text>
+  <rect x="280" y="158" width="204" height="22" rx="6" fill="#7AA89F" fill-opacity="0.1" stroke="#7AA89F" stroke-opacity="0.3"/>
+  <text x="288" y="173" font-size="9"><tspan fill="#7AA89F" font-weight="600">WHERE</tspan><tspan fill="#A1AABB"> · dónde</tspan></text>
+  <rect x="280" y="186" width="204" height="22" rx="6" fill="#7AA89F" fill-opacity="0.1" stroke="#7AA89F" stroke-opacity="0.3"/>
+  <text x="288" y="201" font-size="9"><tspan fill="#7AA89F" font-weight="600">LEARNED</tspan><tspan fill="#A1AABB"> · gotchas</tspan></text>
+
+  <rect x="280" y="220" width="150" height="22" rx="11" fill="#232A36" stroke="#313342"/>
+  <text x="288" y="234" font-size="8" fill="#7AA89F">architecture/auth-model</text>
+  <rect x="438" y="220" width="46" height="22" rx="11" fill="#232A36" stroke="#DFBD76"/>
+  <text x="461" y="234" text-anchor="middle" font-size="8" fill="#DFBD76">rev 3</text>
+
+  <!-- Evolución v1 → v3 -->
+  <rect x="298" y="288" width="34" height="20" rx="6" fill="#232A36" stroke="#313342"/>
+  <text x="315" y="301" text-anchor="middle" font-size="8" fill="#8394A3">v1</text>
+  <path d="M336 298h16m0 0l-4-3m4 3l-4 3" stroke="#7AA89F" stroke-linecap="round"/>
+  <rect x="356" y="288" width="34" height="20" rx="6" fill="#232A36" stroke="#313342"/>
+  <text x="373" y="301" text-anchor="middle" font-size="8" fill="#A1AABB">v2</text>
+  <path d="M394 298h16m0 0l-4-3m4 3l-4 3" stroke="#7AA89F" stroke-linecap="round"/>
+  <rect x="414" y="288" width="34" height="20" rx="6" fill="#232A36" stroke="#7AA89F"/>
+  <text x="431" y="301" text-anchor="middle" font-size="8" fill="#7AA89F">v3</text>
+  <text x="382" y="326" text-anchor="middle" font-size="9" fill="#8394A3">la misma memoria evoluciona, no se duplica</text>
+</svg>

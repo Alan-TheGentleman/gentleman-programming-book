@@ -1,0 +1,66 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Comparación entre un chat que responde con texto y un agente que actúa en un ciclo de acciones con el mismo modelo">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s19-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="s19-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M1 1L5 3L1 5" stroke="#B7CC85" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="s19-arrow-m" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M1 1L5 3L1 5" stroke="#A1AABB" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <text x="260" y="26" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">CHAT VS AGENTE</text>
+  <text x="260" y="46" text-anchor="middle" font-size="16" font-weight="600" fill="#F3F6F9">Chat responde. Agente actúa.</text>
+
+  <!-- Panel CHAT -->
+  <rect x="20" y="58" width="230" height="246" rx="12" fill="#1c212c" stroke="#313342"/>
+  <text x="135" y="80" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">CHAT</text>
+
+  <rect x="65" y="92" width="140" height="28" rx="10" fill="#232A36" stroke="#313342"/>
+  <text x="135" y="110" text-anchor="middle" font-size="10" fill="#F3F6F9">¿cómo hago X?</text>
+
+  <line x1="135" y1="124" x2="135" y2="140" stroke="#A1AABB" stroke-width="1.4" marker-end="url(#s19-arrow-m)"/>
+
+  <rect x="85" y="146" width="100" height="26" rx="13" fill="#232A36" stroke="#B7CC85"/>
+  <text x="135" y="163" text-anchor="middle" font-size="10" letter-spacing="1" fill="#B7CC85">MODELO</text>
+
+  <line x1="135" y1="176" x2="135" y2="192" stroke="#A1AABB" stroke-width="1.4" marker-end="url(#s19-arrow-m)"/>
+
+  <rect x="65" y="198" width="140" height="28" rx="10" fill="#232A36" stroke="#313342"/>
+  <text x="135" y="216" text-anchor="middle" font-size="10" fill="#F3F6F9">respuesta en texto</text>
+
+  <text x="135" y="256" text-anchor="middle" font-size="9" fill="#8394A3">el trabajo sigue siendo tuyo</text>
+
+  <!-- Panel AGENTE -->
+  <rect x="270" y="58" width="230" height="246" rx="12" fill="#1c212c" stroke="#313342"/>
+  <text x="385" y="80" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">AGENTE</text>
+
+  <!-- ciclo de acciones -->
+  <path d="M405 141 A58 58 0 0 1 440 175" stroke="#B7CC85" stroke-width="1.4" opacity="0.8" marker-end="url(#s19-arrow)"/>
+  <path d="M440 215 A58 58 0 0 1 405 250" stroke="#B7CC85" stroke-width="1.4" opacity="0.8" marker-end="url(#s19-arrow)"/>
+  <path d="M365 250 A58 58 0 0 1 330 215" stroke="#B7CC85" stroke-width="1.4" opacity="0.8" marker-end="url(#s19-arrow)"/>
+  <path d="M330 175 A58 58 0 0 1 365 141" stroke="#B7CC85" stroke-width="1.4" opacity="0.8" marker-end="url(#s19-arrow)"/>
+
+  <rect x="345" y="182" width="80" height="26" rx="13" fill="#232A36" stroke="#B7CC85" filter="url(#s19-glow)"/>
+  <text x="385" y="199" text-anchor="middle" font-size="10" letter-spacing="1" fill="#B7CC85">MODELO</text>
+
+  <rect x="346" y="128" width="78" height="18" rx="9" fill="#232A36" stroke="#313342"/>
+  <text x="385" y="140" text-anchor="middle" font-size="8" fill="#F3F6F9">leer archivo</text>
+
+  <rect x="408" y="186" width="78" height="18" rx="9" fill="#232A36" stroke="#313342"/>
+  <text x="447" y="198" text-anchor="middle" font-size="8" fill="#F3F6F9">ejecutar comando</text>
+
+  <rect x="346" y="244" width="78" height="18" rx="9" fill="#232A36" stroke="#313342"/>
+  <text x="385" y="256" text-anchor="middle" font-size="8" fill="#F3F6F9">escribir código</text>
+
+  <rect x="284" y="186" width="78" height="18" rx="9" fill="#232A36" stroke="#313342"/>
+  <text x="323" y="198" text-anchor="middle" font-size="8" fill="#F3F6F9">iterar</text>
+
+  <!-- Footer -->
+  <rect x="140" y="316" width="240" height="28" rx="14" fill="#1c212c" stroke="#B7CC85"/>
+  <text x="260" y="334" text-anchor="middle" font-size="10" fill="#B7CC85">mismo modelo, distinto harness</text>
+</svg>

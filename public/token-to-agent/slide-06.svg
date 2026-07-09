@@ -1,0 +1,76 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Diagrama que muestra que el modelo no ve letras: la palabra strawberry se convierte en tres tokens con IDs numéricos, por eso no puede contar letras">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s06-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#DEBA87" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Header -->
+  <text x="24" y="30" font-size="10" letter-spacing="2" fill="#A1AABB">TOKENIZACIÓN</text>
+  <text x="24" y="52" font-size="16" font-weight="600" fill="#F3F6F9">El modelo nunca ve letras</text>
+
+  <!-- Human view: letter cells -->
+  <text x="112" y="60" font-size="9" letter-spacing="2" fill="#8394A3">VOS VES</text>
+  <text x="408" y="60" text-anchor="end" font-size="9" fill="#8394A3">10 letras</text>
+  <g fill="#232A36" stroke="#313342">
+    <rect x="112" y="66" width="26" height="26" rx="6"/>
+    <rect x="142" y="66" width="26" height="26" rx="6"/>
+    <rect x="172" y="66" width="26" height="26" rx="6"/>
+    <rect x="202" y="66" width="26" height="26" rx="6"/>
+    <rect x="232" y="66" width="26" height="26" rx="6"/>
+    <rect x="262" y="66" width="26" height="26" rx="6"/>
+    <rect x="292" y="66" width="26" height="26" rx="6"/>
+    <rect x="322" y="66" width="26" height="26" rx="6"/>
+    <rect x="352" y="66" width="26" height="26" rx="6"/>
+    <rect x="382" y="66" width="26" height="26" rx="6"/>
+  </g>
+  <g font-size="12" fill="#8394A3" text-anchor="middle">
+    <text x="125" y="83">s</text><text x="155" y="83">t</text><text x="185" y="83">r</text>
+    <text x="215" y="83">a</text><text x="245" y="83">w</text><text x="275" y="83">b</text>
+    <text x="305" y="83">e</text><text x="335" y="83">r</text><text x="365" y="83">r</text>
+    <text x="395" y="83">y</text>
+  </g>
+  <!-- dots under the R letters -->
+  <circle cx="185" cy="99" r="2" fill="#CB7C94"/>
+  <circle cx="335" cy="99" r="2" fill="#CB7C94"/>
+  <circle cx="365" cy="99" r="2" fill="#CB7C94"/>
+
+  <!-- Arrow down -->
+  <line x1="260" y1="106" x2="260" y2="124" stroke="#A1AABB"/>
+  <path d="M255 122 L260 130 L265 122 Z" fill="#A1AABB"/>
+
+  <!-- Model view: token cards -->
+  <text x="110" y="146" font-size="9" letter-spacing="2" fill="#A1AABB">EL MODELO VE</text>
+  <text x="410" y="146" text-anchor="end" font-size="9" fill="#8394A3">3 tokens</text>
+  <g filter="url(#s06-glow)">
+    <rect x="110" y="152" width="84" height="46" rx="8" fill="#1c212c" stroke="#DEBA87" stroke-opacity="0.6"/>
+    <rect x="208" y="152" width="92" height="46" rx="8" fill="#1c212c" stroke="#DEBA87" stroke-opacity="0.6"/>
+    <rect x="314" y="152" width="96" height="46" rx="8" fill="#1c212c" stroke="#DEBA87" stroke-opacity="0.6"/>
+  </g>
+  <text x="152" y="170" text-anchor="middle" font-size="10" fill="#A1AABB">st</text>
+  <text x="152" y="188" text-anchor="middle" font-size="14" font-weight="600" fill="#DEBA87">[302]</text>
+  <text x="254" y="170" text-anchor="middle" font-size="10" fill="#A1AABB">raw</text>
+  <text x="254" y="188" text-anchor="middle" font-size="14" font-weight="600" fill="#DEBA87">[1618]</text>
+  <text x="362" y="170" text-anchor="middle" font-size="10" fill="#A1AABB">berry</text>
+  <text x="362" y="188" text-anchor="middle" font-size="14" font-weight="600" fill="#DEBA87">[8296]</text>
+
+  <!-- Divider -->
+  <line x1="30" y1="222" x2="490" y2="222" stroke="#313342"/>
+
+  <!-- Question chip with red cross -->
+  <rect x="40" y="248" width="116" height="30" rx="8" fill="#232A36" stroke="#313342"/>
+  <text x="98" y="267" text-anchor="middle" font-size="12" fill="#F3F6F9">¿cuántas R?</text>
+  <circle cx="178" cy="263" r="11" fill="none" stroke="#CB7C94"/>
+  <line x1="173" y1="258" x2="183" y2="268" stroke="#CB7C94" stroke-width="1.5"/>
+  <line x1="183" y1="258" x2="173" y2="268" stroke="#CB7C94" stroke-width="1.5"/>
+  <text x="40" y="300" font-size="10" fill="#CB7C94">la info sub-token no existe</text>
+
+  <!-- Connector -->
+  <line x1="196" y1="263" x2="288" y2="263" stroke="#313342" stroke-dasharray="4 4"/>
+
+  <!-- Green alternative chip -->
+  <rect x="296" y="248" width="186" height="30" rx="8" fill="#B7CC85" fill-opacity="0.12" stroke="#B7CC85"/>
+  <text x="389" y="267" text-anchor="middle" font-size="12" fill="#B7CC85">→ dale una tool (código)</text>
+  <text x="296" y="300" font-size="10" fill="#8394A3">el código sí ve caracteres</text>
+</svg>

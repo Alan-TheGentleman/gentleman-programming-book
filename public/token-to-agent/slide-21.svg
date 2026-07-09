@@ -1,0 +1,67 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Tools y MCP: definición de una tool, intercambio tool_use y tool_result entre modelo y harness, y hub MCP conectando servidores">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s21-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="s21-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M1 1L5 3L1 5" stroke="#7AA89F" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <text x="260" y="26" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">HERRAMIENTAS DEL AGENTE</text>
+  <text x="260" y="46" text-anchor="middle" font-size="16" font-weight="600" fill="#F3F6F9">Tools y MCP</text>
+
+  <text x="92" y="68" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">TOOL</text>
+  <text x="260" y="68" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">INTERCAMBIO</text>
+  <text x="428" y="68" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">MCP</text>
+
+  <!-- Tool definition card -->
+  <rect x="15" y="76" width="155" height="132" rx="10" fill="#1c212c" stroke="#313342"/>
+  <text x="30" y="100" font-family="monospace" font-size="12" fill="#7AA89F">read_file</text>
+  <rect x="28" y="110" width="129" height="26" rx="6" fill="#232A36" stroke="#313342"/>
+  <text x="92" y="127" text-anchor="middle" font-family="monospace" font-size="10" fill="#F3F6F9">{ path: string }</text>
+  <rect x="28" y="148" width="129" height="44" rx="6" fill="#DFBD76" fill-opacity="0.12" stroke="#DFBD76" stroke-opacity="0.6"/>
+  <text x="92" y="167" text-anchor="middle" font-size="9" fill="#DFBD76">descripción en texto</text>
+  <text x="92" y="182" text-anchor="middle" font-size="9" fill="#DFBD76">→ el modelo la LEE</text>
+
+  <!-- Intercambio modelo / harness -->
+  <rect x="200" y="86" width="120" height="28" rx="14" fill="#232A36" stroke="#7AA89F"/>
+  <text x="260" y="104" text-anchor="middle" font-size="10" letter-spacing="1" fill="#F3F6F9">MODELO</text>
+
+  <line x1="238" y1="120" x2="238" y2="204" stroke="#7AA89F" stroke-width="1.4" marker-end="url(#s21-arrow)"/>
+  <line x1="282" y1="206" x2="282" y2="122" stroke="#7AA89F" stroke-width="1.4" marker-end="url(#s21-arrow)"/>
+  <text x="230" y="152" text-anchor="end" font-family="monospace" font-size="9" fill="#7AA89F">tool_use</text>
+  <text x="290" y="180" font-family="monospace" font-size="9" fill="#7AA89F">tool_result</text>
+
+  <rect x="200" y="212" width="120" height="28" rx="14" fill="#232A36" stroke="#7AA89F"/>
+  <text x="260" y="230" text-anchor="middle" font-size="10" letter-spacing="1" fill="#F3F6F9">HARNESS</text>
+
+  <text x="260" y="258" text-anchor="middle" font-size="9" fill="#8394A3">el modelo nunca ejecuta</text>
+
+  <!-- MCP hub -->
+  <rect x="350" y="76" width="155" height="190" rx="10" fill="#1c212c" stroke="#313342"/>
+
+  <line x1="406" y1="141" x2="432" y2="108" stroke="#7AA89F" stroke-opacity="0.5" stroke-width="1.2"/>
+  <line x1="408" y1="150" x2="432" y2="150" stroke="#7AA89F" stroke-opacity="0.5" stroke-width="1.2"/>
+  <line x1="406" y1="159" x2="432" y2="192" stroke="#7AA89F" stroke-opacity="0.5" stroke-width="1.2"/>
+
+  <circle cx="388" cy="150" r="20" fill="#232A36" stroke="#7AA89F" stroke-width="1.5" filter="url(#s21-glow)"/>
+  <path d="M388 164 L388 140" stroke="#7AA89F" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M388 131 L384 139 L392 139 Z" fill="#7AA89F"/>
+  <path d="M388 156 L378 150 L378 145" stroke="#7AA89F" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="375" y="139" width="6" height="6" stroke="#7AA89F" stroke-width="1.2" fill="none"/>
+  <path d="M388 156 L398 150 L398 145" stroke="#7AA89F" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="398" cy="142" r="3" stroke="#7AA89F" stroke-width="1.2" fill="none"/>
+  <circle cx="388" cy="164" r="2" fill="#7AA89F"/>
+
+  <rect x="432" y="97" width="64" height="22" rx="11" fill="#232A36" stroke="#313342"/>
+  <text x="464" y="111" text-anchor="middle" font-size="9" fill="#F3F6F9">memoria</text>
+  <rect x="432" y="139" width="64" height="22" rx="11" fill="#232A36" stroke="#313342"/>
+  <text x="464" y="153" text-anchor="middle" font-size="9" fill="#F3F6F9">browser</text>
+  <rect x="432" y="181" width="64" height="22" rx="11" fill="#232A36" stroke="#313342"/>
+  <text x="464" y="195" text-anchor="middle" font-size="9" fill="#F3F6F9">jira</text>
+
+  <text x="428" y="240" text-anchor="middle" font-size="9" fill="#7AA89F">MCP: el USB-C de los agentes</text>
+</svg>

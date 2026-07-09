@@ -1,0 +1,62 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="El stack completo de agent engineering, siete capas desde el modelo hasta el proceso">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s43-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#7AA89F" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <text x="260" y="26" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">AGENT ENGINEERING</text>
+  <text x="260" y="46" text-anchor="middle" font-size="16" font-weight="600" fill="#F3F6F9">El stack completo, capa por capa</text>
+
+  <!-- Flecha lateral: recorrido del curso, de abajo hacia arriba -->
+  <line x1="96" y1="302" x2="96" y2="72" stroke="#7AA89F" stroke-width="1.5"/>
+  <path d="M96 62 L91 72 L101 72 Z" fill="#7AA89F"/>
+  <text x="76" y="185" transform="rotate(-90 76 185)" text-anchor="middle" font-size="10" letter-spacing="1" fill="#A1AABB">el curso, de abajo hacia arriba</text>
+
+  <!-- Capa 7 (tope) -->
+  <g filter="url(#s43-glow)">
+    <rect x="118" y="68" width="330" height="30" rx="8" fill="#1c212c" stroke="#7AA89F" stroke-opacity="0.7"/>
+  </g>
+  <rect x="118" y="68" width="4" height="30" rx="2" fill="#7AA89F"/>
+  <text x="134" y="87" font-size="12" font-weight="600" fill="#F3F6F9">PROCESO <tspan font-size="10" font-weight="400" fill="#A1AABB">(specs · gatekeepers)</tspan></text>
+  <text x="438" y="87" text-anchor="end" font-size="10" fill="#7AA89F">7</text>
+
+  <!-- Capa 6 -->
+  <rect x="118" y="102" width="330" height="30" rx="8" fill="#1c212c" stroke="#7BAAA7" stroke-opacity="0.6"/>
+  <rect x="118" y="102" width="4" height="30" rx="2" fill="#7BAAA7"/>
+  <text x="134" y="121" font-size="12" font-weight="600" fill="#F3F6F9">PATRONES <tspan font-size="10" font-weight="400" fill="#A1AABB">(orquestador–minion · jueces)</tspan></text>
+  <text x="438" y="121" text-anchor="end" font-size="10" fill="#7BAAA7">6</text>
+
+  <!-- Capa 5 -->
+  <rect x="118" y="136" width="330" height="30" rx="8" fill="#1c212c" stroke="#7CACAE" stroke-opacity="0.6"/>
+  <rect x="118" y="136" width="4" height="30" rx="2" fill="#7CACAE"/>
+  <text x="134" y="155" font-size="12" font-weight="600" fill="#F3F6F9">CONOCIMIENTO <tspan font-size="10" font-weight="400" fill="#A1AABB">(bajo demanda · memoria)</tspan></text>
+  <text x="438" y="155" text-anchor="end" font-size="10" fill="#7CACAE">5</text>
+
+  <!-- Capa 4 -->
+  <rect x="118" y="170" width="330" height="30" rx="8" fill="#1c212c" stroke="#7CAEB5" stroke-opacity="0.6"/>
+  <rect x="118" y="170" width="4" height="30" rx="2" fill="#7CAEB5"/>
+  <text x="134" y="189" font-size="12" font-weight="600" fill="#F3F6F9">HARNESS <tspan font-size="10" font-weight="400" fill="#A1AABB">(loop · tools · MCP)</tspan></text>
+  <text x="438" y="189" text-anchor="end" font-size="10" fill="#7CAEB5">4</text>
+
+  <!-- Capa 3 -->
+  <rect x="118" y="204" width="330" height="30" rx="8" fill="#1c212c" stroke="#7DB0BC" stroke-opacity="0.6"/>
+  <rect x="118" y="204" width="4" height="30" rx="2" fill="#7DB0BC"/>
+  <text x="134" y="223" font-size="12" font-weight="600" fill="#F3F6F9">CONTEXTO <tspan font-size="10" font-weight="400" fill="#A1AABB">(presupuesto)</tspan></text>
+  <text x="438" y="223" text-anchor="end" font-size="10" fill="#7DB0BC">3</text>
+
+  <!-- Capa 2 -->
+  <rect x="118" y="238" width="330" height="30" rx="8" fill="#1c212c" stroke="#7EB2C3" stroke-opacity="0.6"/>
+  <rect x="118" y="238" width="4" height="30" rx="2" fill="#7EB2C3"/>
+  <text x="134" y="257" font-size="12" font-weight="600" fill="#F3F6F9">INFERENCIA <tspan font-size="10" font-weight="400" fill="#A1AABB">(KV cache · sampling)</tspan></text>
+  <text x="438" y="257" text-anchor="end" font-size="10" fill="#7EB2C3">2</text>
+
+  <!-- Capa 1 (base) -->
+  <rect x="118" y="272" width="330" height="30" rx="8" fill="#232A36" stroke="#7FB4CA" stroke-opacity="0.7"/>
+  <rect x="118" y="272" width="4" height="30" rx="2" fill="#7FB4CA"/>
+  <text x="134" y="291" font-size="12" font-weight="600" fill="#F3F6F9">MODELO <tspan font-size="10" font-weight="400" fill="#A1AABB">(predicción)</tspan></text>
+  <text x="438" y="291" text-anchor="end" font-size="10" fill="#7FB4CA">1</text>
+
+  <text x="260" y="332" text-anchor="middle" font-size="11" font-style="italic" fill="#A1AABB">el modelo es el motor; <tspan fill="#7AA89F">el auto lo construís vos</tspan></text>
+</svg>

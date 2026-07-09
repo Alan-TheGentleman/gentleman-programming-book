@@ -1,0 +1,80 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Result contracts con campos fijos y gatekeeper que valida artefactos antes de avanzar de fase">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s39-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#DFBD76" flood-opacity="0.35"/>
+    </filter>
+    <marker id="s39-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#A1AABB"/>
+    </marker>
+    <marker id="s39-arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#B7CC85"/>
+    </marker>
+  </defs>
+
+  <text x="260" y="28" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">CONTRATOS ENTRE FASES</text>
+  <text x="260" y="50" text-anchor="middle" font-size="16" font-weight="600" fill="#F3F6F9">Result contracts y gatekeeper</text>
+
+  <!-- Contrato -->
+  <rect x="20" y="72" width="158" height="186" rx="10" fill="#1c212c" stroke="#313342"/>
+  <text x="99" y="94" text-anchor="middle" font-size="9" letter-spacing="2" fill="#DFBD76">RESULT CONTRACT</text>
+  <line x1="34" y1="102" x2="164" y2="102" stroke="#313342"/>
+  <g fill="#232A36" stroke="#DFBD76" stroke-opacity="0.8">
+    <rect x="34" y="113" width="8" height="8" rx="2"/>
+    <rect x="34" y="141" width="8" height="8" rx="2"/>
+    <rect x="34" y="169" width="8" height="8" rx="2"/>
+    <rect x="34" y="197" width="8" height="8" rx="2"/>
+    <rect x="34" y="225" width="8" height="8" rx="2"/>
+  </g>
+  <text x="52" y="121" font-size="10" fill="#F3F6F9">status</text>
+  <text x="52" y="149" font-size="10" fill="#F3F6F9">resumen ejecutivo</text>
+  <text x="52" y="177" font-size="10" fill="#F3F6F9">artefactos</text>
+  <text x="52" y="205" font-size="10" fill="#F3F6F9">riesgos</text>
+  <text x="52" y="233" font-size="10" fill="#F3F6F9">próxima fase</text>
+  <g stroke="#313342">
+    <line x1="34" y1="130" x2="164" y2="130"/>
+    <line x1="34" y1="158" x2="164" y2="158"/>
+    <line x1="34" y1="186" x2="164" y2="186"/>
+    <line x1="34" y1="214" x2="164" y2="214"/>
+  </g>
+
+  <!-- Fase N -> gate -> Fase N+1 -->
+  <rect x="198" y="95" width="62" height="24" rx="8" fill="#1c212c" stroke="#313342"/>
+  <text x="229" y="111" text-anchor="middle" font-size="10" fill="#F3F6F9">fase N</text>
+  <line x1="260" y1="107" x2="280" y2="107" stroke="#A1AABB" stroke-width="1.5" marker-end="url(#s39-arrow)"/>
+
+  <text x="316" y="86" text-anchor="middle" font-size="9" letter-spacing="2" fill="#DFBD76">GATEKEEPER</text>
+  <g filter="url(#s39-glow)">
+    <rect x="286" y="92" width="60" height="32" rx="8" fill="#1c212c" stroke="#DFBD76"/>
+  </g>
+  <line x1="316" y1="92" x2="316" y2="124" stroke="#DFBD76" stroke-opacity="0.5" stroke-dasharray="3 3"/>
+
+  <line x1="346" y1="101" x2="410" y2="101" stroke="#B7CC85" stroke-width="1.5" marker-end="url(#s39-arrow-green)"/>
+  <text x="378" y="94" text-anchor="middle" font-size="8" fill="#B7CC85">pasa ✓</text>
+  <line x1="346" y1="117" x2="382" y2="117" stroke="#CB7C94" stroke-width="1.5"/>
+  <rect x="384" y="109" width="4" height="16" rx="1" fill="#CB7C94"/>
+  <text x="397" y="121" font-size="10" fill="#CB7C94">✕</text>
+  <text x="364" y="136" text-anchor="middle" font-size="8" fill="#CB7C94">bloqueado</text>
+
+  <rect x="415" y="89" width="82" height="24" rx="8" fill="#1c212c" stroke="#B7CC85"/>
+  <text x="456" y="105" text-anchor="middle" font-size="10" fill="#F3F6F9">fase N+1</text>
+
+  <!-- Checks -->
+  <rect x="212" y="155" width="204" height="100" rx="10" fill="#1c212c" stroke="#313342"/>
+  <text x="228" y="174" font-size="8" letter-spacing="2" fill="#A1AABB">CHECKS DEL GATE</text>
+  <g fill="#232A36" stroke="#DFBD76">
+    <rect x="228" y="184" width="11" height="11" rx="3"/>
+    <rect x="228" y="207" width="11" height="11" rx="3"/>
+    <rect x="228" y="230" width="11" height="11" rx="3"/>
+  </g>
+  <g fill="#DFBD76" font-size="8" text-anchor="middle">
+    <text x="233.5" y="193">✓</text>
+    <text x="233.5" y="216">✓</text>
+    <text x="233.5" y="239">✓</text>
+  </g>
+  <text x="248" y="193" font-size="10" fill="#F3F6F9">¿artefactos existen?</text>
+  <text x="248" y="216" font-size="10" fill="#F3F6F9">¿alucinación?</text>
+  <text x="248" y="239" font-size="10" fill="#F3F6F9">¿se desvió de la spec?</text>
+
+  <text x="260" y="334" text-anchor="middle" font-size="11" fill="#DFBD76">sin contrato validado no se avanza</text>
+</svg>

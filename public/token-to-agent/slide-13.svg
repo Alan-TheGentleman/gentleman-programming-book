@@ -1,0 +1,56 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Cuantización: barras de VRAM para FP16, Q8 y Q4 de un modelo 7B, con la línea de una notebook de 8 GB y el stack local GGUF, llama.cpp y Ollama">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <filter id="s13-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <text x="260" y="28" text-anchor="middle" font-size="10" letter-spacing="2" fill="#A1AABB">MODELOS LOCALES · 7B</text>
+  <text x="260" y="52" text-anchor="middle" font-size="16" font-weight="600" fill="#F3F6F9">Cuantización y VRAM</text>
+
+  <!-- bars -->
+  <rect x="52" y="84" width="52" height="168" rx="6" fill="#232A36" stroke="#8394A3"/>
+  <rect x="124" y="162" width="52" height="90" rx="6" fill="#232A36" stroke="#DFBD76"/>
+  <rect x="196" y="198" width="52" height="54" rx="6" fill="#B7CC85" fill-opacity="0.2" stroke="#B7CC85" filter="url(#s13-glow)"/>
+
+  <text x="78" y="102" text-anchor="middle" font-size="9" fill="#A1AABB">14 GB</text>
+  <text x="150" y="180" text-anchor="middle" font-size="9" fill="#DFBD76">7–8 GB</text>
+  <text x="222" y="216" text-anchor="middle" font-size="9" fill="#B7CC85">4–5 GB</text>
+
+  <!-- sweet spot tag -->
+  <rect x="188" y="168" width="68" height="18" rx="7" fill="#1c212c" stroke="#B7CC85"/>
+  <text x="222" y="180" text-anchor="middle" font-size="8" fill="#B7CC85">sweet spot</text>
+
+  <!-- notebook VRAM line -->
+  <line x1="30" y1="156" x2="290" y2="156" stroke="#7FB4CA" stroke-dasharray="5 4"/>
+  <text x="286" y="148" text-anchor="end" font-size="8" fill="#7FB4CA">VRAM de una notebook (~8 GB)</text>
+
+  <line x1="36" y1="252" x2="284" y2="252" stroke="#313342"/>
+  <text x="78" y="268" text-anchor="middle" font-size="10" font-weight="600" fill="#F3F6F9">FP16</text>
+  <text x="150" y="268" text-anchor="middle" font-size="10" font-weight="600" fill="#F3F6F9">Q8</text>
+  <text x="222" y="268" text-anchor="middle" font-size="10" font-weight="600" fill="#F3F6F9">Q4</text>
+
+  <!-- local vs api split -->
+  <rect x="304" y="84" width="200" height="60" rx="10" fill="#1c212c" stroke="#B7CC85" stroke-opacity="0.5"/>
+  <text x="320" y="106" font-size="10" letter-spacing="2" fill="#B7CC85">LOCAL</text>
+  <text x="320" y="128" font-size="10" fill="#F3F6F9">privacidad · $0 · offline</text>
+
+  <text x="404" y="159" text-anchor="middle" font-size="8" fill="#8394A3">vs</text>
+
+  <rect x="304" y="168" width="200" height="60" rx="10" fill="#1c212c" stroke="#7FB4CA" stroke-opacity="0.5"/>
+  <text x="320" y="190" font-size="10" letter-spacing="2" fill="#7FB4CA">API</text>
+  <text x="320" y="212" font-size="10" fill="#F3F6F9">máxima calidad · nada que mantener</text>
+
+  <!-- local stack -->
+  <text x="260" y="286" text-anchor="middle" font-size="8" letter-spacing="2" fill="#A1AABB">STACK LOCAL</text>
+  <rect x="76" y="296" width="100" height="28" rx="8" fill="#232A36" stroke="#313342"/>
+  <text x="126" y="314" text-anchor="middle" font-size="9" fill="#F3F6F9">GGUF (formato)</text>
+  <text x="188" y="314" text-anchor="middle" font-size="10" fill="#B7CC85">→</text>
+  <rect x="200" y="296" width="130" height="28" rx="8" fill="#232A36" stroke="#313342"/>
+  <text x="265" y="314" text-anchor="middle" font-size="9" fill="#F3F6F9">llama.cpp (motor)</text>
+  <text x="342" y="314" text-anchor="middle" font-size="10" fill="#B7CC85">→</text>
+  <rect x="354" y="296" width="90" height="28" rx="8" fill="#232A36" stroke="#313342"/>
+  <text x="399" y="314" text-anchor="middle" font-size="9" fill="#F3F6F9">Ollama (la app)</text>
+</svg>

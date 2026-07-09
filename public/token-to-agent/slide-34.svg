@@ -1,0 +1,72 @@
+<svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk,sans-serif" role="img" aria-label="Fan-out en lectura con minions paralelos y single writer en escritura para evitar merge conflicts">
+  <rect width="520" height="360" fill="#06080f" rx="12"/>
+  <defs>
+    <marker id="s34-cyan" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M1 0 L6 3 L1 6" stroke="#7AA89F" stroke-width="1.2" fill="none"/>
+    </marker>
+    <marker id="s34-red" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M1 0 L6 3 L1 6" stroke="#CB7C94" stroke-width="1.2" fill="none"/>
+    </marker>
+  </defs>
+
+  <text x="30" y="30" font-size="10" letter-spacing="2" fill="#A1AABB">PARALELISMO</text>
+  <text x="30" y="52" font-size="15" font-weight="600" fill="#F3F6F9">Fan-out + single writer</text>
+
+  <line x1="258" y1="72" x2="258" y2="290" stroke="#313342" stroke-dasharray="4 5"/>
+
+  <!-- LEFT: reading -->
+  <text x="30" y="82" font-size="8" letter-spacing="1" fill="#7AA89F">LECTURA · PARALELIZA GRATIS</text>
+
+  <rect x="30" y="104" width="64" height="22" rx="7" fill="#1c212c" stroke="#7AA89F" stroke-opacity="0.6"/>
+  <text x="62" y="118" font-size="8" fill="#F3F6F9" text-anchor="middle">reader 1</text>
+  <line x1="98" y1="115" x2="136" y2="115" stroke="#7AA89F" marker-end="url(#s34-cyan)"/>
+  <rect x="142" y="104" width="76" height="22" rx="7" fill="#232A36" stroke="#313342"/>
+  <text x="180" y="118" font-size="8" fill="#A1AABB" text-anchor="middle">módulo auth/</text>
+  <text x="232" y="119" font-size="12" fill="#B7CC85">✓</text>
+
+  <rect x="30" y="146" width="64" height="22" rx="7" fill="#1c212c" stroke="#7AA89F" stroke-opacity="0.6"/>
+  <text x="62" y="160" font-size="8" fill="#F3F6F9" text-anchor="middle">reader 2</text>
+  <line x1="98" y1="157" x2="136" y2="157" stroke="#7AA89F" marker-end="url(#s34-cyan)"/>
+  <rect x="142" y="146" width="76" height="22" rx="7" fill="#232A36" stroke="#313342"/>
+  <text x="180" y="160" font-size="8" fill="#A1AABB" text-anchor="middle">módulo ui/</text>
+  <text x="232" y="161" font-size="12" fill="#B7CC85">✓</text>
+
+  <rect x="30" y="188" width="64" height="22" rx="7" fill="#1c212c" stroke="#7AA89F" stroke-opacity="0.6"/>
+  <text x="62" y="202" font-size="8" fill="#F3F6F9" text-anchor="middle">reader 3</text>
+  <line x1="98" y1="199" x2="136" y2="199" stroke="#7AA89F" marker-end="url(#s34-cyan)"/>
+  <rect x="142" y="188" width="76" height="22" rx="7" fill="#232A36" stroke="#313342"/>
+  <text x="180" y="202" font-size="8" fill="#A1AABB" text-anchor="middle">módulo api/</text>
+  <text x="232" y="203" font-size="12" fill="#B7CC85">✓</text>
+
+  <text x="30" y="236" font-size="7.5" fill="#8394A3">3 lecturas a la vez · 0 conflictos</text>
+
+  <!-- RIGHT: writing wrong -->
+  <text x="272" y="82" font-size="8" letter-spacing="1" fill="#CB7C94">ESCRITURA · NO PARALELICES</text>
+
+  <rect x="272" y="98" width="66" height="22" rx="7" fill="#1c212c" stroke="#CB7C94" stroke-opacity="0.6"/>
+  <text x="305" y="112" font-size="8" fill="#F3F6F9" text-anchor="middle">writer A</text>
+  <rect x="272" y="134" width="66" height="22" rx="7" fill="#1c212c" stroke="#CB7C94" stroke-opacity="0.6"/>
+  <text x="305" y="148" font-size="8" fill="#F3F6F9" text-anchor="middle">writer B</text>
+  <line x1="342" y1="109" x2="398" y2="124" stroke="#CB7C94" marker-end="url(#s34-red)"/>
+  <line x1="342" y1="145" x2="398" y2="130" stroke="#CB7C94" marker-end="url(#s34-red)"/>
+  <rect x="420" y="116" width="70" height="22" rx="7" fill="#232A36" stroke="#CB7C94"/>
+  <text x="455" y="130" font-size="8" fill="#A1AABB" text-anchor="middle">repo/</text>
+  <text x="405" y="132" font-size="14" font-weight="600" fill="#CB7C94" text-anchor="middle">✗</text>
+  <text x="405" y="158" font-size="7.5" fill="#CB7C94" text-anchor="middle">merge conflict</text>
+
+  <!-- RIGHT: writing right -->
+  <text x="272" y="192" font-size="7" fill="#8394A3">la forma correcta</text>
+  <rect x="272" y="200" width="84" height="24" rx="7" fill="#1c212c" stroke="#7AA89F"/>
+  <path d="M282 210 v-2.5 a3 3 0 0 1 6 0 v2.5" stroke="#7AA89F" stroke-width="1.4" fill="none"/>
+  <rect x="280.5" y="210" width="9" height="7" rx="1.5" fill="#7AA89F"/>
+  <text x="296" y="216" font-size="8" fill="#F3F6F9">writer único</text>
+  <line x1="360" y1="212" x2="412" y2="212" stroke="#7AA89F" marker-end="url(#s34-cyan)"/>
+  <rect x="418" y="200" width="70" height="24" rx="7" fill="#232A36" stroke="#7AA89F"/>
+  <text x="453" y="215" font-size="8" fill="#A1AABB" text-anchor="middle">repo/</text>
+  <text x="495" y="216" font-size="11" fill="#B7CC85">✓</text>
+  <text x="330" y="244" font-size="8" font-weight="600" fill="#7AA89F">single writer</text>
+
+  <!-- dedup ledger -->
+  <rect x="30" y="300" width="252" height="26" rx="9" fill="#1c212c" stroke="#313342"/>
+  <text x="44" y="317" font-size="8" fill="#A1AABB"><tspan fill="#7AA89F">registro</tspan> · tarea #af31 · ya lanzada → no se repite</text>
+</svg>
