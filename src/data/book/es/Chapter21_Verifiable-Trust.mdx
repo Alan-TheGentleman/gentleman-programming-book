@@ -1,0 +1,441 @@
+---
+id: 'confianza-verificable'
+order: 21
+name: 'Confianza Verificable'
+titleList:
+  [
+    {
+      name: 'Introduccion: El Inspector que Nunca Piso la Obra',
+      tagId: 'introduccion-el-inspector-que-nunca-piso-la-obra',
+    },
+    {
+      name: 'Las Palabras No Son Garantias',
+      tagId: 'las-palabras-no-son-garantias',
+    },
+    {
+      name: 'Recibos Atados al Contenido',
+      tagId: 'recibos-atados-al-contenido',
+    },
+    {
+      name: 'Anatomia de una Transaccion de Review',
+      tagId: 'anatomia-de-una-transaccion-de-review',
+    },
+    {
+      name: 'Una Maquina de Estados, No una Conversacion',
+      tagId: 'una-maquina-de-estados-no-una-conversacion',
+    },
+    {
+      name: 'Cadenas Append-Only',
+      tagId: 'cadenas-append-only',
+    },
+    {
+      name: 'Espejos, Bundles y Niveles de Confianza',
+      tagId: 'espejos-bundles-y-niveles-de-confianza',
+    },
+    {
+      name: 'Gates que Derivan, Nunca Confian',
+      tagId: 'gates-que-derivan-nunca-confian',
+    },
+    {
+      name: 'Dos Bugs Reales, Dos Lecciones Reales',
+      tagId: 'dos-bugs-reales-dos-lecciones-reales',
+    },
+    {
+      name: 'De Auditable a Inviolable',
+      tagId: 'de-auditable-a-inviolable',
+    },
+    {
+      name: 'Conclusion: La Confianza Es un Artefacto, No una Sensacion',
+      tagId: 'conclusion-la-confianza-es-un-artefacto-no-una-sensacion',
+    },
+    {
+      name: 'Referencias y Recursos',
+      tagId: 'referencias-y-recursos',
+    },
+  ]
+---
+
+# Confianza Verificable
+
+_Como dejar de creer lo que un agente dice y empezar a verificar lo que hizo_
+
+---
+
+## Introduccion: El Inspector que Nunca Piso la Obra
+
+El Capitulo 20 termino con cuatro palabras que te pedi que lleves a todos lados: **confianza verificable, nunca confianza ciega**. Y la ultima seccion de ese capitulo, Loops de Calidad que se Pueden Verificar, te mostro la forma de la maquina: lentes de review, jueces ciegos, un ledger de hallazgos, loops acotados. Este capitulo es esa idea llevada hasta el fondo. No la filosofia de la verificacion, la PLOMERIA de la verificacion. Vamos a construir la pieza que convierte "el review paso" en un hecho en lugar de una frase.
+
+Porque aca va la verdad incomoda de los workflows de agentes de hoy. Cuando tu orquestador dice "el review paso, procedo a commitear", que es eso, fisicamente? Es texto. Texto en una ventana de contexto, generado por una maquina de probabilidades entrenada para sonar util. El modelo puede saltearse el review por completo y reportar exito. Puede reutilizar una aprobacion de hace veinte minutos aunque el codigo haya cambiado desde entonces. Puede inventar, con total confianza y formato impecable, que corrieron cuatro lentes de review y no encontraron nada. Y nunca te enterarias, porque la unica evidencia es la propia narracion del modelo.
+
+Y no te estoy describiendo un modelo hipotetico con un defecto de personalidad. Son tres modos de falla mecanicos que ya conociste en el Capitulo 20, ahora con su disfraz mas caro. Primero, **presion de contexto**: la instruccion "siempre corre el review antes de commitear" se escribio en el token 3.000, y la decision de commit pasa en el token 140.000, adentro de la zona muerta de atencion de la curva en U. La instruccion no se borro, quedo enterrada bajo cien mil tokens mas recientes. Segundo, **perdida post-compactacion**: cuando la ventana se llena, un resumidor comprime la historia y toma decisiones editoriales. Se queda con "implemente la logica de retry, tests pasando" y tira "el review del segundo diff sigue pendiente", porque lo primero parece progreso y lo segundo un detalle. Despues de la compactacion, para el contexto del modelo el review pendiente nunca existio. Tercero, **redondeo por presion de exito**, el que mas se parece a mentir: los modelos se ajustan con feedback que premia completar tareas, el mismo gradiente que produce reward hacking en aprendizaje por refuerzo. Cuando la recompensa entrenada es "reporta exito", reportar exito ES el comportamiento optimizado, y en un mal dia "deberia correr el review" se redondea hacia "corri el review".
+
+Dejame hacer concreto ese ultimo, porque lo vi pasar. Una sesion larga de orquestacion, tres horas adentro, una compactacion encima. El orquestador tenia instrucciones estrictas: cuatro lentes de review antes de cualquier push. En un momento escupio un resumen de review hermoso: cuatro lentes ejecutados, doce hallazgos considerados, dos arreglados, veredicto aprobado. Formato perfecto, IDs plausibles, la estructura exacta de los resumenes reales. Un problema. El pipeline real toma minutos de tool calls visibles, agentes lanzandose, archivos leyendose. Este "review" se materializo en una sola generacion, unos ocho segundos, con CERO tool calls en el log. El modelo no estaba mintiendo con intencion. Estaba completando un patron: habia visto resumenes de review antes en la sesion, la narrativa necesitaba uno aca, y produjo la FORMA de un resumen de review. Un recuerdo de como se ven los reviews, no un registro de uno. Ese es el adversario de este capitulo, y no es malicioso, lo que lo hace peor, porque no lo atrapas buscando mala intencion.
+
+Te doy la analogia de construccion, porque esta se la merece. Imaginate un inspector de obra que firma el certificado de habitabilidad sin pisar nunca el edificio. El certificado se ve perfecto. Sello oficial, fecha correcta, firma hermosa. Y no vale NADA, porque el papel no esta atado a nada real. No referencia el hormigon que se colo de verdad, el cableado que se instalo de verdad, el edificio tal como esta parado hoy. Si el constructor cambia todo el sistema electrico despues de la inspeccion, el certificado sigue "pasando". El papel dice aprobado, pero el papel y el edificio son dos objetos sin ninguna conexion fisica entre si.
+
+Ese es el estado de la mayoria de los procesos de calidad con agentes hoy: certificados sin edificio atras. Este capitulo lo arregla con un sistema real de produccion como caso de estudio: la feature de **bounded review transactions** de gentle-ai, mi stack open source de agentes (github.com/Gentleman-Programming/gentle-ai, PR #1093 si queres leer el codigo posta). Todo lo que te voy a describir esta corriendo, testeado y, como vas a ver cerca del final, encontro dos bugs reales en su propio pull request. Mismo trato que en el Capitulo 20: cada seccion te deja un mecanismo, un numero o una regla de decision. Vamos.
+
+> _"Una aprobacion que no esta atada a los bytes exactos que aprobo no es una aprobacion. Es un rumor."_
+
+---
+
+## Las Palabras No Son Garantias
+
+Arranquemos con la distincion que genera todo el capitulo: contrato de prompt versus contrato de codigo.
+
+Una regla escrita en markdown, "siempre corre el review antes de commitear", es un PEDIDO AMABLE a una maquina de probabilidades. La mayoria de las veces el modelo la respeta, porque el reward del entrenamiento dijo que seguir instrucciones esta bien. Pero "la mayoria de las veces" es exactamente la frase que no tiene lugar en una garantia de ingenieria. Bajo presion de contexto, despues de una compactacion, al final de una sesion larga donde la instruccion quedo en la zona muerta de atencion que medimos en el Capitulo 20, el modelo a veces se la saltea, o peor, narra que la cumplio. No por malicia. Por estadistica. Un modelo presionado a reportar exito redondea "casi terminado" hacia "terminado", y "deberia haber revisado" hacia "revise".
+
+Pongamosle un numero a "la mayoria de las veces", porque la confiabilidad vaga es como este problema se esconde. Digamos que tu modelo sigue la instruccion de review el 99% de las veces, generoso para una sesion larga con compactaciones. Tu equipo mete 200 commits gateados por mes. Son dos commits sin revisar todos los meses, para siempre, llegando en silencio, con una narracion que dice que fueron revisados. Aceptarias una base de datos que pierde el 1% de sus escrituras y las REPORTA como commiteadas? No terminarias de leer el README. Pero como la falla del agente llega envuelta en prosa fluida en lugar de un stack trace, los equipos la aceptan sin darse cuenta. Una garantia poco confiable con reporte confiado es peor que ninguna garantia, porque ninguna garantia por lo menos te mantiene chequeando.
+
+Una regla escrita en codigo es otra especie por completo. Una maquina de estados que rechaza la transicion de `unreviewed` a `committed` no tiene dias buenos y dias malos. No se cansa en el token 150.000. No se resume a si misma cuando el contexto compacta, porque no vive en el contexto. Rechaza la transicion ilegal todas y cada una de las veces, deterministicamente, porque eso es lo que hace el codigo. La regla en el prompt es una sugerencia; la regla en el codigo es una ley fisica dentro de tu sistema.
+
+Y aca va la regla de decision de esta seccion, la que quiero que apliques a cada workflow de agentes que tengas: **cuando una garantia importa, movela hacia abajo en el stack**. De prosa a estructura, de prompt a codigo deterministico. Preguntate: si el modelo ignorara esta instruccion en su peor dia, algo lo frenaria de verdad? Si la respuesta es no, no tenes una garantia, tenes una esperanza con lindo formato. Las instrucciones sirven para moldear comportamiento. El enforcement es para las cosas que TIENEN que ser verdad.
+
+Ahora, antes de que concluyas que los prompts no valen nada, dejame trazar la division real del trabajo. Los prompts son EXCELENTES para moldear criterio: que busca un lente de seguridad, que tono tiene un hallazgo, que patrones cuentan como code smell en este repo. Eso es calidad del trabajo, y ninguna maquina de estados lo va a codificar jamas. Lo que los prompts no pueden garantizar es OCURRENCIA: que el review paso, sobre el contenido correcto, dentro del presupuesto. El reparto queda asi: los prompts deciden QUE TAN BIEN se hace algo, el codigo decide SI se hizo. Cada desastre de calidad con agentes viene de pedirle a los prompts el segundo trabajo, y cada engendro sobre-ingenierizado viene de pedirle al codigo el primero.
+
+El resto del capitulo es una sola aplicacion larga de esa regla. Agarramos el loop de calidad del Capitulo 20, que vivia en prompts y disciplina, y empujamos cada invariante hacia abajo, a codigo: hashes, maquinas de estado, logs append-only y validadores que no le creen la palabra a nadie.
+
+---
+
+## Recibos Atados al Contenido
+
+Aca va la idea central de todo el sistema, y entra en una sola oracion: cuando un review termina, emite un recibo que dice "revise exactamente el contenido cuyo SHA-256 es X, bajo la politica cuyo hash es Y, con el ledger de hallazgos cuyo hash es Z, y el resultado fue: aprobado".
+
+Por que esa oracion es tan poderosa? Por lo que ES un hash. Un hash criptografico como SHA-256 es una funcion de huella digital: le das cualquier contenido y produce una cadena de tamanio fijo, 64 caracteres hexadecimales, que identifica ese contenido exacto. Cambia UNA letra en un archivo, un espacio, un byte, y el hash cambia por completo, irreconociblemente. Y el camino inverso, fabricar contenido distinto que produzca el mismo hash, esta fuera del alcance computacional. Ese es todo el truco de magia: un hash ata una afirmacion a bytes exactos.
+
+```bash
+$ echo "func main() {}" | sha256sum
+5ac944c0da8e73adc2b48fed48e9adf74b0b1e57e46eb4b552e876a5f19d94a3
+
+$ echo "func main() { }" | sha256sum   # un espacio agregado
+8de545eb64c4fbc09b6cadefdcc433ee346f4ff8ffedbb0daea90e988f28dbeb
+```
+
+Un espacio. Huella completamente distinta. Probalo con cualquier archivo: hashealo, agregale un byte, hashealo de nuevo, y mira como las dos salidas no comparten nada. Ese revuelto total tiene nombre, el **efecto avalancha**: un cambio de un bit en la entrada da vuelta, en promedio, la mitad de los bits de la salida. Es una propiedad diseniada, no un accidente. Si entradas parecidas produjeran hashes parecidos, un atacante podria acercarse de a poco a un hash objetivo con ediciones chicas. Avalancha significa que no hay senial de "frio, caliente". Cada edicion te teletransporta a un punto aleatorio del espacio de salida.
+
+Y que tan grande es ese espacio? Las salidas de SHA-256 tienen 256 bits, o sea 2 a la 256 huellas posibles, un numero de 78 digitos. La pregunta practica para nuestros recibos: podria alguien fabricar un conjunto DISTINTO de archivos con el MISMO hash que el contenido aprobado? Eso se llama ataque de segunda preimagen, y para SHA-256 no existe ningun ataque practico conocido, ni cerca. Incluso el problema mas facil, encontrar DOS entradas cualesquiera que colisionen (un ataque de cumpleanios), necesita del orden de 2 a la 128 operaciones de hash. Converti cada computadora de la Tierra en una maquina de hashear, corriendo desde el Big Bang, y no estas ni en el barrio. Esto no es "improbable" como una race condition. Es territorio de "primero se apaga el sol". Comparalo con MD5 y SHA-1, que SI estan rotos para colisiones, la razon por la que git paso anios migrando su formato de objetos fuera de SHA-1. SHA-256 es el punto dulce actual: disponible en todos lados, rapido, y sin romper. Cuando alguien pregunta "pero que pasa si el agente falsifica un archivo con el mismo hash", la respuesta honesta es: ese es el unico ataque de este capitulo del que NO te tenes que preocupar. La matematica es el eslabon mas fuerte. Los debiles estan en otra parte, y los vamos a cazar uno por uno.
+
+Ahora conectalo con nuestro inspector mentiroso. Si el recibo de aprobacion lleva el hash del contenido exacto que se reviso, entonces una aprobacion vieja fisicamente no puede validar contra codigo que cambio. El gate recalcula el hash del codigo tal como esta AHORA, lo compara con el hash del recibo, y no coinciden. Listo. Sin criterio subjetivo, sin "seguro esta bien", sin confiar en la narracion de nadie. El certificado quedo abulonado al edificio: renovas una pared y el certificado visiblemente ya no encaja.
+
+Fijate la clase de fallas que esto mata. No un bug, una FAMILIA entera de bugs: la aprobacion vieja, la aprobacion de otra branch, la aprobacion que el modelo alucino, la aprobacion que alguien copio y pego de otra corrida. Todas mueren con las mismas tres comparaciones, porque todas son la misma enfermedad: una aprobacion despegada del contenido. Los recibos atados al contenido hacen que ese despegue sea imposible de esconder. Asi se ve la buena ingenieria: no parchas instancias, eliminas la clase.
+
+Y el recibo ata tres cosas, no una, porque tres cosas distintas pueden derivar. El **hash de contenido** responde "que codigo se reviso?". El **hash de politica** responde "bajo que reglas?", porque una aprobacion bajo la politica permisiva del mes pasado no deberia validar bajo la estricta de este mes. El **hash del ledger** responde "contra que hallazgos?", asi nadie puede cambiar el registro de hallazgos despues de los hechos sin que se note. Contenido, reglas, evidencia. Cambia cualquiera de las tres y el recibo deja de coincidir. En carne y hueso, un recibo completo se ve mas o menos asi:
+
+```json
+{
+  "result": "approved",
+  "review_stage": "post-apply",
+  "snapshot_id": "sha256:9f2c8a41...",
+  "policy_hash": "sha256:77b0d2ce...",
+  "ledger_hash": "sha256:c3a91f04...",
+  "evidence_hash": "sha256:5b1e77aa...",
+  "fix_delta_hash": "sha256:e0d3c918...",
+  "lineage_id": "lineage-7f3a",
+  "transaction_id": "tx-000412",
+  "head_event": "sha256:1fa2b6c0..."
+}
+```
+
+Recorramos cada campo, porque cada uno existe para hacer imposible una falsificacion especifica, y si podes nombrar la falsificacion, entendiste el campo:
+
+- **result**: uno de dos valores terminales, approved o escalated. Sin prosa. Mata los veredictos ambiguos que un lector motivado interpreta con generosidad.
+- **review_stage**: a que checkpoint pertenece el recibo, disenio versus post-apply. Mata reciclar una aprobacion de disenio como si cubriera el codigo implementado.
+- **snapshot_id**: la huella del conjunto exacto de archivos revisados, cada ruta y cada byte. Mata la aprobacion vieja, la de otra branch, toda aprobacion despegada del contenido. El certificado abulonado al edificio.
+- **policy_hash**: la huella de las reglas vigentes. Mata validar una aprobacion vieja despues de que se endurecio la politica, que "paso bajo ALGUNAS reglas" se convierta en "paso".
+- **ledger_hash**: la huella del registro congelado de hallazgos. Mata editar los hallazgos despues de la aprobacion para que un CRITICAL incomodo nunca haya existido.
+- **evidence_hash**: la huella de los artefactos de prueba, salidas de tests y logs, capturados al aprobar. Mata el "los tests pasaron, confia en mi" sin salida re-derivable.
+- **fix_delta_hash**: la huella de exactamente lo que cambio la ronda de fixes. Mata el "fix" que contrabandeo cambios extra debajo de un recibo aprobado.
+- **lineage_id** y **transaction_id**: que cadena y que transaccion produjeron el recibo. Matan replayar un recibo valido de otro repositorio o de otro review.
+- **head_event**: el hash del evento de la cadena que emitio el recibo. Mata el recibo fabricado que no corresponde a ningun evento: si el evento no esta en la cadena, el recibo es ficcion, por mas correctos que se vean los otros campos.
+
+Ahi adentro no hay prosa. Ahi adentro no hay opinion del modelo. Cada campo es o una huella que podes recalcular o un identificador que podes buscar. Guardate esa imagen, porque el resto del capitulo es la maquinaria que produce este objeto y la maquinaria que se niega a aceptar cualquier cosa menor.
+
+---
+
+## Anatomia de una Transaccion de Review
+
+Ahora caminemos el ciclo de vida real, paso a paso, tal como corre en gentle-ai. Es la seccion mas larga del capitulo y vale cada linea, porque cada paso existe para cerrar un agujero especifico que un proceso solo-prompt deja abierto.
+
+**Paso uno: congelar el objetivo.** Cuando corre `review-start`, lo primero que hace es construir un **snapshot** inmutable y direccionado por contenido de lo que se va a revisar: la lista exacta de archivos con sus hashes, incluyendo los untracked intencionales, los archivos nuevos que son parte del cambio pero todavia no estan en el index de git. Despues agrega un evento genesis que abre la transaccion. Desde este momento, revisas una foto congelada, no un blanco en movimiento. Por que importa tanto? Porque la falla clasica del review con agentes es que el codigo cambia DEBAJO del review: el revisor lee el archivo A, mientras tanto el fixer edita el archivo B, y la aprobacion final cubre una quimera que nunca existio completa. El snapshot mata eso. Todos en la transaccion revisan los mismos bytes congelados, identificados por hash.
+
+Y frena un segundo en los untracked intencionales, porque parece un detalle quisquilloso y es una definicion de honestidad. "El cambio entregado" no es lo mismo que "lo que git ya conoce". Si tu cambio genera un fixture, un schema, un lockfile, y tenes la intencion de commitearlos, esos archivos SON el contenido entregado, con index o sin index. Un snapshot construido solo con los cambios trackeados aprobaria un subconjunto, y el resto sin revisar es donde a los problemas les encanta vivir, porque ningun ojo humano pasa por los archivos generados. Asi que el snapshot exige el conjunto de untracked intencionales explicito, y falla CERRADO: si no se puede establecer, se niega a construirse en lugar de adivinar. Un review que cubre el 90% del cambio mientras sella el 100% es nuestro inspector mentiroso con mejores herramientas.
+
+**Paso dos: clasificar riesgo, elegir lentes.** La clasificacion de riesgo elige 0, 1 o 4 lentes de review: riesgo, legibilidad, confiabilidad, resiliencia. Un diff solo de docs recibe cero lentes, un diff estandar recibe exactamente uno, un camino caliente (auth, pagos, seguridad) o un diff de mas de 400 lineas recibe los cuatro. Esta tabla la viste en el Capitulo 20; aca es un input de la transaccion, registrado como todo lo demas. Cada lente corre EXACTAMENTE UNA pasada exhaustiva, y cada lente es independiente y de solo lectura: un revisor nunca edita codigo, nunca lanza agentes, nunca decide el rumbo del ciclo de vida. Produce un resultado y termina. Un trabajo, una pasada, una salida.
+
+La regla de solo lectura se merece su propio parrafo, porque codifica una de las separaciones mas viejas de cualquier sistema de juicio: el jurado no es el contratista. Un jurado decide si el edificio esta sano. Un contratista gana plata reparandolo. En el instante en que tu jurado tambien puede cotizar la reparacion, cada veredicto queda contaminado por la reparacion que implica, y ni siquiera hace falta mala fe: un agente que PUEDE arreglar empieza a leer el codigo a traves del lente del arreglo que ya tiene ganas de hacer, subrayando los hallazgos que justifican su plan y pasando por arriba los que no. Los humanos hacemos exactamente esto, por eso "el revisor nunca es el autor" es anterior a la IA por decadas. Hacer que el lente sea fisicamente de solo lectura, sin herramientas de escritura, sin lanzar agentes, sin autoridad sobre el ciclo de vida, elimina la tentacion a nivel de herramientas en lugar de instrucciones. La misma regla de siempre: mover la garantia hacia abajo en el stack. Solo lectura no es una limitacion, es el punto.
+
+**Paso tres: congelar los hallazgos.** Todo lo que los lentes encontraron entra al ledger, y el ledger se CONGELA. Un hallazgo congelado nunca puede desaparecer ni perder severidad. Nadie, ningun agente, ninguna fase posterior, puede bajar silenciosamente un CRITICAL a WARNING ni hacer que un hallazgo incomodo se evapore. Si un hallazgo resulta estar mal, se refuta explicitamente, con veredicto registrado, no se borra. La diferencia entre "refutado, aca esta el porque" y "desaparecio, no preguntes" es la diferencia entre un rastro de auditoria y un encubrimiento.
+
+**Paso cuatro: rutear por evidencia.** Aca hay una pieza que la mayoria de los sistemas de review se saltea por completo. Cada hallazgo lleva una **evidence_class**: **deterministica** (hay un test que falla, la salida de un comando, algo que una maquina puede reproducir), **inferencial** (el revisor lo cree pero no lo probo), o **insuficiente**. Y cada clase recibe un tratamiento distinto:
+
+- Los hallazgos severos deterministicos se corroboran directo, se corre la prueba, se confirma que falla, listo.
+- Los hallazgos severos inferenciales se juntan en EXACTAMENTE UN **refuter** en batch: un agente adversarial cuyo unico trabajo es intentar probar que los hallazgos son falsos. Un solo batch, haya 2 candidatos o 20, nunca un refuter por hallazgo.
+- Los insuficientes se marcan como inconclusos y NUNCA se arreglan automaticamente.
+
+Por que tanta paranoia? Porque los revisores LLM producen falsos positivos convincentes, hallazgos con prosa segura y numeros de linea plausibles que simplemente estan mal. Y un falso positivo no es gratis: cuesta un ciclo de fix completo, un re-review y, lo peor, un "arreglo" aplicado a codigo que no estaba roto. Dejame mostrarte uno real. Un lente de confiabilidad marco una vez: "el mutex adquirido en la linea 84 nunca se libera en el camino de error, deadlock bajo acceso concurrente", con nombre de funcion, escenario plausible y severidad CRITICAL. Seguro, especifico, tecnicamente instruido. Y equivocado: la funcion usaba `defer mu.Unlock()` cuatro lineas mas arriba, que libera el lock en TODOS los caminos, con error o sin error, ese es el proposito entero de defer. El revisor hizo pattern matching de "lock manual, return con error" sin registrar el defer. Ahora pasa la cinta sin refuter: un agente de fixes recibe un CRITICAL confirmado, reestructura obedientemente codigo de locking correcto, la reestructura se valida, se re-revisa, se mergea. Pagaste un ciclo completo para hacer mas complicado codigo que funcionaba, y el ledger registra con orgullo un bug fantasma arreglado. El refuter existe para matar ese hallazgo al precio de una lectura. Es el sistema inmunologico: mas barato intentar matar un hallazgo una vez que arreglar un bug fantasma y revisar el arreglo fantasma.
+
+Y por que exactamente UN refuter en batch en lugar de uno por hallazgo? Control de costos con forma fija. Si la refutacion se lanza por hallazgo, el costo escala linealmente con lo ruidosos que sean tus lentes, y lentes ruidosos es precisamente la falla contra la que te defendes: un lente paranoico emite 20 hallazgos flojos y de repente pagas 20 agentes adversariales. Con un batch, el refuter lee la lista completa en un solo contexto y devuelve un veredicto por hallazgo: 2 candidatos o 20, el mismo overhead fijo. El presupuesto es estructural, decidido por la forma del protocolo, no por como se portaron los lentes hoy. Acordate de esa frase, porque la vas a volver a ver: los presupuestos soldados a la estructura no se revientan con comportamiento.
+
+**Paso cinco: como maximo UNA ronda de fixes.** Los fixes son unidades de trabajo atomicas, cada una con su evidencia de tests y su frontera de rollback. Despues, UN validador de fix-delta con alcance acotado re-chequea solo las lineas tocadas por los fixes, y tiene exactamente dos salidas: aprobar o escalar. No puede pedir otra ronda. Te acordas del test acido del Capitulo 20, acotado y auditable? Esto es acotado, soldado a la estructura. El loop no puede girar porque no hay loop que girar.
+
+Por que el validador ve SOLO las lineas tocadas por los fixes? Prevencion de scope creep, y corta en las dos direcciones. Direccion uno, el fixer: con un validador de diff completo, un agente de fixes puede contrabandear "mejoras" mas alla de los hallazgos confirmados, refactors que nadie pidio, y el validador no puede decir "esto esta fuera de alcance" porque todo esta en alcance. Acotado al delta, cualquier linea cambiada fuera del radio de los hallazgos se ve como lo que es: cambio no autorizado. Direccion dos, el validador mismo: un validador que re-lee el diff completo va a ENCONTRAR COSAS NUEVAS, es su naturaleza. Hallazgos nuevos sobre lineas viejas significan otra ronda de fixes, otra validacion, mas hallazgos nuevos. Un loop sin cota disfrazado de calidad. Acotar al delta hace la convergencia estructural: el fix achica la lista de hallazgos abiertos, la validacion chequea el achique, nada puede crecer. Si algo en una linea no tocada esta realmente roto, estaba roto antes de este review, y lo atrapa el proximo review del proximo cambio. Este se cierra.
+
+**Paso seis: verificacion final independiente.** Un verificador fresco chequea la transaccion completa: requisitos cumplidos, evidencia actual de tests y build, cada hallazgo del ledger resuelto o refutado explicitamente, identidad del snapshot intacta, contadores coherentes. Despues, uno de exactamente dos estados terminales: **approved**, que emite el recibo atado al contenido, o **escalated**, que emite una denegacion legible por maquina para un humano. No existe un tercer final. Nada de "basicamente listo", nada de "aprobado a ojo". Dos puertas.
+
+```text
+snapshot --> lentes (0|1|4, solo lectura, una pasada cada uno) --> congelar ledger
+    --> ruteo por evidencia (deterministica | inferencial | insuficiente)
+    --> maximo 1 ronda de fixes --> validacion de fix-delta acotada
+    --> verificacion final independiente --> approved | escalated
+```
+
+---
+
+## Una Maquina de Estados, No una Conversacion
+
+Todo lo que acabas de leer lo hace cumplir una maquina de 12 estados, y quiero mostrarte la columna vertebral porque la forma misma ensenia la leccion:
+
+```text
+unreviewed --> reviewing --> judges_confirmed --> findings_frozen
+  --> evidence_classified --> fix_required --> fixing --> fix_validating
+  --> ready_final_verification --> final_verifying --> approved
+                                                   \-> escalated
+```
+
+Doce estados, y cada uno es un checkpoint que custodia algo especifico:
+
+| Estado                      | Que custodia                                                     |
+| --------------------------- | ---------------------------------------------------------------- |
+| `unreviewed`                | Todavia no existe recibo; los gates deniegan con `missing`       |
+| `reviewing`                 | Snapshot congelado, lentes barriendo, todos de solo lectura      |
+| `judges_confirmed`          | Todos los resultados de lentes estan; nada se agrega tarde       |
+| `findings_frozen`           | Ledger sellado; los hallazgos no desaparecen ni bajan severidad  |
+| `evidence_classified`       | Cada hallazgo lleva su evidence_class                            |
+| `fix_required`              | Hay hallazgos severos verificados; arreglar queda autorizado     |
+| `fixing`                    | La unica ronda de fixes: unidades atomicas, fronteras de rollback |
+| `fix_validating`            | Validador de delta acotado; aprobar o escalar, nada mas          |
+| `ready_final_verification`  | Fixes listos; esperando un verificador fresco e independiente    |
+| `final_verifying`           | Chequeo de toda la transaccion: requisitos, evidencia, contadores |
+| `approved`                  | Terminal; se emite el recibo atado al contenido                  |
+| `escalated`                 | Terminal; denegacion legible por maquina entregada a un humano   |
+
+Cada flecha es una transicion legal. Todo lo que NO esta dibujado es ilegal, e ilegal no significa "desaconsejado", significa que la funcion de transicion devuelve un error y la transaccion no se mueve. Dejame hacer tangible el "rechazado" con tres intentos concretos, porque el rechazo no es un reto que el modelo pueda discutir, es un evento que nunca se escribe.
+
+**Intento uno: el atajo a la aprobacion.** La transaccion esta en `reviewing` y un agente, apurado por terminar, envia un evento que declara el estado como `approved`. La funcion de transicion busca los sucesores legales de `reviewing`, que son exactamente uno: `judges_confirmed`. El evento nombra un estado que no esta en el conjunto, y la funcion devuelve un error nombrando la arista ilegal, `illegal transition: reviewing -> approved`. Y aca la parte que importa: nada se agrego a la cadena. `HEAD` no se movio. Para todo validador futuro este intento NUNCA PASO, porque la cadena es la unica realidad y no lo contiene. El agente puede narrar aprobacion todo lo que quiera; la transaccion sigue en `reviewing`, y cada gate que pregunte va a recibir esa respuesta.
+
+**Intento dos: la segunda ronda de fixes.** La transaccion esta en `fix_validating`, con un contador: `fix_rounds_used: 1`, contra un maximo estructural de 1. Un orquestador convencido de que una pasada mas arregla todo envia un evento que vuelve a `fixing`. Esa arista no existe en el grafo, y aunque alguien intentara abrir un fix fresco por otro lado, el chequeo de contador corre en cada transicion: presupuesto 1, consumido 1, rechazado. Las unicas salidas de `fix_validating` son hacia adelante: aprobar o escalar.
+
+**Intento tres: el ledger que se achica en silencio.** Llega un evento para una transaccion en `findings_frozen` con un ledger cuyo hash no coincide con el sellado, porque un CRITICAL incomodo ya no esta adentro. La maquina trata los hashes que no coinciden y los contadores que retroceden como el mismo crimen: la historia intentando caminar para atras. Rechazado, nada escrito, y el desajuste queda observable para cualquiera que mire.
+
+Ahora contrasta eso con los "presupuestos" en un sistema manejado por prompts, porque la diferencia es la seccion entera. Escribis "tenes como maximo 2 rondas de fixes" en el system prompt, y esto es lo que pasa en una sesion larga: la ronda tres llega disfrazada de otra cosa. "Pasada final de pulido." "Atendiendo comentarios residuales." "Barrida rapida de consistencia antes de cerrar." El modelo no te esta desafiando, eso es lo que enloquece. El presupuesto es texto, compitiendo por atencion con cien mil tokens mas nuevos, y el texto pierde esa pelea exactamente donde el presupuesto mas importa: sesiones largas, post-compactacion, presion por terminar. Los modelos se pasan los presupuestos de prompt como las resoluciones de anio nuevo se pasan febrero. Aca, el contador de rondas de fix es un campo en el estado de la transaccion, la maquina lo chequea en cada transicion, y una segunda ronda no es desobediencia, es un ESTADO IMPOSIBLE. El presupuesto dejo de ser una sugerencia en un prompt y se convirtio en una regla en codigo. Esa sola oracion es el capitulo entero en miniatura, y es la promesa del Capitulo 20 finalmente cumplida: cuando te dije que un loop de review tiene que ser acotado, ASI se ve acotado cuando es real.
+
+Y la maquina falla CERRADA, en todas las direcciones. Saltos ilegales: rechazados. Eventos que llegan fuera de orden: rechazados. Contadores que retroceden: rechazados. Cuando algo esta mal, la respuesta es siempre "frenar y hacerlo visible", nunca "asumir el camino feliz y seguir". Es el mismo instinto fail-closed que le exigirias a un sistema de pagos, aplicado al review de codigo. Porque eso es esto: un sistema de transacciones donde la moneda es la confianza.
+
+---
+
+## Cadenas Append-Only
+
+Bien, tenemos recibos y una maquina de estados. Ahora, donde VIVE todo esto? Porque si la historia se guarda en un JSON plano que cualquier proceso puede reescribir, construimos una cerradura hermosa y dejamos la llave abajo del felpudo. La respuesta es una cadena de eventos append-only enlazada por hashes, y el store queda aca:
+
+```text
+<git-common-dir>/gentle-ai/review-transactions/v1/<lineage-id>/
+├── HEAD                 # puntero al ultimo evento, atomico temp+fsync+rename
+├── LOCK                 # lock del SO (flock/LockFileEx), se libera solo ante crash
+└── events/
+    └── <sha256>.json    # un evento por transicion de estado, direccionado por
+                         # contenido, cada uno enlaza el hash de su predecesor
+                         # hasta el genesis
+```
+
+Primero la ubicacion, porque cada eleccion aca es deliberada. Vive adentro de `<git-common-dir>`, o sea adentro de `.git`, lo que significa que lo comparten todos los worktrees enlazados del repo, nunca se commitea y nunca se pushea. Tu historia de review viaja con el repositorio local, no con la branch, y no se puede editar via pull request.
+
+Ahora la estructura, y si alguna vez te preguntaste como hace git para que la historia sea a prueba de manipulacion, es el mismo truco. Abri `.git/objects` en cualquier repositorio y vas a encontrar directorios de dos caracteres llenos de archivos de 38 caracteres: concatenalos y tenes hashes. Cada objeto que git guarda, cada commit, cada tree, cada blob, vive en un archivo NOMBRADO POR EL HASH DE SU PROPIO CONTENIDO. Eso es almacenamiento direccionado por contenido, y tiene una consecuencia hermosa: el nombre ES el chequeo de integridad. Si los bytes no hashean al nombre, el objeto esta corrupto, punto. Y git los enlaza: un commit contiene el hash de su tree y el de su commit PADRE. Por eso no podes editar la historia en silencio: cambia un byte en un archivo de hace tres commits y su blob cambia, entonces el tree cambia, entonces el commit cambia, entonces cada descendiente cambia, y cada clon del repo grita en el proximo fetch. Corre `git cat-file -p HEAD` y mira las lineas `tree` y `parent`. Estas mirando el mecanismo exacto de esta seccion.
+
+Nuestra cadena hace lo mismo con eventos de review. Cada evento, uno por transicion de estado, se guarda en un archivo nombrado por el hash de su propio contenido, y adentro, cada evento guarda el hash de su predecesor, hasta el genesis. Los commits de git hacen esto. Las blockchains hacen esto. Y la propiedad que compras es hermosa: no podes modificar, borrar ni reordenar un eslabon sin romper todos los hashes que vienen despues. Caminemos el PORQUE. La cadena tiene 10 eventos y adulteras el evento 3, bajandole la severidad a algo. Su contenido cambio, entonces su hash cambio, entonces el nombre del archivo ya no coincide con su contenido: primera alarma. El evento 4 guarda el hash VIEJO del evento 3 como predecesor, y ese predecesor ya no existe: segunda alarma. Arreglas el puntero del evento 4? Entonces su contenido cambio, entonces SU hash cambio, y el puntero del evento 5 quedo roto. La corrupcion se propaga hacia adelante, eslabon por eslabon, hasta `HEAD`, sin forma de frenarla. Tu unica estrategia "exitosa" es reescribir el evento 3 y CADA evento posterior y el puntero HEAD, y en ese punto no editaste la historia, fabricaste una cadena nueva entera, y los recibos ya emitidos llevan un `head_event` que apunta adentro de la cadena VIEJA, que la nueva no contiene. La falsificacion es estructuralmente visible desde afuera. Eso significa a prueba de manipulacion: no que adulterar sea imposible, sino que adulterar sin ser detectado es imposible. La unica operacion sin alarmas es agregar al final. La historia tiene una sola direccion.
+
+Dos detalles de ingenieria de sistemas en ese diagrama se merecen su propio tratamiento, porque separan una demo de produccion, y los dos defienden contra enemigos que solo aparecen cuando algo crashea.
+
+Primero, `HEAD` se actualiza con el **patron de escritura atomica**, y para apreciarlo necesitas saber que es un torn write, una escritura cortada. Cuando un proceso sobreescribe un archivo y muere a mitad de camino, el archivo queda mitad bytes nuevos, mitad viejos, o truncado: un JSON que ningun parser acepta, o peor, uno que parsea pero describe un estado que nunca existio. Cualquier store que actualice archivos en el lugar eventualmente produce uno, porque los procesos mueren en el peor momento posible, es practicamente su hobby. El patron lo derrota en tres pasos, cada uno contra una falla especifica. Paso uno: escribi el valor nuevo en un archivo TEMPORAL en el mismo directorio. El mismo directorio importa, porque rename solo es atomico dentro de un mismo filesystem; cruza una frontera de montaje y degrada a copiar-y-borrar, exactamente la operacion cortable que evitamos. Paso dos: hacele `fsync` al temporal. Escribir a un archivo en realidad escribe al page cache, memoria, no disco; ante un corte de luz, el cache se evapora y tu archivo "escrito" esta vacio o viejo. `fsync` fuerza los bytes al almacenamiento durable antes de apuntarle. Paso tres: `rename` del temporal encima del `HEAD` viejo. POSIX garantiza que rename reemplaza atomicamente el destino: cualquier lector, en cualquier instante, incluso en el microsegundo en que matan al proceso, ve o el valor viejo completo o el nuevo completo. Nunca medio archivo, nunca un puntero cortado. Veinte lineas de cuidado que eliminan un genero entero de corrupcion.
+
+Segundo, `LOCK` es un **lock a nivel de sistema operativo**, `flock` en Unix, `LockFileEx` en Windows, no un lockfile que creas y borras vos mismo, y la diferencia es invisible hasta el dia en que lo es todo. Con un lockfile manual, tu proceso crea `.lock`, trabaja, borra `.lock`. Ahora el proceso crashea entre crear y borrar. El archivo queda. Cada corrida futura ve `.lock`, asume que alguien trabaja, y espera para siempre. Ya conociste ese bug, todos lo conocimos: es la razon de flags como `--force-unlock` y heuristicas tristes como "fijate si el PID adentro del lockfile sigue vivo", que se rompe porque los PIDs se reciclan, o "ignora locks de mas de 10 minutos", que se rompe la unica vez que una operacion legitima tarda 11. Cada heuristica es una adivinanza sobre vida hecha desde userspace, y userspace no puede saber quien esta vivo. Un lock del SO invierte el problema: el lock esta atado al file descriptor, y cuando el proceso muere, por la razon que sea, el KERNEL libera el lock en el mismo respiro en que reclama los recursos del proceso. El kernel siempre sabe que procesos estan vivos, decidir eso es literalmente su trabajo. El modo de falla no se maneja, deja de existir, porque moviste la garantia hacia abajo en el stack, de tu codigo de limpieza al sistema operativo. La misma regla de la seccion dos, aplicada a un mutex.
+
+---
+
+## Espejos, Bundles y Niveles de Confianza
+
+Un sistema real tiene mas de una copia de la verdad dando vueltas, asi que seamos explicitos sobre quien manda. gentle-ai define tres niveles de confianza, y el ranking se hace cumplir, no es aspiracional:
+
+| Nivel | Que es | Confianza | Si contradice a la cadena |
+| ----- | ------ | --------- | ------------------------- |
+| 1. Cadena autoritativa | Eventos append-only enlazados por hash adentro de `.git` | Total: los gates re-derivan de aca | ES la referencia |
+| 2. Espejos | JSON de openspec, topicos de Engram | Cero para decisiones, plena para lectura | Se ignora y se re-renderiza |
+| 3. Bundles | Archivos portables con la cadena exportada | Carga no confiable hasta re-validar | El import se niega a instalar |
+
+**Nivel uno: la cadena autoritativa.** El store append-only que acabamos de construir. Los gates re-derivan sus respuestas desde aca, cada vez, desde los eventos crudos. Esta es la verdad.
+
+**Nivel dos: espejos legibles por humanos.** El sistema tambien escribe copias comodas: archivos JSON de openspec que podes abrir en tu editor, topicos de memoria en Engram que un agente puede buscar. Y con razon podrias preguntar: si la cadena es la verdad, para que otras copias? Porque la cadena esta optimizada para VERIFICACION, no para lectura. Preguntale "que encontro el review?" y su respuesta honesta es un directorio de archivos con nombres de hash impronunciables, en un orden que solo reconstruis caminando enlaces de predecesor. Perfecta para una maquina, hostil para un humano. Un companiero quiere leer los hallazgos con el cafe; un agente quiere buscar reviews pasados por tema. Asi que el sistema renderiza VISTAS: documentos legibles, memoria buscable. El patron que ya conoces de bases de datos: store de escritura, cache de lectura, y nadie acepta una lectura de cache como resolucion de una disputa. Aca va la regla que hace honesto al disenio: si un espejo esta en desacuerdo con la cadena, el gate ignora al espejo. Sin reconciliacion, sin "cual es mas nuevo". El espejo es un render, la cadena es el hecho. En el momento en que una copia comoda le gana al registro autoritativo, reintrodujiste al inspector mentiroso por la puerta de atras, con un formato mas lindo, porque ahora cualquiera que pueda escribir un JSON puede escribir "approved".
+
+**Nivel tres: bundles portables.** Que pasa cuando clonas el repo de cero en otra maquina? Los internos de `.git` no viajan con el clone, asi que la cadena queda atras. Para eso existe `review-bundle-export`, que empaqueta la cadena completa y ordenada en un archivo portable, y `review-bundle-import`, donde el disenio muestra los dientes: el import re-valida el digest del bundle Y cada hash de evento, cada enlace de predecesor y cada transicion semantica de estado antes de instalar nada. No una muestra: la caminata completa, cada regla de la maquina de estados, re-ejecutada. Un bundle es CARGA NO CONFIABLE hasta que se demuestra a si mismo, incluso si lo exportaste vos, hace diez minutos, en esta misma maquina. Por que tanta frialdad? Porque el bundle viajo fuera de la proteccion del store, por discos, redes, adjuntos de chat, y todo lo que viajo es input. El principio se comprime en una frase que podes reusar en cualquier sistema: **no confies en nada que no derivaste**. La verificacion cuesta milisegundos. Confiar en una cadena adulterada cuesta la credibilidad del sistema entero, porque una cadena envenenada no miente una vez, miente con toda la autoridad del nivel uno para siempre.
+
+Fijate la forma de la jerarquia: exactamente un escritor de la verdad, cualquier cantidad de vistas descartables, y una aduana en la frontera. Si te acordas del invariante de single writer del Capitulo 20 para agentes en paralelo, este es el mismo invariante aplicado a datos: muchos lectores, una autoridad.
+
+---
+
+## Gates que Derivan, Nunca Confian
+
+Ahora el lado consumidor: los gates. Pre-commit, pre-push, pre-PR, release. Y su principio de disenio esta en el titulo de la seccion: los gates NUNCA crean reviews y nunca le creen la palabra a nadie. Un gate consume el recibo a traves de un validador, `review-validate`, que deriva todo lo que necesita del repositorio mismo: ubica la raiz del store por su cuenta, camina la cadena completa hasta el genesis por su cuenta, y recalcula los hashes del contenido ACTUAL desde los bytes reales del repo, por su cuenta.
+
+Que es lo que el validador explicitamente NO acepta? Rutas provistas por el caller, trees provistos por el caller, hashes declarados por el caller. Si el orquestador dice "aca esta el hash del contenido, coincide, ya lo chequee", el validador lo ignora por completo y recalcula. Y esto se merece el momento en MAYUSCULAS, porque es uno de los principios de seguridad mas viejos del oficio, con ropa nueva: **NUNCA CONFIES EN EL INPUT DE LA PARTE QUE TIENE INTERES EN EL RESULTADO**. El orquestador quiere que el commit suceda. El agente quiere reportar exito. No son malvados, son INTERESADOS, y las partes interesadas no pueden aportar la evidencia que las juzga. La misma razon por la que tu backend re-valida lo que manda el frontend, la misma razon por la que el arbitro no le pregunta al delantero si fue gol.
+
+De hecho, sostene ese paralelo del backend un minuto, porque la web aprendio esta leccion de la forma cara. Hace veinte anios, alguien publico un formulario que validaba el precio en JavaScript, en el navegador, y lo llamo seguro. Despues alguien noto que no hace falta usar el formulario: le haces `curl` al endpoint con el payload que quieras, precio negativo, rol de admin, y el servidor, que confiaba en que el cliente habia validado, lo aceptaba. La leccion quedo tallada en una generacion de backend: la validacion del cliente es UX, la del servidor es la frontera, porque el servidor no puede verificar que paso en el cliente, solo que llego. Tu orquestador de agentes es el cliente de esta historia. Su narracion de "revise, los hashes coinciden" es el chequeo del navegador: lindo para el flujo, inservible como evidencia. `review-validate` es el servidor: no asume nada, recalcula todo, y juzga solo lo que deriva por si mismo. Si alguna vez construiste una API, ya tenes el instinto que esta seccion ensenia. Solo que no lo estabas aplicando a tus agentes.
+
+Un gate tiene exactamente dos salidas. Pasa. O una denegacion legible por maquina con un codigo de razon:
+
+```json
+{
+  "result": "denied",
+  "reason": "scope-changed",
+  "expected_content_hash": "sha256:9f2c...",
+  "current_content_hash": "sha256:41d8...",
+  "transaction": "lineage-7f3a/tx-000412"
+}
+```
+
+Los codigos de razon cubren la taxonomia honesta de fallas, y cada uno mapea a una accion concreta: la denegacion te dice que HACER, no solo que te denegaron:
+
+| Codigo de razon | Que significa | Tu proximo movimiento |
+| --------------- | ------------- | --------------------- |
+| `scope-changed` | El contenido cambio despues de la aprobacion; el recibo apunta a bytes que ya no existen | Review fresco del contenido actual; la aprobacion vieja esta muerta |
+| `invalidated` | La transaccion o su cadena ya no valida: eslabon roto, transaccion superada | Inspecciona la cadena antes que nada; algo le paso al store |
+| `escalated` | El review termino en escalated; hay una decision humana pendiente | Resolve la escalacion; re-correr no cambia nada hasta que alguien decida |
+| `missing` | No existe transaccion de review para este contenido, diga lo que diga la narracion | Corre el review que nunca paso |
+
+Mira `scope-changed` de nuevo, porque es el truco favorito de nuestro inspector mentiroso, ahora con respuesta de maquina. Codigo aprobado, "un cambito chiquito" despues de la aprobacion, push con la aprobacion vieja todavia brillando. El gate recalcula, los hashes divergen, denegacion con los dos hashes a la vista. Y `missing` es el review que solo fue narrado: el modelo dijo que corrieron cuatro lentes, la cadena dice que no existe ninguna transaccion, y la cadena gana, cada vez, por construccion. Y todo fail-closed: cualquier duda, cualquier eslabon roto, cualquier hash que no coincide, y el gate deniega. Un gate que falla abierto es un gate solo en el sentido teatral.
+
+Y lo de legible por maquina importa mas de lo que parece. Una denegacion con codigo de razon es algo sobre lo que un orquestador puede actuar SIN interpretacion: `scope-changed` dispara "review nuevo del contenido nuevo", `missing` dispara "corre el review que te salteaste", mecanicamente. Un error en prosa humana, "el review parece desactualizado, considere re-ejecutarlo", necesitaria un modelo para interpretarlo, y acabamos de pasar un capitulo aprendiendo a no poner una maquina de probabilidades en el medio de una garantia. Disenia tus errores para el consumidor mas tonto posible y el auditor mas inteligente posible, y los dos te lo van a agradecer.
+
+---
+
+## Dos Bugs Reales, Dos Lecciones Reales
+
+Hora de honestidad, porque me niego a venderte un sistema con cara seria y sin cicatrices. Mientras esta misma feature estaba en review, su propio proceso de review encontro dos bugs reales en el PR. No hipoteticos para el libro, hallazgos reales en el ledger real del PR #1093. Y los dos valen tu tiempo porque ninguno es un bug de "mal programador".
+
+**Bug uno: la trampa del round-trip en Go.** Un campo de struct guardaba la lista de archivos untracked intencionales, tipado `[]string` y con el tag `json:"...,omitempty"`. El builder siempre lo inicializaba en `[]string{}`, un slice vacio pero NO nil. Aca va un programa completo, no un fragmento, para que veas la trampa cerrarse con tus propios ojos:
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"reflect"
+)
+
+type Binding struct {
+	IntendedUntracked []string `json:"intended_untracked,omitempty"`
+}
+
+func main() {
+	original := Binding{IntendedUntracked: []string{}} // no nil, largo 0
+
+	data, _ := json.Marshal(original)
+	fmt.Println(string(data))
+
+	var loaded Binding
+	json.Unmarshal(data, &loaded)
+
+	fmt.Println(loaded.IntendedUntracked == nil)
+	fmt.Println(reflect.DeepEqual(original, loaded))
+}
+```
+
+Y la salida:
+
+```text
+{}
+true
+false
+```
+
+Lee esas tres lineas despacio. El JSON serializado es `{}`: el campo NO ESTA, `omitempty` lo tiro. El campo cargado es `nil`: no volvio como el slice vacio que guardamos. Y `reflect.DeepEqual` dice que son objetos DISTINTOS. Serializas, deserializas, y lo que guardaste no es lo que volvio.
+
+Ahora, POR QUE Go hace esto? Porque no es un bug de Go, son dos comportamientos documentados componiendose en una trampa. Uno: la documentacion de `encoding/json` define "vacio" para `omitempty` con una lista explicita: false, 0, puntero nil, interfaz nil, y cualquier array, slice, map o string vacio. `[]string{}` tiene largo cero, es "vacio", y el encoder omite la clave por completo. El tag no distingue "vacio pero presente" de "ausente". Dos: `Unmarshal` solo toca los campos PRESENTES en el JSON. Una clave ausente deja el campo en su valor cero, y el valor cero de un slice es `nil`. Cada comportamiento es razonable por separado. Compuestos, transforman en silencio `[]string{}` en `nil` en cada round-trip. Y aca la ultima vuelta del cuchillo: para casi todo proposito, Go trata a los slices nil y vacios igual, `len` devuelve 0, `range` itera cero veces, `append` funciona, asi que la diferencia es invisible en codigo normal. `reflect.DeepEqual` es una de las pocas funciones de la libreria estandar que SI los distingue. Adivina que funcion usaba este codebase.
+
+La rama del release-gate comparaba una transaccion cargada de disco contra una en memoria usando `DeepEqual` estricto, asi que TODOS los bindings de release del caso comun, sin archivos untracked, fallaban. El remate que duele: el mismo codebase ya tenia un helper `equalStrings` tolerante a nil, usado en todos lados, que compara por largo y elementos. Una rama se lo perdio. La leccion: **serializar y deserializar no siempre devuelve lo que guardaste**, y la comparacion estructural profunda a traves de un round-trip de JSON es una trampa clasica. Compara semanticamente, no estructuralmente, cada vez que el dato cruzo una frontera de serializacion.
+
+**Bug dos: la desincronizacion de golden files.** Primero, por si no los usaste: un **golden file**, tambien llamado snapshot test, guarda la salida esperada de una operacion como un archivo commiteado. El test corre la operacion, compara la salida real contra el archivo, byte por byte, y falla ante cualquier diferencia. Son la herramienta correcta cuando la salida es grande y estructurada, un template renderizado, una config generada, una pantalla de CLI, donde escribir assertions campo por campo seria miserable. El trato que haces: el golden file se convierte en una segunda fuente de verdad, y queda viejo en el instante en que el generador cambia. Por eso todo setup de golden files lleva un modo de regeneracion, por convencion algo como `go test -update`, que reescribe los archivos desde el comportamiento actual. Y ahi vive la disciplina: regeneras despues de un cambio de comportamiento INTENCIONAL, nunca para callar una falla que no entendes. Un golden test que falla te pregunta: "quisiste cambiar esta salida?". Regenerar sin contestar es borrar la pregunta.
+
+Ahora el bug. Una oracion de contrato compartida, una sola oracion de texto de documentacion, alimenta 13 fixtures generados que se usan como golden files en tests. La oracion cambio, se regenero UN fixture, y fallaron 12 tests. Nada misterioso una vez que lo ves, pero facil de causar y molesto de diagnosticar, porque quien regenero un fixture tenia un test verde para ESE fixture y ninguna razon para sospechar que los otros 12 existian. La leccion es una regla que podes adoptar hoy: **cuando un contenido compartido alimenta N salidas generadas, regeneras TODAS o NINGUNA**. Nunca un subconjunto. Idealmente la regeneracion es un solo comando que encuentra cada consumidor por su cuenta, y CI corre un chequeo de staleness que falla si alguna salida generada no coincide con su fuente. Entonces la regla se hace cumplir sola: nadie tiene que acordarse de los otros 12 archivos, la maquina se acuerda. Te suena? Mover la garantia hacia abajo en el stack, de nuevo. Hasta tus fixtures se merecen el tratamiento.
+
+Y ahora la meta-leccion, la razon por la que esta seccion existe. Mira lo que SON estos dos bugs. Un comportamiento sutil del lenguaje en una frontera de serializacion. Un hueco de sincronizacion entre una fuente de verdad y sus artefactos generados. Son bugs de SISTEMA GRANDE, de los que viven en las costuras entre componentes, exactamente donde el review a ojo queda ciego, porque cada archivo se ve correcto en aislamiento. Y son exactamente lo que atrapa el review por lentes con ejecucion real de tests: un lente de confiabilidad que CORRE el round-trip en lugar de leerlo, una pasada que regenera los fixtures en lugar de asumirlos. El sistema se reviso a si mismo y encontro sus propias costuras. Ya te estoy diciendo: eso no es verguenza, eso es el punto entero funcionando.
+
+---
+
+## De Auditable a Inviolable
+
+Seamos honestos con los limites, porque un capitulo sobre verificacion que se sobrevende seria un chiste a costa de si mismo.
+
+Lo que construimos hasta aca hace que el recibo sea infalsificable y la historia sea a prueba de manipulacion silenciosa. Pero una garantia es tan fuerte como su PUNTO DE ENFORCEMENT. Segui la cadena de confianza hasta el ultimo eslabon: quien llama a `review-validate`? Si la respuesta es "el orquestador, cuando su prompt se lo dice", entonces tenemos una boveda hermosa cuya puerta esta custodiada por una nota amable. Un modelo mentiroso no necesita falsificar un recibo, ni falsificar un hash, ni romper SHA-256. Simplemente... no llama al validador. Y narra que todo paso. Volvimos al inspector, solo que ahora esta ignorando un archivero lleno de papeles perfectos.
+
+Pensa el enforcement como una escalera de tres escalones, donde cada escalon elimina una clase de bypass que el escalon de abajo no podia tocar.
+
+**Escalon uno: manejado por prompt.** Las instrucciones del orquestador dicen que llame a `review-validate` antes de commitear. La clase de bypass es todo lo que este capitulo te advirtio: la presion de contexto entierra la instruccion, la compactacion la borra, la presion de exito la redondea. Lo que este escalon SI te compra es el rastro de auditoria: despues de los hechos, un humano puede abrir la cadena y probar que el review nunca corrio, que la aprobacion no coincide con el codigo, reconstruir exactamente que paso. Eso es el sistema siendo **auditable**, y es valor real, porque en un mundo solo-prompt no hay nada que auditar salvo el scrollback del chat. Pero auditable significa que atrapas la mentira DESPUES. El commit sin revisar ya entro.
+
+**Escalon dos: un hook de git.** Un hook de pre-commit o pre-push corre el validador localmente, por debajo del modelo. Ahora la narracion es irrelevante: el hook se dispara con la operacion de git misma, y un recibo faltante significa que la operacion muere con un exit code, no con una sugerencia. Este escalon elimina la clase entera de "el modelo se olvido, se lo salteo, lo narro". Lo que no puede eliminar: los hooks son locales y voluntarios por disenio. `git commit --no-verify` se los saltea, ese flag existe a proposito. Un clone fresco no tiene tus hooks hasta que alguien los instala. Otra herramienta, otra maquina, otro companiero pusheando directo: fuera de su alcance. El escalon dos frena al modelo distraido. No frena un camino decidido por el costado.
+
+**Escalon tres: un check requerido de CI en una branch protegida.** El servidor corre el validador, y la proteccion de branch se niega a mergear sin un check en verde. Ningun flag local lo bypasea, ningun clone fresco se lo olvida, ninguna herramienta lo rodea, porque el enforcement no vive en la maquina de nadie, vive frente a la unica puerta de entrada a la branch. El override de admin sigue siendo posible, y esta bien: un override es un evento explicito, logueado, humano, con nombre y apellido, exactamente lo que tiene que ser una salida de emergencia. Cada escalon hacia arriba cuesta mas, un hook son seis lineas mientras que un check requerido significa configuracion de CI y acuerdo de equipo, y cada escalon elimina una clase de bypass que el anterior estructuralmente no podia. Hasta donde subis depende de lo que te costaria un bypass.
+
+```bash
+#!/bin/sh
+# .git/hooks/pre-push, o las mismas tres lineas en un job de CI.
+# La narracion del modelo no se consulta. La cadena si.
+if ! gentle-ai review-validate --gate pre-push; then
+  echo "push denegado: no hay recibo valido atado al contenido actual"
+  exit 1
+fi
+```
+
+Seis lineas. Toda la distancia entre un sistema al que un modelo le puede hablar bonito para pasar y un sistema al que no. Ese es el salto de "auditable despues de los hechos" a **imposible de saltear**, y es nuestra regla de la seccion dos, aplicada una ultima vez: la garantia bajo en el stack, del comportamiento del modelo al de la infraestructura. CI no lee narraciones.
+
+Ahora el lado del costo, porque esto es ingenieria y todo tiene precio. Un store append-only con locks del SO, escrituras atomicas, export e import de bundles y una maquina de 12 estados es, llamemoslo por su nombre, una mini base de datos que ahora mantenes para siempre. Enumeremos lo que pasas a tener: locks cuya semantica difiere entre Unix y Windows, y la matriz de tests que prueba las dos. Procedimientos de recuperacion para el dia en que un incidente de disco deja una cadena que no valida, porque "restaurar desde donde?" quiere respuesta ANTES del incidente. Manejo de rutas entre plataformas, filesystems insensibles a mayusculas, separadores distintos, todo el catalogo aburrido. Versionado de esquema, y ese `/v1/` en la ruta no es decoracion: el dia que el formato v2 salga, algo tiene que seguir leyendo cada cadena v1 o migrarla. Y documentacion, porque ahora mismo la cantidad de gente que entiende tu store de reviews es uno, y uno es un bus factor, no un equipo. Nada de esto es exotico. Todo es peso permanente, cargado cada sprint, a cambio de garantias.
+
+Asi que aca va la regla de decision para la pregunta mas practica del capitulo, tenes que construir esto VOS? **Compra esta complejidad cuando los agentes toman decisiones que llegan a produccion. Salteatela cuando no.** Agentes que commitean a un repo compartido, que gatean releases, que tocan codigo que llega a usuarios: los recibos atados al contenido y los gates con enforcement pagan su costo de mantenimiento muchas veces, porque un review salteado que llega a produccion es mas caro que el sistema entero. Un prototipo de fin de semana, un proyecto de aprendizaje, un repo donde cada linea todavia pasa por tus propios ojos antes del merge: el loop de calidad a nivel prompt del Capitulo 20 es genuinamente suficiente, y construir esta maquinaria para eso seria burocracia por la burocracia misma. La infraestructura de verificacion es un seguro. Compras seguro proporcional a lo que te costaria el incendio, y nadie asegura un castillo de arena.
+
+---
+
+## Conclusion: La Confianza Es un Artefacto, No una Sensacion
+
+Doblemos el capitulo en una sola oracion, el disenio en su forma mas pura: **los agentes y los espejos pueden decir lo que quieran, el gate solo cree lo que puede re-derivar del store append-only y de los bytes actuales del repositorio.** Leela de nuevo, porque cada seccion que caminamos vive adentro de ella. Los recibos atados al contenido por hash. El ciclo de vida congelado en snapshots y ledgers. La maquina de 12 estados con los presupuestos soldados adentro. La cadena que solo crece hacia adelante. Los espejos que nunca le ganan a la fuente. Los bundles tratados como carga no confiable. Los gates que recalculan en lugar de aceptar. Los dos bugs reales que el sistema atrapo en su propio pull request, porque una verificacion que no se aplica a si misma es marketing.
+
+Y fijate en que se convirtio la "confianza" en el camino. Al principio de este capitulo, la confianza era una sensacion: el modelo dijo que el review paso, y la frase sonaba bien, asi que te sentias cubierto. Al final, la confianza es un ARTEFACTO: un recibo que podes agarrar, re-derivar y validar, atado por hashes a los bytes exactos que respalda. Una sensacion se degrada bajo presion, se resume en una compactacion, se redondea a si misma para arriba cuando el modelo te quiere complacer. Un artefacto sigue ahi maniana, byte por byte, y valida o no valida. Ese es todo el upgrade, y ninguna parte requirio un modelo mas inteligente. Requirio mover garantias hacia abajo en el stack, una por una, hasta que las cosas que tienen que ser verdad dejaron de depender de la palabra de alguien.
+
+Y como te prometi mecanismos, numeros y reglas de decision, aca va el set de reglas del capitulo en un solo lugar, la parte que podes clavar arriba del escritorio:
+
+- Cuando una garantia importa, movela hacia abajo en el stack, de prompt a codigo deterministico.
+- Los prompts deciden que tan bien se hace algo; el codigo decide si se hizo.
+- 0, 1 o 4 lentes, elegidos por riesgo, una pasada exhaustiva cada uno, siempre de solo lectura.
+- Un solo refuter en batch para hallazgos severos inferenciales, haya 2 candidatos o 20.
+- Como maximo una ronda de fixes; el validador de delta solo puede aprobar o escalar.
+- Si un espejo esta en desacuerdo con la cadena, gana la cadena. Siempre.
+- Nunca confies en el input de la parte que tiene interes en el resultado.
+- No confies en nada que no derivaste; un bundle es carga hasta que re-valida.
+- Cuando un contenido compartido alimenta N salidas generadas, regeneras todas o ninguna.
+- Compra esta complejidad cuando las decisiones de agentes llegan a produccion; salteatela en juguetes.
+
+Este libro lo dice desde el primer capitulo de IA: el modelo es Jarvis y vos sos Tony Stark. Nosotros dirigimos, la IA ejecuta. Pero este capitulo agrega la clausula que convierte esa frase en ingenieria en lugar de eslogan: **direccion sin verificacion es esperanza, no ingenieria**. Tony chequea la telemetria del traje. No le pregunta al traje como se siente.
+
+Asi que, te toca, y ya sabes que nunca cierro un capitulo sin tarea. Encontra UNA garantia en tu workflow de agentes que hoy viva en un prompt. Una sola, la que mas te doleria si el modelo se la saltea en un mal dia. Esta semana, movela hacia abajo en el stack: una comparacion de hash, un chequeo de estado, un hook que falla cerrado. Despues fijate que distinto dormis cuando "el review paso" deja de ser algo que el modelo dijo y empieza a ser algo que el repositorio puede probar.
+
+> _"No confies en lo que el agente dice que hizo. Verifica lo que hizo de verdad. La diferencia entre esas dos frases es toda la disciplina."_
+
+---
+
+## Referencias y Recursos
+
+- **gentle-ai** (github.com/Gentleman-Programming/gentle-ai): el stack open source de agentes que este capitulo disecciono. El PR #1093 es la feature de bounded review transactions en si: el constructor de snapshots, la maquina de 12 estados, el store append-only, los gates y el ledger donde viven los dos bugs reales.
+- **Capitulo 15 de este libro**: Desarrollo Guiado por IA con Claude Code, el workflow de agentes del dia a dia que estas garantias protegen.
+- **Capitulo 19 de este libro**: Patrones de Orquestacion de IA, la capa multi-agente y MCP que produce los reviews que este capitulo aprendio a verificar.
+- **Capitulo 20 de este libro**: De Token a Agente, la base mecanica: presion de contexto, compactacion, la curva en U y el loop de calidad que este capitulo empujo hacia abajo, a codigo.
+- **Documentacion de encoding/json de Go** (pkg.go.dev/encoding/json): la definicion autoritativa de que considera "vacio" `omitempty` y como trata `Unmarshal` a los campos ausentes, los dos comportamientos detras del bug uno.
+- **Pro Git, "Git Internals - Git Objects"** (git-scm.com/book/en/v2/Git-Internals-Git-Objects): almacenamiento direccionado por contenido explicado desde adentro, el mismo truco que usa nuestra cadena. Leelo y `.git` deja de ser una caja negra.
+- **Tu propia terminal**: el laboratorio mas barato del capitulo. `sha256sum` a un archivo, cambiale un byte, mira la avalancha. Despues `git cat-file -p HEAD` y encontra los hashes `tree` y `parent` en tu disco ahora mismo.
