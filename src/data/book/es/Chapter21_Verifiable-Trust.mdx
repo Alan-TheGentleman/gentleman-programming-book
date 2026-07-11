@@ -156,7 +156,7 @@ Ahi adentro no hay prosa. Ahi adentro no hay opinion del modelo. Cada campo es o
 
 Ahora caminemos el ciclo de vida real, paso a paso, tal como corre en gentle-ai. Es la seccion mas larga del capitulo y vale cada linea, porque cada paso existe para cerrar un agujero especifico que un proceso solo-prompt deja abierto.
 
-**Paso uno: congelar el objetivo.** Cuando corre `review-start`, lo primero que hace es construir un **snapshot** inmutable y direccionado por contenido de lo que se va a revisar: la lista exacta de archivos con sus hashes, incluyendo los untracked intencionales, los archivos nuevos que son parte del cambio pero todavia no estan en el index de git. Despues agrega un evento genesis que abre la transaccion. Desde este momento, revisas una foto congelada, no un blanco en movimiento. Por que importa tanto? Porque la falla clasica del review con agentes es que el codigo cambia DEBAJO del review: el revisor lee el archivo A, mientras tanto el fixer edita el archivo B, y la aprobacion final cubre una quimera que nunca existio completa. El snapshot mata eso. Todos en la transaccion revisan los mismos bytes congelados, identificados por hash.
+**Paso uno: congelar el objetivo.** Cuando corre `review-start`, lo primero que hace es construir un **snapshot** inmutable y direccionado por contenido de lo que se va a revisar: la lista exacta de archivos con sus hashes, incluyendo los untracked intencionales. Despues agrega un evento genesis que abre la transaccion y sella esa lista como el **conjunto inmutable de paths del genesis**. Desde este momento, revisas una foto congelada, no un blanco en movimiento, y cualquier correccion posterior queda legalmente encerrada en esos paths. Por que importa tanto? Porque la falla clasica del review con agentes es que el codigo cambia DEBAJO del review: el revisor lee el archivo A, mientras el fixer edita el B, y la aprobacion cubre una quimera que nunca existio completa. El snapshot mata eso. Todos revisan los mismos bytes y nadie agranda el trabajo despues de ver los hallazgos.
 
 Y frena un segundo en los untracked intencionales, porque parece un detalle quisquilloso y es una definicion de honestidad. "El cambio entregado" no es lo mismo que "lo que git ya conoce". Si tu cambio genera un fixture, un schema, un lockfile, y tenes la intencion de commitearlos, esos archivos SON el contenido entregado, con index o sin index. Un snapshot construido solo con los cambios trackeados aprobaria un subconjunto, y el resto sin revisar es donde a los problemas les encanta vivir, porque ningun ojo humano pasa por los archivos generados. Asi que el snapshot exige el conjunto de untracked intencionales explicito, y falla CERRADO: si no se puede establecer, se niega a construirse en lugar de adivinar. Un review que cubre el 90% del cambio mientras sella el 100% es nuestro inspector mentiroso con mejores herramientas.
 
@@ -176,17 +176,23 @@ Por que tanta paranoia? Porque los revisores LLM producen falsos positivos convi
 
 Y por que exactamente UN refuter en batch en lugar de uno por hallazgo? Control de costos con forma fija. Si la refutacion se lanza por hallazgo, el costo escala linealmente con lo ruidosos que sean tus lentes, y lentes ruidosos es precisamente la falla contra la que te defendes: un lente paranoico emite 20 hallazgos flojos y de repente pagas 20 agentes adversariales. Con un batch, el refuter lee la lista completa en un solo contexto y devuelve un veredicto por hallazgo: 2 candidatos o 20, el mismo overhead fijo. El presupuesto es estructural, decidido por la forma del protocolo, no por como se portaron los lentes hoy. Acordate de esa frase, porque la vas a volver a ver: los presupuestos soldados a la estructura no se revientan con comportamiento.
 
-**Paso cinco: como maximo UNA ronda de fixes.** Los fixes son unidades de trabajo atomicas, cada una con su evidencia de tests y su frontera de rollback. Despues, UN validador de fix-delta con alcance acotado re-chequea solo las lineas tocadas por los fixes, y tiene exactamente dos salidas: aprobar o escalar. No puede pedir otra ronda. Te acordas del test acido del Capitulo 20, acotado y auditable? Esto es acotado, soldado a la estructura. El loop no puede girar porque no hay loop que girar.
+**Paso cinco: como maximo UNA transaccion de correccion.** La frase importa. Una correccion puede contener varias unidades atomicas si varios IDs congelados necesitan trabajo, pero todas comparten un solo presupuesto. Cada unidad mapea a IDs bloqueantes aceptados, se queda dentro del conjunto inmutable de paths, registra tests enfocados, evidencia de runtime o un `N/A` justificado, y tiene su propia frontera de rollback. Dividir una correccion en cinco tareas prolijas no fabrica cinco rondas. El contador pertenece a la transaccion, no a los nombres que invente el agente.
 
-Por que el validador ve SOLO las lineas tocadas por los fixes? Prevencion de scope creep, y corta en las dos direcciones. Direccion uno, el fixer: con un validador de diff completo, un agente de fixes puede contrabandear "mejoras" mas alla de los hallazgos confirmados, refactors que nadie pidio, y el validador no puede decir "esto esta fuera de alcance" porque todo esta en alcance. Acotado al delta, cualquier linea cambiada fuera del radio de los hallazgos se ve como lo que es: cambio no autorizado. Direccion dos, el validador mismo: un validador que re-lee el diff completo va a ENCONTRAR COSAS NUEVAS, es su naturaleza. Hallazgos nuevos sobre lineas viejas significan otra ronda de fixes, otra validacion, mas hallazgos nuevos. Un loop sin cota disfrazado de calidad. Acotar al delta hace la convergencia estructural: el fix achica la lista de hallazgos abiertos, la validacion chequea el achique, nada puede crecer. Si algo en una linea no tocada esta realmente roto, estaba roto antes de este review, y lo atrapa el proximo review del proximo cambio. Este se cierra.
+Y el agente no declara que cambio. El sistema deriva desde Git el snapshot de correccion y el fix delta, compara cada path contra el genesis y rechaza cualquier path externo. Es la misma leccion del backend: la parte que quiere aprobacion no puede escribir la evidencia que la concede. Un JSON del caller sirve como input de operacion, pero nunca es la autoridad. El repositorio y la cadena enlazada por hashes mandan.
 
-**Paso seis: verificacion final independiente.** Un verificador fresco chequea la transaccion completa: requisitos cumplidos, evidencia actual de tests y build, cada hallazgo del ledger resuelto o refutado explicitamente, identidad del snapshot intacta, contadores coherentes. Despues, uno de exactamente dos estados terminales: **approved**, que emite el recibo atado al contenido, o **escalated**, que emite una denegacion legible por maquina para un humano. No existe un tercer final. Nada de "basicamente listo", nada de "aprobado a ojo". Dos puertas.
+Despues, exactamente UN validador acotado recibe el ledger congelado y ese delta inmutable derivado del repositorio. No lanza otro review amplio. Verifica criterios originales, tests enfocados, runtime y evidencia de regresion, y devuelve solo **approve** o **escalate**. Si nota una limpieza opcional o una preocupacion nueva que no contradice la prueba, la guarda como follow-up no bloqueante. No puede cambiar hallazgos, ampliar scope, consumir otra correccion ni secuestrar la entrega actual. Si falla un criterio original, escala: la correccion contradijo la prueba que tenia que preservar.
+
+Esta es la convergencia que aprendimos usando el sistema sobre si mismo. "Nunca descubras nada tarde" es irreal. "Nunca dejes que un descubrimiento tardio cambie una transaccion congelada" si se puede hacer cumplir. Preservas informacion sin reabrir la historia. Los hallazgos se congelan una vez, corregis una vez, validas una vez, y lo tardio sale por otro canal.
+
+**Paso seis: verificacion final independiente.** Un verificador fresco chequea la transaccion completa: requisitos, tests y build actuales, cada hallazgo congelado resuelto o refutado, evidencia dirigida ligada al fix delta, identidad del snapshot y contadores. Despues, uno de dos estados terminales: **approved** o **escalated**. Una contradiccion o un chequeo deterministico nuevo que falla escala, pero no abre otro review ni otra correccion. Nada de "basicamente listo", nada de "aprobado a ojo". Dos puertas.
 
 ```text
-snapshot --> lentes (0|1|4, solo lectura, una pasada cada uno) --> congelar ledger
+snapshot + paths genesis inmutables
+    --> lentes (0|1|4, solo lectura, una pasada cada uno) --> congelar ledger
     --> ruteo por evidencia (deterministica | inferencial | insuficiente)
-    --> maximo 1 ronda de fixes --> validacion de fix-delta acotada
-    --> verificacion final independiente --> approved | escalated
+    --> maximo 1 correccion --> fix delta derivado del repositorio
+    --> validacion dirigida --> approved | escalated
+                              \-> follow-ups no bloqueantes
 ```
 
 ---
@@ -208,12 +214,12 @@ Doce estados, y cada uno es un checkpoint que custodia algo especifico:
 | --------------------------- | ---------------------------------------------------------------- |
 | `unreviewed`                | Todavia no existe recibo; los gates deniegan con `missing`       |
 | `reviewing`                 | Snapshot congelado, lentes barriendo, todos de solo lectura      |
-| `judges_confirmed`          | Todos los resultados de lentes estan; nada se agrega tarde       |
+| `judges_confirmed`          | Todos los resultados estan; lo tardio no puede mutarlos          |
 | `findings_frozen`           | Ledger sellado; los hallazgos no desaparecen ni bajan severidad  |
 | `evidence_classified`       | Cada hallazgo lleva su evidence_class                            |
 | `fix_required`              | Hay hallazgos severos verificados; arreglar queda autorizado     |
-| `fixing`                    | La unica ronda de fixes: unidades atomicas, fronteras de rollback |
-| `fix_validating`            | Validador de delta acotado; aprobar o escalar, nada mas          |
+| `fixing`                    | Una transaccion de correccion: unidades atomicas y rollback      |
+| `fix_validating`            | Evidencia dirigida; aprobar, escalar o registrar follow-up       |
 | `ready_final_verification`  | Fixes listos; esperando un verificador fresco e independiente    |
 | `final_verifying`           | Chequeo de toda la transaccion: requisitos, evidencia, contadores |
 | `approved`                  | Terminal; se emite el recibo atado al contenido                  |
@@ -369,6 +375,8 @@ Ahora el bug. Una oracion de contrato compartida, una sola oracion de texto de d
 
 Y ahora la meta-leccion, la razon por la que esta seccion existe. Mira lo que SON estos dos bugs. Un comportamiento sutil del lenguaje en una frontera de serializacion. Un hueco de sincronizacion entre una fuente de verdad y sus artefactos generados. Son bugs de SISTEMA GRANDE, de los que viven en las costuras entre componentes, exactamente donde el review a ojo queda ciego, porque cada archivo se ve correcto en aislamiento. Y son exactamente lo que atrapa el review por lentes con ejecucion real de tests: un lente de confiabilidad que CORRE el round-trip en lugar de leerlo, una pasada que regenera los fixtures en lugar de asumirlos. El sistema se reviso a si mismo y encontro sus propias costuras. Ya te estoy diciendo: eso no es verguenza, eso es el punto entero funcionando.
 
+Produccion nos dejo otra leccion despues de esa primera version: un protocolo confiable tambien puede ser demasiado caro de usar. El contrato original protegia la correccion, pero su lenguaje todavia empujaba a los agentes a actuar como revisores y descubrir mas trabajo. Mas trabajo invitaba otro juicio, otra correccion y un loop tecnicamente acotado pero mentalmente infinito. En el PR #1106 ajustamos el contrato alrededor del ledger congelado: paths genesis inmutables, una correccion derivada del repositorio, una validacion dirigida y observaciones tardias como follow-ups no bloqueantes. Lo publicamos como gentle-ai v1.49.0 y sincronizamos el mismo contrato en once runtimes de agentes. Ese dia el sistema reviso su PROPIO PROCESO DE REVIEW y saco ceremonia que no agregaba confianza.
+
 ---
 
 ## De Auditable a Inviolable
@@ -405,7 +413,7 @@ Asi que aca va la regla de decision para la pregunta mas practica del capitulo, 
 
 ## Conclusion: La Confianza Es un Artefacto, No una Sensacion
 
-Doblemos el capitulo en una sola oracion, el disenio en su forma mas pura: **los agentes y los espejos pueden decir lo que quieran, el gate solo cree lo que puede re-derivar del store append-only y de los bytes actuales del repositorio.** Leela de nuevo, porque cada seccion que caminamos vive adentro de ella. Los recibos atados al contenido por hash. El ciclo de vida congelado en snapshots y ledgers. La maquina de 12 estados con los presupuestos soldados adentro. La cadena que solo crece hacia adelante. Los espejos que nunca le ganan a la fuente. Los bundles tratados como carga no confiable. Los gates que recalculan en lugar de aceptar. Los dos bugs reales que el sistema atrapo en su propio pull request, porque una verificacion que no se aplica a si misma es marketing.
+Doblemos el capitulo en una sola oracion, el disenio en su forma mas pura: **los agentes y los espejos pueden decir lo que quieran, el gate solo cree lo que puede re-derivar del store append-only y de los bytes actuales del repositorio.** Leela de nuevo, porque cada seccion vive adentro. Los recibos atados al contenido. El ciclo congelado en paths genesis y ledgers. La unica correccion derivada del repositorio. La validacion dirigida que preserva conocimiento tardio sin reabrir scope. La maquina de estados con presupuestos soldados. La cadena que solo crece. Los espejos que nunca ganan. Los bundles tratados como carga no confiable. Los bugs y el desperdicio de protocolo que el sistema atrapo en si mismo, porque una verificacion que no se aplica a si misma es marketing.
 
 Y fijate en que se convirtio la "confianza" en el camino. Al principio de este capitulo, la confianza era una sensacion: el modelo dijo que el review paso, y la frase sonaba bien, asi que te sentias cubierto. Al final, la confianza es un ARTEFACTO: un recibo que podes agarrar, re-derivar y validar, atado por hashes a los bytes exactos que respalda. Una sensacion se degrada bajo presion, se resume en una compactacion, se redondea a si misma para arriba cuando el modelo te quiere complacer. Un artefacto sigue ahi maniana, byte por byte, y valida o no valida. Ese es todo el upgrade, y ninguna parte requirio un modelo mas inteligente. Requirio mover garantias hacia abajo en el stack, una por una, hasta que las cosas que tienen que ser verdad dejaron de depender de la palabra de alguien.
 
@@ -415,7 +423,8 @@ Y como te prometi mecanismos, numeros y reglas de decision, aca va el set de reg
 - Los prompts deciden que tan bien se hace algo; el codigo decide si se hizo.
 - 0, 1 o 4 lentes, elegidos por riesgo, una pasada exhaustiva cada uno, siempre de solo lectura.
 - Un solo refuter en batch para hallazgos severos inferenciales, haya 2 candidatos o 20.
-- Como maximo una ronda de fixes; el validador de delta solo puede aprobar o escalar.
+- Congela paths genesis y hallazgos una vez; una correccion cambia contenido solo dentro de ese scope.
+- La validacion dirigida prueba la correccion; lo tardio se vuelve follow-up no bloqueante.
 - Si un espejo esta en desacuerdo con la cadena, gana la cadena. Siempre.
 - Nunca confies en el input de la parte que tiene interes en el resultado.
 - No confies en nada que no derivaste; un bundle es carga hasta que re-valida.
@@ -432,7 +441,7 @@ Asi que, te toca, y ya sabes que nunca cierro un capitulo sin tarea. Encontra UN
 
 ## Referencias y Recursos
 
-- **gentle-ai** (github.com/Gentleman-Programming/gentle-ai): el stack open source de agentes que este capitulo disecciono. El PR #1093 es la feature de bounded review transactions en si: el constructor de snapshots, la maquina de 12 estados, el store append-only, los gates y el ledger donde viven los dos bugs reales.
+- **gentle-ai** (github.com/Gentleman-Programming/gentle-ai): el stack open source de agentes que este capitulo disecciono. El PR #1093 introdujo bounded review transactions; el PR #1106 y la release v1.49.0 completaron el lifecycle de ledger congelado con paths genesis inmutables, evidencia de correccion derivada del repositorio, validacion dirigida y follow-ups no bloqueantes en once runtimes soportados.
 - **Capitulo 15 de este libro**: Desarrollo Guiado por IA con Claude Code, el workflow de agentes del dia a dia que estas garantias protegen.
 - **Capitulo 19 de este libro**: Patrones de Orquestacion de IA, la capa multi-agente y MCP que produce los reviews que este capitulo aprendio a verificar.
 - **Capitulo 20 de este libro**: De Token a Agente, la base mecanica: presion de contexto, compactacion, la curva en U y el loop de calidad que este capitulo empujo hacia abajo, a codigo.

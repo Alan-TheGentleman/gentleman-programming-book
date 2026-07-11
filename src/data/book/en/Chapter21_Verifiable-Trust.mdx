@@ -156,7 +156,7 @@ Nothing in there is prose. Nothing in there is the model's opinion. Every field 
 
 Now let's walk the actual lifecycle, step by step, the way it runs in gentle-ai. This is the longest section of the chapter and it's worth every line, because each step exists to close a specific hole that a prompt-only process leaves open.
 
-**Step one: freeze the target.** When `review-start` runs, the first thing it does is build a content-addressed, immutable **snapshot** of what's being reviewed: the exact list of files with their hashes, including intended untracked files, the new files that are part of the change but not yet in git's index. Then it appends a genesis event that opens the transaction. From this moment on, you're reviewing a frozen photo, not a moving target. Why does this matter so much? Because the classic failure of agent review is the code changing UNDER the review: the reviewer reads file A, meanwhile the fixer edits file B, and the final approval covers a chimera that never existed as a whole. The snapshot kills that. Everyone in the transaction reviews the same frozen bytes, identified by hash.
+**Step one: freeze the target.** When `review-start` runs, the first thing it does is build a content-addressed, immutable **snapshot** of what's being reviewed: the exact list of files with their hashes, including intended untracked files, the new files that are part of the change but not yet in git's index. Then it appends a genesis event that opens the transaction and seals that list as the **immutable genesis path set**. From this moment on, you're reviewing a frozen photo, not a moving target, and any later correction is legally confined to those paths. Why does this matter so much? Because the classic failure of agent review is the code changing UNDER the review: the reviewer reads file A, meanwhile the fixer edits file B, and the final approval covers a chimera that never existed as a whole. The snapshot kills that. Everyone in the transaction reviews the same frozen bytes, identified by hash, and nobody gets to widen the job after seeing the findings.
 
 And pause on the intended untracked files, because it looks like a fussy detail and it's actually a definition of honesty. "The delivered change" is not the same thing as "what git already knows about". If your change generates a fixture, a schema file, a lockfile, and you intend to commit them, those files ARE the delivered content, index or no index. A snapshot built only from tracked changes would approve a subset of the change, and the unreviewed remainder is exactly where problems love to live, because nobody's eyes ever pass over generated files. So the snapshot demands the intended-untracked set explicitly, and it fails CLOSED: if that set can't be established, the snapshot refuses to build rather than guess. A review that covers 90% of the change while stamping 100% is our lying inspector with better tooling.
 
@@ -176,17 +176,23 @@ Why the paranoia? Because LLM reviewers produce convincing false positives, find
 
 And why exactly ONE batched refuter instead of one per finding? Cost control with a fixed shape. If refutation spawns per finding, review cost scales linearly with how noisy your lenses are, and noisy lenses is precisely the failure you're defending against, so the defense grows exactly when the attack does: a paranoid lens emits 20 shaky findings and suddenly you're paying for 20 adversarial agents. With one batch, the refuter reads the complete candidate list in a single context and returns one verdict per finding: 2 candidates or 20, same fixed overhead, same single context window doing the work. The budget is structural, decided by the shape of the protocol, not by how the lenses behaved today. Remember that phrase, because you'll see it again in the state machine: budgets you weld into the structure can't be blown by behavior.
 
-**Step five: at most ONE fix round.** Fixes are atomic work units, each with its own test evidence and a rollback boundary. Then ONE scoped fix-delta validator re-checks only the fix-touched lines, and it has exactly two outputs: approve or escalate. It cannot request another round. Remember the acid test from Chapter 20, bounded and auditable? This is bounded, welded into the structure. The loop cannot spin because there is no loop to spin.
+**Step five: at most ONE correction transaction.** This wording matters. A correction can contain several atomic work units when several frozen IDs need work, but those units share one budget. Each unit maps to accepted blocking IDs, stays inside the immutable genesis path set, records focused-test evidence, runtime evidence or an explicit justified `N/A`, and owns an independent rollback boundary. Splitting one correction into five tidy commits does not manufacture five correction rounds. The counter belongs to the transaction, not to how creatively the agent names its tasks.
 
-Why does the validator see ONLY the fix-touched lines, instead of re-reading everything? Scope creep prevention, and it cuts in both directions. Direction one, the fixer: with a whole-diff validator, a fix agent can smuggle "improvements" beyond the confirmed findings, refactors nobody asked for, a helper renamed in passing, and the validator has no crisp way to say "this change is out of scope" because everything is in scope. With a delta-scoped validator, any line changed outside the findings' blast radius is visible as exactly what it is: unauthorized change. Direction two, the validator itself: a validator that re-reads the full original diff will FIND NEW THINGS, that's what reviewers do, it's their nature. New findings on old lines mean another fix round, which means another validation, which means more new findings. That's an unbounded loop wearing a quality costume. Scoping the validator to the delta makes convergence structural: the fix shrinks the open findings list, the validation checks the shrinkage, nothing can grow. If something on an untouched line really is broken, it was broken before this review started, and it'll be caught by the next review of the next change. This one closes.
+And the agent does not get to declare what it changed. The system derives the correction snapshot and fix delta from Git, compares every corrected path against the genesis path set, and rejects any path outside it. That's the same backend lesson from earlier: the party that wants approval cannot also author the evidence that grants approval. A caller-supplied JSON file is useful as an operation input, but it is never the authority. The repository and the hash-linked chain are the authority.
 
-**Step six: independent final verification.** A fresh verifier checks the whole transaction: requirements met, current test and build evidence, every ledger finding resolved or explicitly refuted, snapshot identity intact, counters coherent. Then one of exactly two terminal states: **approved**, which emits the content-bound receipt, or **escalated**, which emits a machine-readable denial for a human. No third ending exists. No "basically done", no "approved with vibes". Two doors.
+Then exactly ONE scoped fix-delta validator receives the frozen ledger plus that immutable, repository-derived delta. It does not launch a second broad review. It verifies the original acceptance criteria, focused tests, runtime evidence, and correction regression evidence, then returns only **approve** or **escalate**. If it notices an optional cleanup or a new non-contradictory concern, that observation becomes a non-blocking follow-up. It cannot alter the frozen findings, widen scope, consume another correction, or hold the current delivery hostage. If an original criterion now fails, that's different: the validator escalates because the correction contradicted the proof it was supposed to preserve.
+
+That distinction is the convergence mechanism we learned by dogfooding the system. "Never discover anything late" is unrealistic. "Never let late discovery mutate a frozen transaction" is enforceable. You preserve information without reopening history. The loop cannot spin because findings freeze once, correction happens once, validation happens once, and late observations leave through a separate follow-up channel.
+
+**Step six: independent final verification.** A fresh verifier checks the whole transaction: requirements met, current test and build evidence, every frozen ledger finding resolved or explicitly refuted, targeted correction evidence bound to the fix delta, snapshot identity intact, counters coherent. Then one of exactly two terminal states: **approved**, which emits the content-bound receipt, or **escalated**, which emits a machine-readable denial for a human. A contradiction or newly failing deterministic check escalates, but it cannot start another review or correction loop. No third ending exists. No "basically done", no "approved with vibes". Two doors.
 
 ```text
-snapshot --> lenses (0|1|4, read-only, one sweep each) --> freeze ledger
+snapshot + immutable genesis paths
+    --> lenses (0|1|4, read-only, one sweep each) --> freeze ledger
     --> evidence routing (deterministic | inferential | insufficient)
-    --> at most 1 fix round --> scoped fix-delta validation
-    --> independent final verification --> approved | escalated
+    --> at most 1 correction --> repository-derived fix delta
+    --> targeted validation --> approved | escalated
+                              \-> non-blocking follow-ups
 ```
 
 ---
@@ -208,12 +214,12 @@ Twelve states, and every one of them is a checkpoint guarding something specific
 | --------------------------- | ---------------------------------------------------------------- |
 | `unreviewed`                | No receipt exists yet; gates deny with `missing`                 |
 | `reviewing`                 | Snapshot frozen, lenses sweeping, all of them read-only          |
-| `judges_confirmed`          | Every lens result is in; nothing can be added late               |
+| `judges_confirmed`          | Every lens result is in; later observations cannot mutate it     |
 | `findings_frozen`           | Ledger sealed; findings can't vanish or lose severity            |
 | `evidence_classified`       | Every finding carries its evidence_class                         |
 | `fix_required`              | Verified severe findings exist; fixing is now authorized         |
-| `fixing`                    | The single fix round: atomic units, rollback boundaries          |
-| `fix_validating`            | Scoped delta validator; approve or escalate, nothing else        |
+| `fixing`                    | One correction transaction: atomic units, rollback boundaries   |
+| `fix_validating`            | Targeted evidence check; approve, escalate, or record follow-up  |
 | `ready_final_verification`  | Fixes done; waiting for a fresh, independent verifier            |
 | `final_verifying`           | Full-transaction check: requirements, evidence, counters         |
 | `approved`                  | Terminal; the content-bound receipt is emitted                   |
@@ -368,6 +374,8 @@ Now the bug. A shared contract sentence, one sentence of documentation text, fee
 
 And now the meta-lesson, the reason this section exists. Look at what these two bugs ARE. A subtle language behavior at a serialization boundary. A synchronization gap between a source of truth and its generated artifacts. These are LARGE-SYSTEM bugs, the kind that live in the seams between components, exactly where eyeball review goes blind, because every file looks correct in isolation. And they're exactly what lens-based review with actual test execution catches: a reliability lens that RUNS the round-trip instead of reading it, a sweep that regenerates fixtures instead of assuming them. The system reviewed itself and found its own seams. I'm telling you right now: that's not embarrassing, that's the whole point working.
 
+Production taught us one more lesson after that first version shipped: a trustworthy protocol can still be too expensive to use. The original contract protected the correction by asking a validator to look only at fix-touched lines, but its language still encouraged agents to behave like reviewers and discover more work. More work invited another judgment, another correction, and eventually a quality loop that was technically bounded yet cognitively endless. In PR #1106 we tightened the contract around the frozen ledger: immutable genesis paths, one repository-derived correction, one targeted validation, and late observations routed into non-blocking follow-ups. Then we released it as gentle-ai v1.49.0 and synchronized the same contract across eleven agent runtimes. That day was not just implementation. It was the system reviewing its own REVIEW PROCESS and removing ceremony that produced no additional trust.
+
 ---
 
 ## From Auditable to Untamperable
@@ -404,7 +412,7 @@ So here's the decision rule for the chapter's most practical question, should YO
 
 ## Conclusion: Trust Is an Artifact, Not a Feeling
 
-Let's fold the chapter into one sentence, the design in its purest form: **agents and mirrors can say whatever they want, the gate only believes what it can re-derive from the append-only store and the current bytes of the repository.** Read it again, because every section we walked lives inside it. The receipts bound to content by hash. The lifecycle frozen into snapshots and ledgers. The 12-state machine with budgets welded in. The chain that only grows forward. The mirrors that never outrank the source. The bundles treated as untrusted cargo. The gates that recompute instead of accept. The two real bugs that the system caught in its own pull request, because verification that doesn't apply to itself is marketing.
+Let's fold the chapter into one sentence, the design in its purest form: **agents and mirrors can say whatever they want, the gate only believes what it can re-derive from the append-only store and the current bytes of the repository.** Read it again, because every section we walked lives inside it. The receipts bound to content by hash. The lifecycle frozen into genesis paths and findings ledgers. The one repository-derived correction. The targeted validation that preserves late knowledge without reopening scope. The 12-state machine with budgets welded in. The chain that only grows forward. The mirrors that never outrank the source. The bundles treated as untrusted cargo. The gates that recompute instead of accept. The real bugs and protocol waste that the system caught in itself, because verification that doesn't apply to itself is marketing.
 
 And notice what "trust" turned into along the way. At the start of this chapter, trust was a feeling: the model said the review passed, and the sentence sounded right, so you felt covered. By the end, trust is an ARTIFACT: a receipt you can hold, re-derive, and validate, bound by hashes to the exact bytes it vouches for. A feeling degrades under pressure, gets summarized away in a compaction, rounds itself up when the model wants to please you. An artifact is still there tomorrow, byte for byte, and it either validates or it doesn't. That's the entire upgrade, and no part of it required a smarter model. It required moving guarantees down the stack, one by one, until the things that must be true stopped depending on anyone's word.
 
@@ -414,7 +422,8 @@ And because I promised you mechanisms, numbers, and decision rules, here's the c
 - Prompts decide how well something is done; code decides whether it was done.
 - 0, 1, or 4 lenses, selected by risk, one exhaustive sweep each, always read-only.
 - One batched refuter for inferential severe findings, whether there are 2 candidates or 20.
-- At most one fix round; the delta validator can only approve or escalate.
+- Freeze genesis paths and findings once; one correction may change content only inside that scope.
+- Targeted validation proves the correction; late observations become non-blocking follow-ups.
 - If a mirror disagrees with the chain, the chain wins. Always.
 - Never trust input from the party with a stake in the outcome.
 - Trust nothing you didn't derive; a bundle is cargo until it re-validates.
@@ -431,7 +440,7 @@ So, your move, and you know I never close a chapter without homework. Find ONE g
 
 ## References and Resources
 
-- **gentle-ai** (github.com/Gentleman-Programming/gentle-ai): the open source agent stack this chapter dissected. PR #1093 is the bounded review transactions feature itself: the snapshot builder, the 12-state machine, the append-only store, the gates, and the findings ledger where the two real bugs live.
+- **gentle-ai** (github.com/Gentleman-Programming/gentle-ai): the open source agent stack this chapter dissected. PR #1093 introduced bounded review transactions; PR #1106 and release v1.49.0 completed the frozen-ledger lifecycle with immutable genesis paths, repository-derived correction evidence, targeted validation, and non-blocking follow-ups across eleven supported agent runtimes.
 - **Chapter 15 of this book**: AI-Driven Development with Claude Code, the day-to-day agent workflow that all of these guarantees exist to protect.
 - **Chapter 19 of this book**: AI Orchestration Patterns, the multi-agent and MCP layer that produces the reviews this chapter learned to verify.
 - **Chapter 20 of this book**: From Token to Agent, the mechanical foundation: context pressure, compaction, the U-curve, and the quality loop that this chapter pushed down into code, invariant by invariant.
