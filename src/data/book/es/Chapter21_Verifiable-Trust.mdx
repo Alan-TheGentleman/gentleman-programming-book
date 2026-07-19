@@ -33,8 +33,16 @@ titleList:
       tagId: 'estado-compacto-cas-y-recovery',
     },
     {
+      name: 'Reparar Autoridad Sin Debilitar la Validacion',
+      tagId: 'reparar-autoridad-sin-debilitar-la-validacion',
+    },
+    {
       name: 'Gates de Publicacion y TOCTOU',
       tagId: 'gates-de-publicacion-y-toctou',
+    },
+    {
+      name: 'Primera Publicacion a un Remote Vacio',
+      tagId: 'primera-publicacion-a-un-remote-vacio',
     },
     {
       name: 'De Legacy v1 a Compact v2',
@@ -65,7 +73,7 @@ _Como dejar de creer lo que un agente dice y empezar a verificar lo que el siste
 
 El Capitulo 20 termino con cuatro palabras: **confianza verificable, nunca confianza ciega**. Este capitulo convierte esas palabras en un procedimiento operativo. Y quiero darte la respuesta antes de la arquitectura, porque un proceso confiable no deberia obligar a quien lo usa a reconstruir quince transiciones internas solo para revisar un cambio.
 
-El camino actual de review ordinario en Gentle AI v2.1.2 tiene cinco acciones, o cuatro cuando la seleccion de riesgo no elige ningun lens:
+El camino actual de review ordinario en Gentle AI v2.1.8 tiene cinco acciones, o cuatro cuando la seleccion de riesgo no elige ningun lens:
 
 ```text
 1. gentle-ai review start
@@ -114,6 +122,8 @@ gentle-ai review start --cwd .
 La facade descubre la raiz del repositorio en lugar de confiar en tu directorio actual como autoridad. Descubre archivos untracked intencionales, construye el target inmutable, clasifica riesgo, selecciona lenses, cuenta lineas authored originales, calcula el budget de correccion, deriva un lineage y persiste estado compacto en `reviewing`.
 
 La respuesta es chica y accionable. Recibis lineage, estado, nivel de riesgo, lenses seleccionados, cantidad de archivos y lineas cambiadas, y budget congelado. No recibis una instruccion para fabricar operation JSON. Si el riesgo es bajo, la lista de lenses esta vacia. Si es estandar, recibis un focus lens. Si es alto, recibis los cuatro canonicos en orden: risk, resilience, readability y reliability.
+
+Desde v2.1.8, la respuesta de start tambien trae la identidad congelada del target y un binding preparado por cada lens seleccionado. El orquestador prefija cada prompt de lens con el binding exacto que emitio start, en vez de tipear lineage, target, lens y orden a mano. Parece una comodidad chica. Es una regla de identidad: si el orquestador pudiera inventar bindings, un caracter transpuesto ataria un juicio real a la autoridad equivocada. La parte que congelo el target es la unica que puede nombrarlo.
 
 Esa forma 0, 1 o 4 es control de costo estructural. Un cambio solo de docs no deberia pagar cuatro model calls amplias. Un cambio normal de codigo se beneficia de una pasada enfocada. Auth, pagos, service tokens, paths sensibles de seguridad o un cambio grande merecen cuatro perspectivas independientes. La facade toma esa decision una vez desde evidencia del repo y la congela. Una correccion no puede recalcular riesgo hacia abajo para escapar del review ni hacia arriba para fabricar mas trabajo.
 
@@ -198,6 +208,20 @@ Cada comando de facade tiene una historia segura de retry. Si `review start` ya 
 La regla es simple: trata output de comando como routing, no prosa para reinterpretar. El campo `action` le dice al orquestador que input legal falta. `store_revision` le dice al codigo nativo que revision existe. `receipt_path` aparece solo en estado terminal. El modelo no deberia traducir "rerun with --evidence" a "inicia transaccion final-verification", porque ese comando ordinario ya no existe.
 
 Esto vuelve aburrido al crash recovery. Aburrido es BUENO. No le preguntas al modelo si ya habia congelado findings antes de compactacion. Llamas la misma facade, carga compact state y sigue desde el estado que llego al disco. La autoridad persistida, no el recuerdo del chat, decide donde retomar.
+
+### Resultados de reviewer que sobreviven a la falla
+
+La invocacion exactly-once del lens genera un miedo practico: el lens corre una sola vez, entonces que pasa cuando el ambiente falla alrededor? v2.1.8 responde con tres protecciones, y ninguna debilita la verificacion.
+
+Primero, preflight de captura. Antes de lanzar un lens, la facade verifica que su resultado va a tener donde aterrizar legalmente: la autoridad existe, el lineage resuelve, el binding coincide. La invocacion del reviewer es preciosa justamente porque es exactly-once. Fallar rapido antes de gastarla es mejor que descubrir despues del juicio que nadie podia recibirlo. Proba el grabador antes de la entrevista, no despues.
+
+Segundo, targeting explicito de repositorio. Un lens puede correr con working directory adentro de un repo anidado, y una captura que adivina desde el path actual ata el resultado al store equivocado. `GENTLE_AI_REVIEW_CWD` fija el repositorio duenio del review, y los checkouts anidados dejan de ser una trampa de identidad.
+
+Tercero, resultados preservados que no pueden fingir. Cuando la captura falla despues de que el lens ya produjo su juicio, el runtime preserva el payload crudo como artefacto de incidente con un schema deliberadamente distinto. Finalize RECHAZA ese schema. Un payload no verificado nunca puede hacerse pasar por captura verificada. La recuperacion replaya el artefacto preservado por el camino completo de verificacion nativa, el mismo que paga una captura viva. Y cuando el binario instalado es anterior al flag de preservacion, el runtime degrada con gracia en vez de romper el review.
+
+Mira la forma del disenio: cada comodidad apunta hacia la verificacion, nunca alrededor. Una red de seguridad que finalize aceptara directo seria una segunda puerta mas debil hacia la autoridad. La red existe para llevar el resultado a la misma puerta que usan todos.
+
+> _"La red de seguridad nunca puede volverse un bypass."_
 
 Este es el procedimiento que tenes que recordar. Todo lo demas explica por que estas cinco acciones alcanzan y que protecciones cargan. Si un detalle de implementacion cambia mientras la facade sigue estable, tu contrato cognitivo sobrevive. Para ESO existe una facade.
 
@@ -423,7 +447,7 @@ reviewing
   --> approved | escalated
 ```
 
-Es el camino exitoso, no una afirmacion de que todo intento fallido es imposible. v2.1.2 mantiene correcciones dirigidas fallidas dentro de la misma transaccion, con contabilidad acumulada y maximo de tres intentos fallidos. Abrimos ese edge despues del happy path.
+Es el camino exitoso, no una afirmacion de que todo intento fallido es imposible. v2.1.8 mantiene correcciones dirigidas fallidas dentro de la misma transaccion, con contabilidad acumulada y maximo de tres intentos fallidos. Abrimos ese edge despues del happy path.
 
 ### Forecast antes de editar
 
@@ -463,7 +487,7 @@ Validator es read-only. No lanza broad review ni findings bloqueantes nuevos. Pr
 
 Si falla, el intento persiste con snapshot, lineas propuestas y reales, fix hash y dos checks. Estado vuelve a `correction_required`. Lenses NO corren de nuevo. IDs NO cambian. Risk y genesis NO recalculan. Proximo intento gasta mismo budget acumulado.
 
-Tres intentos fallidos agotan lineage aunque delta sea cero. Exceder lineas acumuladas tambien escala. No son "tres correction rounds" viejas, donde cada una reabria review. Es una transaccion con hasta tres intentos para mismos findings congelados. Importa.
+Tres intentos fallidos agotan lineage aunque delta sea cero. Exceder lineas acumuladas tambien escala. Y desde v2.1.8, un intento que no edita nada escala terminal en el acto, porque un fix de cero lineas no puede resolver un blocker causado por el candidato y loopear sobre el solo narra progreso que no existe. No son "tres correction rounds" viejas, donde cada una reabria review. Es una transaccion con hasta tres intentos para mismos findings congelados. Importa.
 
 Pongamos numeros. Candidato de 120 lineas recibe 60. Primer fix forecast 20, actual 18. Validator falla, quedan cargadas 18. Segundo forecast 25, actual 22. Acumulado 40, quedan 20. Tercer forecast 25 escala antes de editar porque `40 + 25` excede. Forecast 15 puede seguir, pero si falla por tercera vez, escala aunque total quede debajo de 60.
 
@@ -593,6 +617,29 @@ Limite real: snapshots pueden referenciar synthetic Git trees y garbage collecti
 
 ---
 
+## Reparar Autoridad Sin Debilitar la Validacion
+
+La validacion fail-closed tiene una consecuencia incomoda a largo plazo: las reglas se endurecen mas rapido de lo que la historia se reescribe. Un store que vivio varias versiones puede guardar entradas que eran legales cuando se escribieron e invalidas hoy. v2.1.8 se encontro con tres. Una entrada incompleta abandonada por una operacion vieja interrumpida. Un edge de recovery registrado como unchanged-target bajo reglas que hoy rechazan esa forma. Y edges escalados cuya autorizacion de maintainer quedo como texto libre antes de que existiera el binding exacto v1.
+
+Ninguna es un ataque. Todas fallan la validacion actual. Y mientras estan ahi, discovery no puede dar una respuesta limpia sobre el inventario, asi que un store que necesitas queda parcialmente inutilizable por una razon que nadie arregla trabajando mas fuerte.
+
+El fix tentador es tolerancia. Enseniarle a la validacion a aceptar formas legacy: "si la entrada es vieja, permiti la autorizacion de texto libre". Eso es drift fail-open con mejores modales. Cada excepcion legacy es una puerta permanente, y una puerta no pide partida de nacimiento. La entrada que califica para la excepcion maniana puede no ser un accidente historico.
+
+El fix que shippeo va para el otro lado. La validacion queda exactamente igual de estricta. La reparacion se vuelve ceremonia explicita con evidencia:
+
+- **Prueba de anomalia unica.** La reparacion engancha solo despues de probar que la anomalia es la unica de su clase en el inventario. Un paciente documentado, no una amnistia de categoria.
+- **Cuarentena en dos fases que preserva bytes.** La entrada ofensora se aparta en dos fases sin alterar un byte. La historia queda byte-identica. Nada se edita in place, asi la evidencia de lo que paso sobrevive a su propia reparacion.
+- **Clases de prueba distintas en un registro de auditoria.** Cada tipo de anomalia es su propia clase: entrada incompleta, edge de recovery unchanged-target invalido, autorizacion escalada pre-contrato. El registro nombra la clase y carga la prueba, asi un lector futuro sabe exactamente que defecto se reparo y por que.
+- **El mismo binding de autorizacion de maintainer.** La ceremonia exige el mismo binding exacto que requiere un edge escalado moderno. La historia pre-contrato no hereda autoridad por antiguedad. Se re-autoriza bajo el contrato de hoy.
+
+Despues de la ceremonia, la validacion no aprendio ninguna excepcion, los bytes de la historia estan intactos y el inventario vuelve a ser usable. Comparalo con el registro de la propiedad. Cuando una escritura vieja es anterior a la ley de escribanos, el registro no empieza a aceptar escrituras sin escribano. Corre un proceso de reconocimiento: un caso, evidencia en el expediente, el documento original preservado y una entrada nueva autorizada que las reglas de hoy validan completa.
+
+La distincion para internalizar es entre reparar datos y reparar autoridad. Reparar datos edita bytes hasta que el parser queda contento. Reparar autoridad prueba lo que paso, pone en cuarentena sin reescribir y re-autoriza bajo el contrato actual. La primera destruye la evidencia que deberia preservar. La segunda es la unica que este sistema permite.
+
+> _"Reparar es una ceremonia con evidencia, nunca una edicion."_
+
+---
+
 ## Gates de Publicacion y TOCTOU
 
 Receipt responde que candidato termino. Delivery gate responde si todavia aplica ACA, AHORA, en esta frontera.
@@ -617,11 +664,27 @@ El flat `gentle-ai review-validate` queda solo legacy v1. Docs, hooks y workflow
 
 `main` es ref mutable, no identidad. `origin` es alias local. "PR branch" puede ser fork head, chained base o tracking ref vieja. Gate resuelve object IDs y relaciones.
 
-En pre-push, current-changes receipt necesita tree entregado real y exactamente un delivery commit. Rechaza vacio o parcial. En pre-PR, base explicita unavailable produce denial, no fallback conveniente. Compatible advance necesita prueba; base vieja no se vuelve actual porque diff se parece.
+En pre-push, current-changes receipt necesita tree entregado real y exactamente un delivery commit. Rechaza vacio o parcial. Cuando la misma entrega fisica es alcanzable por mas de un camino de refs, el gate deduplica el rango de publicacion antes de juzgarlo, asi una entrega se valida una sola vez en lugar de contarse doble hasta un mismatch falso. En pre-PR, base explicita unavailable produce denial, no fallback conveniente. Compatible advance necesita prueba; base vieja no se vuelve actual porque diff se parece.
 
-Toma chained PR. B se reviso contra A, no `main`. A mergea y `main` avanza. Gate que compara nombres rechaza cadenas legitimas o asume equivalencia. Compact gate deriva ancestry y candidate tree, evalua advance con prueba. Preserva relacion valida sin fingir objetos identicos.
+Toma chained PR. B se reviso contra A, no `main`. A mergea y `main` avanza. Gate que compara nombres rechaza cadenas legitimas o asume equivalencia. Compact gate deriva ancestry y candidate tree, evalua advance con prueba. Preserva relacion valida sin fingir objetos identicos. Desde v2.1.8, el gate pre-PR deriva esa prueba de advance compatible nativamente desde ancestry en vez de aceptar una equivalencia afirmada, y sin prueba queda la denial.
 
 Ahora fork. `origin` local apunta al fork pero PR base al upstream. Replayar receipt contra remote equivocado entrega bytes correctos al dominio incorrecto. Pre-PR y pre-push quedan separados porque preguntan distinto. Por eso topology vive en live context, no `destination_ref` adivinado.
+
+### El siguiente slice no envenena el gate
+
+Aprobas un slice, lo commiteas y arrancas el siguiente encima. Ayer, ese momento ordinario era el mas confuso del lifecycle: los gates comparaban tu working tree nuevo contra un receipt terminado, honesto y simplemente sobre otra cosa, y el resultado sonaba a acusacion.
+
+v2.1.8 clasifica en vez de acusar. Trabajo nuevo que no toca ningun path revisado clasifica como `receipt_unrelated`: el receipt viejo sigue valido para lo que aprobo, y el trabajo nuevo necesita su propio review cuando llegue a una frontera. Trabajo nuevo que se mete en el scope revisado clasifica como `receipt_scope_changed`: accion explicita de scope. Dos nombres, dos proximos movimientos, ningun gate envenenado.
+
+La regla profunda se esconde en el camino de falla. La clasificacion corre comandos git, y git puede fallar: un objeto corrupto, un proceso interrumpido, una ref que falta. Cuando pasa, la falla propaga como error tipado en vez de colapsar en silencio hacia una de las dos clasificaciones. Una falla de infraestructura nunca puede reclasificarse como respuesta. "No pude determinar X" y "X es falso" son oraciones distintas, y un gate que las mezcla eventualmente deniega trabajo valido o, peor, permite trabajo invalido con cara seria.
+
+### Recovery encadenado tiene que re-atar la entrega
+
+Un sucesor de recovery puede nacer despues de que su predecesor ya entrego. Digamos que el scope cambio despues de aprobar, la entrega paso por la cadena predecesora, y el sucesor existe para gobernar lo que viene. Su receipt es degenerado por construccion: base igual a candidate y genesis vacio, porque al momento de crearlo no habia nada nuevo que revisar.
+
+Ata ese receipt directo en un gate de publicacion y deniega: los commits entregados no matchean un review vacio. La denial es tecnicamente correcta y operativamente mala, porque la entrega SI fue revisada, por los predecesores aprobados.
+
+v2.1.8 deja que los gates de publicacion compongan la cadena predecesora aprobada de hoja a raiz y re-deriven la entrega nativamente: caminar la historia lineal, probar el final candidate tree de cada miembro, coser los segmentos de genesis por miembro y re-derivar bajo el mismo lock que usa toda autorizacion. La composicion engancha solo cuando dos condiciones se cumplen a la vez: el binding directo denegaria, y el candidato entregado todavia es igual al del receipt. Y cada camino de falla adentro de la composicion conserva la denial original. El rebind existe para rescatar un verdadero positivo. Nunca puede dar vuelta un verdadero negativo.
 
 ### Rechecks finales TOCTOU
 
@@ -654,6 +717,40 @@ Denial machine-readable es disenio operativo, no copy de error mas lindo. `scope
 Orchestrator puede rutear sin inventar policy. No responde a `scope-changed` corriendo validate tres veces, ni a `escalated` abriendo correction ordinaria. Reason codes vuelven failure una transicion finita para caller. Errores solo en prosa invitan a misma maquina probabilistica eliminada de autoridad a reinterpretar gate.
 
 Un buen denial incluye suficiente contexto observado para diagnosticar sin autorizar. Mostrar selector de base pedido y codigo `unavailable` ayuda al humano a corregir remote o ref, pero no convierte observacion parcial en permiso. Explicabilidad no tiene que debilitar fail-closed.
+
+---
+
+## Primera Publicacion a un Remote Vacio
+
+Todo invariante de este capitulo suena terminado cuando lo lees. Dejame mostrarte uno chocando contra la realidad, porque esa colision es la mejor leccion de metodo de todo el release. La feature: pushear a un remote con cero refs. La primera publicacion de un repositorio. Tomo siete rondas de review adversarial shippearla, y el propio proceso de review de la herramienta encontro cada agujero.
+
+Por que la primera publicacion es especial? Un push ordinario entrega un rango acotado: los commits entre lo que el remote tiene y lo que mandas. Un push a un remote vacio no tiene "lo que el remote tiene". Git transfiere cada objeto alcanzable: la historia completa, cada commit, cada tree, cada blob que cualquier commit haya referenciado. El invariante "nada sin revisar se publica" de golpe no aplica a un diff sino a todo lo que tu repositorio contuvo alguna vez.
+
+La primera ronda encontro una contradiccion: la validacion se salteaba entera para un tipo de target mientras era demasiado estricta para otro. El fixture de test pasaba, pero solo por construccion: estaba armado en una forma que esquivaba los dos defectos de casualidad. Un fixture que pasa por construccion no es evidencia; es una coincidencia con tilde verde.
+
+La capa siguiente fue disclosure por path. La comparacion a nivel path pregunta: cada path del tree entregado esta revisado? Suena bien, y admite una fuga. Imaginate un secreto commiteado temprano en `config/keys.txt`, despues pisado con una version sana. El chequeo de paths inspecciona el contenido actual y aprueba. Pero el push al remote vacio carga la historia ENTERA, incluido el blob viejo con el secreto. El tree revisado nunca lo muestra; los objetos transferidos lo incluyen.
+
+El disclosure a nivel blob cerro ese agujero: dejar de preguntar por paths, preguntar por blobs. Y entonces el review encontro la capa abajo de los blobs: metadata. `git commit --allow-empty` crea un commit sin ningun cambio de contenido, cargando un mensaje arbitrario. Pone un secreto en ese mensaje y toda regla de contenido pasa, porque un mensaje no es contenido. El objeto igual se transfiere.
+
+El invariante final quedo en capas que matchean la superficie de ataque:
+
+- El rango entregado tiene que ser subconjunto del genesis calculado desde el base commit REAL resuelto, no una aproximacion comoda.
+- Cada blob alcanzable tiene que ser byte-identico a algun blob del base tree revisado. La membresia es por object ID y agnostica de path, asi los renames entran naturales, y un blob con secreto pisado falla cerrado, con guia para squashear la historia que lo carga.
+- La metadata de commits y tags queda explicitamente FUERA del scope del contrato.
+
+Esa ultima linea merece una pausa, porque parece debilidad y es la movida mas fuerte del disenio. Ningun receipt en ningun lado ata el texto de un mensaje de commit. Ni en primera publicacion, ni en pushes ordinarios. Reclamar proteccion de metadata seria exactamente la inflacion de adjetivos contra la que este capitulo viene avisando. Entonces el contrato declara la exclusion, la documenta y la clava con un scope test que hay que flipear conscientemente: quien extienda el contrato a metadata tiene que cambiar el test que dice que no lo cubre, a proposito, en un diff revisable.
+
+Tres lecciones para quedarte:
+
+Primera, los invariantes chocan con la realidad por capas. Paths, despues blobs, despues metadata. Cada fix expuso el agujero siguiente, y ninguna ronda sola podia encontrar los tres, porque cada capa recien se vuelve visible cuando la anterior deja de filtrar.
+
+Segunda, un contrato honesto declara lo que NO garantiza. "Cada blob alcanzable es contenido revisado, y los mensajes quedan fuera de scope" es mas confiable que "todo esta protegido", porque el primer claim lo podes verificar y el segundo solo creerlo.
+
+Tercera, clava las fronteras del contrato con tests. La documentacion de una frontera se pudre en silencio; un scope test falla a los gritos el dia que alguien mueve la frontera sin decidirlo.
+
+Y disfruta la recursion un segundo: la maquinaria de review adversarial que describe este capitulo es la que corrio esas siete rondas contra su propio gate de publicacion. El metodo no exime su propio codigo. Asi se ve una cultura de verificacion que se cree a si misma.
+
+> _"Un contrato honesto te dice donde termina, y clava ese final con un test."_
 
 ---
 
@@ -801,6 +898,10 @@ Reglas para clavar arriba del escritorio:
 - Hooks local, required CI server.
 - Nunca claims de authenticity/tamper resistance sin anchor externo.
 - Legacy chains/bundles etiquetados compatibilidad.
+- Repara autoridad con ceremonias atadas a evidencia, nunca con ediciones ni excepciones legacy.
+- Clasifica trabajo nuevo sobre un receipt aprobado, y nunca dejes que una falla de infraestructura se vuelva respuesta.
+- Declara lo que tu contrato NO garantiza y clava esa frontera con un test.
+- Deja que los caminos de recuperacion replayen por verificacion completa; la red de seguridad nunca es bypass.
 
 Al principio, confianza era frase: "review paso". Al final es derivacion repetible. State dice candidato y juicio terminal. Receipt carga identidad estable. Gate pregunta a Git vivo si aplica aca. Cada capa responde una pregunta que puede probar.
 
@@ -825,6 +926,7 @@ Tu tarea es menor al protocolo viejo y mas dificil de fingir. Elegi workflow don
 - **Gentle AI v2.1.2 source of truth**: `internal/assets/skills/_shared/review-ledger-contract.md`, `internal/app/help.go`, `internal/cli/review_facade.go`, `internal/reviewtransaction/compact.go`, `internal/reviewtransaction/compact_store.go`, `internal/reviewtransaction/compact_gate.go` e `internal/cli/review_facade_test.go` en tag `v2.1.2`.
 - **Gentle AI PR #1135**, `fix(review): simplify causal review lifecycle`, merge `fd1afc27c607821f10ad401043ada42c3745f6ac`: reemplazo lifecycle legacy ordinario por facade causal compacta y midio reducciones.
 - **Gentle AI PR #1216**, `fix(review): recover bounded review lifecycles`: agrego successor recovery auditado, schemas estrictos, correction accounting acumulado y limite de tres intentos sin rerun lenses.
+- **Gentle AI v2.1.8 release** (github.com/Gentleman-Programming/gentle-ai/releases/tag/v2.1.8): ceremonias de reparacion de autoridad (#1400, #1429, #1436), ruteo del siguiente slice (#1431), rebind de recovery encadenado (#1432), resultados de reviewer preservados con replay verificado (#1434) y el contrato de primera publicacion a remotes vacios (#1437).
 - **Review Authority Threat Model**: `docs/review-authority-threat-model.md` en `v2.1.2`, frontera explicita entre controles accidental/concurrent y autenticidad same-user local fuera de scope.
 - **Capitulo 15**: Desarrollo Guiado por IA con Claude Code, workflow diario protegido.
 - **Capitulo 19**: Patrones de Orquestacion de IA, capa multi-agent y MCP.
