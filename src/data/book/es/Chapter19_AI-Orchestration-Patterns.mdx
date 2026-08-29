@@ -80,15 +80,17 @@ Este es el patron mas intuitivo y probablemente el que vas a usar mas. Funciona 
 
 **Analogia de construccion:** Pensa en el arquitecto jefe de una obra. El no pone los cables electricos, no suelda las tuberias, no coloca los vidrios. Pero sabe exactamente que tiene que hacer cada especialista, en que orden, y como combinar todo para que el edificio funcione. El electricista le reporta a el, el plomero le reporta a el, y el toma las decisiones de coordinacion.
 
-<Mermaid
-	chart={`
-graph TD
-    S[SUPERVISOR<br/>Recibe, delega, sintetiza]
-    S --> R[Worker<br/>Research]
-    S --> W[Worker<br/>Writer]
-    S --> A[Worker<br/>Analyst]
-`}
-/>
+```
+      ┌─────────────────────────┐
+      │       SUPERVISOR        │
+      │ (Recibe,delega,sintet.) │
+      └───┬────────┬────────┬───┘
+          │        │        │
+     ┌────┴───┐┌───┴───┐┌───┴────┐
+     │ Worker ││Worker ││ Worker │
+     │Research││Writer ││Analyst │
+     └────────┘└───────┘└────────┘
+```
 
 **Cuando usarlo:**
 
