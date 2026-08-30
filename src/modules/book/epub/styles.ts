@@ -45,6 +45,17 @@ img {
 	height: auto;
 }
 
+figure.diagram {
+	margin: 1em 0;
+	text-align: center;
+	page-break-inside: avoid;
+}
+
+figure.diagram img {
+	max-width: 100%;
+	height: auto;
+}
+
 table {
 	width: 100%;
 	border-collapse: collapse;

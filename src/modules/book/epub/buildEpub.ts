@@ -5,6 +5,7 @@ import { BrowserContext } from 'playwright';
 
 import { MediaLibrary } from './assets';
 import { renderCover } from './cover';
+import { DiagramRenderer } from './diagrams';
 import { renderChapter } from './markdown';
 import {
 	buildNav,
@@ -96,13 +97,14 @@ export async function buildEpub(
 	if (!profile) throw new Error(`unsupported locale: ${locale}`);
 
 	const library = new MediaLibrary();
+	const diagrams = new DiagramRenderer(context);
 	const sources = await readChapters(locale);
 
 	const documents: ChapterDocument[] = [];
 	const chapterEntries: ZipEntry[] = [];
 
 	for (const [index, source] of sources.entries()) {
-		const rendered = await renderChapter(source.content, library);
+		const rendered = await renderChapter(source.content, library, diagrams);
 		const fileName = `chapter-${String(index + 1).padStart(2, '0')}.xhtml`;
 
 		documents.push({
@@ -138,7 +140,7 @@ export async function buildEpub(
 		modified: new Date().toISOString().replace(/\.\d{3}Z$/, 'Z'),
 	};
 
-	const media = library.list();
+	const media = [...library.list(), ...diagrams.list()];
 	const coverBody = `\t\t<div class="cover"><img src="../media/cover.jpg" alt="${profile.title}"/></div>`;
 
 	const entries: ZipEntry[] = [

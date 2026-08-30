@@ -9,6 +9,7 @@ import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 
 import { MediaLibrary } from './assets';
+import { DiagramRenderer, isDiagram } from './diagrams';
 
 export interface ChapterHeading {
 	id: string;
@@ -68,9 +69,54 @@ function imagePlugin(library: MediaLibrary) {
 	};
 }
 
+function diagramPlugin(renderer: DiagramRenderer) {
+	return () => async (tree: unknown) => {
+		const targets: { node: Record<string, unknown>; text: string }[] = [];
+
+		visit(tree as never, 'element', (node: never) => {
+			const element = node as {
+				tagName: string;
+				children: { tagName?: string; children?: unknown[] }[];
+			};
+			if (element.tagName !== 'pre') return;
+
+			const code = element.children.find(child => child.tagName === 'code');
+			if (!code) return;
+
+			const text = hastToString(code as never);
+			if (!isDiagram(text)) return;
+
+			targets.push({ node: element as never, text });
+		});
+
+		await Promise.all(
+			targets.map(async target => {
+				const asset = await renderer.render(target.text);
+				Object.assign(target.node, {
+					type: 'element',
+					tagName: 'figure',
+					properties: { className: ['diagram'] },
+					children: [
+						{
+							type: 'element',
+							tagName: 'img',
+							properties: {
+								src: `../media/${asset.fileName}`,
+								alt: 'Diagram',
+							},
+							children: [],
+						},
+					],
+				});
+			}),
+		);
+	};
+}
+
 export async function renderChapter(
 	markdown: string,
 	library: MediaLibrary,
+	diagrams: DiagramRenderer,
 ): Promise<RenderedChapter> {
 	const headings: ChapterHeading[] = [];
 
@@ -81,6 +127,7 @@ export async function renderChapter(
 		.use(rehypeRaw)
 		.use(slugPlugin(headings))
 		.use(imagePlugin(library))
+		.use(diagramPlugin(diagrams))
 		.use(rehypeStringify, {
 			closeSelfClosing: true,
 			closeEmptyElements: true,

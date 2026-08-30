@@ -1,7 +1,19 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { MediaLibrary } from '@/book/epub/assets';
+import { DiagramRenderer } from '@/book/epub/diagrams';
 import { renderChapter } from '@/book/epub/markdown';
+
+function diagramsReturning(fileName = 'diagram-abc123.png') {
+	return {
+		render: vi.fn(async () => ({
+			fileName,
+			mediaType: 'image/png',
+			data: Buffer.alloc(0),
+		})),
+		list: () => [],
+	} as unknown as DiagramRenderer;
+}
 
 function libraryReturning(fileName: string | null) {
 	return {
@@ -19,6 +31,7 @@ describe('renderChapter', () => {
 		const result = await renderChapter(
 			'# Clean Agile\n\nSome prose.',
 			libraryReturning(null),
+			diagramsReturning(),
 		);
 
 		expect(result.title).toBe('Clean Agile');
@@ -28,6 +41,7 @@ describe('renderChapter', () => {
 		const result = await renderChapter(
 			'# Algorithms\n\n### Types of Big O Notation\n\ntext',
 			libraryReturning(null),
+			diagramsReturning(),
 		);
 
 		expect(result.headings).toContainEqual({
@@ -41,6 +55,7 @@ describe('renderChapter', () => {
 		const result = await renderChapter(
 			'# Chapter\n\n![Waterfall](/clean-agile/img1.svg)',
 			libraryReturning('clean-agile_img1.png'),
+			diagramsReturning(),
 		);
 
 		expect(result.body).toContain('src="../media/clean-agile_img1.png"');
@@ -51,6 +66,7 @@ describe('renderChapter', () => {
 		const result = await renderChapter(
 			'# Chapter\n\n![Missing](/nope/absent.png)',
 			libraryReturning(null),
+			diagramsReturning(),
 		);
 
 		expect(result.body).toContain('src="/nope/absent.png"');
@@ -60,6 +76,7 @@ describe('renderChapter', () => {
 		const result = await renderChapter(
 			'# Chapter\n\n| a | b |\n| --- | --- |\n| 1 | 2 |',
 			libraryReturning(null),
+			diagramsReturning(),
 		);
 
 		expect(result.body).toContain('<table>');
@@ -70,9 +87,40 @@ describe('renderChapter', () => {
 		const result = await renderChapter(
 			'# Chapter\n\n![Waterfall](/clean-agile/img1.svg)\n\n---',
 			libraryReturning('clean-agile_img1.png'),
+			diagramsReturning(),
 		);
 
 		expect(result.body).toContain('/>');
 		expect(result.body).not.toMatch(/<img[^>]*[^/]>/);
+	});
+	it('turns a box drawing block into an image so Kindle cannot reflow it', async () => {
+		const diagram = [
+			'```',
+			'┌─────────────┐',
+			'│  Call Stack │',
+			'└─────────────┘',
+			'```',
+		].join('\n');
+
+		const result = await renderChapter(
+			`# Chapter\n\n${diagram}`,
+			libraryReturning(null),
+			diagramsReturning('diagram-deadbeef.png'),
+		);
+
+		expect(result.body).toContain('src="../media/diagram-deadbeef.png"');
+		expect(result.body).not.toContain('┌');
+	});
+
+	it('leaves ordinary code blocks as text', async () => {
+		const result = await renderChapter(
+			'# Chapter\n\n```ts\nconst answer = 42;\n```',
+			libraryReturning(null),
+			diagramsReturning(),
+		);
+
+		expect(result.body).toContain('<pre>');
+		expect(result.body).toContain('const answer = 42;');
+		expect(result.body).not.toContain('../media/diagram');
 	});
 });
