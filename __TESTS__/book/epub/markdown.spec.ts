@@ -123,4 +123,34 @@ describe('renderChapter', () => {
 		expect(result.body).toContain('const answer = 42;');
 		expect(result.body).not.toContain('../media/diagram');
 	});
+	it('wraps every code line in its own block so wrapped lines hang', async () => {
+		const result = await renderChapter(
+			'# Chapter\n\n```ts\nconst a = 1;\nconst b = 2;\n```',
+			libraryReturning(null),
+			diagramsReturning(),
+		);
+
+		expect(result.body).toContain('<span class="cl">const a = 1;</span>');
+		expect(result.body).toContain('<span class="cl">const b = 2;</span>');
+	});
+
+	it('keeps leading indentation inside a code line', async () => {
+		const result = await renderChapter(
+			'# Chapter\n\n```ts\nfunction f() {\n  return 1;\n}\n```',
+			libraryReturning(null),
+			diagramsReturning(),
+		);
+
+		expect(result.body).toContain('<span class="cl">  return 1;</span>');
+	});
+
+	it('gives blank code lines a marker so they keep their height', async () => {
+		const result = await renderChapter(
+			'# Chapter\n\n```ts\nconst a = 1;\n\nconst b = 2;\n```',
+			libraryReturning(null),
+			diagramsReturning(),
+		);
+
+		expect(result.body).toContain('<span class="cl">\u200B</span>');
+	});
 });

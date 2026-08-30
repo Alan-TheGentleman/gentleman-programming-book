@@ -113,6 +113,33 @@ function diagramPlugin(renderer: DiagramRenderer) {
 	};
 }
 
+const EMPTY_LINE_MARKER = '\u200B';
+
+function codeLinesPlugin() {
+	return () => (tree: unknown) => {
+		visit(tree as never, 'element', (node: never) => {
+			const element = node as {
+				tagName: string;
+				children: { tagName?: string; children?: unknown[] }[];
+			};
+			if (element.tagName !== 'pre') return;
+
+			const code = element.children.find(child => child.tagName === 'code') as
+				| { children: unknown[] }
+				| undefined;
+			if (!code) return;
+
+			const text = hastToString(code as never).replace(/\n$/, '');
+			code.children = text.split('\n').map(line => ({
+				type: 'element',
+				tagName: 'span',
+				properties: { className: ['cl'] },
+				children: [{ type: 'text', value: line || EMPTY_LINE_MARKER }],
+			}));
+		});
+	};
+}
+
 export async function renderChapter(
 	markdown: string,
 	library: MediaLibrary,
@@ -128,6 +155,7 @@ export async function renderChapter(
 		.use(slugPlugin(headings))
 		.use(imagePlugin(library))
 		.use(diagramPlugin(diagrams))
+		.use(codeLinesPlugin())
 		.use(rehypeStringify, {
 			closeSelfClosing: true,
 			closeEmptyElements: true,

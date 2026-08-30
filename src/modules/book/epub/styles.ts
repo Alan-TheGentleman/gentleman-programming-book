@@ -21,12 +21,21 @@ pre {
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	hyphens: none;
-	font-size: 0.7em;
-	line-height: 1.35;
-	background-color: #f5f5f5;
-	border-left: 3px solid #c71f7a;
-	padding: 0.5em 0.6em;
-	margin: 1em 0;
+	font-size: 0.78em;
+	line-height: 1.45;
+	background-color: #f7f7f7;
+	border-left: 2px solid #b0b0b0;
+	padding: 0.6em 0.7em;
+	margin: 1.1em 0;
+	-moz-tab-size: 4;
+	tab-size: 4;
+}
+
+pre .cl {
+	display: block;
+	white-space: pre-wrap;
+	padding-left: 1.6em;
+	text-indent: -1.6em;
 }
 
 code {
