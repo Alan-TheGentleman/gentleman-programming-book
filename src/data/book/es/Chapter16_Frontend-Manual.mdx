@@ -613,19 +613,19 @@ Antes de escribir una línea de código, necesitás entender cómo JavaScript ej
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                         Call Stack                          │
-│  (donde se ejecuta el código síncrono)                     │
+│  (donde se ejecuta el código síncrono)                      │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                      Microtask Queue                        │
-│  (Promises, queueMicrotask - alta prioridad)               │
+│  (Promises, queueMicrotask - alta prioridad)                │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                      Macrotask Queue                        │
-│  (setTimeout, setInterval, I/O, UI rendering)              │
+│  (setTimeout, setInterval, I/O, UI rendering)               │
 └─────────────────────────────────────────────────────────────┘
 ```
 
