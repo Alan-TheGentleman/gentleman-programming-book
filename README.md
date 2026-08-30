@@ -51,6 +51,23 @@ bun run lint             # Run ESLint
 bun run lint:fix         # Fix ESLint issues
 ```
 
+## Generating the Book Files
+
+With the dev server running:
+
+```bash
+# PDF, both languages
+curl -X GET "http://localhost:3000/api/pdf"
+
+# EPUB for Kindle / Amazon KDP
+curl -X GET "http://localhost:3000/api/epub"           # both languages
+curl -X GET "http://localhost:3000/api/epub?locale=en" # English only
+curl -X GET "http://localhost:3000/api/epub?locale=es" # Spanish only
+```
+
+The EPUB route writes the book and a 1600x2560 cover for each language into
+`public/`, and needs no external tooling beyond the project dependencies.
+
 ## Project Structure
 
 ```

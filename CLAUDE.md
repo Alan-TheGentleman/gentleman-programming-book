@@ -24,6 +24,11 @@ bun run test         # Run tests with Vitest in watch mode
 
 # PDF Generation
 curl -X GET "http://localhost:3000/api/pdf"  # Generate PDFs for both languages
+
+# EPUB Generation (Kindle / Amazon KDP)
+curl -X GET "http://localhost:3000/api/epub"             # Both languages
+curl -X GET "http://localhost:3000/api/epub?locale=en"   # English only
+curl -X GET "http://localhost:3000/api/epub?locale=es"   # Spanish only
 ```
 
 ## Architecture
@@ -115,6 +120,26 @@ titleList:
 - Format: `ChapterXX_Descriptive-Name.mdx` where XX is zero-padded order number
 - Example: `Chapter15_IA-Driven-Development.mdx`
 - Use same descriptive name for both languages when possible
+
+### EPUB Generation
+The `/api/epub` route builds Kindle-ready EPUB 3 files without any external
+binary. It accepts a `locale` query parameter (`en`, `es`, or `all`, defaulting
+to `all`) and writes:
+- `public/gentleman-programming-book.epub` and `public/gentleman-programming-book-cover.jpg`
+- `public/es/gentleman-programming-book-es.epub` and `public/es/gentleman-programming-book-es-cover.jpg`
+
+Implementation lives in `src/modules/book/epub`:
+1. Chapters are discovered from the filesystem and ordered by frontmatter `order`
+2. Markdown becomes XHTML through the remark/rehype pipeline, reusing `remark-gfm`
+   so tables survive
+3. SVG figures are rasterized to PNG with `sharp`, because Kindle does not render
+   SVG reliably
+4. The cover is rendered by Playwright at 1600x2560, the size Amazon KDP expects
+5. Code blocks are styled to wrap, since Kindle has no horizontal scrolling
+6. The container is zipped by `src/modules/book/epub/zip.ts` using Node's `zlib`,
+   storing `mimetype` uncompressed as the EPUB specification requires
+
+The output validates against EPUBCheck with no errors or warnings.
 
 ### Styling System
 Uses Vanilla Extract CSS-in-JS with:
