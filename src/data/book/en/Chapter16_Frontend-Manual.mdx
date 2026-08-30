@@ -613,19 +613,19 @@ Before writing a line of code, you need to understand how JavaScript executes yo
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                         Call Stack                          │
-│  (where synchronous code executes)                         │
+│  (where synchronous code executes)                          │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                      Microtask Queue                        │
-│  (Promises, queueMicrotask - high priority)                │
+│  (Promises, queueMicrotask - high priority)                 │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                      Macrotask Queue                        │
-│  (setTimeout, setInterval, I/O, UI rendering)              │
+│  (setTimeout, setInterval, I/O, UI rendering)               │
 └─────────────────────────────────────────────────────────────┘
 ```
 
